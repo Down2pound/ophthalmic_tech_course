@@ -157,13 +157,13 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-                🚀 Launch Your Career in 7 Days
+                🚀 Launch Your Career in 10 Days
               </div>
               <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
                 Become a Clinic-Ready Ophthalmic Technician
               </h1>
               <p className="text-xl text-gray-600">
-                Master essential clinical skills in our intensive 7-day bootcamp. Join thousands of healthcare professionals transforming their careers.
+                Master essential clinical skills in our intensive 10-day bootcamp. Join thousands of healthcare professionals transforming their careers.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
               <Button
