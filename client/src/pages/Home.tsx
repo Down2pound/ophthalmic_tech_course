@@ -51,6 +51,24 @@ export default function Home() {
       description: "Equipment care and JCAHPO certification preparation.",
       icon: "⚙️",
     },
+    {
+      day: "Day 8",
+      title: "Patient Communication & Soft Skills",
+      description: "Managing difficult patients, building rapport, and professional communication best practices.",
+      icon: "💬",
+    },
+    {
+      day: "Day 9",
+      title: "Clinical Documentation & EHR",
+      description: "Medical record accuracy, HIPAA compliance, and electronic health records proficiency.",
+      icon: "📝",
+    },
+    {
+      day: "Day 10",
+      title: "Professional Development & Career Pathways",
+      description: "JCAHPO certification, continuing education, and advancement opportunities in ophthalmology.",
+      icon: "🎓",
+    },
   ];
 
   const pricingTiers = [
@@ -60,7 +78,7 @@ export default function Home() {
       price: "$197",
       description: "Perfect for individual technicians starting their career",
       features: [
-        "Full course videos (7 days)",
+        "Full course videos (10 days)",
         "Downloadable worksheets & checklists",
         "Lifetime access to materials",
         "Email support",
@@ -93,7 +111,7 @@ export default function Home() {
         "Everything in Standard",
         "1-on-1 coaching sessions (4 sessions)",
         "Personalized learning plan",
-        "Advanced modules (B-scan, Pentacam)",
+        "Advanced modules (B-scan, Pentacam, surgical assisting)",
         "Job placement assistance",
         "Lifetime mentorship access",
       ],
