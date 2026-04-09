@@ -48,7 +48,7 @@ export default function Home() {
     {
       day: "Day 7",
       title: "Maintenance & Certification",
-      description: "Equipment care and JCAHPO certification preparation.",
+      description: "Equipment care, maintenance, and professional development preparation.",
       icon: "⚙️",
     },
     {
@@ -66,7 +66,7 @@ export default function Home() {
     {
       day: "Day 10",
       title: "Professional Development & Career Pathways",
-      description: "JCAHPO certification, continuing education, and advancement opportunities in ophthalmology.",
+      description: "Continuing education, professional development, and advancement opportunities in ophthalmology.",
       icon: "🎓",
     },
   ];
@@ -226,8 +226,8 @@ export default function Home() {
               },
               {
                 icon: <Award className="w-8 h-8 text-blue-600" />,
-                title: "JCAHPO Certified",
-                description: "Our curriculum aligns with JCAHPO certification requirements for professional advancement.",
+                title: "Industry-Aligned Curriculum",
+                description: "Comprehensive training covering essential ophthalmic technician competencies recognized across the industry.",
               },
               {
                 icon: <Users className="w-8 h-8 text-blue-600" />,
