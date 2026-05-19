@@ -163,7 +163,7 @@ export default function Home() {
                 Become a Clinic-Ready Ophthalmic Technician
               </h1>
               <p className="text-xl text-gray-600">
-                Master essential clinical skills in our intensive 10-day bootcamp. Join thousands of healthcare professionals transforming their careers.
+                Master essential clinical skills in our comprehensive 10-day online video course. Join thousands of healthcare professionals transforming their careers.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
               <Button
@@ -221,8 +221,8 @@ export default function Home() {
             {[
               {
                 icon: <Clock className="w-8 h-8 text-blue-600" />,
-                title: "Intensive & Efficient",
-                description: "Complete your training in just 7 days without compromising quality or depth.",
+                title: "Self-Paced & Comprehensive",
+                description: "Complete your 10-day online course at your own pace without compromising quality or depth.",
               },
               {
                 icon: <Award className="w-8 h-8 text-blue-600" />,
@@ -400,7 +400,7 @@ export default function Home() {
               {
                 name: "Emily Rodriguez",
                 role: "Career Changer",
-                text: "Coming from a different healthcare background, this bootcamp made the transition seamless and professional.",
+                text: "Coming from a different healthcare background, this course made the transition seamless and professional.",
               },
             ].map((testimonial, idx) => (
               <Card key={idx} className="p-6 border border-gray-200">
