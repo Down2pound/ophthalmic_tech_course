@@ -1,17 +1,24 @@
 {
   "build_command": "pnpm run build",
-  "capabilities": [],
+  "capabilities": [
+    "db",
+    "server",
+    "user"
+  ],
   "dev_command": "pnpm run dev",
-  "env_vars": {},
+  "env_vars": {
+    "DATABASE_URL": "mysql://3SEie5J3EEL4UNx.d404c4f78c04:InxU7b5p918WnuYq6tqm@gateway02.us-east-1.prod.aws.tidbcloud.com:4000/H5oPCvuaL4V8cbWP559r9W?ssl={\"rejectUnauthorized\":true}",
+    "DRIZZLE_DATABASE_URL": "mysql://3SEie5J3EEL4UNx.d404c4f78c04:InxU7b5p918WnuYq6tqm@gateway02.us-east-1.prod.aws.tidbcloud.com:4000/H5oPCvuaL4V8cbWP559r9W?ssl={\"rejectUnauthorized\":true}"
+  },
   "experiments": [
     "no_db_push"
   ],
   "git_remote": {
     "repo_url": "s3://vida-prod-gitrepo/webdev-git/310419663028372668/H5oPCvuaL4V8cbWP559r9W",
-    "access_key_id": "ASIAZV3A2ECZIYIDD3RS",
-    "secret_access_key": "2qJXBhTLq9xchCTdr6WZnOF92F5nB2Pd3s2iFeER",
-    "session_token": "IQoJb3JpZ2luX2VjEBQaCXVzLWVhc3QtMSJHMEUCIQCZ3XqobTCHV5P3f97NUwb0+dTdfoHelBF8CClKQ+JEKQIgMAVFAFTFh8OJ8hrnbBqZ1YotvB4LEDJapoHjRpVX0sUq/wMI3f//////////ARAEGgw2NjUzODYwOTg4NjYiDEuw6c9FBuepQwUT3SrTAxbLtgezGZQo46etrSow9J5Xc1hIccMsgnbc9GeLG5ah7NBxNsPatEXpsAq0fDXn8Nn9Uv9zbFOP0CyKR7568sEb7u1l9MiM9sNq5RVEtgN+umTDsL0lt7EOUY82wNeDmFOyyMBpSxWa5Ha0eXUM9NxrCwkhR9iu3U/c8Q6LFLF0ii74ci085yCGpUwhtfeVuJOVKlQN8mRqy7ghcPNSsVtCLCNrfl+3Udlyo08mZr82QTs/sa1wdY9Dmzlspg6NjYaOkM/x7e2aYSgnxxOvsIcEmW4CmCwS7si+/xTRU/bVd16kXALm+LEtgAOZVC+fvCSpVaHxyZhI6Q0ABnVy+CQoLLpe6B8vZKk/xany8KfQFgSZMRblTw7puaZykYnX+LBrWsW7aAxrB9UANKlGiBaddyIsTuS5mEZYOgL0gi9C059XJt7S/auJtmSfOpzqked6R1xuSm7sYejoikcsN08+6SODAXngmVuBAYfY8AF+BiFDsFEh4fhmCH+sPFAtq0zNsIL7CeZOiJsCbm+sS2Zm+Qw5/Qe0XP+UmwNC9cn/XAIjOZ2L4CFYC1cSJc0BVZDnaSOaUfJS3TTbPO5WY3bG7kX3kiaaejLLW/VZG0SdJv5rMIX2stAGOp0B0NOib2/RnhQg4PI3XIa49vpzQAgb8VWkLb6mEWLyBrYaGAQOR88grDSUpfssPyR0dok/BUlbWUPi+ur9hgE/CBoB169cX7FfUsOGivJijER4AD4HdR3DcZdGGDSe+oqN+BESOfkt2i+J65ua5ki/YpnNU1djQJP97qQ9cFTFdlSooeUTlQGn1YNORTdlPezppGlnDH2/OxST6tYdsw==",
-    "expiration": "2026-05-20T07:33:25.000Z"
+    "access_key_id": "ASIAZV3A2ECZNDD7IPF2",
+    "secret_access_key": "NbKwH95zyXPv37wVB2UbRZhYv/1a5A3ObmN2cLMH",
+    "session_token": "IQoJb3JpZ2luX2VjEBQaCXVzLWVhc3QtMSJGMEQCIBNaHqvM9eP+Na4JPh1Gf/Lzddg1D4WCuxkBe1vIMcpJAiBKcQ92VLLLx3RsZB4KYvpaCEiFO/draXcQRCyO06tu7yr/Awjd//////////8BEAQaDDY2NTM4NjA5ODg2NiIM/e+yJnUXNVxEdpo2KtMDw8InJBb7lA7EgRHwHa5BJzO4zyKMRieJojw1642db25gLJTNN2IBxir98DcNBQbm5hwyH6FFZw5spvxfXVL4lsnvLi6xkCG0iY3ne26/cGGisP/69LYiPamTrUD82VMmbwmQFUtmFY+oe4DEsh1ugLP587U3KKLyghlD0MM70dO6p5nuG3AxAbf4PfVk3Q/Kyw0NmtOyWZv7Yx6BMzAk11hnVyP0tb4fmWypZH5a0xrilaY8m+VCpcFBE6jhBRdEHsYagLfM+QQzZ/ge3nU9XBr983VWBXJkj0oKPVmMI5uuT6+b+u5Ip/nbdWWx4r6DyCos4nqhzvqaW83VLIQnmNOsQWI9mrfT2EPBsGHPW3COQgPK9038hKubKLmVuakCBzzOJdhK+mahfcVIUSNCNXOyWfwwWInRXQwMgQEYKCSbj2mbBWHzcIm+6HecXlYKOSCRR0CV1W3nWACQYNTcFN2TcNy1yVe+doV4LvOic83Mry/qOfjazj3V1pa1nBcNcKLkRGukADW0Oh/5ITSLtM5cm0e7Eg6zLEZxGWujRUEi5HnHte3ucgtYbjnbLHg7P6L7GE7y6MvjpoYWLz5BKidM/PCNF8nUtuBcSwcETVn70AAw9vqy0AY6ngEcNigQeLfVlOKjcnzjgjVyU2zqEoOtUx2uDff80AoPMLL8rHD/Dpu9akwiLa907EERfIOt76VrrTGxjXXd5YIBCCIFz0IKlw+PiVjvylxWgbGEC92oq7K/mKi3NqubRWDIzw0TJGFpIiWt6NRhYlqo2trdIV7p22LXd30avYkJCQBnN6qmEKqc1C+ee4gNJYJuwmErSzydRZc2aitRzw==",
+    "expiration": "2026-05-20T07:43:50.000Z"
   },
   "name": "ophthalmic_tech_course",
   "path": "/home/ubuntu/ophthalmic_tech_course",

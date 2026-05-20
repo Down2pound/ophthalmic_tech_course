@@ -90,11 +90,11 @@ export default function Home() {
       id: "standard",
       name: "Standard",
       price: "$699",
-      description: "Comprehensive learning with community support",
+      description: "Comprehensive learning with professional support",
       features: [
         "Everything in Basic",
         "Live Q&A sessions (weekly)",
-        "Private community access",
+
         "Downloadable study guides",
         "Certificate of completion",
         "Priority email support",
