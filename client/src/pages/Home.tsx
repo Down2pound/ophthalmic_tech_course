@@ -174,9 +174,11 @@ export default function Home() {
               >
                 Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
-                <Button size="lg" variant="outline">
-                  Learn More
-                </Button>
+                <a href="/curriculum">
+                  <Button size="lg" variant="outline">
+                    View Curriculum
+                  </Button>
+                </a>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <CheckCircle2 className="w-5 h-5 text-green-500" />
