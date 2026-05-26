@@ -105,25 +105,23 @@ export default function Home() {
     {
       id: "premium",
       name: "Premium",
-      price: "$2,000+",
-      description: "Elite program with personalized coaching",
+      price: "$1,299",
+      description: "Advanced modules for specialized skills",
       features: [
         "Everything in Standard",
-        "1-on-1 coaching sessions (4 sessions)",
-        "Personalized learning plan",
         "Advanced modules (B-scan, Pentacam, surgical assisting)",
-        "Job placement assistance",
-        "Lifetime mentorship access",
+        "Extended email support (48-hour response)",
+        "Continuing education resources",
       ],
-      cta: "Schedule Consultation",
+      cta: "Enroll Now",
       highlighted: false,
-    },
+    }
   ];
 
   const stats = [
     { number: "65,000+", label: "Technicians in the US" },
     { number: "16%", label: "Job Growth by 2032" },
-    { number: "7 Days", label: "Intensive Training" },
+    { number: "10 Days", label: "Course Duration" },
     { number: "86%", label: "Success Rate" },
   ];
 
