@@ -3,73 +3,19 @@ import { Card } from "@/components/ui/card";
 import { CheckCircle2, Clock, Users, Award, ArrowRight, Eye } from "lucide-react";
 import { useState } from "react";
 import { EnrollmentForm } from "@/components/EnrollmentForm";
+import { curriculumModules } from "@/data/curriculum";
 
 export default function Home() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [showEnrollmentForm, setShowEnrollmentForm] = useState(false);
 
-  const curriculumDays = [
-    {
-      day: "Day 1",
-      title: "Foundations & Patient Intake",
-      description: "Core roles, clinic workflow, patient history taking, and visual acuity testing.",
-      icon: "📋",
-    },
-    {
-      day: "Day 2",
-      title: "Slit Lamp Biomicroscopy",
-      description: "Master the essential diagnostic tool for anterior segment examination.",
-      icon: "🔬",
-    },
-    {
-      day: "Day 3",
-      title: "Tonometry & IOP",
-      description: "Learn intraocular pressure measurement techniques and equipment operation.",
-      icon: "📊",
-    },
-    {
-      day: "Day 4",
-      title: "Refraction Principles",
-      description: "Manual refraction, lensometry, and refractive index determination.",
-      icon: "👓",
-    },
-    {
-      day: "Day 5",
-      title: "Advanced Diagnostics",
-      description: "Visual field testing and OCT imaging for comprehensive eye assessment.",
-      icon: "🎯",
-    },
-    {
-      day: "Day 6",
-      title: "Specialized Populations",
-      description: "Pediatric, geriatric, and post-operative cataract patient management.",
-      icon: "👥",
-    },
-    {
-      day: "Day 7",
-      title: "Maintenance & Certification",
-      description: "Equipment care, maintenance, and professional development preparation.",
-      icon: "⚙️",
-    },
-    {
-      day: "Day 8",
-      title: "Patient Communication & Soft Skills",
-      description: "Managing difficult patients, building rapport, and professional communication best practices.",
-      icon: "💬",
-    },
-    {
-      day: "Day 9",
-      title: "Clinical Documentation & EHR",
-      description: "Medical record accuracy, HIPAA compliance, and electronic health records proficiency.",
-      icon: "📝",
-    },
-    {
-      day: "Day 10",
-      title: "Professional Development & Career Pathways",
-      description: "Continuing education, professional development, and advancement opportunities in ophthalmology.",
-      icon: "🎓",
-    },
-  ];
+  // Create summary list for home page (first 10 modules)
+  const curriculumDays = curriculumModules.map((module) => ({
+    day: `Day ${module.day}`,
+    title: module.title,
+    description: module.description,
+    icon: module.icon,
+  }));
 
   const pricingTiers = [
     {
@@ -94,7 +40,6 @@ export default function Home() {
       features: [
         "Everything in Basic",
         "Live Q&A sessions (weekly)",
-
         "Downloadable study guides",
         "Certificate of completion",
         "Priority email support",
@@ -115,7 +60,7 @@ export default function Home() {
       ],
       cta: "Enroll Now",
       highlighted: false,
-    }
+    },
   ];
 
   const stats = [
@@ -164,16 +109,16 @@ export default function Home() {
                 Master essential clinical skills in our comprehensive 10-day online video course. Join thousands of healthcare professionals transforming their careers.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={() => {
-                  setSelectedTier("standard");
-                  setShowEnrollmentForm(true);
-                }}
-              >
-                Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
+                <Button
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={() => {
+                    setSelectedTier("standard");
+                    setShowEnrollmentForm(true);
+                  }}
+                >
+                  Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
                 <a href="/curriculum">
                   <Button size="lg" variant="outline">
                     View Curriculum
@@ -222,17 +167,20 @@ export default function Home() {
               {
                 icon: <Clock className="w-8 h-8 text-blue-600" />,
                 title: "Self-Paced & Comprehensive",
-                description: "Complete your 10-day online course at your own pace without compromising quality or depth.",
+                description:
+                  "Complete your 10-day online course at your own pace without compromising quality or depth.",
               },
               {
                 icon: <Award className="w-8 h-8 text-blue-600" />,
                 title: "Industry-Aligned Curriculum",
-                description: "Comprehensive training covering essential ophthalmic technician competencies recognized across the industry.",
+                description:
+                  "Comprehensive training covering essential ophthalmic technician competencies recognized across the industry.",
               },
               {
                 icon: <Users className="w-8 h-8 text-blue-600" />,
                 title: "Expert Instructors",
-                description: "Learn from practicing ophthalmic professionals with 15+ years of clinical experience.",
+                description:
+                  "Learn from practicing ophthalmic professionals with 15+ years of clinical experience.",
               },
             ].map((item, idx) => (
               <Card key={idx} className="p-8 border border-gray-200 hover:shadow-lg transition-shadow">
@@ -249,7 +197,7 @@ export default function Home() {
       <section id="curriculum" className="py-20 bg-gray-50">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">7-Day Intensive Curriculum</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">10-Day Comprehensive Curriculum</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Master the essential skills needed to excel in any ophthalmic practice.
             </p>
@@ -257,13 +205,24 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {curriculumDays.map((day, idx) => (
-              <Card key={idx} className="p-6 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all">
+              <Card
+                key={idx}
+                className="p-6 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
+              >
                 <div className="text-3xl mb-3">{day.icon}</div>
                 <div className="text-sm font-semibold text-blue-600 mb-2">{day.day}</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">{day.title}</h3>
                 <p className="text-gray-600 text-sm">{day.description}</p>
               </Card>
             ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <a href="/curriculum">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+                View Full Curriculum Details <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </a>
           </div>
         </div>
       </section>
@@ -362,17 +321,18 @@ export default function Home() {
             <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
               <h3 className="text-2xl font-bold mb-6">For Practice Managers</h3>
               <p className="mb-6">
-                Struggling to find and train qualified technicians? Our B2B program provides affordable, scalable training for your entire team.
+                Struggling to find and train qualified technicians? Our B2B program provides affordable, scalable training
+                for your entire team.
               </p>
               <Button
-            className="bg-white text-blue-600 hover:bg-gray-100"
-            onClick={() => {
-              setSelectedTier("premium");
-              setShowEnrollmentForm(true);
-            }}
-          >
-            Learn About Team Licensing
-          </Button>
+                className="bg-white text-blue-600 hover:bg-gray-100"
+                onClick={() => {
+                  setSelectedTier("premium");
+                  setShowEnrollmentForm(true);
+                }}
+              >
+                Learn About Team Licensing
+              </Button>
             </div>
           </div>
         </div>
@@ -390,7 +350,7 @@ export default function Home() {
               {
                 name: "Sarah Chen",
                 role: "Ophthalmic Technician",
-                text: "This course gave me the confidence to work in a busy clinic. The 7-day format was perfect for my schedule.",
+                text: "This course gave me the confidence to work in a busy clinic. The 10-day format was perfect for my schedule.",
               },
               {
                 name: "Marcus Johnson",
@@ -427,7 +387,7 @@ export default function Home() {
         <div className="container text-center">
           <h2 className="text-4xl font-bold mb-6">Ready to Transform Your Career?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join the next cohort and become clinic-ready in just 7 days. Limited spots available.
+            Join the next cohort and become clinic-ready in just 10 days. Limited spots available.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
