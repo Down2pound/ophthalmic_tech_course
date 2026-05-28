@@ -24,40 +24,16 @@ export default function Home() {
       price: "$699",
       description: "Complete 10-day online course with certificate of completion",
       features: [
-<<<<<<< Updated upstream
-        "Everything in Basic",
-        "Live Q&A sessions (weekly)",
-        "Downloadable study guides",
-=======
         "Full course videos (10 days)",
         "Downloadable worksheets & checklists",
         "Study guides and reference materials",
         "Lifetime access to course materials",
->>>>>>> Stashed changes
         "Certificate of completion",
         "Email support",
       ],
       cta: "Enroll Now",
       highlighted: true,
-<<<<<<< Updated upstream
-    },
-    {
-      id: "premium",
-      name: "Premium",
-      price: "$1,299",
-      description: "Advanced modules for specialized skills",
-      features: [
-        "Everything in Standard",
-        "Advanced modules (B-scan, Pentacam, surgical assisting)",
-        "Extended email support (48-hour response)",
-        "Continuing education resources",
-      ],
-      cta: "Enroll Now",
-      highlighted: false,
-    },
-=======
     }
->>>>>>> Stashed changes
   ];
 
   const stats = [
