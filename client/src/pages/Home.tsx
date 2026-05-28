@@ -19,33 +19,27 @@ export default function Home() {
 
   const pricingTiers = [
     {
-      id: "basic",
-      name: "Basic",
-      price: "$197",
-      description: "Perfect for individual technicians starting their career",
-      features: [
-        "Full course videos (10 days)",
-        "Downloadable worksheets & checklists",
-        "Lifetime access to materials",
-        "Email support",
-      ],
-      cta: "Enroll Now",
-      highlighted: false,
-    },
-    {
       id: "standard",
-      name: "Standard",
+      name: "Ophthalmic Technician Foundations",
       price: "$699",
-      description: "Comprehensive learning with professional support",
+      description: "Complete 10-day online course with certificate of completion",
       features: [
+<<<<<<< Updated upstream
         "Everything in Basic",
         "Live Q&A sessions (weekly)",
         "Downloadable study guides",
+=======
+        "Full course videos (10 days)",
+        "Downloadable worksheets & checklists",
+        "Study guides and reference materials",
+        "Lifetime access to course materials",
+>>>>>>> Stashed changes
         "Certificate of completion",
-        "Priority email support",
+        "Email support",
       ],
       cta: "Enroll Now",
       highlighted: true,
+<<<<<<< Updated upstream
     },
     {
       id: "premium",
@@ -61,6 +55,9 @@ export default function Home() {
       cta: "Enroll Now",
       highlighted: false,
     },
+=======
+    }
+>>>>>>> Stashed changes
   ];
 
   const stats = [
@@ -233,17 +230,17 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Choose the plan that fits your goals and budget. All plans include lifetime access to course materials.
+              One comprehensive course. One affordable price. Includes lifetime access to all materials and certificate of completion.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="flex justify-center max-w-2xl mx-auto">
             {pricingTiers.map((tier) => (
               <Card
                 key={tier.id}
-                className={`relative p-8 border-2 transition-all ${
+                className={`relative p-8 border-2 transition-all w-full max-w-md ${
                   tier.highlighted
-                    ? "border-blue-600 shadow-2xl scale-105"
+                    ? "border-blue-600 shadow-2xl"
                     : "border-gray-200 hover:border-gray-300"
                 }`}
               >
