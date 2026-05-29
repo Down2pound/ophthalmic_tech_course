@@ -1,15 +1,14 @@
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle2, Clock, Users, Award, ArrowRight, Eye } from "lucide-react";
+import { CheckCircle2, Clock, Users, Award, ArrowRight, Eye, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { EnrollmentForm } from "@/components/EnrollmentForm";
 import { curriculumModules } from "@/data/curriculum";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [showEnrollmentForm, setShowEnrollmentForm] = useState(false);
 
-  // Create summary list for home page (first 10 modules)
   const curriculumDays = curriculumModules.map((module) => ({
     day: `Day ${module.day}`,
     title: module.title,
@@ -44,47 +43,59 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
+      </div>
+
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+      <nav className="sticky top-0 z-50 glass-dark border-b border-white/10 backdrop-blur-xl">
         <div className="container flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
-            <Eye className="w-6 h-6 text-blue-600" />
-            <span className="text-lg font-bold text-gray-900">OptiTech Academy</span>
+            <Eye className="w-6 h-6 text-blue-400" />
+            <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">OptiTech Academy</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#curriculum" className="text-sm text-gray-600 hover:text-blue-600">
+            <a href="#curriculum" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
               Curriculum
             </a>
-            <a href="#pricing" className="text-sm text-gray-600 hover:text-blue-600">
+            <a href="#pricing" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
               Pricing
             </a>
-            <a href="#why" className="text-sm text-gray-600 hover:text-blue-600">
+            <a href="#why" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
               Why Us
             </a>
           </div>
-          <Button className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
+          <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">Get Started</Button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 py-20">
+      <section className="relative overflow-hidden py-32 px-4">
         <div className="container">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <div className="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-                🚀 Launch Your Career in 10 Days
+            <div className="space-y-8 relative z-10">
+              <div className="inline-flex items-center gap-2 glass-dark px-4 py-2 w-fit">
+                <Sparkles className="w-4 h-4 text-blue-400" />
+                <span className="text-sm font-semibold text-blue-300">🚀 Launch Your Career in 10 Days</span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
-                Become a Clinic-Ready Ophthalmic Technician
+              <h1 className="text-6xl md:text-7xl font-bold leading-tight">
+                <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-300 bg-clip-text text-transparent">
+                  Become a Clinic-Ready
+                </span>
+                <br />
+                <span className="text-white">Ophthalmic Technician</span>
               </h1>
-              <p className="text-xl text-gray-600">
+              <p className="text-xl text-gray-300 leading-relaxed">
                 Master essential clinical skills in our comprehensive 10-day online video course. Join thousands of healthcare professionals transforming their careers.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
                   onClick={() => {
                     setSelectedTier("standard");
                     setShowEnrollmentForm(true);
@@ -93,150 +104,107 @@ export default function Home() {
                   Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
                 <a href="/curriculum">
-                  <Button size="lg" variant="outline">
+                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
                     View Curriculum
                   </Button>
                 </a>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
-                <span>Limited spots available this month</span>
+              <div className="flex items-center gap-2 text-green-400 pt-4">
+                <CheckCircle2 className="w-5 h-5" />
+                <span className="text-sm font-medium">Limited spots available this month</span>
               </div>
             </div>
-            <div className="relative">
-              <img
-                src="https://d2xsxph8kpxj0f.cloudfront.net/310419663028372668/H5oPCvuaL4V8cbWP559r9W/hero-ophthalmic-JL5fgAFccP4oWiE968bQNk.webp"
-                alt="Ophthalmic clinic with advanced equipment"
-                className="rounded-2xl shadow-2xl w-full"
-              />
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+            <div className="relative z-10">
+              <div className="glass-card p-8 aspect-video flex items-center justify-center">
+                <div className="text-center">
+                  <Eye className="w-20 h-20 text-blue-400/50 mx-auto mb-4" />
+                  <p className="text-gray-300">Professional Medical Training</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="container mt-20 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-blue-600">{stat.number}</div>
-              <div className="text-sm text-gray-600 mt-2">{stat.label}</div>
-            </div>
-          ))}
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section id="why" className="py-20 bg-white">
+      {/* Stats Section */}
+      <section className="relative z-10 py-20 px-4">
         <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose OptiTech Academy?</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We bridge the critical gap between entry-level training and clinic readiness with industry-leading expertise.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Clock className="w-8 h-8 text-blue-600" />,
-                title: "Self-Paced & Comprehensive",
-                description:
-                  "Complete your 10-day online course at your own pace without compromising quality or depth.",
-              },
-              {
-                icon: <Award className="w-8 h-8 text-blue-600" />,
-                title: "Industry-Aligned Curriculum",
-                description:
-                  "Comprehensive training covering essential ophthalmic technician competencies recognized across the industry.",
-              },
-              {
-                icon: <Users className="w-8 h-8 text-blue-600" />,
-                title: "Expert Instructors",
-                description:
-                  "Learn from practicing ophthalmic professionals with 15+ years of clinical experience.",
-              },
-            ].map((item, idx) => (
-              <Card key={idx} className="p-8 border border-gray-200 hover:shadow-lg transition-shadow">
-                <div className="mb-4">{item.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
-              </Card>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {stats.map((stat, idx) => (
+              <div key={idx} className="glass-card p-6 text-center">
+                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+                  {stat.number}
+                </div>
+                <p className="text-gray-300 text-sm">{stat.label}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Curriculum */}
-      <section id="curriculum" className="py-20 bg-gray-50">
+      {/* Curriculum Preview */}
+      <section id="curriculum" className="relative z-10 py-20 px-4">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">10-Day Comprehensive Curriculum</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Master the essential skills needed to excel in any ophthalmic practice.
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                10-Day Comprehensive Curriculum
+              </span>
+            </h2>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              Structured learning path covering everything from fundamentals to advanced clinical techniques
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             {curriculumDays.map((day, idx) => (
-              <Card
-                key={idx}
-                className="p-6 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
-              >
-                <div className="text-3xl mb-3">{day.icon}</div>
-                <div className="text-sm font-semibold text-blue-600 mb-2">{day.day}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{day.title}</h3>
-                <p className="text-gray-600 text-sm">{day.description}</p>
-              </Card>
+              <div key={idx} className="glass-card p-6 hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+                <div className="text-blue-400 font-bold mb-2">{day.day}</div>
+                <h3 className="text-white font-semibold mb-2 group-hover:text-blue-300 transition-colors">{day.title}</h3>
+                <p className="text-gray-400 text-sm">{day.description}</p>
+              </div>
             ))}
           </div>
 
           <div className="text-center mt-12">
             <a href="/curriculum">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-                View Full Curriculum Details <ArrowRight className="ml-2 w-4 h-4" />
+              <Button size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">
+                View Full Curriculum
               </Button>
             </a>
           </div>
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="py-20 bg-white">
+      {/* Pricing Section */}
+      <section id="pricing" className="relative z-10 py-20 px-4">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              One comprehensive course. One affordable price. Includes lifetime access to all materials and certificate of completion.
-            </p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Simple, Transparent Pricing
+              </span>
+            </h2>
+            <p className="text-gray-300 text-lg">One comprehensive package with everything you need</p>
           </div>
 
           <div className="flex justify-center max-w-2xl mx-auto">
             {pricingTiers.map((tier) => (
               <Card
                 key={tier.id}
-                className={`relative p-8 border-2 transition-all w-full max-w-md ${
-                  tier.highlighted
-                    ? "border-blue-600 shadow-2xl"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
+                className="relative p-8 border-2 transition-all w-full max-w-md glass-card border-blue-500/50 hover:border-blue-400"
               >
-                {tier.highlighted && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                    Most Popular
-                  </div>
-                )}
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{tier.name}</h3>
-                <p className="text-gray-600 text-sm mb-4">{tier.description}</p>
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                  Most Popular
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">{tier.name}</h3>
+                <p className="text-gray-300 text-sm mb-4">{tier.description}</p>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">{tier.price}</span>
-                  <span className="text-gray-600 ml-2">one-time</span>
+                  <span className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{tier.price}</span>
+                  <span className="text-gray-400 ml-2">one-time</span>
                 </div>
                 <Button
-                  className={`w-full mb-8 ${
-                    tier.highlighted
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-900"
-                  }`}
+                  className="w-full mb-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0"
                   onClick={() => {
                     setSelectedTier(tier.id);
                     setShowEnrollmentForm(true);
@@ -247,8 +215,8 @@ export default function Home() {
                 <ul className="space-y-3">
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700 text-sm">{feature}</span>
+                      <CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-300 text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -258,211 +226,61 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Market Opportunity */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-        <div className="container">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-6">A Growing Opportunity</h2>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>65,000+ technicians</strong> currently employed in the US
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>16% job growth</strong> projected through 2032
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>25% annual turnover</strong> creating constant demand for new talent
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                  <span>
-                    <strong>$44,000+ median salary</strong> with growth potential
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
-              <h3 className="text-2xl font-bold mb-6">For Practice Managers</h3>
-              <p className="mb-6">
-                Struggling to find and train qualified technicians? Our B2B program provides affordable, scalable training
-                for your entire team.
-              </p>
-              <Button
-                className="bg-white text-blue-600 hover:bg-gray-100"
-                onClick={() => {
-                  setSelectedTier("premium");
-                  setShowEnrollmentForm(true);
-                }}
-              >
-                Learn About Team Licensing
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-gray-50">
+      {/* Why Us Section */}
+      <section id="why" className="relative z-10 py-20 px-4">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Students Say</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Why Choose OptiTech Academy?
+              </span>
+            </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              {
-                name: "Sarah Chen",
-                role: "Ophthalmic Technician",
-                text: "This course gave me the confidence to work in a busy clinic. The 10-day format was perfect for my schedule.",
-              },
-              {
-                name: "Marcus Johnson",
-                role: "Practice Manager",
-                text: "We enrolled our entire team and saw immediate improvements in patient care and clinic efficiency.",
-              },
-              {
-                name: "Emily Rodriguez",
-                role: "Career Changer",
-                text: "Coming from a different healthcare background, this course made the transition seamless and professional.",
-              },
-            ].map((testimonial, idx) => (
-              <Card key={idx} className="p-6 border border-gray-200">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400">
-                      ★
-                    </span>
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
-                <div>
-                  <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                  <p className="text-sm text-gray-600">{testimonial.role}</p>
-                </div>
-              </Card>
+              { icon: Clock, title: "Self-Paced Learning", desc: "Learn at your own pace with lifetime access to all course materials" },
+              { icon: Award, title: "Certificate Included", desc: "Receive a professional certificate of completion upon finishing" },
+              { icon: Users, title: "Expert Instruction", desc: "Learn from experienced ophthalmic professionals with 40+ years in the field" },
+            ].map((item, idx) => (
+              <div key={idx} className="glass-card p-8">
+                <item.icon className="w-12 h-12 text-blue-400 mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
+                <p className="text-gray-300">{item.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
-        <div className="container text-center">
-          <h2 className="text-4xl font-bold mb-6">Ready to Transform Your Career?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join the next cohort and become clinic-ready in just 10 days. Limited spots available.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <section className="relative z-10 py-20 px-4">
+        <div className="container">
+          <div className="glass-card p-12 text-center">
+            <h2 className="text-4xl font-bold text-white mb-4">Ready to Transform Your Career?</h2>
+            <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
+              Join hundreds of healthcare professionals who have already completed our comprehensive training program
+            </p>
             <Button
               size="lg"
-              className="bg-white text-blue-600 hover:bg-gray-100"
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
               onClick={() => {
                 setSelectedTier("standard");
                 setShowEnrollmentForm(true);
               }}
             >
-              Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white/10"
-            >
-              Schedule a Demo
+              Start Learning Today <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="container">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Eye className="w-5 h-5 text-blue-400" />
-                <span className="font-semibold text-white">OptiTech Academy</span>
-              </div>
-              <p className="text-sm">Bridging the gap between training and clinic readiness.</p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Program</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#curriculum" className="hover:text-blue-400">
-                    Curriculum
-                  </a>
-                </li>
-                <li>
-                  <a href="#pricing" className="hover:text-blue-400">
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-blue-400">
-                    FAQ
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Company</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="hover:text-blue-400">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-blue-400">
-                    Contact
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-blue-400">
-                    Blog
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="hover:text-blue-400">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-blue-400">
-                    Terms of Service
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm">
-            <p>&copy; 2026 OptiTech Academy. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-
       {/* Enrollment Form Modal */}
-      {showEnrollmentForm && selectedTier && (
-        <EnrollmentForm
-          tier={selectedTier}
-          onClose={() => setShowEnrollmentForm(false)}
-        />
+      {showEnrollmentForm && (
+            <EnrollmentForm
+              tier={selectedTier || "standard"}
+              onClose={() => setShowEnrollmentForm(false)}
+            />
       )}
     </div>
   );
