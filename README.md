@@ -79,8 +79,13 @@ Checkout routes:
 - Frontend page: `/checkout`
 - Policies page: `/policies`
 - Server endpoint: `POST /api/checkout/sessions`
+- Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success`
 - Cancel return: `/checkout?checkout=cancelled`
 
 If `STRIPE_SECRET_KEY` is missing, checkout fails closed with a setup message and
 does not collect payment.
+
+`GET /api/launch/readiness` returns a safe setup report with launch blocker
+counts and missing environment variable names. It must never return actual
+Stripe key values.

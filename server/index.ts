@@ -3,6 +3,7 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { setupCheckoutRoutes } from "./src/routes/checkout";
+import { setupLaunchReadinessRoutes } from "./src/routes/launchReadiness";
 import { setupStripeWebhookRoute } from "./src/routes/stripeWebhook";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,6 +17,7 @@ async function startServer() {
   setupStripeWebhookRoute(app);
   app.use(express.json());
   setupCheckoutRoutes(apiRouter);
+  setupLaunchReadinessRoutes(apiRouter);
   app.use("/api", apiRouter);
 
   // Serve static files from dist/public in production
