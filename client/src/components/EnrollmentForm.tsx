@@ -186,7 +186,7 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
                 className="mt-1 w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
               />
               <span className="text-sm text-gray-700">
-                I agree to the terms of service and privacy policy. I understand this is a 7-day intensive program.
+                I agree to the terms of service and privacy policy. Founding access includes the self-paced course preview, published Module 1 lessons, and access to additional modules as they are released.
               </span>
             </label>
           </div>

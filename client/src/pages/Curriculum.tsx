@@ -65,6 +65,15 @@ export default function Curriculum() {
                           {module.difficulty}
                         </span>
                       )}
+                      <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                        module.status === "published"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-slate-200 text-slate-700"
+                      }`}>
+                        {module.status === "published"
+                          ? "Preview available"
+                          : "Scheduled content"}
+                      </span>
                     </div>
                     <h2 className="text-xl font-bold text-gray-900 mb-2">
                       {module.title}
@@ -139,9 +148,20 @@ export default function Curriculum() {
                   </div>
 
                   {/* CTA */}
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                    Enroll to Access This Content
-                  </Button>
+                  {module.status === "published" ? (
+                    <a href="/learn">
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                        Preview Module
+                      </Button>
+                    </a>
+                  ) : (
+                    <Button
+                      className="w-full bg-slate-500 text-white hover:bg-slate-600"
+                      disabled
+                    >
+                      Scheduled Content
+                    </Button>
+                  )}
                 </div>
               )}
             </Card>

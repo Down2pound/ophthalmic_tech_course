@@ -20,13 +20,14 @@ export default function Home() {
     {
       id: "standard",
       name: "Ophthalmic Technician Foundations",
-      price: "$699",
-      description: "Complete 10-day online course with certificate of completion",
+      price: "$199",
+      description: "Founding learner access to the self-paced foundations course",
       features: [
-        "Full course videos (10 days)",
+        "Published Module 1 starter lessons",
+        "Additional modules released as they are completed",
         "Downloadable worksheets & checklists",
         "Study guides and reference materials",
-        "Lifetime access to course materials",
+        "12 months of course access",
         "Certificate of completion",
         "Email support",
       ],
@@ -36,10 +37,10 @@ export default function Home() {
   ];
 
   const stats = [
-    { number: "65,000+", label: "Technicians in the US" },
-    { number: "16%", label: "Job Growth by 2032" },
-    { number: "10 Days", label: "Course Duration" },
-    { number: "86%", label: "Success Rate" },
+    { number: "10", label: "Planned modules" },
+    { number: "3", label: "Module 1 starter lessons" },
+    { number: "80%", label: "Target passing score" },
+    { number: "12 mo", label: "Founding learner access" },
   ];
 
   return (
@@ -80,7 +81,7 @@ export default function Home() {
             <div className="space-y-8 relative z-10">
               <div className="inline-flex items-center gap-2 glass-dark px-4 py-2 w-fit">
                 <Sparkles className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-semibold text-blue-300">🚀 Launch Your Career in 10 Days</span>
+                <span className="text-sm font-semibold text-blue-300">Founding learner preview now open</span>
               </div>
               <h1 className="text-6xl md:text-7xl font-bold leading-tight">
                 <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-300 bg-clip-text text-transparent">
@@ -90,7 +91,7 @@ export default function Home() {
                 <span className="text-white">Ophthalmic Technician</span>
               </h1>
               <p className="text-xl text-gray-300 leading-relaxed">
-                Master essential clinical skills in our comprehensive 10-day online video course. Join thousands of healthcare professionals transforming their careers.
+                Build the vocabulary, habits, and supervised practice plan needed to begin training for an ophthalmic assistant or technician role.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button
@@ -108,10 +109,15 @@ export default function Home() {
                     View Curriculum
                   </Button>
                 </a>
+                <a href="/learn">
+                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
+                    Preview Module 1
+                  </Button>
+                </a>
               </div>
               <div className="flex items-center gap-2 text-green-400 pt-4">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm font-medium">Limited spots available this month</span>
+                <span className="text-sm font-medium">Completion is education, not certification</span>
               </div>
             </div>
             <div className="relative z-10">
@@ -239,7 +245,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: Clock, title: "Self-Paced Learning", desc: "Learn at your own pace with lifetime access to all course materials" },
+              { icon: Clock, title: "Self-Paced Learning", desc: "Learn at your own pace with 12 months of founding learner access" },
               { icon: Award, title: "Certificate Included", desc: "Receive a professional certificate of completion upon finishing" },
               { icon: Users, title: "Expert Instruction", desc: "Learn from experienced ophthalmic professionals with 40+ years in the field" },
             ].map((item, idx) => (
@@ -259,7 +265,7 @@ export default function Home() {
           <div className="glass-card p-12 text-center">
             <h2 className="text-4xl font-bold text-white mb-4">Ready to Transform Your Career?</h2>
             <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-              Join hundreds of healthcare professionals who have already completed our comprehensive training program
+              Join the founding learner group and help shape a practical, honest training path for new ophthalmic techs
             </p>
             <Button
               size="lg"
