@@ -57,6 +57,9 @@ export default function Home() {
             <a href="/practice-packs" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
               Practice Packs
             </a>
+            <a href="/launch-readiness" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+              Launch Readiness
+            </a>
             <a href="#why" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
               Why Us
             </a>
