@@ -2,6 +2,7 @@ export interface CheckoutStatus {
   tone: "success" | "notice";
   title: string;
   message: string;
+  nextSteps: string[];
 }
 
 export function getCheckoutStatus(search: string): CheckoutStatus | null {
@@ -13,7 +14,12 @@ export function getCheckoutStatus(search: string): CheckoutStatus | null {
       tone: "success",
       title: "Payment received",
       message:
-        "Your founding learner access is ready. You can start with Module 1 now.",
+        "Stripe confirmed your payment. You can begin Module 1 now while we finish connecting your durable learner access.",
+      nextSteps: [
+        "Check your email for the Stripe receipt.",
+        "Start Module 1 and save your local progress on this device.",
+        "Do not share patient information in course forms or support requests.",
+      ],
     };
   }
 
@@ -23,6 +29,7 @@ export function getCheckoutStatus(search: string): CheckoutStatus | null {
       title: "Checkout canceled",
       message:
         "No payment was taken. You can review the offer and restart checkout when ready.",
+      nextSteps: ["Return to checkout when you are ready to enroll."],
     };
   }
 

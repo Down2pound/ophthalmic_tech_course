@@ -90,6 +90,14 @@ export default function Checkout() {
             >
               <h2 className="text-xl font-bold">{checkoutStatus.title}</h2>
               <p className="mt-2 leading-7">{checkoutStatus.message}</p>
+              <ul className="mt-3 space-y-1 text-sm leading-6">
+                {checkoutStatus.nextSteps.map((step) => (
+                  <li key={step} className="flex gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ul>
               {checkoutStatus.tone === "success" && (
                 <a
                   href="/learn"

@@ -22,7 +22,7 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Truthful public offer and policy visibility",
     status: "ready",
     evidence:
-      "Individual offer, practice packs, policies, certificate language, and educational limitations are visible before purchase.",
+      "Individual offer, practice packs, policies, certificate language, educational limitations, and post-payment next steps are visible without overstating durable access.",
     nextAction:
       "Keep reviewing public copy whenever pricing, content scope, or certificate language changes.",
   },
