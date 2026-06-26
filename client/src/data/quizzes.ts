@@ -3,57 +3,73 @@
  * Each module has an end-of-module quiz to assess learning
  */
 
-import type { ModuleQuiz } from "@/components/ModuleQuiz";
+import type { QuizData } from "@/components/ModuleQuiz";
 
-export const moduleQuizzes: ModuleQuiz[] = [
+export const moduleQuizzes: QuizData[] = [
   {
-    id: "quiz-day-1",
-    title: "Day 1: Ophthalmic Foundations & Patient Communication",
-    description: "Test your knowledge of ocular anatomy and patient communication fundamentals",
+    id: "quiz-entering-ophthalmic-care",
+    title: "Module 1: Entering Ophthalmic Care",
+    description:
+      "Check your understanding of clinic roles, privacy, scope, and escalation.",
     day: 1,
-    passingScore: 70,
+    passingScore: 80,
     questions: [
       {
-        id: "q1-day1",
-        question: "Which part of the eye is responsible for focusing light onto the retina?",
+        id: "m1-q1",
+        question: "A new ophthalmic technician should describe their role as:",
         type: "multiple-choice",
-        options: ["Cornea", "Lens", "Retina", "Pupil"],
-        correctAnswer: "Lens",
+        options: [
+          "The person who diagnoses the eye problem",
+          "A clinical team member who gathers accurate information and performs starting tests",
+          "The person who decides whether surgery is needed",
+          "A billing specialist who schedules follow-up care",
+        ],
+        correctAnswer:
+          "A clinical team member who gathers accurate information and performs starting tests",
         explanation:
-          "The lens is the transparent structure that changes shape to focus light onto the retina. While the cornea also participates in focusing, the lens is primarily responsible for accommodation.",
+          "Entry-level technicians support the eye-care team by gathering information, testing carefully, documenting, and escalating concerns.",
       },
       {
-        id: "q2-day1",
-        question: "The optic nerve transmits visual information from the eye to the brain.",
+        id: "m1-q2",
+        question:
+          "If a patient asks whether their symptoms mean they have glaucoma, the safest beginner response is:",
+        type: "multiple-choice",
+        options: [
+          "Yes, because blurry vision usually means glaucoma",
+          "No, glaucoma never causes blurry vision",
+          "That is a diagnosis question for the provider, and I will make sure they know your concern",
+          "Search the internet with the patient",
+        ],
+        correctAnswer:
+          "That is a diagnosis question for the provider, and I will make sure they know your concern",
+        explanation:
+          "The technician should acknowledge the concern, avoid diagnosis, and escalate the question to the provider.",
+      },
+      {
+        id: "m1-q3",
+        question:
+          "Privacy means patient details should be discussed only with care team members who need the information for care.",
         type: "true-false",
         correctAnswer: "True",
         explanation:
-          "The optic nerve (cranial nerve II) carries visual signals from the retina to the visual cortex in the brain.",
+          "Patient information should not be discussed casually or in public spaces.",
       },
       {
-        id: "q3-day1",
-        question: "What is the primary benefit of using the EMPATHY framework in patient interactions?",
+        id: "m1-q4",
+        question: "Which situation should be escalated promptly?",
         type: "multiple-choice",
         options: [
-          "It reduces conversation time",
-          "It builds patient trust and rapport",
-          "It eliminates the need for documentation",
-          "It speeds up the diagnostic process",
+          "A patient asks where the restroom is",
+          "A patient reports sudden new flashes and floaters",
+          "A patient asks for a printed appointment reminder",
+          "A patient says the waiting room is cold",
         ],
-        correctAnswer: "It builds patient trust and rapport",
+        correctAnswer: "A patient reports sudden new flashes and floaters",
         explanation:
-          "EMPATHY (Empathy, Mutuality, Partnership, Teaching, Hypothesizing, Your role) creates therapeutic relationships that improve patient satisfaction and clinical outcomes.",
-      },
-      {
-        id: "q4-day1",
-        question: "The macula is located in the peripheral retina.",
-        type: "true-false",
-        correctAnswer: "False",
-        explanation:
-          "The macula is located in the central retina and is responsible for central vision and color perception.",
+          "Sudden flashes and floaters can signal an urgent eye problem and should be brought to the provider or supervisor promptly.",
       },
     ],
-    timeLimit: 20,
+    timeLimit: 15,
   },
   {
     id: "quiz-day-2",
@@ -386,10 +402,10 @@ export const moduleQuizzes: ModuleQuiz[] = [
   },
 ];
 
-export const getQuizByDay = (day: number): ModuleQuiz | undefined => {
+export const getQuizByDay = (day: number): QuizData | undefined => {
   return moduleQuizzes.find((quiz) => quiz.day === day);
 };
 
-export const getQuizById = (quizId: string): ModuleQuiz | undefined => {
+export const getQuizById = (quizId: string): QuizData | undefined => {
   return moduleQuizzes.find((quiz) => quiz.id === quizId);
 };
