@@ -13,7 +13,7 @@ interface CheckoutRequestBody {
 }
 
 export function setupCheckoutRoutes(router: Router) {
-  router.post("/checkout/session", async (req: Request, res: Response) => {
+  router.post("/checkout/sessions", async (req: Request, res: Response) => {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
     if (!stripeSecretKey) {

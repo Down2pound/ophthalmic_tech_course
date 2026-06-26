@@ -15,6 +15,8 @@ import {
 } from "@shared/commerce/offers";
 import { commercePolicies } from "@shared/commerce/policies";
 import { useState } from "react";
+import { createCheckoutSession } from "@/lib/checkoutClient";
+import { getCheckoutStatus } from "@/lib/checkoutStatus";
 
 const policySummary = commercePolicies.slice(0, 3);
 
@@ -22,27 +24,21 @@ export default function Checkout() {
   const [email, setEmail] = useState("");
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [isStartingCheckout, setIsStartingCheckout] = useState(false);
+  const checkoutStatus =
+    typeof window === "undefined"
+      ? null
+      : getCheckoutStatus(window.location.search);
 
   const startCheckout = async () => {
     setIsStartingCheckout(true);
     setCheckoutError(null);
 
     try {
-      const response = await fetch("/api/checkout/session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() || undefined }),
+      const { url } = await createCheckoutSession({
+        email: email.trim() || undefined,
       });
-      const payload = (await response.json()) as {
-        url?: string;
-        error?: string;
-      };
 
-      if (!response.ok || !payload.url) {
-        throw new Error(payload.error ?? "Checkout could not start.");
-      }
-
-      window.location.href = payload.url;
+      window.location.href = url;
     } catch (error) {
       setCheckoutError(
         error instanceof Error
@@ -84,6 +80,28 @@ export default function Checkout() {
 
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1fr_380px]">
         <section className="space-y-6">
+          {checkoutStatus && (
+            <Card
+              className={`border p-5 shadow-sm ${
+                checkoutStatus.tone === "success"
+                  ? "border-green-200 bg-green-50 text-green-950"
+                  : "border-blue-200 bg-blue-50 text-blue-950"
+              }`}
+            >
+              <h2 className="text-xl font-bold">{checkoutStatus.title}</h2>
+              <p className="mt-2 leading-7">{checkoutStatus.message}</p>
+              {checkoutStatus.tone === "success" && (
+                <a
+                  href="/learn"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-green-800 hover:text-green-950"
+                >
+                  Start Module 1
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
+            </Card>
+          )}
+
           <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
             <div className="flex items-center gap-3">
               <GraduationCap className="h-6 w-6 text-blue-700" />

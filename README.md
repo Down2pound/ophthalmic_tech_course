@@ -46,3 +46,29 @@ Each day features a dedicated module with comprehensive training materials, hand
 ## Getting Started
 
 See individual README files in `client/`, `server/`, and `shared/` directories for setup instructions.
+
+## Stripe Checkout Setup
+
+The app uses Stripe-hosted Checkout for founding learner purchases. That means
+learners enter card details on Stripe's secure page, not inside this app.
+
+Required environment variables:
+
+```text
+STRIPE_SECRET_KEY=sk_test_your_key_here
+PUBLIC_APP_URL=http://localhost:3000
+```
+
+`PUBLIC_APP_URL` should be the real deployed site URL in production. The server
+uses it to build the success and cancel return links after Stripe checkout.
+
+Checkout routes:
+
+- Frontend page: `/checkout`
+- Policies page: `/policies`
+- Server endpoint: `POST /api/checkout/sessions`
+- Success return: `/learn?checkout=success`
+- Cancel return: `/checkout?checkout=cancelled`
+
+If `STRIPE_SECRET_KEY` is missing, checkout fails closed with a setup message and
+does not collect payment.

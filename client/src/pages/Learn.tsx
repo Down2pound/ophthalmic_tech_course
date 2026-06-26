@@ -8,6 +8,7 @@ import {
   markLessonComplete,
   saveProgress,
 } from "@/lib/progressStore";
+import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import { optiTechCourse } from "@shared/course/courseCatalog";
 import { moduleOneLessons } from "@shared/course/moduleOneLessons";
 import { BookOpen, CheckCircle2, ExternalLink, ShieldAlert } from "lucide-react";
@@ -32,6 +33,10 @@ export default function Learn() {
 
   const completePercent = getProgressPercent(progress, moduleOneLessons.length);
   const moduleOne = optiTechCourse.modules[0];
+  const checkoutStatus =
+    typeof window === "undefined"
+      ? null
+      : getCheckoutStatus(window.location.search);
 
   const completeLesson = () => {
     if (!selectedLesson || !storage) return;
@@ -61,6 +66,15 @@ export default function Learn() {
 
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[320px_1fr]">
         <aside className="space-y-4">
+          {checkoutStatus?.tone === "success" && (
+            <Card className="border-green-200 bg-green-50 p-4 text-green-950 shadow-sm">
+              <h2 className="font-semibold">{checkoutStatus.title}</h2>
+              <p className="mt-2 text-sm leading-6">
+                {checkoutStatus.message}
+              </p>
+            </Card>
+          )}
+
           <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold">Module progress</span>
