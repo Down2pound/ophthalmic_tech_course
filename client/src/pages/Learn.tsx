@@ -16,6 +16,7 @@ import {
   BriefcaseBusiness,
   CheckCircle2,
   ClipboardCheck,
+  Compass,
   ExternalLink,
   ShieldAlert,
 } from "lucide-react";
@@ -114,6 +115,24 @@ export default function Learn() {
                   className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
                 >
                   Open toolkit
+                </a>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
+            <div className="flex items-start gap-3">
+              <Compass className="mt-1 h-5 w-5 text-blue-700" />
+              <div>
+                <h2 className="font-semibold">Starting Path</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Take the onboarding assessment to frame your learning path.
+                </p>
+                <a
+                  href="/onboarding"
+                  className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
+                >
+                  Find your path
                 </a>
               </div>
             </div>

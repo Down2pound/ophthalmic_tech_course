@@ -90,6 +90,11 @@ export default function Home() {
                     Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </a>
+                <a href="/onboarding">
+                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
+                    Find Your Path
+                  </Button>
+                </a>
                 <a href="/curriculum">
                   <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
                     View Curriculum

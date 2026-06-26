@@ -11,6 +11,7 @@ import Checkout from "./pages/Checkout";
 import Policies from "./pages/Policies";
 import SkillsPassport from "./pages/SkillsPassport";
 import CareerToolkit from "./pages/CareerToolkit";
+import OnboardingAssessment from "./pages/OnboardingAssessment";
 
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       <Route path={"/policies"} component={Policies} />
       <Route path={"/skills-passport"} component={SkillsPassport} />
       <Route path={"/career-toolkit"} component={CareerToolkit} />
+      <Route path={"/onboarding"} component={OnboardingAssessment} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
