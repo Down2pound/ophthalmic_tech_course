@@ -61,7 +61,7 @@ export default function Learn() {
 
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[320px_1fr]">
         <aside className="space-y-4">
-          <Card className="p-4">
+          <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold">Module progress</span>
               <span className="text-sm text-slate-600">{completePercent}%</span>
@@ -69,7 +69,7 @@ export default function Learn() {
             <Progress className="mt-3" value={completePercent} />
           </Card>
 
-          <Card className="overflow-hidden">
+          <Card className="overflow-hidden border-slate-200 bg-white text-slate-950 shadow-sm">
             {moduleOneLessons.map((lesson) => {
               const complete = progress.completedLessonIds.includes(lesson.id);
               const active = selectedLesson?.id === lesson.id;
@@ -100,7 +100,7 @@ export default function Learn() {
 
         {selectedLesson && (
           <article className="space-y-6">
-            <Card className="p-6">
+            <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
               <p className="text-sm font-semibold text-blue-700">Lesson</p>
               <h2 className="mt-2 text-3xl font-bold">
                 {selectedLesson.title}
@@ -117,7 +117,7 @@ export default function Learn() {
               </div>
             </Card>
 
-            <Card className="grid gap-4 p-6 md:grid-cols-2">
+            <Card className="grid gap-4 border-slate-200 bg-white p-6 text-slate-950 shadow-sm md:grid-cols-2">
               <section>
                 <h3 className="font-semibold">In the clinic</h3>
                 <p className="mt-2 text-slate-700">
@@ -132,7 +132,7 @@ export default function Learn() {
               </section>
             </Card>
 
-            <Card className="p-6">
+            <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
               <h3 className="font-semibold">Common mistakes to avoid</h3>
               <ul className="mt-3 space-y-2">
                 {selectedLesson.commonMistakes.map((mistake) => (
@@ -144,7 +144,7 @@ export default function Learn() {
               </ul>
             </Card>
 
-            <Card className="p-6">
+            <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
               <h3 className="font-semibold">Scenario practice</h3>
               <p className="mt-2 text-slate-700">
                 {selectedLesson.scenarioPrompt}
@@ -154,7 +154,7 @@ export default function Learn() {
               </p>
             </Card>
 
-            <Card className="p-6">
+            <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
               <h3 className="font-semibold">Sources and review status</h3>
               <p className="mt-2 text-sm text-slate-600">
                 Review: {selectedLesson.review.reviewStatus}. Reviewer:{" "}

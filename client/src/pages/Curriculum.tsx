@@ -1,12 +1,43 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, BookOpen, Video, FileText, HelpCircle, Clock } from "lucide-react";
+import {
+  Activity,
+  BookOpen,
+  CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  ClipboardList,
+  Clock,
+  Eye,
+  FileText,
+  Gauge,
+  Glasses,
+  GraduationCap,
+  HelpCircle,
+  ScanEye,
+  Search,
+  ShieldCheck,
+  Video,
+  type LucideIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { curriculumModules, getTotalCourseDuration } from "@/data/curriculum";
 
 export default function Curriculum() {
   const [expandedDay, setExpandedDay] = useState<number | null>(null);
   const totalDuration = getTotalCourseDuration();
+  const moduleIconMap: Record<string, LucideIcon> = {
+    Activity,
+    BookOpen,
+    ClipboardList,
+    Eye,
+    Gauge,
+    Glasses,
+    GraduationCap,
+    ScanEye,
+    Search,
+    ShieldCheck,
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -30,7 +61,10 @@ export default function Curriculum() {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid gap-4">
-          {curriculumModules.map((module) => (
+          {curriculumModules.map((module) => {
+            const ModuleIcon = moduleIconMap[module.icon] ?? BookOpen;
+
+            return (
             <Card
               key={module.id}
               className="overflow-hidden hover:shadow-lg transition-shadow"
@@ -44,7 +78,9 @@ export default function Curriculum() {
                 className="w-full p-6 flex items-start justify-between hover:bg-blue-50 transition-colors"
               >
                 <div className="flex items-start gap-4 flex-1 text-left">
-                  <div className="text-4xl">{module.icon}</div>
+                  <div className="rounded-lg bg-blue-50 p-3 text-blue-700">
+                    <ModuleIcon className="h-7 w-7" />
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-sm font-semibold text-blue-600">
@@ -102,9 +138,7 @@ export default function Curriculum() {
                     <ul className="space-y-2">
                       {module.objectives.map((objective, idx) => (
                         <li key={idx} className="flex items-start gap-3">
-                          <span className="text-blue-600 font-bold mt-1">
-                            ✓
-                          </span>
+                          <CheckCircle className="mt-1 h-4 w-4 flex-shrink-0 text-blue-600" />
                           <span className="text-gray-700">{objective}</span>
                         </li>
                       ))}
@@ -165,7 +199,8 @@ export default function Curriculum() {
                 </div>
               )}
             </Card>
-          ))}
+            );
+          })}
         </div>
 
         {/* Summary Section */}
