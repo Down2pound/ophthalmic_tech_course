@@ -3,6 +3,7 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { setupCheckoutRoutes } from "./src/routes/checkout";
+import { setupAuthRoutes } from "./src/routes/auth";
 import { setupLaunchReadinessRoutes } from "./src/routes/launchReadiness";
 import { setupStripeWebhookRoute } from "./src/routes/stripeWebhook";
 
@@ -16,6 +17,7 @@ async function startServer() {
 
   setupStripeWebhookRoute(app);
   app.use(express.json());
+  setupAuthRoutes(apiRouter);
   setupCheckoutRoutes(apiRouter);
   setupLaunchReadinessRoutes(apiRouter);
   app.use("/api", apiRouter);

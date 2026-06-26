@@ -84,6 +84,7 @@ Checkout routes:
 - Frontend page: `/checkout`
 - Policies page: `/policies`
 - Server endpoint: `POST /api/checkout/sessions`
+- Passwordless sign-in request endpoint: `POST /api/auth/passwordless/start`
 - Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success`
 - Cancel return: `/checkout?checkout=cancelled`
@@ -94,6 +95,11 @@ does not collect payment.
 `GET /api/launch/readiness` returns a safe setup report with launch blocker
 counts and missing environment variable names. It must never return actual
 Stripe key values.
+
+`POST /api/auth/passwordless/start` prepares a magic-link sign-in request and
+returns only a generic safe message. It does not return raw tokens, token
+hashes, or callback URLs. Email delivery and durable database storage still
+need to be connected before real learner sign-in is production-ready.
 
 ## Database Contracts
 
@@ -107,6 +113,7 @@ durable. Current schema contracts live in:
   storing only SHA-256 token hashes.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
+- `server/src/routes/auth.ts` for the safe passwordless sign-in request route.
 
 These files are blueprints. They still need to be run through the production
 migration tool and wired to real database repositories before selling durable
