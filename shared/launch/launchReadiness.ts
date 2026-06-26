@@ -40,7 +40,7 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Stripe Checkout session creation",
     status: "in-progress",
     evidence:
-      "Server route creates Stripe Checkout Sessions, fails closed when STRIPE_SECRET_KEY is missing, and has a safe .env.example template for local Stripe setup.",
+      "Server route creates Stripe Checkout Sessions, reports missing setup variables when checkout is not configured, and has a safe .env.example template for local Stripe setup.",
     nextAction:
       "Add real Stripe test/production secrets outside Git, test card flow, webhook delivery, and success/cancel redirects in a deployed environment.",
   },
@@ -49,7 +49,7 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Verified Stripe webhook fulfillment",
     status: "blocked",
     evidence:
-      "A signed Stripe webhook receiver can verify checkout.session.completed events, record purchases, provision temporary enrollments idempotently, and now has a PostgreSQL-ready commerce schema, but records are not connected to a live database yet.",
+      "A signed Stripe webhook receiver can report missing setup variables, verify checkout.session.completed events, record purchases, provision temporary enrollments idempotently, and now has a PostgreSQL-ready commerce schema, but records are not connected to a live database yet.",
     nextAction:
       "Run the commerce schema against managed PostgreSQL, replace temporary stores with database repositories, and unlock paid access from durable server-side records.",
   },

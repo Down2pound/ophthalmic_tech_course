@@ -3,6 +3,7 @@ import {
   buildStripeCheckoutParams,
   getCheckoutBaseUrl,
 } from "../commerce/stripeCheckout";
+import { getCommerceEnvironmentStatus } from "../config/environment";
 
 const STRIPE_CHECKOUT_SESSIONS_URL =
   "https://api.stripe.com/v1/checkout/sessions";
@@ -15,10 +16,12 @@ interface CheckoutRequestBody {
 export function setupCheckoutRoutes(router: Router) {
   router.post("/checkout/sessions", async (req: Request, res: Response) => {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    const environmentStatus = getCommerceEnvironmentStatus();
 
-    if (!stripeSecretKey) {
+    if (!environmentStatus.checkoutConfigured || !stripeSecretKey) {
       res.status(503).json({
         error: "Stripe checkout is not configured yet.",
+        missing: environmentStatus.missingCheckoutVariables,
       });
       return;
     }

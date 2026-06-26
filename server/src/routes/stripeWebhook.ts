@@ -7,6 +7,7 @@ import {
   verifyStripeWebhookSignature,
   type StripeCheckoutCompletedEvent,
 } from "../commerce/stripeWebhook";
+import { getCommerceEnvironmentStatus } from "../config/environment";
 
 const purchaseStore = createInMemoryPurchaseStore();
 const enrollmentStore = createInMemoryEnrollmentStore();
@@ -29,9 +30,13 @@ export function setupStripeWebhookRoute(app: Express) {
     express.raw({ type: "application/json" }),
     async (req: Request & { body: Buffer }, res: Response) => {
       const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      const environmentStatus = getCommerceEnvironmentStatus();
 
-      if (!webhookSecret) {
-        res.status(503).json({ error: "Stripe webhook is not configured." });
+      if (!environmentStatus.webhookConfigured || !webhookSecret) {
+        res.status(503).json({
+          error: "Stripe webhook is not configured.",
+          missing: environmentStatus.missingWebhookVariables,
+        });
         return;
       }
 
