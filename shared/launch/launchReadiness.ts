@@ -58,9 +58,9 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Learner accounts and access control",
     status: "blocked",
     evidence:
-      "A server-side entitlement rule can derive access from verified purchases, and the webhook can create temporary enrollments, but there are no authenticated learner accounts or durable enrollments yet.",
+      "A server-side entitlement rule can derive access from verified purchases, the webhook can create temporary enrollments, and a PostgreSQL-ready passwordless auth schema now exists, but there is no running sign-in flow or durable enrollment repository yet.",
     nextAction:
-      "Add authentication, durable enrollment records, and authorization rules before selling durable access.",
+      "Run auth and commerce schemas against managed PostgreSQL, add passwordless email sign-in, durable enrollment repositories, and authorization rules before selling durable access.",
   },
   {
     id: "assessment-security",
