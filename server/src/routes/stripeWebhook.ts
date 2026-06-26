@@ -1,5 +1,9 @@
 import express, { type Express, type Request, type Response } from "express";
 import {
+  createEnrollmentFromPurchase,
+  createInMemoryEnrollmentStore,
+} from "../commerce/enrollmentStore";
+import {
   createInMemoryPurchaseStore,
   createVerifiedPurchaseRecord,
 } from "../commerce/purchaseStore";
@@ -10,9 +14,14 @@ import {
 } from "../commerce/stripeWebhook";
 
 const purchaseStore = createInMemoryPurchaseStore();
+const enrollmentStore = createInMemoryEnrollmentStore();
 
 export function getReceivedPurchaseEvents() {
   return purchaseStore.listPurchases();
+}
+
+export function getProvisionedEnrollments() {
+  return enrollmentStore.listEnrollments();
 }
 
 export function setupStripeWebhookRoute(app: Express) {
@@ -51,14 +60,19 @@ export function setupStripeWebhookRoute(app: Express) {
 
       const purchaseEvent = createPurchaseEventFromStripeEvent(stripeEvent);
       let purchaseRecorded = false;
+      let enrollmentProvisioned = false;
 
       if (purchaseEvent) {
-        purchaseRecorded = purchaseStore.recordPurchase(
-          createVerifiedPurchaseRecord(purchaseEvent)
+        const verifiedPurchase = createVerifiedPurchaseRecord(purchaseEvent);
+
+        purchaseRecorded =
+          purchaseStore.recordPurchase(verifiedPurchase).created;
+        enrollmentProvisioned = enrollmentStore.provisionEnrollment(
+          createEnrollmentFromPurchase(verifiedPurchase)
         ).created;
       }
 
-      res.json({ received: true, purchaseRecorded });
+      res.json({ received: true, purchaseRecorded, enrollmentProvisioned });
     }
   );
 }

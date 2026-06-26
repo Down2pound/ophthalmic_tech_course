@@ -49,16 +49,16 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Verified Stripe webhook fulfillment",
     status: "blocked",
     evidence:
-      "A signed Stripe webhook receiver can verify checkout.session.completed events and record them idempotently in a temporary server-side store, but purchase records are not durable yet.",
+      "A signed Stripe webhook receiver can verify checkout.session.completed events, record purchases, and provision temporary enrollments idempotently, but records are not durable yet.",
     nextAction:
-      "Persist verified purchase events in the database and unlock paid access from server-side purchase records.",
+      "Persist verified purchase events and enrollments in the database, then unlock paid access from durable server-side records.",
   },
   {
     id: "learner-access-control",
     title: "Learner accounts and access control",
     status: "blocked",
     evidence:
-      "A server-side entitlement rule can derive access from verified purchases, but there are no authenticated learner accounts or durable enrollments yet.",
+      "A server-side entitlement rule can derive access from verified purchases, and the webhook can create temporary enrollments, but there are no authenticated learner accounts or durable enrollments yet.",
     nextAction:
       "Add authentication, durable enrollment records, and authorization rules before selling durable access.",
   },
