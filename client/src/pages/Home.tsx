@@ -105,6 +105,11 @@ export default function Home() {
                     Skills Passport
                   </Button>
                 </a>
+                <a href="/career-toolkit">
+                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
+                    Career Toolkit
+                  </Button>
+                </a>
               </div>
               <div className="flex items-center gap-2 text-green-400 pt-4">
                 <CheckCircle2 className="w-5 h-5" />

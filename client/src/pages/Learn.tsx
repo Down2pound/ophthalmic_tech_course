@@ -13,6 +13,7 @@ import { optiTechCourse } from "@shared/course/courseCatalog";
 import { moduleOneLessons } from "@shared/course/moduleOneLessons";
 import {
   BookOpen,
+  BriefcaseBusiness,
   CheckCircle2,
   ClipboardCheck,
   ExternalLink,
@@ -94,6 +95,25 @@ export default function Learn() {
                   className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
                 >
                   Open passport
+                </a>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
+            <div className="flex items-start gap-3">
+              <BriefcaseBusiness className="mt-1 h-5 w-5 text-blue-700" />
+              <div>
+                <h2 className="font-semibold">Career Toolkit</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Prepare resume language, interview answers, and job-search
+                  next steps.
+                </p>
+                <a
+                  href="/career-toolkit"
+                  className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
+                >
+                  Open toolkit
                 </a>
               </div>
             </div>

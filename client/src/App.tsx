@@ -10,6 +10,7 @@ import Learn from "./pages/Learn";
 import Checkout from "./pages/Checkout";
 import Policies from "./pages/Policies";
 import SkillsPassport from "./pages/SkillsPassport";
+import CareerToolkit from "./pages/CareerToolkit";
 
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
       <Route path={"/checkout"} component={Checkout} />
       <Route path={"/policies"} component={Policies} />
       <Route path={"/skills-passport"} component={SkillsPassport} />
+      <Route path={"/career-toolkit"} component={CareerToolkit} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
