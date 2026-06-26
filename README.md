@@ -55,12 +55,24 @@ learners enter card details on Stripe's secure page, not inside this app.
 Required environment variables:
 
 ```text
-STRIPE_SECRET_KEY=sk_test_your_key_here
+STRIPE_SECRET_KEY=sk_test_replace_with_your_secret_key
 PUBLIC_APP_URL=http://localhost:3000
+STRIPE_WEBHOOK_SECRET=whsec_replace_with_your_webhook_signing_secret
 ```
 
 `PUBLIC_APP_URL` should be the real deployed site URL in production. The server
 uses it to build the success and cancel return links after Stripe checkout.
+
+Use `.env.example` as the safe template for local setup. Copy it to `.env`, then
+paste real local/test values into `.env`. The `.env` file is ignored by Git so
+real secrets do not get committed.
+
+Stripe key guide:
+
+- `pk_test_...` is a publishable test key. It is safe to expose to the browser,
+  but the current hosted Checkout flow does not require it.
+- `sk_test_...` is a secret test key. It must stay server-only in `.env`.
+- `whsec_...` is the webhook signing secret. It must stay server-only in `.env`.
 
 Checkout routes:
 

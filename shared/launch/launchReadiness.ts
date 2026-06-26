@@ -40,9 +40,9 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Stripe Checkout session creation",
     status: "in-progress",
     evidence:
-      "Server route creates Stripe Checkout Sessions and fails closed when STRIPE_SECRET_KEY is missing.",
+      "Server route creates Stripe Checkout Sessions, fails closed when STRIPE_SECRET_KEY is missing, and has a safe .env.example template for local Stripe setup.",
     nextAction:
-      "Add production Stripe secrets, test card flow, and confirm success/cancel redirects in a deployed environment.",
+      "Add real Stripe test/production secrets outside Git, test card flow, webhook delivery, and success/cancel redirects in a deployed environment.",
   },
   {
     id: "stripe-webhooks",
