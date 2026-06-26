@@ -12,6 +12,7 @@ import Policies from "./pages/Policies";
 import SkillsPassport from "./pages/SkillsPassport";
 import CareerToolkit from "./pages/CareerToolkit";
 import OnboardingAssessment from "./pages/OnboardingAssessment";
+import PracticePacks from "./pages/PracticePacks";
 
 
 function Router() {
@@ -25,6 +26,7 @@ function Router() {
       <Route path={"/skills-passport"} component={SkillsPassport} />
       <Route path={"/career-toolkit"} component={CareerToolkit} />
       <Route path={"/onboarding"} component={OnboardingAssessment} />
+      <Route path={"/practice-packs"} component={PracticePacks} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

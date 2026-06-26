@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { foundingLearnerOffer } from "./offers";
+import { foundingLearnerOffer, practicePackOffers } from "./offers";
 import { commercePolicies } from "./policies";
 
 describe("foundingLearnerOffer", () => {
@@ -20,6 +20,33 @@ describe("foundingLearnerOffer", () => {
     expect(combined).toMatch(/not certification/i);
     expect(combined).toMatch(/does not guarantee employment/i);
     expect(combined).toMatch(/does not verify hands-on/i);
+  });
+});
+
+describe("practicePackOffers", () => {
+  it("defines the approved employer seat packs", () => {
+    expect(practicePackOffers.map((offer) => offer.id)).toEqual([
+      "practice-five-seat-pack",
+      "practice-fifteen-seat-pack",
+    ]);
+    expect(practicePackOffers[0].seatCount).toBe(5);
+    expect(practicePackOffers[0].priceCents).toBe(79900);
+    expect(practicePackOffers[1].seatCount).toBe(15);
+    expect(practicePackOffers[1].priceCents).toBe(179900);
+  });
+
+  it("keeps employer offers honest about supervision and competency", () => {
+    const combined = practicePackOffers
+      .flatMap((offer) => [
+        offer.description,
+        ...offer.includes,
+        ...offer.limitations,
+      ])
+      .join(" ");
+
+    expect(combined).toMatch(/supervisor/i);
+    expect(combined).toMatch(/does not independently verify/i);
+    expect(combined).not.toMatch(/guaranteed competency/i);
   });
 });
 

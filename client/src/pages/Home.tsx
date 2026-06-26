@@ -54,6 +54,9 @@ export default function Home() {
             <a href="#pricing" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
               Pricing
             </a>
+            <a href="/practice-packs" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+              Practice Packs
+            </a>
             <a href="#why" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
               Why Us
             </a>
@@ -113,6 +116,11 @@ export default function Home() {
                 <a href="/career-toolkit">
                   <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
                     Career Toolkit
+                  </Button>
+                </a>
+                <a href="/practice-packs">
+                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
+                    Practice Packs
                   </Button>
                 </a>
               </div>
