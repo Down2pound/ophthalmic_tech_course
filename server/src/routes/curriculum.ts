@@ -23,7 +23,7 @@ export function setupCurriculumRoutes(router: Router) {
         description:
           "A comprehensive high-intensity multimedia training program designed to prepare new hires and career changers to become clinic-ready ophthalmic technicians.",
         totalDays: CURRICULUM_CONFIG.TOTAL_DAYS,
-        modules: CURRICULUM_CONFIG.MODULES as any[], // Will be populated from database
+        modules: [...CURRICULUM_CONFIG.MODULES] as Module[], // Will be populated from database
         notebookLmUrl: CURRICULUM_CONFIG.NOTEBOOKLM_URL,
         lastUpdated: new Date(),
       };
