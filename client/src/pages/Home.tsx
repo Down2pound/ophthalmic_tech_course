@@ -1,14 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { CheckCircle2, Clock, Users, Award, ArrowRight, Eye, Sparkles } from "lucide-react";
-import { useState } from "react";
-import { EnrollmentForm } from "@/components/EnrollmentForm";
 import { curriculumModules } from "@/data/curriculum";
 import { Button } from "@/components/ui/button";
+import { formatOfferPrice, foundingLearnerOffer } from "@shared/commerce/offers";
 
 export default function Home() {
-  const [selectedTier, setSelectedTier] = useState<string | null>(null);
-  const [showEnrollmentForm, setShowEnrollmentForm] = useState(false);
-
   const curriculumDays = curriculumModules.map((module) => ({
     day: `Day ${module.day}`,
     title: module.title,
@@ -20,17 +16,9 @@ export default function Home() {
     {
       id: "standard",
       name: "Ophthalmic Technician Foundations",
-      price: "$199",
+      price: formatOfferPrice(foundingLearnerOffer),
       description: "Founding learner access to the self-paced foundations course",
-      features: [
-        "Published Module 1 starter lessons",
-        "Additional modules released as they are completed",
-        "Downloadable worksheets & checklists",
-        "Study guides and reference materials",
-        "12 months of course access",
-        "Certificate of completion",
-        "Email support",
-      ],
+      features: foundingLearnerOffer.includes,
       cta: "Enroll Now",
       highlighted: true,
     }
@@ -94,16 +82,14 @@ export default function Home() {
                 Build the vocabulary, habits, and supervised practice plan needed to begin training for an ophthalmic assistant or technician role.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
-                  onClick={() => {
-                    setSelectedTier("standard");
-                    setShowEnrollmentForm(true);
-                  }}
-                >
-                  Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
+                <a href="/checkout">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
+                  >
+                    Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </a>
                 <a href="/curriculum">
                   <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
                     View Curriculum
@@ -209,15 +195,11 @@ export default function Home() {
                   <span className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{tier.price}</span>
                   <span className="text-gray-400 ml-2">one-time</span>
                 </div>
-                <Button
-                  className="w-full mb-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0"
-                  onClick={() => {
-                    setSelectedTier(tier.id);
-                    setShowEnrollmentForm(true);
-                  }}
-                >
-                  {tier.cta}
-                </Button>
+                <a href="/checkout">
+                  <Button className="w-full mb-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">
+                    {tier.cta}
+                  </Button>
+                </a>
                 <ul className="space-y-3">
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3">
@@ -267,27 +249,17 @@ export default function Home() {
             <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
               Join the founding learner group and help shape a practical, honest training path for new ophthalmic techs
             </p>
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
-              onClick={() => {
-                setSelectedTier("standard");
-                setShowEnrollmentForm(true);
-              }}
-            >
-              Start Learning Today <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
+            <a href="/checkout">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
+              >
+                Start Learning Today <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </a>
           </div>
         </div>
       </section>
-
-      {/* Enrollment Form Modal */}
-      {showEnrollmentForm && (
-            <EnrollmentForm
-              tier={selectedTier || "standard"}
-              onClose={() => setShowEnrollmentForm(false)}
-            />
-      )}
     </div>
   );
 }

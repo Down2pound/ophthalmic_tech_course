@@ -7,6 +7,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Curriculum from "./pages/Curriculum";
 import Learn from "./pages/Learn";
+import Checkout from "./pages/Checkout";
+import Policies from "./pages/Policies";
 
 
 function Router() {
@@ -15,6 +17,8 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/curriculum"} component={Curriculum} />
       <Route path={"/learn"} component={Learn} />
+      <Route path={"/checkout"} component={Checkout} />
+      <Route path={"/policies"} component={Policies} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
