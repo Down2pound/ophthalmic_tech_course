@@ -14,6 +14,10 @@ export interface RuntimeLaunchReadinessReport {
   readyForPaidLaunch: boolean;
   staticSummary: LaunchReadinessSummary;
   commerce: RuntimeCommerceStatus;
+  auth: {
+    passwordlessConfigured: boolean;
+    missingPasswordlessVariables: string[];
+  };
   warnings: string[];
 }
 

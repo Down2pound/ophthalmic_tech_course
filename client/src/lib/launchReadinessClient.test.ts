@@ -17,6 +17,10 @@ const runtimeReport = {
     missingCheckoutVariables: [],
     missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],
   },
+  auth: {
+    passwordlessConfigured: false,
+    missingPasswordlessVariables: ["TRANSACTIONAL_EMAIL_API_KEY"],
+  },
   warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
 };
 

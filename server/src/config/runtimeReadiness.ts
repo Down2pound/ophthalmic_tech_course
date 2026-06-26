@@ -4,7 +4,9 @@ import {
   type LaunchReadinessSummary,
 } from "../../../shared/launch/launchReadiness";
 import {
+  getAuthEnvironmentStatus,
   getCommerceEnvironmentStatus,
+  type AuthEnvironmentStatus,
   type CommerceEnvironmentStatus,
   type EnvironmentMap,
 } from "./environment";
@@ -19,6 +21,7 @@ export interface RuntimeLaunchReadinessReport {
   readyForPaidLaunch: boolean;
   staticSummary: LaunchReadinessSummary;
   commerce: CommerceEnvironmentStatus;
+  auth: AuthEnvironmentStatus;
   warnings: string[];
 }
 
@@ -33,6 +36,7 @@ export function getRuntimeLaunchReadinessReport({
 }: RuntimeLaunchReadinessInput = {}): RuntimeLaunchReadinessReport {
   const staticSummary = getLaunchReadinessSummary(launchReadinessChecklist);
   const commerce = getCommerceEnvironmentStatus(env);
+  const auth = getAuthEnvironmentStatus(env);
   const warnings = [
     staticSummary.ready
       ? null
@@ -42,6 +46,10 @@ export function getRuntimeLaunchReadinessReport({
       commerce.missingCheckoutVariables
     ),
     formatMissingWarning("Stripe webhook", commerce.missingWebhookVariables),
+    formatMissingWarning(
+      "Passwordless sign-in",
+      auth.missingPasswordlessVariables
+    ),
   ].filter((warning): warning is string => Boolean(warning));
 
   return {
@@ -49,9 +57,11 @@ export function getRuntimeLaunchReadinessReport({
     readyForPaidLaunch:
       staticSummary.ready &&
       commerce.checkoutConfigured &&
-      commerce.webhookConfigured,
+      commerce.webhookConfigured &&
+      auth.passwordlessConfigured,
     staticSummary,
     commerce,
+    auth,
     warnings,
   };
 }

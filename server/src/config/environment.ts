@@ -7,12 +7,24 @@ export interface CommerceEnvironmentStatus {
   missingWebhookVariables: string[];
 }
 
+export interface AuthEnvironmentStatus {
+  passwordlessConfigured: boolean;
+  missingPasswordlessVariables: string[];
+}
+
 export const checkoutEnvironmentVariables = [
   "STRIPE_SECRET_KEY",
   "PUBLIC_APP_URL",
 ] as const;
 
 export const webhookEnvironmentVariables = ["STRIPE_WEBHOOK_SECRET"] as const;
+
+export const passwordlessEnvironmentVariables = [
+  "AUTH_SESSION_SECRET",
+  "TRANSACTIONAL_EMAIL_API_KEY",
+  "SIGN_IN_FROM_EMAIL",
+  "PUBLIC_APP_URL",
+] as const;
 
 export function getMissingEnvironmentVariables(
   env: EnvironmentMap,
@@ -41,5 +53,19 @@ export function getCommerceEnvironmentStatus(
     webhookConfigured: missingWebhookVariables.length === 0,
     missingCheckoutVariables,
     missingWebhookVariables,
+  };
+}
+
+export function getAuthEnvironmentStatus(
+  env: EnvironmentMap = process.env
+): AuthEnvironmentStatus {
+  const missingPasswordlessVariables = getMissingEnvironmentVariables(
+    env,
+    passwordlessEnvironmentVariables
+  );
+
+  return {
+    passwordlessConfigured: missingPasswordlessVariables.length === 0,
+    missingPasswordlessVariables,
   };
 }

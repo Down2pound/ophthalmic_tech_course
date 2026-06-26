@@ -58,6 +58,9 @@ Required environment variables:
 STRIPE_SECRET_KEY=sk_test_replace_with_your_secret_key
 PUBLIC_APP_URL=http://localhost:3000
 STRIPE_WEBHOOK_SECRET=whsec_replace_with_your_webhook_signing_secret
+AUTH_SESSION_SECRET=replace_with_a_long_random_session_secret
+TRANSACTIONAL_EMAIL_API_KEY=replace_with_your_email_provider_api_key
+SIGN_IN_FROM_EMAIL="OptiTech Academy <noreply@example.com>"
 ```
 
 `PUBLIC_APP_URL` should be the real deployed site URL in production. The server
@@ -73,6 +76,8 @@ Stripe key guide:
   but the current hosted Checkout flow does not require it.
 - `sk_test_...` is a secret test key. It must stay server-only in `.env`.
 - `whsec_...` is the webhook signing secret. It must stay server-only in `.env`.
+- `AUTH_SESSION_SECRET` and `TRANSACTIONAL_EMAIL_API_KEY` are server-only values
+  for the future passwordless sign-in flow.
 
 Checkout routes:
 

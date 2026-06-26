@@ -8,6 +8,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
         STRIPE_SECRET_KEY: "sk_test_secret_value",
         PUBLIC_APP_URL: "http://localhost:3000",
         STRIPE_WEBHOOK_SECRET: "",
+        AUTH_SESSION_SECRET: "session-secret",
+        TRANSACTIONAL_EMAIL_API_KEY: "",
+        SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
       },
       now: () => "2026-06-26T12:00:00.000Z",
     });
@@ -21,10 +24,17 @@ describe("getRuntimeLaunchReadinessReport", () => {
         missingCheckoutVariables: [],
         missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],
       },
+      auth: {
+        passwordlessConfigured: false,
+        missingPasswordlessVariables: ["TRANSACTIONAL_EMAIL_API_KEY"],
+      },
     });
     expect(report.staticSummary.blockedCount).toBeGreaterThan(0);
     expect(report.warnings).toContain(
       "Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."
+    );
+    expect(report.warnings).toContain(
+      "Passwordless sign-in setup is missing: TRANSACTIONAL_EMAIL_API_KEY."
     );
   });
 
@@ -34,6 +44,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
         STRIPE_SECRET_KEY: "sk_test_secret_value",
         PUBLIC_APP_URL: "http://localhost:3000",
         STRIPE_WEBHOOK_SECRET: "whsec_secret_value",
+        AUTH_SESSION_SECRET: "session-secret-value",
+        TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value",
+        SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
       },
     });
 
@@ -41,5 +54,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
 
     expect(serializedReport).not.toContain("sk_test_secret_value");
     expect(serializedReport).not.toContain("whsec_secret_value");
+    expect(serializedReport).not.toContain("session-secret-value");
+    expect(serializedReport).not.toContain("email-secret-value");
   });
 });
