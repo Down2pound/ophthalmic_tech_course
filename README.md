@@ -105,6 +105,8 @@ durable. Current schema contracts live in:
   and sessions.
 - `server/src/auth/magicLinkToken.ts` for creating raw email tokens while
   storing only SHA-256 token hashes.
+- `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
+  and email payload without storing the raw email token.
 
 These files are blueprints. They still need to be run through the production
 migration tool and wired to real database repositories before selling durable
