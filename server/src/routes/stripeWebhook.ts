@@ -1,15 +1,18 @@
 import express, { type Express, type Request, type Response } from "express";
 import {
+  createInMemoryPurchaseStore,
+  createVerifiedPurchaseRecord,
+} from "../commerce/purchaseStore";
+import {
   createPurchaseEventFromStripeEvent,
   verifyStripeWebhookSignature,
-  type PurchaseEvent,
   type StripeCheckoutCompletedEvent,
 } from "../commerce/stripeWebhook";
 
-const receivedPurchaseEvents: PurchaseEvent[] = [];
+const purchaseStore = createInMemoryPurchaseStore();
 
 export function getReceivedPurchaseEvents() {
-  return [...receivedPurchaseEvents];
+  return purchaseStore.listPurchases();
 }
 
 export function setupStripeWebhookRoute(app: Express) {
@@ -47,12 +50,15 @@ export function setupStripeWebhookRoute(app: Express) {
       }
 
       const purchaseEvent = createPurchaseEventFromStripeEvent(stripeEvent);
+      let purchaseRecorded = false;
 
       if (purchaseEvent) {
-        receivedPurchaseEvents.push(purchaseEvent);
+        purchaseRecorded = purchaseStore.recordPurchase(
+          createVerifiedPurchaseRecord(purchaseEvent)
+        ).created;
       }
 
-      res.json({ received: true, purchaseRecorded: Boolean(purchaseEvent) });
+      res.json({ received: true, purchaseRecorded });
     }
   );
 }

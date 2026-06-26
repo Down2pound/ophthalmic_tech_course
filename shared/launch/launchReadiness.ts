@@ -49,9 +49,9 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Verified Stripe webhook fulfillment",
     status: "blocked",
     evidence:
-      "A signed Stripe webhook receiver can verify checkout.session.completed events, but payment success does not yet provision durable learner access.",
+      "A signed Stripe webhook receiver can verify checkout.session.completed events and record them idempotently in a temporary server-side store, but purchase records are not durable yet.",
     nextAction:
-      "Persist verified purchase events, make webhook handling idempotent, and unlock paid access from server-side purchase records.",
+      "Persist verified purchase events in the database and unlock paid access from server-side purchase records.",
   },
   {
     id: "learner-access-control",
