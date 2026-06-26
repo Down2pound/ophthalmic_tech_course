@@ -1,0 +1,46 @@
+import { describe, expect, it, vi } from "vitest";
+import { fetchRuntimeLaunchReadiness } from "./launchReadinessClient";
+
+const runtimeReport = {
+  generatedAt: "2026-06-26T12:00:00.000Z",
+  readyForPaidLaunch: false,
+  staticSummary: {
+    ready: false,
+    readyCount: 1,
+    inProgressCount: 2,
+    blockedCount: 4,
+    blockers: ["Clinical content review"],
+  },
+  commerce: {
+    checkoutConfigured: true,
+    webhookConfigured: false,
+    missingCheckoutVariables: [],
+    missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],
+  },
+  warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
+};
+
+describe("fetchRuntimeLaunchReadiness", () => {
+  it("returns the runtime readiness report", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => runtimeReport,
+    });
+
+    await expect(fetchRuntimeLaunchReadiness({ fetcher })).resolves.toEqual(
+      runtimeReport
+    );
+    expect(fetcher).toHaveBeenCalledWith("/api/launch/readiness");
+  });
+
+  it("surfaces readiness fetch failures", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: "Readiness unavailable" }),
+    });
+
+    await expect(fetchRuntimeLaunchReadiness({ fetcher })).rejects.toThrow(
+      "Readiness unavailable"
+    );
+  });
+});
