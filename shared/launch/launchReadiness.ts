@@ -49,9 +49,9 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Verified Stripe webhook fulfillment",
     status: "blocked",
     evidence:
-      "A signed Stripe webhook receiver can verify checkout.session.completed events, record purchases, and provision temporary enrollments idempotently, but records are not durable yet.",
+      "A signed Stripe webhook receiver can verify checkout.session.completed events, record purchases, provision temporary enrollments idempotently, and now has a PostgreSQL-ready commerce schema, but records are not connected to a live database yet.",
     nextAction:
-      "Persist verified purchase events and enrollments in the database, then unlock paid access from durable server-side records.",
+      "Run the commerce schema against managed PostgreSQL, replace temporary stores with database repositories, and unlock paid access from durable server-side records.",
   },
   {
     id: "learner-access-control",
