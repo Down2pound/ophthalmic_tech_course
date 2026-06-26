@@ -1,12 +1,7 @@
 import express, { type Express, type Request, type Response } from "express";
-import {
-  createEnrollmentFromPurchase,
-  createInMemoryEnrollmentStore,
-} from "../commerce/enrollmentStore";
-import {
-  createInMemoryPurchaseStore,
-  createVerifiedPurchaseRecord,
-} from "../commerce/purchaseStore";
+import { createCommerceFulfillmentService } from "../commerce/commerceFulfillment";
+import { createInMemoryEnrollmentStore } from "../commerce/enrollmentStore";
+import { createInMemoryPurchaseStore } from "../commerce/purchaseStore";
 import {
   createPurchaseEventFromStripeEvent,
   verifyStripeWebhookSignature,
@@ -15,6 +10,10 @@ import {
 
 const purchaseStore = createInMemoryPurchaseStore();
 const enrollmentStore = createInMemoryEnrollmentStore();
+const commerceFulfillmentService = createCommerceFulfillmentService({
+  purchaseStore,
+  enrollmentStore,
+});
 
 export function getReceivedPurchaseEvents() {
   return purchaseStore.listPurchases();
@@ -63,13 +62,10 @@ export function setupStripeWebhookRoute(app: Express) {
       let enrollmentProvisioned = false;
 
       if (purchaseEvent) {
-        const verifiedPurchase = createVerifiedPurchaseRecord(purchaseEvent);
-
-        purchaseRecorded =
-          purchaseStore.recordPurchase(verifiedPurchase).created;
-        enrollmentProvisioned = enrollmentStore.provisionEnrollment(
-          createEnrollmentFromPurchase(verifiedPurchase)
-        ).created;
+        const fulfillment =
+          commerceFulfillmentService.fulfillPurchaseEvent(purchaseEvent);
+        purchaseRecorded = fulfillment.purchaseRecorded;
+        enrollmentProvisioned = fulfillment.enrollmentProvisioned;
       }
 
       res.json({ received: true, purchaseRecorded, enrollmentProvisioned });
