@@ -58,9 +58,9 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Learner accounts and access control",
     status: "blocked",
     evidence:
-      "Current progress is local-browser storage only; there are no authenticated learner accounts or server-side enrollments.",
+      "A server-side entitlement rule can derive access from verified purchases, but there are no authenticated learner accounts or durable enrollments yet.",
     nextAction:
-      "Add authentication, enrollment records, and authorization rules before selling durable access.",
+      "Add authentication, durable enrollment records, and authorization rules before selling durable access.",
   },
   {
     id: "assessment-security",
