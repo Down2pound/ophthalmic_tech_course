@@ -103,6 +103,8 @@ durable. Current schema contracts live in:
 - `server/src/commerce/commerceSchema.ts` for purchases and enrollments.
 - `server/src/auth/authSchema.ts` for passwordless users, magic-link tokens,
   and sessions.
+- `server/src/auth/magicLinkToken.ts` for creating raw email tokens while
+  storing only SHA-256 token hashes.
 
 These files are blueprints. They still need to be run through the production
 migration tool and wired to real database repositories before selling durable
