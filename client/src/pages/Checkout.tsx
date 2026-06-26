@@ -14,10 +14,46 @@ import {
   foundingLearnerOffer,
 } from "@shared/commerce/offers";
 import { commercePolicies } from "@shared/commerce/policies";
+import { useState } from "react";
 
 const policySummary = commercePolicies.slice(0, 3);
 
 export default function Checkout() {
+  const [email, setEmail] = useState("");
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [isStartingCheckout, setIsStartingCheckout] = useState(false);
+
+  const startCheckout = async () => {
+    setIsStartingCheckout(true);
+    setCheckoutError(null);
+
+    try {
+      const response = await fetch("/api/checkout/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() || undefined }),
+      });
+      const payload = (await response.json()) as {
+        url?: string;
+        error?: string;
+      };
+
+      if (!response.ok || !payload.url) {
+        throw new Error(payload.error ?? "Checkout could not start.");
+      }
+
+      window.location.href = payload.url;
+    } catch (error) {
+      setCheckoutError(
+        error instanceof Error
+          ? error.message
+          : "Checkout could not start. Please try again."
+      );
+    } finally {
+      setIsStartingCheckout(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="border-b bg-white">
@@ -118,16 +154,32 @@ export default function Checkout() {
               <Clock className="h-4 w-4 text-blue-700" />
               {foundingLearnerOffer.accessMonths} months of access
             </div>
+            <label className="mt-6 block text-sm font-semibold text-slate-700">
+              Email for receipt and access
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="learner@example.com"
+              className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
+            />
+            {checkoutError && (
+              <p className="mt-3 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                {checkoutError}
+              </p>
+            )}
             <Button
-              className="mt-6 w-full bg-blue-700 text-white hover:bg-blue-800"
-              disabled
+              className="mt-4 w-full bg-blue-700 text-white hover:bg-blue-800"
+              disabled={isStartingCheckout}
+              onClick={startCheckout}
             >
               <CreditCard className="mr-2 h-4 w-4" />
-              Stripe checkout coming next
+              {isStartingCheckout ? "Starting checkout..." : "Continue to Stripe"}
             </Button>
             <p className="mt-4 text-sm leading-6 text-slate-600">
-              The next build step will connect this button to Stripe Checkout so
-              payment details are handled securely by Stripe, not by this app.
+              Payment details are handled securely by Stripe Checkout, not by
+              this app.
             </p>
           </Card>
         </aside>
