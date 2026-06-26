@@ -251,7 +251,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { icon: Clock, title: "Self-Paced Learning", desc: "Learn at your own pace with 12 months of founding learner access" },
-              { icon: Award, title: "Certificate Included", desc: "Receive a professional certificate of completion upon finishing" },
+              { icon: Award, title: "Completion Certificate", desc: "Receive a certificate of completion for finished published content" },
               { icon: Users, title: "Expert Instruction", desc: "Learn from experienced ophthalmic professionals with 40+ years in the field" },
             ].map((item, idx) => (
               <div key={idx} className="glass-card p-8">

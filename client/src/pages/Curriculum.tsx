@@ -250,7 +250,7 @@ export default function Curriculum() {
                   Career Ready
                 </h4>
                 <p className="text-gray-600">
-                  Prepare for certification and career advancement
+                  Prepare for supervised practice and career advancement
                 </p>
               </div>
             </div>

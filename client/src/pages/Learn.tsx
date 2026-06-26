@@ -12,6 +12,7 @@ import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import { optiTechCourse } from "@shared/course/courseCatalog";
 import { moduleOneLessons } from "@shared/course/moduleOneLessons";
 import {
+  Award,
   BookOpen,
   BriefcaseBusiness,
   CheckCircle2,
@@ -133,6 +134,24 @@ export default function Learn() {
                   className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
                 >
                   Find your path
+                </a>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
+            <div className="flex items-start gap-3">
+              <Award className="mt-1 h-5 w-5 text-blue-700" />
+              <div>
+                <h2 className="font-semibold">Certificate Preview</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  See the completion language before it is used.
+                </p>
+                <a
+                  href="/certificate-preview"
+                  className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
+                >
+                  View preview
                 </a>
               </div>
             </div>
