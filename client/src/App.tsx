@@ -9,6 +9,7 @@ import Curriculum from "./pages/Curriculum";
 import Learn from "./pages/Learn";
 import Checkout from "./pages/Checkout";
 import Policies from "./pages/Policies";
+import SkillsPassport from "./pages/SkillsPassport";
 
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/learn"} component={Learn} />
       <Route path={"/checkout"} component={Checkout} />
       <Route path={"/policies"} component={Policies} />
+      <Route path={"/skills-passport"} component={SkillsPassport} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

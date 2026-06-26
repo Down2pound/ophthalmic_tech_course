@@ -100,6 +100,11 @@ export default function Home() {
                     Preview Module 1
                   </Button>
                 </a>
+                <a href="/skills-passport">
+                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
+                    Skills Passport
+                  </Button>
+                </a>
               </div>
               <div className="flex items-center gap-2 text-green-400 pt-4">
                 <CheckCircle2 className="w-5 h-5" />

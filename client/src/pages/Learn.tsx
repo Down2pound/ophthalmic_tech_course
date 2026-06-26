@@ -11,7 +11,13 @@ import {
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import { optiTechCourse } from "@shared/course/courseCatalog";
 import { moduleOneLessons } from "@shared/course/moduleOneLessons";
-import { BookOpen, CheckCircle2, ExternalLink, ShieldAlert } from "lucide-react";
+import {
+  BookOpen,
+  CheckCircle2,
+  ClipboardCheck,
+  ExternalLink,
+  ShieldAlert,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 
 const storage = typeof window === "undefined" ? null : window.localStorage;
@@ -74,6 +80,24 @@ export default function Learn() {
               </p>
             </Card>
           )}
+
+          <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
+            <div className="flex items-start gap-3">
+              <ClipboardCheck className="mt-1 h-5 w-5 text-blue-700" />
+              <div>
+                <h2 className="font-semibold">Skills Passport</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Track practice skills separately from online lesson progress.
+                </p>
+                <a
+                  href="/skills-passport"
+                  className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
+                >
+                  Open passport
+                </a>
+              </div>
+            </div>
+          </Card>
 
           <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
             <div className="flex items-center justify-between">
