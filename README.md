@@ -97,9 +97,10 @@ counts and missing environment variable names. It must never return actual
 Stripe key values.
 
 `POST /api/auth/passwordless/start` prepares a magic-link sign-in request and
-returns only a generic safe message. It does not return raw tokens, token
-hashes, or callback URLs. Email delivery and durable database storage still
-need to be connected before real learner sign-in is production-ready.
+stores the hashed magic-link record server-side while returning only a generic
+safe message. It does not return raw tokens, token hashes, or callback URLs.
+Email delivery and durable database storage still need to be connected before
+real learner sign-in is production-ready.
 
 ## Database Contracts
 
@@ -111,6 +112,8 @@ durable. Current schema contracts live in:
   and sessions.
 - `server/src/auth/magicLinkToken.ts` for creating raw email tokens while
   storing only SHA-256 token hashes.
+- `server/src/auth/magicLinkStore.ts` for the current swappable magic-link
+  storage interface and local in-memory implementation.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.
