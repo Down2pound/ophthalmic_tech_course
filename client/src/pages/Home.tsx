@@ -9,6 +9,11 @@ export default function Home() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [showEnrollmentForm, setShowEnrollmentForm] = useState(false);
 
+  const openEnrollment = (tier = "standard") => {
+    setSelectedTier(tier);
+    setShowEnrollmentForm(true);
+  };
+
   const curriculumDays = curriculumModules.map((module) => ({
     day: `Day ${module.day}`,
     title: module.title,
@@ -21,7 +26,7 @@ export default function Home() {
       id: "standard",
       name: "Ophthalmic Technician Foundations",
       price: "$699",
-      description: "Complete 10-day online course with certificate of completion",
+      description: "Complete 10-day online course subscription with certificate of completion",
       features: [
         "Full course videos (10 days)",
         "Downloadable worksheets & checklists",
@@ -69,7 +74,12 @@ export default function Home() {
               Why Us
             </a>
           </div>
-          <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">Get Started</Button>
+          <Button
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0"
+            onClick={() => openEnrollment()}
+          >
+            Get Started
+          </Button>
         </div>
       </nav>
 
@@ -80,7 +90,7 @@ export default function Home() {
             <div className="space-y-8 relative z-10">
               <div className="inline-flex items-center gap-2 glass-dark px-4 py-2 w-fit">
                 <Sparkles className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-semibold text-blue-300">🚀 Launch Your Career in 10 Days</span>
+                <span className="text-sm font-semibold text-blue-300">Launch Your Career in 10 Days</span>
               </div>
               <h1 className="text-6xl md:text-7xl font-bold leading-tight">
                 <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-300 bg-clip-text text-transparent">
@@ -96,10 +106,7 @@ export default function Home() {
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
-                  onClick={() => {
-                    setSelectedTier("standard");
-                    setShowEnrollmentForm(true);
-                  }}
+                  onClick={() => openEnrollment()}
                 >
                   Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -201,14 +208,11 @@ export default function Home() {
                 <p className="text-gray-300 text-sm mb-4">{tier.description}</p>
                 <div className="mb-6">
                   <span className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{tier.price}</span>
-                  <span className="text-gray-400 ml-2">one-time</span>
+                  <span className="text-gray-400 ml-2">subscription</span>
                 </div>
                 <Button
                   className="w-full mb-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0"
-                  onClick={() => {
-                    setSelectedTier(tier.id);
-                    setShowEnrollmentForm(true);
-                  }}
+                  onClick={() => openEnrollment(tier.id)}
                 >
                   {tier.cta}
                 </Button>
@@ -264,10 +268,7 @@ export default function Home() {
             <Button
               size="lg"
               className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
-              onClick={() => {
-                setSelectedTier("standard");
-                setShowEnrollmentForm(true);
-              }}
+              onClick={() => openEnrollment()}
             >
               Start Learning Today <ArrowRight className="ml-2 w-4 h-4" />
             </Button>

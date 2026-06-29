@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle2 } from "lucide-react";
+import { AlertCircle, Loader2, X } from "lucide-react";
 
 interface EnrollmentFormProps {
   tier: string;
@@ -17,40 +17,47 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
     experience: "beginner",
     goal: "",
     type: "individual",
+    organizationName: "",
+    seats: "1",
   });
 
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 3000);
-  };
+    setError("");
+    setIsSubmitting(true);
 
-  if (submitted) {
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <Card className="w-full max-w-md p-8 text-center">
-          <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Enrollment Submitted!</h3>
-          <p className="text-gray-600 mb-4">
-            Thank you for enrolling in the {tier.charAt(0).toUpperCase() + tier.slice(1)} program. Check your email for next steps.
-          </p>
-          <p className="text-sm text-gray-500">Redirecting...</p>
-        </Card>
-      </div>
-    );
-  }
+    try {
+      const response = await fetch("/api/enrollment/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          tier,
+        }),
+      });
+
+      const payload = await response.json();
+
+      if (!response.ok || !payload.url) {
+        throw new Error(payload.error ?? "Unable to start checkout.");
+      }
+
+      window.location.assign(payload.url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to start checkout.");
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
@@ -59,9 +66,10 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
           <h2 className="text-3xl font-bold text-gray-900">Enroll in {tier.charAt(0).toUpperCase() + tier.slice(1)} Program</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            className="text-gray-500 hover:text-gray-700"
+            aria-label="Close enrollment form"
           >
-            ×
+            <X className="h-6 w-6" />
           </button>
         </div>
 
@@ -161,6 +169,39 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
                 <option value="practice">Practice/Clinic Team</option>
               </select>
             </div>
+            {formData.type === "practice" && (
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Practice or Clinic Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="organizationName"
+                    value={formData.organizationName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Bright Vision Clinic"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Seats *
+                  </label>
+                  <input
+                    type="number"
+                    name="seats"
+                    value={formData.seats}
+                    onChange={handleChange}
+                    min="1"
+                    max="50"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 What is your primary goal? *
@@ -186,23 +227,39 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
                 className="mt-1 w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
               />
               <span className="text-sm text-gray-700">
-                I agree to the terms of service and privacy policy. I understand this is a 7-day intensive program.
+                I agree to the terms of service and privacy policy. I understand this is a 10-day intensive program.
               </span>
             </label>
           </div>
+
+          {error && (
+            <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
 
           {/* Buttons */}
           <div className="flex gap-4">
             <Button
               type="submit"
+              disabled={isSubmitting}
               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Complete Enrollment
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Redirecting to Checkout
+                </>
+              ) : (
+                "Continue to Secure Checkout"
+              )}
             </Button>
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
+              disabled={isSubmitting}
               className="flex-1"
             >
               Cancel

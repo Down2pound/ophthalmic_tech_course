@@ -3,9 +3,9 @@
  * Each module has an end-of-module quiz to assess learning
  */
 
-import type { ModuleQuiz } from "@/components/ModuleQuiz";
+import type { QuizData } from "@/components/ModuleQuiz";
 
-export const moduleQuizzes: ModuleQuiz[] = [
+export const moduleQuizzes: QuizData[] = [
   {
     id: "quiz-day-1",
     title: "Day 1: Ophthalmic Foundations & Patient Communication",
@@ -386,10 +386,10 @@ export const moduleQuizzes: ModuleQuiz[] = [
   },
 ];
 
-export const getQuizByDay = (day: number): ModuleQuiz | undefined => {
+export const getQuizByDay = (day: number): QuizData | undefined => {
   return moduleQuizzes.find((quiz) => quiz.day === day);
 };
 
-export const getQuizById = (quizId: string): ModuleQuiz | undefined => {
+export const getQuizById = (quizId: string): QuizData | undefined => {
   return moduleQuizzes.find((quiz) => quiz.id === quizId);
 };

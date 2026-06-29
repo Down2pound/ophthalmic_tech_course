@@ -11,6 +11,18 @@ import type {
 } from "../../../shared/types/curriculum";
 import { CURRICULUM_CONFIG } from "../../../shared/types/curriculum";
 
+const curriculumModules: Module[] = CURRICULUM_CONFIG.MODULES.map((module) => ({
+  id: module.day,
+  day: module.day,
+  title: module.title,
+  description: `${module.title} training module for day ${module.day}.`,
+  duration: "Self-paced",
+  topics: [],
+  learningOutcomes: [],
+  assessmentType: module.assessmentType,
+  status: "published",
+}));
+
 export function setupCurriculumRoutes(router: Router) {
   /**
    * GET /api/curriculum/overview
@@ -23,7 +35,7 @@ export function setupCurriculumRoutes(router: Router) {
         description:
           "A comprehensive high-intensity multimedia training program designed to prepare new hires and career changers to become clinic-ready ophthalmic technicians.",
         totalDays: CURRICULUM_CONFIG.TOTAL_DAYS,
-        modules: CURRICULUM_CONFIG.MODULES as any[], // Will be populated from database
+        modules: curriculumModules, // Will be populated from database
         notebookLmUrl: CURRICULUM_CONFIG.NOTEBOOKLM_URL,
         lastUpdated: new Date(),
       };
@@ -40,8 +52,7 @@ export function setupCurriculumRoutes(router: Router) {
    */
   router.get("/curriculum/modules", (req: Request, res: Response) => {
     try {
-      const modules = CURRICULUM_CONFIG.MODULES;
-      res.json(modules);
+      res.json(curriculumModules);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch modules" });
     }
@@ -62,7 +73,7 @@ export function setupCurriculumRoutes(router: Router) {
         return;
       }
 
-      const module = CURRICULUM_CONFIG.MODULES.find((m) => m.day === day);
+      const module = curriculumModules.find((m) => m.day === day);
 
       if (!module) {
         res.status(404).json({ error: `Module for day ${day} not found` });
