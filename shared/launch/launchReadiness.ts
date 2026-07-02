@@ -58,9 +58,9 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Learner accounts and access control",
     status: "blocked",
     evidence:
-      "A server-side entitlement rule can derive access from verified purchases, the webhook can create temporary enrollments, a PostgreSQL-ready passwordless auth schema exists, magic-link request/token helpers exist, a safe passwordless sign-in request route stores hashed magic-link records server-side, a callback route consumes one-time links into HTTP-only session cookies, and runtime readiness checks auth environment setup, but there is no email delivery or durable PostgreSQL-backed enrollment repository yet.",
+      "A server-side entitlement rule can derive access from verified purchases, the webhook can create temporary enrollments, a PostgreSQL-ready passwordless auth schema exists, magic-link request/token helpers exist, a safe passwordless sign-in request route stores hashed magic-link records server-side, a callback route consumes one-time links into HTTP-only session cookies, a session access endpoint checks active server-side enrollments, and runtime readiness checks auth environment setup, but there is no email delivery, durable PostgreSQL-backed enrollment repository, or fully protected server-delivered course content yet.",
     nextAction:
-      "Run auth and commerce schemas against managed PostgreSQL, add email delivery, durable enrollment repositories, and authorization rules before selling durable access.",
+      "Run auth and commerce schemas against managed PostgreSQL, add email delivery, durable enrollment repositories, and move paid course content behind server-checked authorization before selling durable access.",
   },
   {
     id: "assessment-security",

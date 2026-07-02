@@ -86,6 +86,7 @@ Checkout routes:
 - Server endpoint: `POST /api/checkout/sessions`
 - Passwordless sign-in request endpoint: `POST /api/auth/passwordless/start`
 - Passwordless callback endpoint: `GET /api/auth/callback?token=...`
+- Current learner access endpoint: `GET /api/auth/session`
 - Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success`
 - Cancel return: `/checkout?checkout=cancelled`
@@ -108,6 +109,10 @@ a hashed session server-side, sets an HTTP-only session cookie, and redirects to
 `/learn`. Expired, missing, or already used links return a safe invalid-link
 message.
 
+`GET /api/auth/session` reads the HTTP-only session cookie, verifies the hashed
+server-side session, and reports whether the signed-in learner has an active
+enrollment. It does not trust browser-provided email addresses.
+
 ## Database Contracts
 
 The first production release needs managed PostgreSQL before paid access can be
@@ -122,6 +127,8 @@ durable. Current schema contracts live in:
   storage interface and local in-memory implementation.
 - `server/src/auth/consumeMagicLink.ts` and `server/src/auth/sessionStore.ts`
   for one-time magic-link consumption and hashed session storage.
+- `server/src/auth/sessionAccess.ts` for checking a signed-in learner session
+  against active server-side enrollments.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.

@@ -8,6 +8,10 @@ import {
   markLessonComplete,
   saveProgress,
 } from "@/lib/progressStore";
+import {
+  fetchLearnerSessionAccess,
+  type LearnerSessionAccess,
+} from "@/lib/learnerSessionClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import { optiTechCourse } from "@shared/course/courseCatalog";
 import { moduleOneLessons } from "@shared/course/moduleOneLessons";
@@ -21,7 +25,7 @@ import {
   ExternalLink,
   ShieldAlert,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const storage = typeof window === "undefined" ? null : window.localStorage;
 
@@ -32,6 +36,9 @@ export default function Learn() {
   const [progress, setProgress] = useState(() =>
     storage ? loadProgress(storage) : createEmptyProgress()
   );
+  const [learnerAccess, setLearnerAccess] =
+    useState<LearnerSessionAccess | null>(null);
+  const [learnerAccessError, setLearnerAccessError] = useState("");
 
   const selectedLesson = useMemo(
     () =>
@@ -53,6 +60,28 @@ export default function Learn() {
     setProgress(nextProgress);
     saveProgress(storage, nextProgress);
   };
+
+  useEffect(() => {
+    let active = true;
+
+    fetchLearnerSessionAccess()
+      .then((access) => {
+        if (!active) return;
+        setLearnerAccess(access);
+      })
+      .catch((error) => {
+        if (!active) return;
+        setLearnerAccessError(
+          error instanceof Error
+            ? error.message
+            : "Learner access is unavailable right now."
+        );
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -91,6 +120,36 @@ export default function Learn() {
               </ul>
             </Card>
           )}
+
+          <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
+            <div className="flex items-start gap-3">
+              <ShieldAlert
+                className={`mt-1 h-5 w-5 ${
+                  learnerAccess?.hasAccess ? "text-green-700" : "text-amber-600"
+                }`}
+              />
+              <div>
+                <h2 className="font-semibold">Access status</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {learnerAccess?.hasAccess
+                    ? `Signed in as ${learnerAccess.email}. Access is active through ${new Date(
+                        learnerAccess.accessExpiresAt
+                      ).toLocaleDateString()}.`
+                    : learnerAccess
+                      ? learnerAccess.reason
+                      : learnerAccessError || "Checking learner access..."}
+                </p>
+                {!learnerAccess?.hasAccess && (
+                  <a
+                    href="/checkout"
+                    className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
+                  >
+                    Review access options
+                  </a>
+                )}
+              </div>
+            </div>
+          </Card>
 
           <Card className="border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
             <div className="flex items-start gap-3">

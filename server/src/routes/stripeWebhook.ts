@@ -24,6 +24,10 @@ export function getProvisionedEnrollments() {
   return enrollmentStore.listEnrollments();
 }
 
+export function getEnrollmentStore() {
+  return enrollmentStore;
+}
+
 export function setupStripeWebhookRoute(app: Express) {
   app.post(
     "/api/stripe/webhook",

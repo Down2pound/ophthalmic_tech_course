@@ -1,9 +1,12 @@
 import type { Request, Response, Router } from "express";
+import { COOKIE_NAME } from "../../../shared/const";
 import { consumeMagicLink } from "../auth/consumeMagicLink";
 import { createInMemoryMagicLinkStore } from "../auth/magicLinkStore";
 import { preparePasswordlessSignInResponse } from "../auth/passwordlessSignInResponse";
+import { authorizeLearnerSession } from "../auth/sessionAccess";
 import { createInMemoryAuthSessionStore } from "../auth/sessionStore";
 import { getCheckoutBaseUrl } from "../commerce/stripeCheckout";
+import { getEnrollmentStore } from "./stripeWebhook";
 
 interface PasswordlessStartRequestBody {
   email?: string;
@@ -11,6 +14,18 @@ interface PasswordlessStartRequestBody {
 
 const magicLinkStore = createInMemoryMagicLinkStore();
 const sessionStore = createInMemoryAuthSessionStore();
+
+function getCookieValue(cookieHeader: string | undefined, name: string) {
+  if (!cookieHeader) return "";
+
+  return (
+    cookieHeader
+      .split(";")
+      .map((cookie) => cookie.trim())
+      .find((cookie) => cookie.startsWith(`${name}=`))
+      ?.slice(name.length + 1) ?? ""
+  );
+}
 
 export function listPreparedMagicLinks() {
   return magicLinkStore.listMagicLinks();
@@ -64,5 +79,16 @@ export function setupAuthRoutes(router: Router) {
       path: result.cookie.path,
     });
     res.redirect("/learn");
+  });
+
+  router.get("/auth/session", (req: Request, res: Response) => {
+    const sessionToken = getCookieValue(req.get("cookie"), COOKIE_NAME);
+    const access = authorizeLearnerSession({
+      rawSessionToken: sessionToken,
+      sessionStore,
+      enrollmentStore: getEnrollmentStore(),
+    });
+
+    res.json(access);
   });
 }
