@@ -7,6 +7,10 @@ export interface MagicLinkStore {
   listMagicLinks(): MagicLinkRecord[];
   findMagicLinksByEmail(email: string): MagicLinkRecord[];
   findMagicLinkByTokenHash(tokenHash: string): MagicLinkRecord | undefined;
+  markMagicLinkConsumed(
+    id: string,
+    consumedAt: string
+  ): MagicLinkRecord | undefined;
 }
 
 export function createStoredMagicLinkRecord(
@@ -48,6 +52,21 @@ export function createInMemoryMagicLinkStore(): MagicLinkStore {
       return Array.from(magicLinksById.values()).find(
         (magicLink) => magicLink.tokenHash === tokenHash
       );
+    },
+    markMagicLinkConsumed(id, consumedAt) {
+      const magicLink = magicLinksById.get(id);
+
+      if (!magicLink) {
+        return undefined;
+      }
+
+      const consumedMagicLink = {
+        ...magicLink,
+        consumedAt,
+      };
+      magicLinksById.set(id, consumedMagicLink);
+
+      return consumedMagicLink;
     },
   };
 }

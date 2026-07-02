@@ -85,6 +85,7 @@ Checkout routes:
 - Policies page: `/policies`
 - Server endpoint: `POST /api/checkout/sessions`
 - Passwordless sign-in request endpoint: `POST /api/auth/passwordless/start`
+- Passwordless callback endpoint: `GET /api/auth/callback?token=...`
 - Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success`
 - Cancel return: `/checkout?checkout=cancelled`
@@ -102,6 +103,11 @@ safe message. It does not return raw tokens, token hashes, or callback URLs.
 Email delivery and durable database storage still need to be connected before
 real learner sign-in is production-ready.
 
+`GET /api/auth/callback?token=...` consumes a valid one-time magic link, stores
+a hashed session server-side, sets an HTTP-only session cookie, and redirects to
+`/learn`. Expired, missing, or already used links return a safe invalid-link
+message.
+
 ## Database Contracts
 
 The first production release needs managed PostgreSQL before paid access can be
@@ -114,6 +120,8 @@ durable. Current schema contracts live in:
   storing only SHA-256 token hashes.
 - `server/src/auth/magicLinkStore.ts` for the current swappable magic-link
   storage interface and local in-memory implementation.
+- `server/src/auth/consumeMagicLink.ts` and `server/src/auth/sessionStore.ts`
+  for one-time magic-link consumption and hashed session storage.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.

@@ -8,6 +8,7 @@ export interface MagicLinkRecord {
   purpose: "sign-in";
   createdAt: string;
   expiresAt: string;
+  consumedAt?: string;
 }
 
 export interface MagicLinkEmailPayload {
