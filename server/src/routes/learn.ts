@@ -6,9 +6,15 @@ import {
   scoreModuleOneKnowledgeCheck,
   type SubmittedKnowledgeCheckAnswer,
 } from "../assessments/moduleOneKnowledgeCheck";
+import {
+  createAssessmentAttemptRecord,
+  createInMemoryAssessmentAttemptStore,
+} from "../assessments/assessmentAttemptStore";
 import { getProtectedModuleOneLessons } from "../course/protectedLessons";
 import { getSessionStore } from "./auth";
 import { getEnrollmentStore } from "./stripeWebhook";
+
+const assessmentAttemptStore = createInMemoryAssessmentAttemptStore();
 
 function getCookieValue(cookieHeader: string | undefined, name: string) {
   if (!cookieHeader) return "";
@@ -72,11 +78,33 @@ export function setupLearnRoutes(router: Router) {
       ? (req.body.answers as SubmittedKnowledgeCheckAnswer[])
       : [];
 
-    res.json(
-      scoreModuleOneKnowledgeCheck({
-        learnerEmail: access.email,
-        answers,
-      })
-    );
+    const score = scoreModuleOneKnowledgeCheck({
+      learnerEmail: access.email,
+      answers,
+    });
+    const previousAttempts =
+      assessmentAttemptStore.findAttemptsByLearnerAndQuiz(
+        access.email,
+        score.quizId
+      );
+    const attempt = createAssessmentAttemptRecord({
+      score,
+      attemptNumber: previousAttempts.length + 1,
+    });
+
+    assessmentAttemptStore.recordAttempt(attempt);
+
+    res.json({
+      ...score,
+      attempt,
+      progress: assessmentAttemptStore.getLearnerQuizProgress(
+        access.email,
+        score.quizId
+      ),
+    });
   });
+}
+
+export function listAssessmentAttempts() {
+  return assessmentAttemptStore.listAttempts();
 }

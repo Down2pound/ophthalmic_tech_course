@@ -126,7 +126,8 @@ into the browser bundle.
 
 `GET /api/learn/module-one/quiz` returns Module 1 knowledge-check questions
 without the answer key. `POST /api/learn/module-one/quiz/submit` scores learner
-answers on the server after the same session and enrollment check.
+answers on the server after the same session and enrollment check, records the
+attempt server-side, and returns quiz progress.
 
 ## Database Contracts
 
@@ -150,6 +151,8 @@ durable. Current schema contracts live in:
   after server-side access approval.
 - `server/src/assessments/moduleOneKnowledgeCheck.ts` for Module 1
   server-side quiz delivery and scoring without exposing answer keys.
+- `server/src/assessments/assessmentAttemptStore.ts` for recording server-side
+  quiz attempts and learner quiz progress.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.
