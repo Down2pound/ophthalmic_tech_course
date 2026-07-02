@@ -65,11 +65,11 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
   {
     id: "assessment-security",
     title: "Assessment security",
-    status: "blocked",
+    status: "in-progress",
     evidence:
-      "Current quizzes are client-side learning interactions; answer keys are not protected by a server-side submission flow.",
+      "Module 1 has a protected server-side knowledge-check endpoint that returns questions without answer keys and a protected submit endpoint that scores answers server-side, but older client quiz data and future module assessments still need to be migrated before high-stakes completion logic.",
     nextAction:
-      "Move scored assessment submission and answer validation to the server before high-stakes completion logic.",
+      "Migrate remaining quiz data out of browser bundles, persist attempts durably, and connect completion rules to server-scored assessments before high-stakes completion logic.",
   },
   {
     id: "browser-and-accessibility-qa",

@@ -90,6 +90,8 @@ Checkout routes:
 - Passwordless callback endpoint: `GET /api/auth/callback?token=...`
 - Current learner access endpoint: `GET /api/auth/session`
 - Protected lesson endpoint: `GET /api/learn/module-one/lessons`
+- Protected quiz endpoint: `GET /api/learn/module-one/quiz`
+- Protected quiz submission endpoint: `POST /api/learn/module-one/quiz/submit`
 - Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success`
 - Cancel return: `/checkout?checkout=cancelled`
@@ -122,6 +124,10 @@ after the session cookie maps to an active server-side enrollment. The learner
 dashboard uses this endpoint instead of importing paid lesson bodies directly
 into the browser bundle.
 
+`GET /api/learn/module-one/quiz` returns Module 1 knowledge-check questions
+without the answer key. `POST /api/learn/module-one/quiz/submit` scores learner
+answers on the server after the same session and enrollment check.
+
 ## Database Contracts
 
 The first production release needs managed PostgreSQL before paid access can be
@@ -142,6 +148,8 @@ durable. Current schema contracts live in:
   against active server-side enrollments.
 - `server/src/course/protectedLessons.ts` for serving paid lesson content only
   after server-side access approval.
+- `server/src/assessments/moduleOneKnowledgeCheck.ts` for Module 1
+  server-side quiz delivery and scoring without exposing answer keys.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.
