@@ -67,9 +67,9 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Assessment security",
     status: "in-progress",
     evidence:
-      "Module 1 has a protected server-side knowledge-check endpoint that returns questions without answer keys, a protected submit endpoint that scores answers server-side, and a server-side attempt store that tracks quiz progress, but attempts are not durable in PostgreSQL and older client quiz data plus future module assessments still need migration before high-stakes completion logic.",
+      "Module 1 has a protected server-side knowledge-check endpoint that returns questions without answer keys, a protected submit endpoint that scores answers server-side, a server-side attempt store that tracks quiz progress, and a PostgreSQL-ready assessment schema, but attempts are not connected to a live database and older client quiz data plus future module assessments still need migration before high-stakes completion logic.",
     nextAction:
-      "Persist attempts durably, migrate remaining quiz data out of browser bundles, and connect completion rules to server-scored assessments before high-stakes completion logic.",
+      "Run the assessment schema against managed PostgreSQL, replace the in-memory attempt store with a database repository, migrate remaining quiz data out of browser bundles, and connect completion rules to server-scored assessments before high-stakes completion logic.",
   },
   {
     id: "browser-and-accessibility-qa",

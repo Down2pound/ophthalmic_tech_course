@@ -153,6 +153,8 @@ durable. Current schema contracts live in:
   server-side quiz delivery and scoring without exposing answer keys.
 - `server/src/assessments/assessmentAttemptStore.ts` for recording server-side
   quiz attempts and learner quiz progress.
+- `server/src/assessments/assessmentSchema.ts` for the PostgreSQL-ready
+  assessment attempt and question-result tables.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.
