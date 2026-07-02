@@ -12,9 +12,12 @@ import {
   fetchLearnerSessionAccess,
   type LearnerSessionAccess,
 } from "@/lib/learnerSessionClient";
+import {
+  fetchProtectedModuleOneLessons,
+  type ProtectedModuleOneLessons,
+} from "@/lib/protectedLessonsClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import { optiTechCourse } from "@shared/course/courseCatalog";
-import { moduleOneLessons } from "@shared/course/moduleOneLessons";
 import {
   Award,
   BookOpen,
@@ -30,25 +33,27 @@ import { useEffect, useMemo, useState } from "react";
 const storage = typeof window === "undefined" ? null : window.localStorage;
 
 export default function Learn() {
-  const [selectedLessonId, setSelectedLessonId] = useState(
-    moduleOneLessons[0]?.id
-  );
+  const [selectedLessonId, setSelectedLessonId] = useState<string>();
   const [progress, setProgress] = useState(() =>
     storage ? loadProgress(storage) : createEmptyProgress()
   );
   const [learnerAccess, setLearnerAccess] =
     useState<LearnerSessionAccess | null>(null);
   const [learnerAccessError, setLearnerAccessError] = useState("");
+  const [protectedLessons, setProtectedLessons] =
+    useState<ProtectedModuleOneLessons | null>(null);
+  const [lessonContentError, setLessonContentError] = useState("");
 
+  const lessonList = protectedLessons?.lessons ?? [];
   const selectedLesson = useMemo(
     () =>
-      moduleOneLessons.find((lesson) => lesson.id === selectedLessonId) ??
-      moduleOneLessons[0],
-    [selectedLessonId]
+      lessonList.find((lesson) => lesson.id === selectedLessonId) ??
+      lessonList[0],
+    [lessonList, selectedLessonId]
   );
 
-  const completePercent = getProgressPercent(progress, moduleOneLessons.length);
-  const moduleOne = optiTechCourse.modules[0];
+  const completePercent = getProgressPercent(progress, lessonList.length);
+  const moduleOne = protectedLessons?.module ?? optiTechCourse.modules[0];
   const checkoutStatus =
     typeof window === "undefined"
       ? null
@@ -75,6 +80,32 @@ export default function Learn() {
           error instanceof Error
             ? error.message
             : "Learner access is unavailable right now."
+        );
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    fetchProtectedModuleOneLessons()
+      .then((payload) => {
+        if (!active) return;
+        setProtectedLessons(payload);
+        setLearnerAccess(payload.access);
+        setSelectedLessonId((currentLessonId) =>
+          currentLessonId ?? payload.lessons[0]?.id
+        );
+      })
+      .catch((error) => {
+        if (!active) return;
+        setLessonContentError(
+          error instanceof Error
+            ? error.message
+            : "Lesson content is unavailable right now."
         );
       });
 
@@ -233,7 +264,13 @@ export default function Learn() {
           </Card>
 
           <Card className="overflow-hidden border-slate-200 bg-white text-slate-950 shadow-sm">
-            {moduleOneLessons.map((lesson) => {
+            {lessonList.length === 0 && (
+              <div className="p-4 text-sm leading-6 text-slate-600">
+                {lessonContentError ||
+                  "Checking whether lesson content is available..."}
+              </div>
+            )}
+            {lessonList.map((lesson) => {
               const complete = progress.completedLessonIds.includes(lesson.id);
               const active = selectedLesson?.id === lesson.id;
               return (
@@ -260,6 +297,21 @@ export default function Learn() {
             })}
           </Card>
         </aside>
+
+        {!selectedLesson && (
+          <article>
+            <Card className="border-amber-200 bg-amber-50 p-6 text-amber-950 shadow-sm">
+              <h2 className="text-2xl font-bold">Lesson access required</h2>
+              <p className="mt-3 leading-7">
+                {lessonContentError ||
+                  "We are checking your sign-in and enrollment before loading paid lesson content."}
+              </p>
+              <a href="/checkout">
+                <Button className="mt-5">Review access options</Button>
+              </a>
+            </Card>
+          </article>
+        )}
 
         {selectedLesson && (
           <article className="space-y-6">

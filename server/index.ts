@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { setupCheckoutRoutes } from "./src/routes/checkout";
 import { setupAuthRoutes } from "./src/routes/auth";
+import { setupLearnRoutes } from "./src/routes/learn";
 import { setupLaunchReadinessRoutes } from "./src/routes/launchReadiness";
 import { setupStripeWebhookRoute } from "./src/routes/stripeWebhook";
 
@@ -19,6 +20,7 @@ async function startServer() {
   app.use(express.json());
   setupAuthRoutes(apiRouter);
   setupCheckoutRoutes(apiRouter);
+  setupLearnRoutes(apiRouter);
   setupLaunchReadinessRoutes(apiRouter);
   app.use("/api", apiRouter);
 

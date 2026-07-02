@@ -87,6 +87,7 @@ Checkout routes:
 - Passwordless sign-in request endpoint: `POST /api/auth/passwordless/start`
 - Passwordless callback endpoint: `GET /api/auth/callback?token=...`
 - Current learner access endpoint: `GET /api/auth/session`
+- Protected lesson endpoint: `GET /api/learn/module-one/lessons`
 - Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success`
 - Cancel return: `/checkout?checkout=cancelled`
@@ -113,6 +114,11 @@ message.
 server-side session, and reports whether the signed-in learner has an active
 enrollment. It does not trust browser-provided email addresses.
 
+`GET /api/learn/module-one/lessons` returns paid Module 1 lesson bodies only
+after the session cookie maps to an active server-side enrollment. The learner
+dashboard uses this endpoint instead of importing paid lesson bodies directly
+into the browser bundle.
+
 ## Database Contracts
 
 The first production release needs managed PostgreSQL before paid access can be
@@ -129,6 +135,8 @@ durable. Current schema contracts live in:
   for one-time magic-link consumption and hashed session storage.
 - `server/src/auth/sessionAccess.ts` for checking a signed-in learner session
   against active server-side enrollments.
+- `server/src/course/protectedLessons.ts` for serving paid lesson content only
+  after server-side access approval.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.

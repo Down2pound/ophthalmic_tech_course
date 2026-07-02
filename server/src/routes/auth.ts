@@ -35,6 +35,10 @@ export function listPreparedSessions() {
   return sessionStore.listSessions();
 }
 
+export function getSessionStore() {
+  return sessionStore;
+}
+
 export function setupAuthRoutes(router: Router) {
   router.post("/auth/passwordless/start", (req: Request, res: Response) => {
     try {
