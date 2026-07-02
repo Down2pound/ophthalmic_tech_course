@@ -59,6 +59,7 @@ STRIPE_SECRET_KEY=sk_test_replace_with_your_secret_key
 PUBLIC_APP_URL=http://localhost:3000
 STRIPE_WEBHOOK_SECRET=whsec_replace_with_your_webhook_signing_secret
 AUTH_SESSION_SECRET=replace_with_a_long_random_session_secret
+TRANSACTIONAL_EMAIL_API_URL=https://email-provider.example.com/send
 TRANSACTIONAL_EMAIL_API_KEY=replace_with_your_email_provider_api_key
 SIGN_IN_FROM_EMAIL="OptiTech Academy <noreply@example.com>"
 ```
@@ -76,8 +77,9 @@ Stripe key guide:
   but the current hosted Checkout flow does not require it.
 - `sk_test_...` is a secret test key. It must stay server-only in `.env`.
 - `whsec_...` is the webhook signing secret. It must stay server-only in `.env`.
-- `AUTH_SESSION_SECRET` and `TRANSACTIONAL_EMAIL_API_KEY` are server-only values
-  for the future passwordless sign-in flow.
+- `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
+  `TRANSACTIONAL_EMAIL_API_KEY`, and `SIGN_IN_FROM_EMAIL` are server-only values
+  for passwordless sign-in email delivery.
 
 Checkout routes:
 
@@ -102,8 +104,9 @@ Stripe key values.
 `POST /api/auth/passwordless/start` prepares a magic-link sign-in request and
 stores the hashed magic-link record server-side while returning only a generic
 safe message. It does not return raw tokens, token hashes, or callback URLs.
-Email delivery and durable database storage still need to be connected before
-real learner sign-in is production-ready.
+It sends the sign-in link through the configured transactional email endpoint.
+Durable database storage still needs to be connected before real learner sign-in
+is production-ready.
 
 `GET /api/auth/callback?token=...` consumes a valid one-time magic link, stores
 a hashed session server-side, sets an HTTP-only session cookie, and redirects to
@@ -129,6 +132,8 @@ durable. Current schema contracts live in:
   and sessions.
 - `server/src/auth/magicLinkToken.ts` for creating raw email tokens while
   storing only SHA-256 token hashes.
+- `server/src/auth/magicLinkEmail.ts` for sending magic-link emails through a
+  configured transactional email endpoint.
 - `server/src/auth/magicLinkStore.ts` for the current swappable magic-link
   storage interface and local in-memory implementation.
 - `server/src/auth/consumeMagicLink.ts` and `server/src/auth/sessionStore.ts`

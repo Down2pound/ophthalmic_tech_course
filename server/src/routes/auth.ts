@@ -1,11 +1,13 @@
 import type { Request, Response, Router } from "express";
 import { COOKIE_NAME } from "../../../shared/const";
 import { consumeMagicLink } from "../auth/consumeMagicLink";
+import { sendMagicLinkEmail } from "../auth/magicLinkEmail";
 import { createInMemoryMagicLinkStore } from "../auth/magicLinkStore";
 import { preparePasswordlessSignInResponse } from "../auth/passwordlessSignInResponse";
 import { authorizeLearnerSession } from "../auth/sessionAccess";
 import { createInMemoryAuthSessionStore } from "../auth/sessionStore";
 import { getCheckoutBaseUrl } from "../commerce/stripeCheckout";
+import { getAuthEnvironmentStatus } from "../config/environment";
 import { getEnrollmentStore } from "./stripeWebhook";
 
 interface PasswordlessStartRequestBody {
@@ -40,7 +42,17 @@ export function getSessionStore() {
 }
 
 export function setupAuthRoutes(router: Router) {
-  router.post("/auth/passwordless/start", (req: Request, res: Response) => {
+  router.post("/auth/passwordless/start", async (req: Request, res: Response) => {
+    const environmentStatus = getAuthEnvironmentStatus();
+
+    if (!environmentStatus.passwordlessConfigured) {
+      res.status(503).json({
+        error: "Passwordless sign-in email is not configured yet.",
+        missing: environmentStatus.missingPasswordlessVariables,
+      });
+      return;
+    }
+
     try {
       const { email } = (req.body ?? {}) as PasswordlessStartRequestBody;
       const prepared = preparePasswordlessSignInResponse({
@@ -49,16 +61,21 @@ export function setupAuthRoutes(router: Router) {
       });
 
       magicLinkStore.storeMagicLink(prepared.signInRequest.magicLinkRecord);
-      // Next step: send prepared.signInRequest.emailPayload through the
-      // transactional email provider.
+      await sendMagicLinkEmail({
+        payload: prepared.signInRequest.emailPayload,
+        from: process.env.SIGN_IN_FROM_EMAIL ?? "",
+        apiUrl: process.env.TRANSACTIONAL_EMAIL_API_URL ?? "",
+        apiKey: process.env.TRANSACTIONAL_EMAIL_API_KEY ?? "",
+      });
       res.json(prepared.publicResponse);
     } catch (error) {
-      res.status(400).json({
-        error:
-          error instanceof Error
-            ? error.message
-            : "Sign-in request could not be prepared.",
-      });
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Sign-in request could not be prepared.";
+      const status = message === "Sign-in email could not be sent." ? 502 : 400;
+
+      res.status(status).json({ error: message });
     }
   });
 

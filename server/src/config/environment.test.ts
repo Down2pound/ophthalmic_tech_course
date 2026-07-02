@@ -50,6 +50,7 @@ describe("getAuthEnvironmentStatus", () => {
     expect(
       getAuthEnvironmentStatus({
         AUTH_SESSION_SECRET: "session-secret",
+        TRANSACTIONAL_EMAIL_API_URL: "https://email-provider.example.com/send",
         TRANSACTIONAL_EMAIL_API_KEY: "email-api-key",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
         PUBLIC_APP_URL: "http://localhost:3000",
@@ -70,6 +71,7 @@ describe("getAuthEnvironmentStatus", () => {
       passwordlessConfigured: false,
       missingPasswordlessVariables: [
         "AUTH_SESSION_SECRET",
+        "TRANSACTIONAL_EMAIL_API_URL",
         "TRANSACTIONAL_EMAIL_API_KEY",
         "SIGN_IN_FROM_EMAIL",
       ],

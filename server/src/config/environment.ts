@@ -21,6 +21,7 @@ export const webhookEnvironmentVariables = ["STRIPE_WEBHOOK_SECRET"] as const;
 
 export const passwordlessEnvironmentVariables = [
   "AUTH_SESSION_SECRET",
+  "TRANSACTIONAL_EMAIL_API_URL",
   "TRANSACTIONAL_EMAIL_API_KEY",
   "SIGN_IN_FROM_EMAIL",
   "PUBLIC_APP_URL",
