@@ -273,6 +273,13 @@ the live checklist passes, then set `ENABLE_PAID_ENROLLMENT=true` to open paid
 checkout. Do not leave copied `.env.example` placeholders in production; the
 launch doctor will count those values as missing.
 
+To include `sitemap.xml` in a production Docker image, pass the final public
+domain at build time:
+
+```bash
+docker build --build-arg PUBLIC_APP_URL=https://your-deployed-site.example.com --tag optitech-academy .
+```
+
 After the managed PostgreSQL database is created and `DATABASE_URL` is set, run:
 
 ```bash
@@ -294,6 +301,7 @@ GitHub Actions runs launch CI on pushes and pull requests:
 - `pnpm build`
 - `pnpm launch:secrets`
 - `pnpm launch:doctor`
+- `PUBLIC_APP_URL=https://academy.spindeleye.test pnpm launch:sitemap`
 - `pnpm launch:bundle`
 - `docker build`
 
@@ -326,6 +334,16 @@ pnpm launch:doctor
 The doctor prints a plain-English paid-launch preflight report using the same
 readiness gates as the app. It lists missing variable names and next actions,
 but not secret values.
+
+Generate the production sitemap after `PUBLIC_APP_URL` is set to the real
+deployed `https` domain:
+
+```bash
+PUBLIC_APP_URL=https://your-deployed-site.example.com pnpm launch:sitemap
+```
+
+The command writes `dist/public/sitemap.xml` by default. It refuses placeholder,
+localhost, or non-https URLs so search engines do not receive a fake sitemap.
 
 Create a local handoff folder for Google Drive with safe launch artifacts:
 

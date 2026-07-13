@@ -48,6 +48,11 @@ jobs:
       - name: Print launch doctor report
         run: pnpm launch:doctor
 
+      - name: Verify production sitemap generation
+        run: pnpm launch:sitemap
+        env:
+          PUBLIC_APP_URL: https://academy.spindeleye.test
+
       - name: Generate launch evidence bundle
         run: pnpm launch:bundle
 

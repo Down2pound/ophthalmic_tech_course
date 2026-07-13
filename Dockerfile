@@ -9,6 +9,12 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm check
 RUN pnpm build
+ARG PUBLIC_APP_URL=""
+RUN if [ -n "$PUBLIC_APP_URL" ]; then \
+  PUBLIC_APP_URL="$PUBLIC_APP_URL" pnpm launch:sitemap; \
+  else \
+  echo "Skipping sitemap generation; PUBLIC_APP_URL build arg not set."; \
+  fi
 
 FROM node:22-bookworm-slim AS runner
 

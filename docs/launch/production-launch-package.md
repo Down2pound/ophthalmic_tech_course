@@ -36,6 +36,20 @@ Run this after the app is online:
 LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
 
+Generate the production sitemap after `PUBLIC_APP_URL` is set to the real
+deployed `https` domain:
+
+```bash
+PUBLIC_APP_URL=https://your-deployed-site.example.com pnpm launch:sitemap
+```
+
+For Docker deployments, pass the same domain as a build argument so the
+container image includes `dist/public/sitemap.xml`:
+
+```bash
+docker build --build-arg PUBLIC_APP_URL=https://your-deployed-site.example.com --tag optitech-academy .
+```
+
 Create a local handoff folder for Google Drive after checks are complete:
 
 ```bash
@@ -180,6 +194,7 @@ When the launch package is ready to archive, save these files together:
 - Stripe webhook test notes
 - Deployment smoke test output
 - Browser/accessibility QA notes
+- Generated `dist/public/sitemap.xml` or the hosted sitemap URL
 
 Do not save `.env`, live secrets, raw magic-link tokens, session cookies,
 database passwords, or Stripe secret keys to Google Drive.
