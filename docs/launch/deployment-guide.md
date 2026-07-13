@@ -25,6 +25,9 @@ Do not turn on real paid checkout until every item above is working.
 Use `docs/launch/clinical-review-guide.md` for the Module 1 review and signoff
 recipe.
 
+If you want the simplest hosted path, use Render with the included
+`render.yaml` Blueprint and follow `docs/launch/render-deployment-guide.md`.
+
 ## Host Settings
 
 Use these commands in the hosting dashboard:

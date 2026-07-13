@@ -21,4 +21,22 @@ describe("deployment files", () => {
     expect(dockerfile).toContain('CMD ["node", "dist/index.js"]');
     expect(dockerfile).toContain("/api/health");
   });
+
+  it("keeps the Render Blueprint aligned with the launch service", async () => {
+    const renderBlueprint = await readFile(
+      path.resolve(process.cwd(), "render.yaml"),
+      "utf8"
+    );
+
+    expect(renderBlueprint).toContain("name: optitech-academy");
+    expect(renderBlueprint).toContain("runtime: node");
+    expect(renderBlueprint).toContain("pnpm build");
+    expect(renderBlueprint).toContain("startCommand: node dist/index.js");
+    expect(renderBlueprint).toContain("healthCheckPath: /api/health");
+    expect(renderBlueprint).toContain("fromDatabase:");
+    expect(renderBlueprint).toContain("sync: false");
+    expect(renderBlueprint).toContain("generateValue: true");
+    expect(renderBlueprint).not.toContain("sk_test_");
+    expect(renderBlueprint).not.toContain("whsec_");
+  });
 });

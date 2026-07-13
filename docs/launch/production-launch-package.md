@@ -30,6 +30,8 @@ pnpm launch:preflight
 
 For a step-by-step beginner deployment recipe, use
 `docs/launch/deployment-guide.md`.
+For a Render Blueprint deployment path, use
+`docs/launch/render-deployment-guide.md`.
 
 For production domain, sitemap, and shared-link setup, use
 `docs/launch/domain-and-sharing-guide.md`.
@@ -226,6 +228,7 @@ When the launch package is ready to archive, save these files together:
 - Generated `launch-evidence/` folder from `pnpm launch:bundle`
 - `docs/launch/production-launch-package.md`
 - `docs/launch/deployment-guide.md`
+- `docs/launch/render-deployment-guide.md`
 - `docs/launch/domain-and-sharing-guide.md`
 - `docs/launch/home-pc-runbook.md`
 - `docs/launch/home-pc-command-cheatsheet.md`

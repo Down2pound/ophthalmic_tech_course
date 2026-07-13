@@ -258,11 +258,13 @@ The command creates the commerce, auth, and assessment tables with safe
 ## Deployment
 
 The app can be deployed as one Node/Express service that serves both the React
-frontend and the API. The production build command is:
+frontend and the API.
 
 Use `docs/launch/deployment-guide.md` as the beginner-friendly setup path and
 `docs/launch/production-launch-package.md` as the shareable launch handoff
 checklist before opening paid enrollment.
+Use `render.yaml` with `docs/launch/render-deployment-guide.md` for the Render
+Blueprint path.
 Use `docs/launch/stripe-setup-guide.md` for the Stripe checkout and webhook
 setup steps.
 Use `docs/launch/email-setup-guide.md` for passwordless sign-in email setup.

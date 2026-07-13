@@ -39,6 +39,7 @@ function renderReadme({
     "",
     "- `production-launch-package.md`: launch handoff checklist.",
     "- `deployment-guide.md`: beginner-friendly production setup recipe.",
+    "- `render-deployment-guide.md`: Render Blueprint setup recipe.",
     "- `domain-and-sharing-guide.md`: production URL, sitemap, and shared-link setup recipe.",
     "- `home-pc-runbook.md`: beginner-friendly fallback for admin-blocked work computers.",
     "- `home-pc-command-cheatsheet.md`: short command list for finishing checks on a home PC.",
@@ -88,6 +89,7 @@ export async function createLaunchEvidenceBundle({
     "README.md",
     "production-launch-package.md",
     "deployment-guide.md",
+    "render-deployment-guide.md",
     "domain-and-sharing-guide.md",
     "home-pc-runbook.md",
     "home-pc-command-cheatsheet.md",
@@ -114,6 +116,10 @@ export async function createLaunchEvidenceBundle({
   const launchPackage = await readFile(launchPackagePath, "utf8");
   const deploymentGuide = await readFile(
     path.resolve(projectRoot, "docs/launch/deployment-guide.md"),
+    "utf8"
+  );
+  const renderDeploymentGuide = await readFile(
+    path.resolve(projectRoot, "docs/launch/render-deployment-guide.md"),
     "utf8"
   );
   const domainAndSharingGuide = await readFile(
@@ -178,6 +184,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "deployment-guide.md"),
     deploymentGuide
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "render-deployment-guide.md"),
+    renderDeploymentGuide
   );
   await writeFile(
     path.join(resolvedOutputDir, "domain-and-sharing-guide.md"),

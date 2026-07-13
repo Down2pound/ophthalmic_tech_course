@@ -1,0 +1,58 @@
+# Render Blueprint for OptiTech Academy.
+# Keep real Stripe, email, and clinical signoff values in the Render dashboard.
+services:
+  - type: web
+    name: optitech-academy
+    runtime: node
+    plan: starter
+    region: ohio
+    buildCommand: corepack enable && corepack prepare pnpm@10.4.1 --activate && pnpm install --frozen-lockfile && pnpm build
+    startCommand: node dist/index.js
+    healthCheckPath: /api/health
+    autoDeployTrigger: "off"
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: PUBLIC_APP_URL
+        sync: false
+      - key: ENABLE_PAID_ENROLLMENT
+        value: "false"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: optitech-academy-db
+          property: connectionString
+      - key: DATABASE_SSL
+        value: "true"
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: AUTH_SESSION_SECRET
+        generateValue: true
+      - key: TRANSACTIONAL_EMAIL_API_URL
+        sync: false
+      - key: TRANSACTIONAL_EMAIL_API_KEY
+        sync: false
+      - key: SIGN_IN_FROM_EMAIL
+        sync: false
+      - key: PRACTICE_SEAT_ADMIN_TOKEN
+        generateValue: true
+      - key: MODULE_ONE_CLINICAL_REVIEWER_NAME
+        sync: false
+      - key: MODULE_ONE_CLINICAL_REVIEWER_ROLE
+        sync: false
+      - key: MODULE_ONE_CLINICAL_REVIEW_DATE
+        sync: false
+      - key: MODULE_ONE_CLINICAL_APPROVED_VERSION
+        sync: false
+      - key: MODULE_ONE_CLINICAL_REVIEW_APPROVED
+        value: "false"
+
+databases:
+  - name: optitech-academy-db
+    databaseName: optitech_academy
+    user: optitech_academy
+    region: ohio
+    plan: basic-256mb
