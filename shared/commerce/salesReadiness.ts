@@ -23,6 +23,11 @@ export interface PracticeValueProofPoint {
   description: string;
 }
 
+export interface LearnerValueProofPoint {
+  title: string;
+  description: string;
+}
+
 export const individualLearnerSalesPath: BuyerPathSection[] = [
   {
     title: "Best fit",
@@ -171,6 +176,29 @@ export const practiceValueProofPoints: PracticeValueProofPoint[] = [
     title: "Local signoff stays local",
     description:
       "The course supports preparation and shared language, while clinical protocols, competency observation, and employment decisions stay with the practice.",
+  },
+];
+
+export const learnerValueProofPoints: LearnerValueProofPoint[] = [
+  {
+    title: "Learn the language before the room feels overwhelming",
+    description:
+      "Build comfort with ophthalmic vocabulary, clinic roles, patient communication, and common exam flow before relying only on live shadowing.",
+  },
+  {
+    title: "Study at your own pace",
+    description:
+      "Use 12 months of founding access to review published lessons, knowledge checks, and future released modules during the access period.",
+  },
+  {
+    title: "Prepare for supervised practice conversations",
+    description:
+      "Skills Passport language helps learners talk with supervisors or future employers about what still needs hands-on observation.",
+  },
+  {
+    title: "Explore eye care without overclaiming credentials",
+    description:
+      "The course helps learners decide whether ophthalmic assisting is a good direction while staying clear that completion is education, not certification.",
   },
 ];
 

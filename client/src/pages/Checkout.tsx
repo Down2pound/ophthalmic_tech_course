@@ -22,6 +22,7 @@ import {
 import {
   individualLearnerSalesPath,
   individualLearnerStartSteps,
+  learnerValueProofPoints,
   purchaseAssurances,
 } from "@shared/commerce/salesReadiness";
 import { useState } from "react";
@@ -152,6 +153,25 @@ export default function Checkout() {
                       <li key={item}>- {item}</li>
                     ))}
                   </ul>
+                </section>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
+            <h2 className="text-2xl font-bold">
+              Why learners choose founding access
+            </h2>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {learnerValueProofPoints.map(point => (
+                <section
+                  key={point.title}
+                  className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                >
+                  <h3 className="font-semibold">{point.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {point.description}
+                  </p>
                 </section>
               ))}
             </div>

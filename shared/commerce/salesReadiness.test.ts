@@ -4,6 +4,7 @@ import {
   getSalesPathItemCount,
   individualLearnerSalesPath,
   individualLearnerStartSteps,
+  learnerValueProofPoints,
   practiceBuyerSalesPath,
   practiceValueProofPoints,
   purchaseAssurances,
@@ -122,5 +123,26 @@ describe("sales readiness copy", () => {
     expect(combined).not.toMatch(/guarantee/i);
     expect(combined).not.toMatch(/retention/i);
     expect(combined).not.toMatch(/staffing outcome/i);
+  });
+
+  it("helps individual learners justify buying without promising jobs or credentials", () => {
+    expect(learnerValueProofPoints.map(point => point.title)).toEqual([
+      "Learn the language before the room feels overwhelming",
+      "Study at your own pace",
+      "Prepare for supervised practice conversations",
+      "Explore eye care without overclaiming credentials",
+    ]);
+
+    const combined = learnerValueProofPoints
+      .map(point => `${point.title} ${point.description}`)
+      .join(" ");
+
+    expect(combined).toMatch(/ophthalmic vocabulary/i);
+    expect(combined).toMatch(/12 months of founding access/i);
+    expect(combined).toMatch(/Skills Passport/i);
+    expect(combined).toMatch(/education, not certification/i);
+    expect(combined).not.toMatch(/guarantee/i);
+    expect(combined).not.toMatch(/employment/i);
+    expect(combined).not.toMatch(/certified technician/i);
   });
 });
