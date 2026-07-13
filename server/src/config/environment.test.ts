@@ -7,7 +7,9 @@ import {
   getMissingEnvironmentVariables,
   getPracticeSeatEnvironmentStatus,
   getStripeSecretKeyMode,
+  isResendEmailConfiguration,
   isPlaceholderEnvironmentValue,
+  isTransactionalEmailApiKeyUnsafe,
   isUnsafeLaunchEnvironmentValue,
 } from "./environment";
 
@@ -108,6 +110,15 @@ describe("isUnsafeLaunchEnvironmentValue", () => {
         "mysql://optitech:credential@db.internal/optitech"
       )
     ).toBe(true);
+    expect(
+      isUnsafeLaunchEnvironmentValue(
+        "TRANSACTIONAL_EMAIL_API_KEY",
+        "generic-email-key-123456",
+        {
+          TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails",
+        }
+      )
+    ).toBe(true);
   });
 
   it("allows realistic launch-critical values", () => {
@@ -134,6 +145,58 @@ describe("isUnsafeLaunchEnvironmentValue", () => {
         "AUTH_SESSION_SECRET",
         "session-secret-value-with-at-least-32-chars"
       )
+    ).toBe(false);
+    expect(
+      isUnsafeLaunchEnvironmentValue(
+        "TRANSACTIONAL_EMAIL_API_KEY",
+        "re_test_key_123456",
+        {
+          TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails",
+        }
+      )
+    ).toBe(false);
+  });
+});
+
+describe("isResendEmailConfiguration", () => {
+  it("detects the direct Resend email endpoint", () => {
+    expect(
+      isResendEmailConfiguration({
+        TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails",
+      })
+    ).toBe(true);
+    expect(
+      isResendEmailConfiguration({
+        TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails/",
+      })
+    ).toBe(true);
+    expect(
+      isResendEmailConfiguration({
+        TRANSACTIONAL_EMAIL_API_URL: "https://email.spindeleye.com/send",
+      })
+    ).toBe(false);
+  });
+});
+
+describe("isTransactionalEmailApiKeyUnsafe", () => {
+  it("requires Resend keys when the Resend endpoint is configured", () => {
+    const resendEnv = {
+      TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails",
+    };
+
+    expect(
+      isTransactionalEmailApiKeyUnsafe("generic-email-key-123456", resendEnv)
+    ).toBe(true);
+    expect(
+      isTransactionalEmailApiKeyUnsafe("re_test_key_123456", resendEnv)
+    ).toBe(false);
+  });
+
+  it("allows generic provider keys for non-Resend endpoints", () => {
+    expect(
+      isTransactionalEmailApiKeyUnsafe("generic-email-key-123456", {
+        TRANSACTIONAL_EMAIL_API_URL: "https://email.spindeleye.com/send",
+      })
     ).toBe(false);
   });
 });
@@ -242,6 +305,36 @@ describe("getAuthEnvironmentStatus", () => {
         "TRANSACTIONAL_EMAIL_API_KEY",
         "SIGN_IN_FROM_EMAIL",
       ],
+    });
+  });
+
+  it("reports the email API key as missing when Resend is configured with a non-Resend key", () => {
+    expect(
+      getAuthEnvironmentStatus({
+        AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
+        TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails",
+        TRANSACTIONAL_EMAIL_API_KEY: "generic-email-key-123456",
+        SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
+        PUBLIC_APP_URL: "https://academy.spindeleye.com",
+      })
+    ).toEqual({
+      passwordlessConfigured: false,
+      missingPasswordlessVariables: ["TRANSACTIONAL_EMAIL_API_KEY"],
+    });
+  });
+
+  it("accepts a Resend API key shape for the Resend email endpoint", () => {
+    expect(
+      getAuthEnvironmentStatus({
+        AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
+        TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails",
+        TRANSACTIONAL_EMAIL_API_KEY: "re_test_key_123456",
+        SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
+        PUBLIC_APP_URL: "https://academy.spindeleye.com",
+      })
+    ).toEqual({
+      passwordlessConfigured: true,
+      missingPasswordlessVariables: [],
     });
   });
 });

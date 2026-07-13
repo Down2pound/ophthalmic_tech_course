@@ -62,7 +62,7 @@ Before launch:
 3. Set `TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails` when using
    Resend.
 4. Set `TRANSACTIONAL_EMAIL_API_KEY` to the provider API key in the host
-   dashboard.
+   dashboard. Resend keys should start with `re_`.
 5. Set `SIGN_IN_FROM_EMAIL` to the verified sender.
 6. Send a test sign-in email to an internal learner inbox.
 7. Check inbox, spam, quarantine, and link behavior.
@@ -89,7 +89,8 @@ Check these in order:
 
 1. `/api/launch/readiness` shows email variables are configured.
 2. `TRANSACTIONAL_EMAIL_API_URL` is the correct production endpoint.
-3. `TRANSACTIONAL_EMAIL_API_KEY` is active and server-side only.
+3. `TRANSACTIONAL_EMAIL_API_KEY` is active, server-side only, and starts with
+   `re_` when using Resend.
 4. `SIGN_IN_FROM_EMAIL` is verified by the provider.
 5. `PUBLIC_APP_URL` uses the deployed `https` domain.
 6. The learner used the same email that received purchase access.

@@ -122,6 +122,38 @@ function isPostgresUrl(value: string): boolean {
   }
 }
 
+function isResendEmailApiUrl(value: string): boolean {
+  try {
+    const url = new URL(value.trim());
+    const pathname = url.pathname.replace(/\/$/, "");
+    return url.origin === "https://api.resend.com" && pathname === "/emails";
+  } catch {
+    return false;
+  }
+}
+
+export function isResendEmailConfiguration(
+  env: EnvironmentMap = process.env
+): boolean {
+  const apiUrl = env.TRANSACTIONAL_EMAIL_API_URL;
+  return Boolean(apiUrl && isResendEmailApiUrl(apiUrl));
+}
+
+export function isTransactionalEmailApiKeyUnsafe(
+  value: string,
+  env: EnvironmentMap = process.env
+): boolean {
+  const trimmedValue = value.trim();
+
+  if (!hasMinimumLength(trimmedValue, 16)) return true;
+
+  if (isResendEmailConfiguration(env)) {
+    return !trimmedValue.startsWith("re_");
+  }
+
+  return false;
+}
+
 export function getStripeSecretKeyMode(
   env: EnvironmentMap = process.env
 ): StripeSecretKeyMode {
@@ -135,7 +167,8 @@ export function getStripeSecretKeyMode(
 
 export function isUnsafeLaunchEnvironmentValue(
   variableName: string,
-  value: string
+  value: string,
+  env: EnvironmentMap = process.env
 ): boolean {
   if (isPlaceholderEnvironmentValue(variableName, value)) return true;
 
@@ -158,7 +191,7 @@ export function isUnsafeLaunchEnvironmentValue(
     case "DATABASE_URL":
       return !isPostgresUrl(trimmedValue);
     case "TRANSACTIONAL_EMAIL_API_KEY":
-      return !hasMinimumLength(value, 16);
+      return isTransactionalEmailApiKeyUnsafe(trimmedValue, env);
     case "SIGN_IN_FROM_EMAIL":
       return !trimmedValue.includes("@");
     default:
@@ -175,7 +208,7 @@ export function getMissingEnvironmentVariables(
     return (
       !value ||
       value.trim().length === 0 ||
-      isUnsafeLaunchEnvironmentValue(variableName, value)
+      isUnsafeLaunchEnvironmentValue(variableName, value, env)
     );
   });
 }

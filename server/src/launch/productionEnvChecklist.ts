@@ -56,7 +56,8 @@ export const productionEnvironmentChecklist: ProductionEnvironmentChecklistItem[
     {
       variableName: "TRANSACTIONAL_EMAIL_API_KEY",
       source: "Transactional email provider.",
-      validationRule: "At least 16 characters and server-only.",
+      validationRule:
+        "At least 16 characters and server-only. Resend keys should start with re_.",
       launchNote: "Authorizes passwordless email delivery.",
     },
     {

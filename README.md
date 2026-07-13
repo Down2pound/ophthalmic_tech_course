@@ -115,8 +115,8 @@ Stripe key guide:
   `TRANSACTIONAL_EMAIL_API_KEY`, and `SIGN_IN_FROM_EMAIL` are server-only values
   for passwordless sign-in email delivery.
 - For the simplest production email path, use Resend with
-  `TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails`, a Resend API key,
-  and a verified sender address.
+  `TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails`, a Resend API key
+  that starts with `re_`, and a verified sender address.
 - `PRACTICE_SEAT_ADMIN_TOKEN` is a server-only private token used to protect the
   temporary practice-seat assignment API until a full admin login exists.
 - `DATABASE_URL` points the server at managed PostgreSQL so purchases,
