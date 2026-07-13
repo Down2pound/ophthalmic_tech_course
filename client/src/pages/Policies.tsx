@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { createMailtoHref } from "@shared/commerce/offers";
 import {
   buyerSupportContact,
   commercePolicies,
@@ -12,9 +13,11 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-const supportHref = `mailto:${buyerSupportContact.email}?subject=${encodeURIComponent(
-  buyerSupportContact.subject
-)}`;
+const supportHref = createMailtoHref({
+  email: buyerSupportContact.email,
+  subject: buyerSupportContact.subject,
+  body: buyerSupportContact.emailBody,
+});
 
 export default function Policies() {
   return (

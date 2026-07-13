@@ -14,6 +14,7 @@ import {
 import {
   formatOfferPrice,
   foundingLearnerOffer,
+  createMailtoHref,
 } from "@shared/commerce/offers";
 import {
   buyerSupportContact,
@@ -30,9 +31,11 @@ import { createCheckoutSession } from "@/lib/checkoutClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 
 const policySummary = commercePolicies;
-const supportHref = `mailto:${buyerSupportContact.email}?subject=${encodeURIComponent(
-  buyerSupportContact.subject
-)}`;
+const supportHref = createMailtoHref({
+  email: buyerSupportContact.email,
+  subject: buyerSupportContact.subject,
+  body: buyerSupportContact.emailBody,
+});
 
 export default function Checkout() {
   const [email, setEmail] = useState("");

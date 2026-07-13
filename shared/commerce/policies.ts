@@ -13,6 +13,7 @@ export interface CommercePolicy {
 export interface BuyerSupportContact {
   email: string;
   subject: string;
+  emailBody: string;
   safeDetails: string[];
   neverSend: string[];
   expectedUse: string;
@@ -21,6 +22,19 @@ export interface BuyerSupportContact {
 export const buyerSupportContact: BuyerSupportContact = {
   email: "jeff.chapin@spindeleye.com",
   subject: "OptiTech Academy support request",
+  emailBody: [
+    "Hi Jeff,",
+    "",
+    "I need help with OptiTech Academy.",
+    "",
+    "Purchaser or learner email used at checkout:",
+    "Request type: access / refund review / practice seats / course navigation / technical issue",
+    "Approximate purchase date or Stripe receipt date:",
+    "Public error message, if any:",
+    "Short description:",
+    "",
+    "I understand I should not send patient information, card numbers, passwords, raw sign-in links, session cookies, or private employee details.",
+  ].join("\n"),
   safeDetails: [
     "Purchaser or learner email used at checkout.",
     "Whether the request is about access, refund review, practice seats, or course navigation.",

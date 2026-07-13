@@ -153,6 +153,8 @@ describe("buyerSupportContact", () => {
   it("gives buyers a safe support path without collecting sensitive data", () => {
     expect(buyerSupportContact.email).toContain("@");
     expect(buyerSupportContact.subject).toMatch(/support request/i);
+    expect(buyerSupportContact.emailBody).toMatch(/Request type/i);
+    expect(buyerSupportContact.emailBody).toMatch(/refund review/i);
     expect(buyerSupportContact.safeDetails.join(" ")).toMatch(/checkout/i);
     expect(buyerSupportContact.expectedUse).toMatch(/refund review/i);
 
@@ -161,5 +163,21 @@ describe("buyerSupportContact", () => {
     expect(neverSend).toMatch(/protected health information/i);
     expect(neverSend).toMatch(/Card numbers/i);
     expect(neverSend).toMatch(/raw sign-in links/i);
+  });
+
+  it("builds a safe prefilled support email link", () => {
+    const href = createMailtoHref({
+      email: buyerSupportContact.email,
+      subject: buyerSupportContact.subject,
+      body: buyerSupportContact.emailBody,
+    });
+
+    expect(href).toContain("mailto:jeff.chapin@spindeleye.com");
+    expect(href).toContain("subject=OptiTech+Academy+support+request");
+    expect(href).toContain("body=");
+    expect(decodeURIComponent(href)).toContain("Request type:");
+    expect(decodeURIComponent(href)).toContain("Approximate purchase date");
+    expect(decodeURIComponent(href)).not.toMatch(/card number:/i);
+    expect(decodeURIComponent(href)).not.toMatch(/password:/i);
   });
 });

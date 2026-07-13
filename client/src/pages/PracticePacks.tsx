@@ -57,9 +57,11 @@ export default function PracticePacks() {
     subject: customPracticeInquiryOffer.subject,
     body: customPracticeInquiryOffer.emailBody,
   });
-  const supportHref = `mailto:${buyerSupportContact.email}?subject=${encodeURIComponent(
-    buyerSupportContact.subject
-  )}`;
+  const supportHref = createMailtoHref({
+    email: buyerSupportContact.email,
+    subject: buyerSupportContact.subject,
+    body: buyerSupportContact.emailBody,
+  });
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
