@@ -249,6 +249,8 @@ frontend and the API. The production build command is:
 Use `docs/launch/deployment-guide.md` as the beginner-friendly setup path and
 `docs/launch/production-launch-package.md` as the shareable launch handoff
 checklist before opening paid enrollment.
+Use `docs/launch/stripe-setup-guide.md` for the Stripe checkout and webhook
+setup steps.
 
 ```bash
 pnpm build

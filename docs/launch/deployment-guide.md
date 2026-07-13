@@ -103,6 +103,8 @@ verified.
 
 ## Stripe Setup
 
+Use `docs/launch/stripe-setup-guide.md` as the detailed Stripe recipe.
+
 1. Start in Stripe test mode.
 2. Add the server secret key as `STRIPE_SECRET_KEY`.
 3. Create a webhook endpoint for:

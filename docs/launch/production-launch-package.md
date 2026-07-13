@@ -31,6 +31,8 @@ pnpm launch:preflight
 For a step-by-step beginner deployment recipe, use
 `docs/launch/deployment-guide.md`.
 
+For Stripe-specific setup, use `docs/launch/stripe-setup-guide.md`.
+
 Run this after the app is online:
 
 ```bash
@@ -195,6 +197,7 @@ When the launch package is ready to archive, save these files together:
 - Generated `launch-evidence/` folder from `pnpm launch:bundle`
 - `docs/launch/production-launch-package.md`
 - `docs/launch/deployment-guide.md`
+- `docs/launch/stripe-setup-guide.md`
 - `first-sale-support-runbook.md` from the generated launch evidence folder
 - Downloaded `/api/launch/clinical-review-packet.md`
 - Clinical reviewer signoff evidence
