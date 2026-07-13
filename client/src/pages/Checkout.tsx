@@ -15,7 +15,10 @@ import {
   foundingLearnerOffer,
 } from "@shared/commerce/offers";
 import { commercePolicies } from "@shared/commerce/policies";
-import { individualLearnerSalesPath } from "@shared/commerce/salesReadiness";
+import {
+  individualLearnerSalesPath,
+  individualLearnerStartSteps,
+} from "@shared/commerce/salesReadiness";
 import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
@@ -141,6 +144,26 @@ export default function Checkout() {
                       <li key={item}>- {item}</li>
                     ))}
                   </ul>
+                </section>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
+            <h2 className="text-2xl font-bold">How you start after purchase</h2>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {individualLearnerStartSteps.map((step, index) => (
+                <section
+                  key={step.title}
+                  className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                >
+                  <p className="text-sm font-semibold text-blue-700">
+                    Step {index + 1}
+                  </p>
+                  <h3 className="mt-2 font-semibold">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {step.description}
+                  </p>
                 </section>
               ))}
             </div>

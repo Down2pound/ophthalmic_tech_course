@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getSalesPathItemCount,
   individualLearnerSalesPath,
+  individualLearnerStartSteps,
   practiceBuyerSalesPath,
 } from "./salesReadiness";
 
@@ -43,5 +44,23 @@ describe("sales readiness copy", () => {
     expect(combined).not.toMatch(/guarantee/i);
     expect(combined).not.toMatch(/certified/i);
     expect(combined).not.toMatch(/independently verifies/i);
+  });
+
+  it("gives individual learners a clear first-session path after purchase", () => {
+    expect(individualLearnerStartSteps.map(step => step.title)).toEqual([
+      "Use the same email at checkout",
+      "Request your sign-in link",
+      "Start Module 1",
+      "Keep hands-on skills supervised",
+    ]);
+
+    const combined = individualLearnerStartSteps
+      .map(step => `${step.title} ${step.description}`)
+      .join(" ");
+
+    expect(combined).toMatch(/Stripe confirms payment/i);
+    expect(combined).toMatch(/same email/i);
+    expect(combined).toMatch(/supervisor/i);
+    expect(combined).not.toMatch(/guarantee/i);
   });
 });

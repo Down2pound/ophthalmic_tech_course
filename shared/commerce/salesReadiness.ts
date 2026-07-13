@@ -3,6 +3,11 @@ export interface BuyerPathSection {
   items: string[];
 }
 
+export interface LearnerStartStep {
+  title: string;
+  description: string;
+}
+
 export const individualLearnerSalesPath: BuyerPathSection[] = [
   {
     title: "Best fit",
@@ -54,6 +59,29 @@ export const practiceBuyerSalesPath: BuyerPathSection[] = [
       "A manager uses the protected practice-seat tool to assign learner emails.",
       "Each assigned learner signs in with their own email and starts the course.",
     ],
+  },
+];
+
+export const individualLearnerStartSteps: LearnerStartStep[] = [
+  {
+    title: "Use the same email at checkout",
+    description:
+      "Course access is created for the buyer email after Stripe confirms payment.",
+  },
+  {
+    title: "Request your sign-in link",
+    description:
+      "Use the same email on the sign-in screen so the app can find your access.",
+  },
+  {
+    title: "Start Module 1",
+    description:
+      "Begin with the published ophthalmic foundations lessons and knowledge checks.",
+  },
+  {
+    title: "Keep hands-on skills supervised",
+    description:
+      "Use Skills Passport language with a supervisor, trainer, or future employer for observed practice.",
   },
 ];
 
