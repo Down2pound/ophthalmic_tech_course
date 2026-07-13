@@ -233,6 +233,7 @@ LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 
 The smoke test checks `/api/health` and `/api/launch/readiness`. It exits with
 an error until the live app reports that paid launch readiness is complete.
+When it fails, it prints the first launch actions to handle next.
 
 ## Database Contracts
 

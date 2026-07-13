@@ -1,4 +1,5 @@
 import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
+import type { LaunchActionItem } from "../../../shared/launch/launchActionPlan";
 
 export interface DeploymentSmokeTestReport {
   baseUrl: string;
@@ -6,6 +7,7 @@ export interface DeploymentSmokeTestReport {
   readyForPaidLaunch: boolean;
   blockers: string[];
   warnings: string[];
+  launchActions: LaunchActionItem[];
 }
 
 export interface DeploymentSmokeTestInput {
@@ -62,5 +64,6 @@ export async function runDeploymentSmokeTest({
     readyForPaidLaunch: readiness.readyForPaidLaunch,
     blockers: readiness.staticSummary.blockers,
     warnings: readiness.warnings,
+    launchActions: readiness.launchActions,
   };
 }

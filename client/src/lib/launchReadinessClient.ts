@@ -1,4 +1,5 @@
 import type { LaunchReadinessSummary } from "@shared/launch/launchReadiness";
+import type { LaunchActionItem } from "@shared/launch/launchActionPlan";
 
 type Fetcher = typeof fetch;
 
@@ -27,6 +28,7 @@ export interface RuntimeLaunchReadinessReport {
     missingDatabaseVariables: string[];
   };
   warnings: string[];
+  launchActions: LaunchActionItem[];
 }
 
 interface RuntimeReadinessErrorResponse {

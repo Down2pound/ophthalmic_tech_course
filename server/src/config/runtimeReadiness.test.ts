@@ -41,6 +41,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
       },
     });
     expect(report.staticSummary.blockedCount).toBeGreaterThan(0);
+    expect(report.launchActions.map(action => action.id)).toContain(
+      "production-database"
+    );
     expect(report.warnings).toContain(
       "Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."
     );

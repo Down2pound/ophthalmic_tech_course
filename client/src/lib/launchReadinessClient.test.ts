@@ -30,6 +30,16 @@ const runtimeReport = {
     missingDatabaseVariables: ["DATABASE_URL"],
   },
   warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
+  launchActions: [
+    {
+      id: "production-database",
+      title: "Create and initialize hosted PostgreSQL",
+      status: "app-command",
+      whyItMatters: "Durable records are required.",
+      action: "Run pnpm db:setup.",
+      evidenceNeeded: "Database setup succeeds.",
+    },
+  ],
 };
 
 describe("fetchRuntimeLaunchReadiness", () => {

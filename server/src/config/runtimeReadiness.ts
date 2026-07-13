@@ -4,6 +4,10 @@ import {
   type LaunchReadinessSummary,
 } from "../../../shared/launch/launchReadiness";
 import {
+  getRemainingLaunchActions,
+  type LaunchActionItem,
+} from "../../../shared/launch/launchActionPlan";
+import {
   getAuthEnvironmentStatus,
   getCommerceEnvironmentStatus,
   getDatabaseEnvironmentStatus,
@@ -29,6 +33,7 @@ export interface RuntimeLaunchReadinessReport {
   practiceSeatAdmin: PracticeSeatEnvironmentStatus;
   database: DatabaseEnvironmentStatus;
   warnings: string[];
+  launchActions: LaunchActionItem[];
 }
 
 function formatMissingWarning(label: string, missingVariables: string[]) {
@@ -77,5 +82,6 @@ export function getRuntimeLaunchReadinessReport({
     practiceSeatAdmin,
     database,
     warnings,
+    launchActions: getRemainingLaunchActions(),
   };
 }

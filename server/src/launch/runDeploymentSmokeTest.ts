@@ -24,6 +24,13 @@ async function main() {
     }
   }
 
+  if (!report.readyForPaidLaunch && report.launchActions.length > 0) {
+    console.log("- Next launch actions:");
+    for (const action of report.launchActions.slice(0, 3)) {
+      console.log(`  - ${action.title}: ${action.action}`);
+    }
+  }
+
   if (!report.healthOk || !report.readyForPaidLaunch) {
     process.exitCode = 1;
   }

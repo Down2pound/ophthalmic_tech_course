@@ -31,6 +31,16 @@ describe("runDeploymentSmokeTest", () => {
           blockers: ["Clinical content review"],
         },
         warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
+        launchActions: [
+          {
+            id: "production-database",
+            title: "Create and initialize hosted PostgreSQL",
+            status: "app-command",
+            whyItMatters: "Durable records are required.",
+            action: "Run pnpm db:setup.",
+            evidenceNeeded: "Database setup succeeds.",
+          },
+        ],
       });
     };
 
@@ -45,6 +55,16 @@ describe("runDeploymentSmokeTest", () => {
       readyForPaidLaunch: false,
       blockers: ["Clinical content review"],
       warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
+      launchActions: [
+        {
+          id: "production-database",
+          title: "Create and initialize hosted PostgreSQL",
+          status: "app-command",
+          whyItMatters: "Durable records are required.",
+          action: "Run pnpm db:setup.",
+          evidenceNeeded: "Database setup succeeds.",
+        },
+      ],
     });
     expect(requestedUrls).toEqual([
       "https://example.com/api/health",

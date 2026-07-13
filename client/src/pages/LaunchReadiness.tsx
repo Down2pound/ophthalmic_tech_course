@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   CircleAlert,
   Clock3,
+  ListChecks,
   Rocket,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -33,6 +34,12 @@ const runtimeStatusStyles = {
   ready: "border-green-200 bg-green-50 text-green-950",
   checking: "border-blue-200 bg-blue-50 text-blue-950",
   blocked: "border-red-200 bg-red-50 text-red-950",
+};
+
+const actionStatusLabels = {
+  external: "outside account",
+  "app-command": "app command",
+  "manual-qa": "manual QA",
 };
 
 export default function LaunchReadiness() {
@@ -249,6 +256,57 @@ export default function LaunchReadiness() {
               </div>
             )}
           </Card>
+
+          {runtimeReport && (
+            <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
+              <div className="flex items-start gap-3">
+                <ListChecks className="mt-1 h-6 w-6 text-blue-700" />
+                <div>
+                  <p className="text-sm font-semibold text-blue-700">
+                    Ordered go-live plan
+                  </p>
+                  <h2 className="mt-1 text-xl font-bold">
+                    Finish these before accepting real payments
+                  </h2>
+                  <p className="mt-3 leading-7 text-slate-600">
+                    Each step lists the action and the proof needed before it
+                    should be considered done.
+                  </p>
+                </div>
+              </div>
+              <ol className="mt-5 space-y-3">
+                {runtimeReport.launchActions.map((action, index) => (
+                  <li
+                    key={action.id}
+                    className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-500">
+                          Step {index + 1}
+                        </p>
+                        <h3 className="mt-1 font-semibold">{action.title}</h3>
+                      </div>
+                      <span className="inline-flex rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-950">
+                        {actionStatusLabels[action.status]}
+                      </span>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-slate-600">
+                      {action.whyItMatters}
+                    </p>
+                    <p className="mt-3 text-sm leading-6 text-slate-700">
+                      <span className="font-semibold">Action:</span>{" "}
+                      {action.action}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-700">
+                      <span className="font-semibold">Proof needed:</span>{" "}
+                      {action.evidenceNeeded}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          )}
 
           {launchReadinessChecklist.map(item => {
             const Icon = statusIcons[item.status];
