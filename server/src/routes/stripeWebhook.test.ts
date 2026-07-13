@@ -1,9 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type {
   PurchaseEvent,
   StripeCheckoutCompletedEvent,
 } from "../commerce/stripeWebhook";
-import { isUnfulfillableCheckoutCompletedEvent } from "./stripeWebhook";
+import {
+  isUnfulfillableCheckoutCompletedEvent,
+  sendFulfillmentWelcomeEmail,
+  shouldSendPurchaseWelcomeEmail,
+} from "./stripeWebhook";
 
 const purchaseEvent: PurchaseEvent = {
   stripeEventId: "evt_123",
@@ -70,5 +74,115 @@ describe("isUnfulfillableCheckoutCompletedEvent", () => {
     expect(isUnfulfillableCheckoutCompletedEvent(stripeEvent, null)).toBe(
       false
     );
+  });
+});
+
+describe("shouldSendPurchaseWelcomeEmail", () => {
+  it("sends only after a new purchase provisions access", () => {
+    expect(
+      shouldSendPurchaseWelcomeEmail({
+        purchaseRecorded: true,
+        enrollmentProvisioned: true,
+        practiceSeatPackProvisioned: false,
+      })
+    ).toBe(true);
+    expect(
+      shouldSendPurchaseWelcomeEmail({
+        purchaseRecorded: true,
+        enrollmentProvisioned: false,
+        practiceSeatPackProvisioned: true,
+      })
+    ).toBe(true);
+    expect(
+      shouldSendPurchaseWelcomeEmail({
+        purchaseRecorded: false,
+        enrollmentProvisioned: false,
+        practiceSeatPackProvisioned: false,
+      })
+    ).toBe(false);
+  });
+});
+
+describe("sendFulfillmentWelcomeEmail", () => {
+  const configuredEmailEnv = {
+    AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
+    TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails",
+    TRANSACTIONAL_EMAIL_API_KEY: "re_test_key_123456",
+    SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
+    PUBLIC_APP_URL: "https://academy.example.com",
+  };
+
+  it("uses the transactional email settings after access is provisioned", async () => {
+    const sender = vi.fn().mockResolvedValue({
+      sent: true,
+      providerMessageId: "email_123",
+    });
+
+    await expect(
+      sendFulfillmentWelcomeEmail({
+        purchaseEvent,
+        fulfillment: {
+          purchaseRecorded: true,
+          enrollmentProvisioned: true,
+          practiceSeatPackProvisioned: false,
+        },
+        env: configuredEmailEnv,
+        sender,
+      })
+    ).resolves.toEqual({
+      attempted: true,
+      sent: true,
+      providerMessageId: "email_123",
+    });
+    expect(sender).toHaveBeenCalledWith({
+      purchase: purchaseEvent,
+      from: "OptiTech Academy <noreply@example.com>",
+      publicAppUrl: "https://academy.example.com",
+      apiUrl: "https://api.resend.com/emails",
+      apiKey: "re_test_key_123456",
+    });
+  });
+
+  it("skips welcome email when email setup is missing", async () => {
+    const sender = vi.fn();
+
+    await expect(
+      sendFulfillmentWelcomeEmail({
+        purchaseEvent,
+        fulfillment: {
+          purchaseRecorded: true,
+          enrollmentProvisioned: true,
+          practiceSeatPackProvisioned: false,
+        },
+        env: {},
+        sender,
+      })
+    ).resolves.toEqual({
+      attempted: false,
+      sent: false,
+      skippedReason: "Transactional email is not configured.",
+    });
+    expect(sender).not.toHaveBeenCalled();
+  });
+
+  it("does not let welcome email failures undo fulfillment", async () => {
+    const sender = vi.fn().mockRejectedValue(new Error("provider down"));
+
+    await expect(
+      sendFulfillmentWelcomeEmail({
+        purchaseEvent,
+        fulfillment: {
+          purchaseRecorded: true,
+          enrollmentProvisioned: true,
+          practiceSeatPackProvisioned: false,
+        },
+        env: configuredEmailEnv,
+        sender,
+      })
+    ).resolves.toEqual({
+      attempted: true,
+      sent: false,
+      error: "Welcome email could not be sent.",
+    });
   });
 });

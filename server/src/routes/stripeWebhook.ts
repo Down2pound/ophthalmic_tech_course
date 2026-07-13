@@ -25,7 +25,12 @@ import {
   type PurchaseEvent,
   type StripeCheckoutCompletedEvent,
 } from "../commerce/stripeWebhook";
-import { getCommerceEnvironmentStatus } from "../config/environment";
+import { sendPurchaseWelcomeEmail } from "../commerce/purchaseWelcomeEmail";
+import {
+  getAuthEnvironmentStatus,
+  getCommerceEnvironmentStatus,
+  type EnvironmentMap,
+} from "../config/environment";
 import { getWebhookFulfillmentGateStatus } from "../config/webhookFulfillmentGate";
 
 function createCommerceStores(): {
@@ -83,6 +88,109 @@ export function isUnfulfillableCheckoutCompletedEvent(
   purchaseEvent: PurchaseEvent | null
 ): boolean {
   return stripeEvent.type === "checkout.session.completed" && !purchaseEvent;
+}
+
+export interface PurchaseWelcomeEmailStatus {
+  attempted: boolean;
+  sent: boolean;
+  providerMessageId?: string;
+  skippedReason?: string;
+  error?: string;
+}
+
+export interface PurchaseWelcomeEmailSenderInput {
+  purchase: PurchaseEvent;
+  from: string;
+  publicAppUrl: string;
+  apiUrl: string;
+  apiKey: string;
+}
+
+export type PurchaseWelcomeEmailSender = (
+  input: PurchaseWelcomeEmailSenderInput
+) => Promise<{ sent: true; providerMessageId?: string }>;
+
+export function shouldSendPurchaseWelcomeEmail({
+  purchaseRecorded,
+  enrollmentProvisioned,
+  practiceSeatPackProvisioned,
+}: {
+  purchaseRecorded: boolean;
+  enrollmentProvisioned: boolean;
+  practiceSeatPackProvisioned: boolean;
+}): boolean {
+  return (
+    purchaseRecorded &&
+    (enrollmentProvisioned || practiceSeatPackProvisioned)
+  );
+}
+
+export async function sendFulfillmentWelcomeEmail({
+  purchaseEvent,
+  fulfillment,
+  env = process.env,
+  sender = sendPurchaseWelcomeEmail,
+}: {
+  purchaseEvent: PurchaseEvent;
+  fulfillment: {
+    purchaseRecorded: boolean;
+    enrollmentProvisioned: boolean;
+    practiceSeatPackProvisioned: boolean;
+  };
+  env?: EnvironmentMap;
+  sender?: PurchaseWelcomeEmailSender;
+}): Promise<PurchaseWelcomeEmailStatus> {
+  if (!shouldSendPurchaseWelcomeEmail(fulfillment)) {
+    return {
+      attempted: false,
+      sent: false,
+      skippedReason: "Purchase was not newly fulfilled.",
+    };
+  }
+
+  const authStatus = getAuthEnvironmentStatus(env);
+  const from = env.SIGN_IN_FROM_EMAIL?.trim();
+  const apiUrl = env.TRANSACTIONAL_EMAIL_API_URL?.trim();
+  const apiKey = env.TRANSACTIONAL_EMAIL_API_KEY?.trim();
+  const publicAppUrl = env.PUBLIC_APP_URL?.trim();
+
+  if (
+    !authStatus.passwordlessConfigured ||
+    !from ||
+    !apiUrl ||
+    !apiKey ||
+    !publicAppUrl
+  ) {
+    return {
+      attempted: false,
+      sent: false,
+      skippedReason: "Transactional email is not configured.",
+    };
+  }
+
+  try {
+    const result = await sender({
+      purchase: purchaseEvent,
+      from,
+      publicAppUrl,
+      apiUrl,
+      apiKey,
+    });
+
+    return {
+      attempted: true,
+      sent: true,
+      ...(result.providerMessageId
+        ? { providerMessageId: result.providerMessageId }
+        : {}),
+    };
+  } catch {
+    return {
+      attempted: true,
+      sent: false,
+      error: "Welcome email could not be sent.",
+    };
+  }
 }
 
 export function setupStripeWebhookRoute(app: Express) {
@@ -152,6 +260,11 @@ export function setupStripeWebhookRoute(app: Express) {
       let purchaseRecorded = false;
       let enrollmentProvisioned = false;
       let practiceSeatPackProvisioned = false;
+      let welcomeEmail: PurchaseWelcomeEmailStatus = {
+        attempted: false,
+        sent: false,
+        skippedReason: "No purchase fulfillment was needed.",
+      };
 
       if (purchaseEvent) {
         const fulfillment =
@@ -159,6 +272,10 @@ export function setupStripeWebhookRoute(app: Express) {
         purchaseRecorded = fulfillment.purchaseRecorded;
         enrollmentProvisioned = fulfillment.enrollmentProvisioned;
         practiceSeatPackProvisioned = fulfillment.practiceSeatPackProvisioned;
+        welcomeEmail = await sendFulfillmentWelcomeEmail({
+          purchaseEvent,
+          fulfillment,
+        });
       }
 
       res.json({
@@ -166,6 +283,7 @@ export function setupStripeWebhookRoute(app: Express) {
         purchaseRecorded,
         enrollmentProvisioned,
         practiceSeatPackProvisioned,
+        welcomeEmail,
       });
     }
   );

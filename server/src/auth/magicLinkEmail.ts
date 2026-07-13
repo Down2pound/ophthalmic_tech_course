@@ -10,6 +10,8 @@ export interface MagicLinkEmailMessage {
   html: string;
 }
 
+export type TransactionalEmailMessage = MagicLinkEmailMessage;
+
 export interface SendMagicLinkEmailInput {
   payload: MagicLinkEmailPayload;
   from: string;
@@ -28,6 +30,14 @@ interface ProviderResponse {
   messageId?: string;
 }
 
+export interface SendTransactionalEmailInput {
+  message: TransactionalEmailMessage;
+  apiUrl: string;
+  apiKey: string;
+  fetcher?: Fetcher;
+  failureMessage?: string;
+}
+
 export function createMagicLinkEmailMessage({
   payload,
   from,
@@ -44,27 +54,27 @@ export function createMagicLinkEmailMessage({
   };
 }
 
-export async function sendMagicLinkEmail({
-  payload,
-  from,
+export async function sendTransactionalEmailMessage({
+  message,
   apiUrl,
   apiKey,
   fetcher = fetch,
-}: SendMagicLinkEmailInput): Promise<SendMagicLinkEmailResult> {
+  failureMessage = "Email could not be sent.",
+}: SendTransactionalEmailInput): Promise<SendMagicLinkEmailResult> {
   const response = await fetcher(apiUrl, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(createMagicLinkEmailMessage({ payload, from })),
+    body: JSON.stringify(message),
   });
   const providerResponse = (await response.json().catch(() => ({}))) as
     | ProviderResponse
     | { error?: string };
 
   if (!response.ok) {
-    throw new Error("Sign-in email could not be sent.");
+    throw new Error(failureMessage);
   }
 
   return {
@@ -76,4 +86,20 @@ export async function sendMagicLinkEmail({
           ? providerResponse.messageId
           : undefined,
   };
+}
+
+export async function sendMagicLinkEmail({
+  payload,
+  from,
+  apiUrl,
+  apiKey,
+  fetcher = fetch,
+}: SendMagicLinkEmailInput): Promise<SendMagicLinkEmailResult> {
+  return sendTransactionalEmailMessage({
+    message: createMagicLinkEmailMessage({ payload, from }),
+    apiUrl,
+    apiKey,
+    fetcher,
+    failureMessage: "Sign-in email could not be sent.",
+  });
 }
