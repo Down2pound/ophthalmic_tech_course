@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { normalizeCheckoutEmail } from "../../../shared/commerce/checkoutEmail";
 
 export interface StripeWebhookVerificationInput {
   payload: string;
@@ -15,6 +16,9 @@ export interface StripeCheckoutCompletedEvent {
     object: {
       id?: string;
       customer_email?: string | null;
+      customer_details?: {
+        email?: string | null;
+      } | null;
       metadata?: Record<string, string>;
       amount_total?: number | null;
       currency?: string | null;
@@ -82,6 +86,9 @@ export function createPurchaseEventFromStripeEvent(
   const session = event.data.object;
   const offerId = session.metadata?.offer_id;
   const accessMonths = Number(session.metadata?.access_months);
+  const purchaserEmail = normalizeCheckoutEmail(
+    session.customer_email ?? session.customer_details?.email
+  );
   const seatCount = session.metadata?.seat_count
     ? Number(session.metadata.seat_count)
     : undefined;
@@ -89,7 +96,7 @@ export function createPurchaseEventFromStripeEvent(
   if (
     !session.id ||
     !offerId ||
-    !session.customer_email ||
+    !purchaserEmail ||
     !session.amount_total ||
     !session.currency ||
     !Number.isFinite(accessMonths) ||
@@ -103,7 +110,7 @@ export function createPurchaseEventFromStripeEvent(
     stripeEventId: event.id,
     checkoutSessionId: session.id,
     offerId,
-    purchaserEmail: session.customer_email,
+    purchaserEmail,
     amountTotal: session.amount_total,
     currency: session.currency,
     accessMonths,

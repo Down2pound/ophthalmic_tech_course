@@ -51,7 +51,7 @@ describe("createPurchaseEventFromStripeEvent", () => {
         data: {
           object: {
             id: "cs_test_123",
-            customer_email: "learner@example.com",
+            customer_email: " Learner@Example.COM ",
             metadata: {
               offer_id: "founding-learner",
               access_months: "12",
@@ -70,6 +70,57 @@ describe("createPurchaseEventFromStripeEvent", () => {
       currency: "usd",
       accessMonths: 12,
     });
+  });
+
+  it("uses Stripe customer details email when top-level customer email is missing", () => {
+    expect(
+      createPurchaseEventFromStripeEvent({
+        id: "evt_customer_details",
+        type: "checkout.session.completed",
+        data: {
+          object: {
+            id: "cs_test_customer_details",
+            customer_email: null,
+            customer_details: {
+              email: "DetailsEmail@Example.COM",
+            },
+            metadata: {
+              offer_id: "founding-learner",
+              access_months: "12",
+            },
+            amount_total: 19900,
+            currency: "usd",
+          },
+        },
+      })
+    ).toMatchObject({
+      checkoutSessionId: "cs_test_customer_details",
+      purchaserEmail: "detailsemail@example.com",
+    });
+  });
+
+  it("rejects completed checkout sessions without a usable buyer email", () => {
+    expect(
+      createPurchaseEventFromStripeEvent({
+        id: "evt_missing_email",
+        type: "checkout.session.completed",
+        data: {
+          object: {
+            id: "cs_test_missing_email",
+            customer_email: null,
+            customer_details: {
+              email: "not-an-email",
+            },
+            metadata: {
+              offer_id: "founding-learner",
+              access_months: "12",
+            },
+            amount_total: 19900,
+            currency: "usd",
+          },
+        },
+      })
+    ).toBeNull();
   });
 
   it("includes practice seat count metadata when present", () => {
