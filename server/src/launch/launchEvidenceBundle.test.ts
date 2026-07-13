@@ -92,6 +92,7 @@ describe("createLaunchEvidenceBundle", () => {
       "production-env-checklist.md",
       "launch-doctor-report.md",
       "manual-launch-qa-evidence.md",
+      "first-sale-support-runbook.md",
       "module-1-clinical-review-packet.md",
       "runtime-readiness-snapshot.json",
     ]);
@@ -116,6 +117,10 @@ describe("createLaunchEvidenceBundle", () => {
       path.join(result.outputDir, "manual-launch-qa-evidence.md"),
       "utf8"
     );
+    const supportRunbook = await readFile(
+      path.join(result.outputDir, "first-sale-support-runbook.md"),
+      "utf8"
+    );
 
     expect(readme).toContain("safe to save to Google Drive");
     expect(readme).toContain("Ready for paid launch: no");
@@ -129,6 +134,14 @@ describe("createLaunchEvidenceBundle", () => {
       "OptiTech Academy Manual Launch QA Evidence"
     );
     expect(manualQaEvidence).toContain("Test the paid learner flow end to end");
+    expect(supportRunbook).toContain(
+      "OptiTech Academy First Sale Support Runbook"
+    );
+    expect(supportRunbook).toContain(
+      "Payment Succeeded But Access Is Missing"
+    );
+    expect(supportRunbook).not.toContain("sk_test_");
+    expect(supportRunbook).not.toContain("whsec_");
     expect(readinessSnapshot).toContain("STRIPE_SECRET_KEY");
     expect(readinessSnapshot).not.toContain("sk_test_");
     expect(readinessSnapshot).not.toContain("whsec_");

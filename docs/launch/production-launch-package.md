@@ -193,6 +193,7 @@ When the launch package is ready to archive, save these files together:
 
 - Generated `launch-evidence/` folder from `pnpm launch:bundle`
 - `docs/launch/production-launch-package.md`
+- `first-sale-support-runbook.md` from the generated launch evidence folder
 - Downloaded `/api/launch/clinical-review-packet.md`
 - Clinical reviewer signoff evidence
 - Stripe webhook test notes
