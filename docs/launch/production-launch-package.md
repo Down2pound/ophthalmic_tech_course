@@ -56,7 +56,8 @@ LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
 
 The smoke test checks the health endpoint, launch readiness endpoint, and the
-public buyer pages for home, checkout, practice packs, policies, curriculum, and
+public buyer pages for home, checkout, individual checkout return states,
+practice packs, practice checkout return states, policies, curriculum, and
 onboarding.
 
 Generate the production sitemap after `PUBLIC_APP_URL` is set to the real

@@ -32,7 +32,11 @@ interface HealthResponse {
 export const deploymentSmokePublicPaths = [
   "/",
   "/checkout",
+  "/checkout?checkout=cancelled&offer=founding-learner",
+  "/learn?checkout=success&offer=founding-learner",
   "/practice-packs",
+  "/practice-packs?checkout=cancelled&offer=practice-five-seat-pack",
+  "/practice-packs?checkout=success&offer=practice-five-seat-pack",
   "/policies",
   "/curriculum",
   "/onboarding",

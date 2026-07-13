@@ -85,6 +85,8 @@ Only after every earlier section passes:
 - [ ] Set `ENABLE_PAID_ENROLLMENT=true`.
 - [ ] Redeploy or restart the app.
 - [ ] Run `LAUNCH_BASE_URL=https://your-domain.example pnpm launch:smoke`.
+- [ ] Confirm the smoke report includes individual and practice checkout
+      success/cancel return pages.
 - [ ] Open `/api/launch/readiness`.
 - [ ] Confirm `readyForPaidLaunch` is `true`.
 - [ ] Run one low-risk internal live-mode purchase.
