@@ -14,6 +14,9 @@ describe(".env.example", () => {
     expect(envExample).toContain("PUBLIC_APP_URL=");
     expect(envExample).toContain("DATABASE_URL=");
     expect(envExample).toContain("AUTH_SESSION_SECRET=");
+    expect(envExample).toContain(
+      "TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails"
+    );
     expect(envExample).toContain("PRACTICE_SEAT_ADMIN_TOKEN=");
     expect(envExample).toContain("LAUNCH_SITEMAP_PATH=");
     expect(envExample).toContain("VITE_ANALYTICS_ENDPOINT=");

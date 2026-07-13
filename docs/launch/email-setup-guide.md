@@ -6,10 +6,10 @@ and use that link to enter the course.
 
 ## How This App Sends Email
 
-The app sends a `POST` request to the configured transactional email endpoint:
+The simplest production path is Resend. The app can send directly to:
 
 ```text
-TRANSACTIONAL_EMAIL_API_URL=
+TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails
 ```
 
 The request uses this authorization header:
@@ -30,8 +30,9 @@ The JSON body has this shape:
 }
 ```
 
-Choose an email provider or adapter that accepts this format, or add a small
-server adapter that converts this format into the provider's required shape.
+Resend accepts this shape directly. If you choose a different provider, use one
+that accepts the same shape or add a small server adapter that converts this
+message into the provider's required format.
 
 ## Required Host Variables
 
@@ -39,7 +40,7 @@ Set these in the production host dashboard, not in Git:
 
 ```text
 AUTH_SESSION_SECRET=
-TRANSACTIONAL_EMAIL_API_URL=
+TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails
 TRANSACTIONAL_EMAIL_API_KEY=
 SIGN_IN_FROM_EMAIL=
 PUBLIC_APP_URL=
@@ -56,11 +57,16 @@ https://your-domain.example/api/auth/callback?token=...
 
 Before launch:
 
-1. Verify the sender address or sending domain with the email provider.
-2. Set `SIGN_IN_FROM_EMAIL` to that verified sender.
-3. Send a test sign-in email to an internal learner inbox.
-4. Check inbox, spam, quarantine, and link behavior.
-5. Confirm the link opens the deployed app and creates a session.
+1. Create a Resend account or open your existing email provider.
+2. Verify the sender address or sending domain.
+3. Set `TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails` when using
+   Resend.
+4. Set `TRANSACTIONAL_EMAIL_API_KEY` to the provider API key in the host
+   dashboard.
+5. Set `SIGN_IN_FROM_EMAIL` to the verified sender.
+6. Send a test sign-in email to an internal learner inbox.
+7. Check inbox, spam, quarantine, and link behavior.
+8. Confirm the link opens the deployed app and creates a session.
 
 ## What To Prove Before Selling
 

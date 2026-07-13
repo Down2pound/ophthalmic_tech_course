@@ -49,7 +49,7 @@ export const productionEnvironmentChecklist: ProductionEnvironmentChecklistItem[
     },
     {
       variableName: "TRANSACTIONAL_EMAIL_API_URL",
-      source: "Transactional email provider.",
+      source: "Transactional email provider. Resend: https://api.resend.com/emails.",
       validationRule: "Must be an https API endpoint.",
       launchNote: "Sends passwordless sign-in links.",
     },

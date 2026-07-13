@@ -252,6 +252,7 @@ describe("createLaunchEvidenceBundle", () => {
     expect(stripeSetupGuide).toContain("checkout.session.completed");
     expect(emailSetupGuide).toContain("OptiTech Academy Email Setup Guide");
     expect(emailSetupGuide).toContain("TRANSACTIONAL_EMAIL_API_URL");
+    expect(emailSetupGuide).toContain("https://api.resend.com/emails");
     expect(databaseSetupGuide).toContain(
       "OptiTech Academy Database Setup Guide"
     );

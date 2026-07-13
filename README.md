@@ -82,7 +82,7 @@ DATABASE_URL=replace_with_managed_postgres_connection_string
 DATABASE_SSL=true
 STRIPE_WEBHOOK_SECRET=whsec_replace_with_your_webhook_signing_secret
 AUTH_SESSION_SECRET=replace_with_a_long_random_session_secret
-TRANSACTIONAL_EMAIL_API_URL=https://email-provider.example.com/send
+TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails
 TRANSACTIONAL_EMAIL_API_KEY=replace_with_your_email_provider_api_key
 SIGN_IN_FROM_EMAIL="OptiTech Academy <noreply@example.com>"
 PRACTICE_SEAT_ADMIN_TOKEN=replace_with_a_long_random_admin_token
@@ -114,6 +114,9 @@ Stripe key guide:
 - `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
   `TRANSACTIONAL_EMAIL_API_KEY`, and `SIGN_IN_FROM_EMAIL` are server-only values
   for passwordless sign-in email delivery.
+- For the simplest production email path, use Resend with
+  `TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails`, a Resend API key,
+  and a verified sender address.
 - `PRACTICE_SEAT_ADMIN_TOKEN` is a server-only private token used to protect the
   temporary practice-seat assignment API until a full admin login exists.
 - `DATABASE_URL` points the server at managed PostgreSQL so purchases,

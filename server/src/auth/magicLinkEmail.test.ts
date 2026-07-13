@@ -41,7 +41,7 @@ describe("sendMagicLinkEmail", () => {
       sendMagicLinkEmail({
         payload: emailPayload,
         from: "OptiTech Academy <noreply@example.com>",
-        apiUrl: "https://email-provider.example.com/send",
+        apiUrl: "https://api.resend.com/emails",
         apiKey: "email-api-key",
         fetcher,
       })
@@ -50,7 +50,7 @@ describe("sendMagicLinkEmail", () => {
       providerMessageId: "email_123",
     });
     expect(fetcher).toHaveBeenCalledWith(
-      "https://email-provider.example.com/send",
+      "https://api.resend.com/emails",
       expect.objectContaining({
         method: "POST",
         headers: {
@@ -75,7 +75,7 @@ describe("sendMagicLinkEmail", () => {
       sendMagicLinkEmail({
         payload: emailPayload,
         from: "OptiTech Academy <noreply@example.com>",
-        apiUrl: "https://email-provider.example.com/send",
+        apiUrl: "https://api.resend.com/emails",
         apiKey: "email-api-key",
         fetcher,
       })
