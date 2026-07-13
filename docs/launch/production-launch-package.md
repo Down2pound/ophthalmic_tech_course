@@ -60,6 +60,16 @@ public buyer pages for home, checkout, individual checkout return states,
 practice packs, practice checkout return states, policies, curriculum, and
 onboarding.
 
+Before the paid launch switch is enabled, the same smoke test can confirm the
+deployed health endpoint and buyer pages while allowing `readyForPaidLaunch` to
+remain `false`:
+
+```bash
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
+```
+
+Do not use `LAUNCH_SMOKE_ALLOW_NOT_READY=true` for the final go-live check.
+
 Generate the production sitemap after `PUBLIC_APP_URL` is set to the real
 deployed `https` domain:
 

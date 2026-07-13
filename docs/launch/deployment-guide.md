@@ -156,7 +156,10 @@ Before changing `ENABLE_PAID_ENROLLMENT` to `true`, verify:
 - A learner can open Module 1 and submit the protected quiz.
 - A practice pack can assign learner seats without exceeding capacity.
 - Module 1 clinical review is approved and saved in environment variables.
-- `pnpm launch:smoke` passes against the deployed site.
+- `LAUNCH_SMOKE_ALLOW_NOT_READY=true pnpm launch:smoke` confirms the deployed
+  site loads before paid enrollment is turned on.
+- `pnpm launch:smoke` passes against the deployed site after every paid launch
+  gate is complete.
 
 Only then set:
 

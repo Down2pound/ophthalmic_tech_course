@@ -108,9 +108,12 @@ Google Drive because it does not include secret values.
 Replace the example URL with your real production URL:
 
 ```bash
-LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
 PUBLIC_APP_URL=https://your-real-domain.example pnpm launch:sitemap
 ```
+
+Use the smoke command without `LAUNCH_SMOKE_ALLOW_NOT_READY=true` only for the
+final go-live check after paid enrollment is supposed to be ready.
 
 Save the smoke test output and hosted sitemap URL with the launch evidence.
 

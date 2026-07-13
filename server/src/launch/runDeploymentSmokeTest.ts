@@ -1,11 +1,15 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { runDeploymentSmokeTest } from "./deploymentSmokeTest";
+import {
+  getDeploymentSmokeExitCode,
+  runDeploymentSmokeTest,
+} from "./deploymentSmokeTest";
 import { renderDeploymentSmokeReport } from "./deploymentSmokeTest";
 
 async function main() {
   const baseUrl =
     process.env.LAUNCH_BASE_URL || process.env.PUBLIC_APP_URL || "";
+  const allowNotReady = process.env.LAUNCH_SMOKE_ALLOW_NOT_READY === "true";
   const report = await runDeploymentSmokeTest({ baseUrl });
   const renderedReport = renderDeploymentSmokeReport(report);
 
@@ -24,6 +28,11 @@ async function main() {
       report.readyForPaidLaunch ? "ready" : "not ready"
     }`
   );
+  if (allowNotReady && !report.readyForPaidLaunch) {
+    console.log(
+      "- Not-ready launch status allowed for this pre-launch smoke run."
+    );
+  }
 
   if (report.blockers.length > 0) {
     console.log(`- Blockers: ${report.blockers.join(", ")}`);
@@ -50,9 +59,7 @@ async function main() {
     console.log(`- Report written: ${reportPath}`);
   }
 
-  if (!report.healthOk || !report.publicPagesOk || !report.readyForPaidLaunch) {
-    process.exitCode = 1;
-  }
+  process.exitCode = getDeploymentSmokeExitCode(report, { allowNotReady });
 }
 
 main().catch(error => {

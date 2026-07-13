@@ -25,6 +25,10 @@ export interface DeploymentSmokePublicPageResult {
   status: number;
 }
 
+export interface DeploymentSmokeExitOptions {
+  allowNotReady?: boolean;
+}
+
 interface HealthResponse {
   ok?: boolean;
 }
@@ -116,6 +120,16 @@ export async function runDeploymentSmokeTest({
     warnings: readiness.warnings,
     launchActions: readiness.launchActions,
   };
+}
+
+export function getDeploymentSmokeExitCode(
+  report: DeploymentSmokeTestReport,
+  { allowNotReady = false }: DeploymentSmokeExitOptions = {}
+): number {
+  if (!report.healthOk || !report.publicPagesOk) return 1;
+  if (!allowNotReady && !report.readyForPaidLaunch) return 1;
+
+  return 0;
 }
 
 function renderList(items: string[], emptyText: string): string[] {

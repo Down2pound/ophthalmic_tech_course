@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  getDeploymentSmokeExitCode,
   renderDeploymentSmokeReport,
   runDeploymentSmokeTest,
 } from "./deploymentSmokeTest";
@@ -203,6 +204,48 @@ describe("runDeploymentSmokeTest", () => {
     expect(report).toContain("Create and initialize hosted PostgreSQL");
     expect(report).not.toContain("sk_test_");
     expect(report).not.toContain("whsec_123");
+  });
+
+  it("can allow not-ready launch status for pre-launch deployment checks", () => {
+    const report = {
+      baseUrl: "https://academy.spindeleye.com",
+      healthOk: true,
+      publicPagesOk: true,
+      publicPages: [],
+      readyForPaidLaunch: false,
+      generatedAt: "2026-07-13T12:00:00.000Z",
+      blockers: [],
+      warnings: [],
+      launchActions: [],
+    };
+
+    expect(getDeploymentSmokeExitCode(report)).toBe(1);
+    expect(getDeploymentSmokeExitCode(report, { allowNotReady: true })).toBe(0);
+  });
+
+  it("still fails pre-launch deployment checks when public pages are broken", () => {
+    expect(
+      getDeploymentSmokeExitCode(
+        {
+          baseUrl: "https://academy.spindeleye.com",
+          healthOk: true,
+          publicPagesOk: false,
+          publicPages: [
+            {
+              path: "/checkout",
+              ok: false,
+              status: 500,
+            },
+          ],
+          readyForPaidLaunch: false,
+          generatedAt: "2026-07-13T12:00:00.000Z",
+          blockers: [],
+          warnings: [],
+          launchActions: [],
+        },
+        { allowNotReady: true }
+      )
+    ).toBe(1);
   });
 
   it("fails clearly when a deployed endpoint is unavailable", async () => {
