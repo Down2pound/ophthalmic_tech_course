@@ -1,4 +1,5 @@
 import type { Request, Response, Router } from "express";
+import { renderModuleOneClinicalReviewPacketMarkdown } from "../../../shared/course/clinicalReviewPacket";
 import { getHealthReport } from "../config/health";
 import { getRuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 
@@ -10,4 +11,17 @@ export function setupLaunchReadinessRoutes(router: Router) {
   router.get("/launch/readiness", (_req: Request, res: Response) => {
     res.json(getRuntimeLaunchReadinessReport());
   });
+
+  router.get(
+    "/launch/clinical-review-packet.md",
+    (_req: Request, res: Response) => {
+      res
+        .type("text/markdown")
+        .set(
+          "Content-Disposition",
+          'attachment; filename="module-1-clinical-review-packet.md"'
+        )
+        .send(renderModuleOneClinicalReviewPacketMarkdown());
+    }
+  );
 }

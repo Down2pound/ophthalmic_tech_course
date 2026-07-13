@@ -333,6 +333,12 @@ export default function LaunchReadiness() {
                   <p className="mt-3 leading-7 text-slate-600">
                     {runtimeReport.clinicalReviewPacket.purpose}
                   </p>
+                  <a
+                    href="/api/launch/clinical-review-packet.md"
+                    className="mt-4 inline-flex rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-950 hover:bg-blue-100"
+                  >
+                    Download review packet
+                  </a>
                 </div>
               </div>
 

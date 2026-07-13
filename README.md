@@ -118,6 +118,8 @@ Checkout routes:
 - Protected practice seat pack list endpoint: `GET /api/practice-seat-packs`
 - Health check endpoint: `GET /api/health`
 - Runtime launch check: `GET /api/launch/readiness`
+- Clinical review packet export:
+  `GET /api/launch/clinical-review-packet.md`
 - Success return: `/learn?checkout=success&offer=...`
 - Cancel return: `/checkout?checkout=cancelled`
 
@@ -144,6 +146,10 @@ checkout fails closed with a setup message and does not collect payment.
 counts and missing environment variable names. It must never return actual
 Stripe key values. It also includes the ordered launch action plan and Module 1
 clinical review packet so reviewers can see exactly what still needs signoff.
+
+`GET /api/launch/clinical-review-packet.md` downloads a Markdown packet with
+Module 1 lesson bodies, scope notes, sources, review questions, and signoff
+fields. Use it to collect clinical review before turning on paid enrollment.
 
 `GET /api/health` returns a small safe uptime report for deployment health
 checks. It does not return secret values.

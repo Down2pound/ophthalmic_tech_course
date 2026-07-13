@@ -1,4 +1,5 @@
 import { moduleOneLessons } from "./moduleOneLessons";
+import type { Lesson } from "./types";
 
 export interface ClinicalReviewLessonSummary {
   lessonId: string;
@@ -62,6 +63,84 @@ export const moduleOneClinicalReviewPacket: ClinicalReviewPacket = {
 
 export function getModuleOneClinicalReviewPacket(): ClinicalReviewPacket {
   return moduleOneClinicalReviewPacket;
+}
+
+function formatList(items: string[]): string {
+  return items.map(item => `- ${item}`).join("\n");
+}
+
+function formatSignoffFields(fields: string[]): string {
+  return fields.map(field => `- ${field}: ____________________`).join("\n");
+}
+
+function formatLessonForReview(lesson: Lesson, index: number): string {
+  return [
+    `## Lesson ${index + 1}: ${lesson.title}`,
+    "",
+    `Lesson ID: ${lesson.id}`,
+    `Duration: ${lesson.durationMinutes} minutes`,
+    `Status: ${lesson.status}`,
+    `Review status: ${lesson.review.reviewStatus}`,
+    `Clinical reviewer: ${lesson.review.clinicalReviewer}`,
+    `Review date: ${lesson.review.reviewDate || "Not reviewed yet"}`,
+    `Next review date: ${lesson.review.nextReviewDate}`,
+    "",
+    "### Learning Outcome",
+    lesson.outcome,
+    "",
+    "### Lesson Body",
+    formatList(lesson.body),
+    "",
+    "### Clinic Context",
+    lesson.clinicContext,
+    "",
+    "### Patient-Friendly Script",
+    lesson.patientFriendlyScript,
+    "",
+    "### Scenario Prompt",
+    lesson.scenarioPrompt,
+    "",
+    "### Common Mistakes",
+    formatList(lesson.commonMistakes),
+    "",
+    "### Scope Note",
+    lesson.scopeNote,
+    "",
+    "### Sources",
+    formatList(lesson.sources.map(source => `${source.title} (${source.url})`)),
+    "",
+    "### Reviewer Questions",
+    formatList(moduleOneClinicalReviewPacket.lessons[index].reviewQuestions),
+    "",
+    "Reviewer notes:",
+    "",
+    "________________________________________________________________",
+    "",
+    "________________________________________________________________",
+  ].join("\n");
+}
+
+export function renderModuleOneClinicalReviewPacketMarkdown(): string {
+  return [
+    `# ${moduleOneClinicalReviewPacket.moduleTitle} Clinical Review Packet`,
+    "",
+    moduleOneClinicalReviewPacket.purpose,
+    "",
+    "## Reviewer Instructions",
+    formatList(moduleOneClinicalReviewPacket.reviewerInstructions),
+    "",
+    "## Signoff Fields",
+    formatSignoffFields(moduleOneClinicalReviewPacket.signoffFields),
+    "",
+    ...moduleOneLessons.map(formatLessonForReview),
+    "",
+    "## Final Approval",
+    "",
+    "Final approval status: ____________________",
+    "",
+    "Reviewer signature: ____________________",
+    "",
+  ].join("\n");
 }
 
 export function isModuleOneClinicallyReviewed(): boolean {

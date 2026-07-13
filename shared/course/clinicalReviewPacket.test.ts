@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getModuleOneClinicalReviewPacket,
   isModuleOneClinicallyReviewed,
+  renderModuleOneClinicalReviewPacketMarkdown,
 } from "./clinicalReviewPacket";
 import { moduleOneLessons } from "./moduleOneLessons";
 
@@ -21,5 +22,19 @@ describe("getModuleOneClinicalReviewPacket", () => {
 
   it("keeps the launch blocker active until all lessons are clinically reviewed", () => {
     expect(isModuleOneClinicallyReviewed()).toBe(false);
+  });
+
+  it("renders a sendable Markdown review packet with full lesson content", () => {
+    const markdown = renderModuleOneClinicalReviewPacketMarkdown();
+
+    expect(markdown).toContain(
+      "# Module 1: Entering Ophthalmic Care Clinical Review Packet"
+    );
+    expect(markdown).toContain("## Signoff Fields");
+    expect(markdown).toContain("Clinical reviewer name: ____________________");
+    expect(markdown).toContain("### Lesson Body");
+    expect(markdown).toContain(moduleOneLessons[0].body[0]);
+    expect(markdown).toContain("### Reviewer Questions");
+    expect(markdown).toContain("Reviewer signature: ____________________");
   });
 });
