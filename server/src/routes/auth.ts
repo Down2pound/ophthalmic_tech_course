@@ -146,9 +146,9 @@ export function setupAuthRoutes(router: Router) {
     res.redirect("/learn");
   });
 
-  router.get("/auth/session", (req: Request, res: Response) => {
+  router.get("/auth/session", async (req: Request, res: Response) => {
     const sessionToken = getCookieValue(req.get("cookie"), COOKIE_NAME);
-    const access = authorizeLearnerSession({
+    const access = await authorizeLearnerSession({
       rawSessionToken: sessionToken,
       sessionStore,
       enrollmentStore: getEnrollmentStore(),
@@ -159,7 +159,7 @@ export function setupAuthRoutes(router: Router) {
 
   router.post(
     "/practice-seat-packs/:seatPackId/assignments",
-    (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
       const authorization = authorizePracticeSeatAdminRequest(req);
 
       if (!authorization.authorized) {
@@ -169,7 +169,7 @@ export function setupAuthRoutes(router: Router) {
 
       const { learnerEmail } = (req.body ??
         {}) as PracticeSeatAssignmentRequestBody;
-      const result = assignPracticeSeatToLearner({
+      const result = await assignPracticeSeatToLearner({
         seatPackId: req.params.seatPackId,
         learnerEmail: learnerEmail ?? "",
         practiceSeatPackStore: getPracticeSeatPackStore(),
@@ -196,7 +196,7 @@ export function setupAuthRoutes(router: Router) {
     }
   );
 
-  router.get("/practice-seat-packs", (req: Request, res: Response) => {
+  router.get("/practice-seat-packs", async (req: Request, res: Response) => {
     const authorization = authorizePracticeSeatAdminRequest(req);
 
     if (!authorization.authorized) {
@@ -207,8 +207,8 @@ export function setupAuthRoutes(router: Router) {
     const practiceSeatPackStore = getPracticeSeatPackStore();
 
     res.json({
-      seatPacks: practiceSeatPackStore.listPracticeSeatPacks(),
-      assignments: practiceSeatPackStore.listPracticeSeatAssignments(),
+      seatPacks: await practiceSeatPackStore.listPracticeSeatPacks(),
+      assignments: await practiceSeatPackStore.listPracticeSeatAssignments(),
     });
   });
 }

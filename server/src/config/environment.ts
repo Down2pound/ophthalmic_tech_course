@@ -17,6 +17,11 @@ export interface PracticeSeatEnvironmentStatus {
   missingPracticeSeatAdminVariables: string[];
 }
 
+export interface DatabaseEnvironmentStatus {
+  databaseConfigured: boolean;
+  missingDatabaseVariables: string[];
+}
+
 export const checkoutEnvironmentVariables = [
   "STRIPE_SECRET_KEY",
   "PUBLIC_APP_URL",
@@ -35,6 +40,8 @@ export const passwordlessEnvironmentVariables = [
 export const practiceSeatAdminEnvironmentVariables = [
   "PRACTICE_SEAT_ADMIN_TOKEN",
 ] as const;
+
+export const databaseEnvironmentVariables = ["DATABASE_URL"] as const;
 
 export function getMissingEnvironmentVariables(
   env: EnvironmentMap,
@@ -91,5 +98,19 @@ export function getPracticeSeatEnvironmentStatus(
   return {
     practiceSeatAdminConfigured: missingPracticeSeatAdminVariables.length === 0,
     missingPracticeSeatAdminVariables,
+  };
+}
+
+export function getDatabaseEnvironmentStatus(
+  env: EnvironmentMap = process.env
+): DatabaseEnvironmentStatus {
+  const missingDatabaseVariables = getMissingEnvironmentVariables(
+    env,
+    databaseEnvironmentVariables
+  );
+
+  return {
+    databaseConfigured: missingDatabaseVariables.length === 0,
+    missingDatabaseVariables,
   };
 }

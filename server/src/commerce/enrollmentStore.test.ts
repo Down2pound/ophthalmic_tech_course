@@ -59,18 +59,18 @@ describe("createEnrollmentFromPracticeSeatAssignment", () => {
 });
 
 describe("createInMemoryEnrollmentStore", () => {
-  it("provisions one enrollment per enrollment id", () => {
+  it("provisions one enrollment per enrollment id", async () => {
     const store = createInMemoryEnrollmentStore();
     const enrollment = createEnrollmentFromPurchase(purchase);
 
     expect(store.provisionEnrollment(enrollment).created).toBe(true);
     expect(store.provisionEnrollment(enrollment).created).toBe(false);
-    expect(store.findEnrollmentsByEmail(" learner@example.com ")).toEqual([
-      enrollment,
-    ]);
+    expect(await store.findEnrollmentsByEmail(" learner@example.com ")).toEqual(
+      [enrollment]
+    );
   });
 
-  it("allows multiple learners from one practice checkout session", () => {
+  it("allows multiple learners from one practice checkout session", async () => {
     const store = createInMemoryEnrollmentStore();
     const firstEnrollment = createEnrollmentFromPracticeSeatAssignment({
       assignmentId: "seat_pack_first",
@@ -97,6 +97,6 @@ describe("createInMemoryEnrollmentStore", () => {
 
     expect(store.provisionEnrollment(firstEnrollment).created).toBe(true);
     expect(store.provisionEnrollment(secondEnrollment).created).toBe(true);
-    expect(store.listEnrollments()).toHaveLength(2);
+    expect(await store.listEnrollments()).toHaveLength(2);
   });
 });

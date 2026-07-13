@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getAuthEnvironmentStatus,
   getCommerceEnvironmentStatus,
+  getDatabaseEnvironmentStatus,
   getMissingEnvironmentVariables,
   getPracticeSeatEnvironmentStatus,
 } from "./environment";
@@ -96,6 +97,26 @@ describe("getPracticeSeatEnvironmentStatus", () => {
     expect(getPracticeSeatEnvironmentStatus({})).toEqual({
       practiceSeatAdminConfigured: false,
       missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
+    });
+  });
+});
+
+describe("getDatabaseEnvironmentStatus", () => {
+  it("marks database storage as configured when DATABASE_URL exists", () => {
+    expect(
+      getDatabaseEnvironmentStatus({
+        DATABASE_URL: "postgres://example",
+      })
+    ).toEqual({
+      databaseConfigured: true,
+      missingDatabaseVariables: [],
+    });
+  });
+
+  it("shows when durable database storage is missing", () => {
+    expect(getDatabaseEnvironmentStatus({})).toEqual({
+      databaseConfigured: false,
+      missingDatabaseVariables: ["DATABASE_URL"],
     });
   });
 });

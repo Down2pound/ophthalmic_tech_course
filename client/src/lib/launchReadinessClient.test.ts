@@ -25,6 +25,10 @@ const runtimeReport = {
     practiceSeatAdminConfigured: false,
     missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
   },
+  database: {
+    databaseConfigured: false,
+    missingDatabaseVariables: ["DATABASE_URL"],
+  },
   warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
 };
 

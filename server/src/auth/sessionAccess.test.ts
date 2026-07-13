@@ -7,7 +7,7 @@ import {
 } from "./sessionStore";
 
 describe("authorizeLearnerSession", () => {
-  it("grants access when the session and enrollment are active", () => {
+  it("grants access when the session and enrollment are active", async () => {
     const sessionStore = createInMemoryAuthSessionStore();
     const enrollmentStore = createInMemoryEnrollmentStore();
 
@@ -30,7 +30,7 @@ describe("authorizeLearnerSession", () => {
     });
 
     expect(
-      authorizeLearnerSession({
+      await authorizeLearnerSession({
         rawSessionToken: "private-session-token",
         sessionStore,
         enrollmentStore,
@@ -46,7 +46,7 @@ describe("authorizeLearnerSession", () => {
     });
   });
 
-  it("denies access for missing, expired, or unenrolled sessions", () => {
+  it("denies access for missing, expired, or unenrolled sessions", async () => {
     const sessionStore = createInMemoryAuthSessionStore();
     const enrollmentStore = createInMemoryEnrollmentStore();
 
@@ -61,7 +61,7 @@ describe("authorizeLearnerSession", () => {
     );
 
     expect(
-      authorizeLearnerSession({
+      await authorizeLearnerSession({
         rawSessionToken: "",
         sessionStore,
         enrollmentStore,
@@ -73,7 +73,7 @@ describe("authorizeLearnerSession", () => {
       reason: "No active session found.",
     });
     expect(
-      authorizeLearnerSession({
+      await authorizeLearnerSession({
         rawSessionToken: "private-session-token",
         sessionStore,
         enrollmentStore,
@@ -85,7 +85,7 @@ describe("authorizeLearnerSession", () => {
       reason: "Session has expired.",
     });
     expect(
-      authorizeLearnerSession({
+      await authorizeLearnerSession({
         rawSessionToken: "private-session-token",
         sessionStore,
         enrollmentStore,

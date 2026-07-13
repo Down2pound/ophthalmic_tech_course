@@ -44,7 +44,7 @@ describe("createPracticeSeatPackFromPurchase", () => {
 });
 
 describe("createInMemoryPracticeSeatPackStore", () => {
-  it("provisions one seat pack per checkout session", () => {
+  it("provisions one seat pack per checkout session", async () => {
     const store = createInMemoryPracticeSeatPackStore();
     const seatPack = createPracticeSeatPackFromPurchase(practicePurchase);
 
@@ -52,11 +52,11 @@ describe("createInMemoryPracticeSeatPackStore", () => {
     expect(store.provisionPracticeSeatPack(seatPack!).created).toBe(true);
     expect(store.provisionPracticeSeatPack(seatPack!).created).toBe(false);
     expect(
-      store.findPracticeSeatPacksByPurchaserEmail(" manager@example.com ")
+      await store.findPracticeSeatPacksByPurchaserEmail(" manager@example.com ")
     ).toEqual([seatPack]);
   });
 
-  it("assigns learner emails without exceeding purchased capacity", () => {
+  it("assigns learner emails without exceeding purchased capacity", async () => {
     const store = createInMemoryPracticeSeatPackStore();
     const seatPack = createPracticeSeatPackFromPurchase({
       ...practicePurchase,
@@ -67,7 +67,7 @@ describe("createInMemoryPracticeSeatPackStore", () => {
     store.provisionPracticeSeatPack(seatPack!);
 
     expect(
-      store.assignPracticeSeat({
+      await store.assignPracticeSeat({
         seatPackId: seatPack!.seatPackId,
         learnerEmail: " Tech@OnePractice.com ",
         assignedAt: "2026-06-27T14:00:00.000Z",
@@ -86,7 +86,7 @@ describe("createInMemoryPracticeSeatPackStore", () => {
     });
 
     expect(
-      store.assignPracticeSeat({
+      await store.assignPracticeSeat({
         seatPackId: seatPack!.seatPackId,
         learnerEmail: "second@example.com",
       })
@@ -96,34 +96,34 @@ describe("createInMemoryPracticeSeatPackStore", () => {
     });
   });
 
-  it("returns the existing assignment when the same learner is assigned twice", () => {
+  it("returns the existing assignment when the same learner is assigned twice", async () => {
     const store = createInMemoryPracticeSeatPackStore();
     const seatPack = createPracticeSeatPackFromPurchase(practicePurchase);
 
     expect(seatPack).not.toBeNull();
     store.provisionPracticeSeatPack(seatPack!);
 
-    const firstAssignment = store.assignPracticeSeat({
+    const firstAssignment = await store.assignPracticeSeat({
       seatPackId: seatPack!.seatPackId,
       learnerEmail: "tech@example.com",
       assignedAt: "2026-06-27T14:00:00.000Z",
     });
-    const secondAssignment = store.assignPracticeSeat({
+    const secondAssignment = await store.assignPracticeSeat({
       seatPackId: seatPack!.seatPackId,
       learnerEmail: " TECH@example.com ",
       assignedAt: "2026-07-01T14:00:00.000Z",
     });
 
     expect(secondAssignment).toEqual(firstAssignment);
-    expect(store.listPracticeSeatAssignments()).toHaveLength(1);
-    expect(store.listPracticeSeatPacks()[0].assignedSeats).toBe(1);
+    expect(await store.listPracticeSeatAssignments()).toHaveLength(1);
+    expect((await store.listPracticeSeatPacks())[0].assignedSeats).toBe(1);
   });
 
-  it("rejects assignments for missing seat packs", () => {
+  it("rejects assignments for missing seat packs", async () => {
     const store = createInMemoryPracticeSeatPackStore();
 
     expect(
-      store.assignPracticeSeat({
+      await store.assignPracticeSeat({
         seatPackId: "seatpack_missing",
         learnerEmail: "tech@example.com",
       })

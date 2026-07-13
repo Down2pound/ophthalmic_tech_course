@@ -183,7 +183,7 @@ export default function LaunchReadiness() {
             )}
 
             {runtimeReport && (
-              <div className="mt-5 grid gap-3 md:grid-cols-4">
+              <div className="mt-5 grid gap-3 md:grid-cols-5">
                 <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
                   <p className="text-sm font-semibold text-slate-700">
                     Stripe checkout
@@ -224,8 +224,18 @@ export default function LaunchReadiness() {
                       : `Missing ${runtimeReport.practiceSeatAdmin.missingPracticeSeatAdminVariables.join(", ")}`}
                   </p>
                 </div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-sm font-semibold text-slate-700">
+                    Database
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {runtimeReport.database.databaseConfigured
+                      ? "Configured"
+                      : `Missing ${runtimeReport.database.missingDatabaseVariables.join(", ")}`}
+                  </p>
+                </div>
                 {runtimeReport.warnings.length > 0 && (
-                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-4">
+                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-5">
                     <p className="text-sm font-semibold text-amber-950">
                       Runtime warnings
                     </p>

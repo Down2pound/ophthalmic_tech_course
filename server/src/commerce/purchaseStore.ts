@@ -1,5 +1,7 @@
 import type { PurchaseEvent } from "./stripeWebhook";
 
+export type StoreResult<T> = T | Promise<T>;
+
 export interface VerifiedPurchaseRecord extends PurchaseEvent {
   recordedAt: string;
 }
@@ -7,9 +9,9 @@ export interface VerifiedPurchaseRecord extends PurchaseEvent {
 export interface PurchaseStore {
   recordPurchase(
     purchase: VerifiedPurchaseRecord
-  ): { created: boolean; purchase: VerifiedPurchaseRecord };
-  listPurchases(): VerifiedPurchaseRecord[];
-  findPurchasesByEmail(email: string): VerifiedPurchaseRecord[];
+  ): StoreResult<{ created: boolean; purchase: VerifiedPurchaseRecord }>;
+  listPurchases(): StoreResult<VerifiedPurchaseRecord[]>;
+  findPurchasesByEmail(email: string): StoreResult<VerifiedPurchaseRecord[]>;
 }
 
 export function createVerifiedPurchaseRecord(
@@ -43,7 +45,7 @@ export function createInMemoryPurchaseStore(): PurchaseStore {
       const normalizedEmail = email.trim().toLowerCase();
 
       return Array.from(purchasesByEventId.values()).filter(
-        (purchase) => purchase.purchaserEmail === normalizedEmail
+        purchase => purchase.purchaserEmail === normalizedEmail
       );
     },
   };

@@ -6,9 +6,11 @@ import {
 import {
   getAuthEnvironmentStatus,
   getCommerceEnvironmentStatus,
+  getDatabaseEnvironmentStatus,
   getPracticeSeatEnvironmentStatus,
   type AuthEnvironmentStatus,
   type CommerceEnvironmentStatus,
+  type DatabaseEnvironmentStatus,
   type EnvironmentMap,
   type PracticeSeatEnvironmentStatus,
 } from "./environment";
@@ -25,6 +27,7 @@ export interface RuntimeLaunchReadinessReport {
   commerce: CommerceEnvironmentStatus;
   auth: AuthEnvironmentStatus;
   practiceSeatAdmin: PracticeSeatEnvironmentStatus;
+  database: DatabaseEnvironmentStatus;
   warnings: string[];
 }
 
@@ -41,6 +44,7 @@ export function getRuntimeLaunchReadinessReport({
   const commerce = getCommerceEnvironmentStatus(env);
   const auth = getAuthEnvironmentStatus(env);
   const practiceSeatAdmin = getPracticeSeatEnvironmentStatus(env);
+  const database = getDatabaseEnvironmentStatus(env);
   const warnings = [
     staticSummary.ready
       ? null
@@ -55,6 +59,7 @@ export function getRuntimeLaunchReadinessReport({
       "Practice seat assignment",
       practiceSeatAdmin.missingPracticeSeatAdminVariables
     ),
+    formatMissingWarning("Database", database.missingDatabaseVariables),
   ].filter((warning): warning is string => Boolean(warning));
 
   return {
@@ -64,11 +69,13 @@ export function getRuntimeLaunchReadinessReport({
       commerce.checkoutConfigured &&
       commerce.webhookConfigured &&
       auth.passwordlessConfigured &&
-      practiceSeatAdmin.practiceSeatAdminConfigured,
+      practiceSeatAdmin.practiceSeatAdminConfigured &&
+      database.databaseConfigured,
     staticSummary,
     commerce,
     auth,
     practiceSeatAdmin,
+    database,
     warnings,
   };
 }

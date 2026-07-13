@@ -40,7 +40,9 @@ export function assignPracticeSeatToLearner({
   practiceSeatPackStore,
   enrollmentStore,
   assignedAt,
-}: AssignPracticeSeatToLearnerInput): PracticeSeatAssignmentServiceResult {
+}: AssignPracticeSeatToLearnerInput):
+  | PracticeSeatAssignmentServiceResult
+  | Promise<PracticeSeatAssignmentServiceResult> {
   const normalizedEmail = learnerEmail.trim().toLowerCase();
 
   if (!isValidEmail(normalizedEmail)) {
@@ -50,26 +52,29 @@ export function assignPracticeSeatToLearner({
     };
   }
 
-  const assignmentResult = practiceSeatPackStore.assignPracticeSeat({
-    seatPackId,
-    learnerEmail: normalizedEmail,
-    assignedAt,
+  return Promise.resolve(
+    practiceSeatPackStore.assignPracticeSeat({
+      seatPackId,
+      learnerEmail: normalizedEmail,
+      assignedAt,
+    })
+  ).then(async assignmentResult => {
+    if (!assignmentResult.assigned) {
+      return assignmentResult;
+    }
+
+    const enrollment = createEnrollmentFromPracticeSeatAssignment(
+      assignmentResult.assignment
+    );
+    const enrollmentResult =
+      await enrollmentStore.provisionEnrollment(enrollment);
+
+    return {
+      assigned: true,
+      assignment: assignmentResult.assignment,
+      enrollment: enrollmentResult.enrollment,
+      enrollmentProvisioned: enrollmentResult.created,
+      seatPack: assignmentResult.seatPack,
+    };
   });
-
-  if (!assignmentResult.assigned) {
-    return assignmentResult;
-  }
-
-  const enrollment = createEnrollmentFromPracticeSeatAssignment(
-    assignmentResult.assignment
-  );
-  const enrollmentResult = enrollmentStore.provisionEnrollment(enrollment);
-
-  return {
-    assigned: true,
-    assignment: assignmentResult.assignment,
-    enrollment: enrollmentResult.enrollment,
-    enrollmentProvisioned: enrollmentResult.created,
-    seatPack: assignmentResult.seatPack,
-  };
 }

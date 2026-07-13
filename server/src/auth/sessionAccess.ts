@@ -29,12 +29,12 @@ interface AuthorizeLearnerSessionInput {
   now?: string;
 }
 
-export function authorizeLearnerSession({
+export async function authorizeLearnerSession({
   rawSessionToken,
   sessionStore,
   enrollmentStore,
   now = new Date().toISOString(),
-}: AuthorizeLearnerSessionInput): LearnerSessionAccess {
+}: AuthorizeLearnerSessionInput): Promise<LearnerSessionAccess> {
   if (!rawSessionToken) {
     return {
       authenticated: false,
@@ -63,11 +63,12 @@ export function authorizeLearnerSession({
     };
   }
 
-  const activeEnrollment = enrollmentStore
-    .findEnrollmentsByEmail(session.email)
-    .filter((enrollment) => enrollment.status === "active")
+  const activeEnrollment = (
+    await enrollmentStore.findEnrollmentsByEmail(session.email)
+  )
+    .filter(enrollment => enrollment.status === "active")
     .filter(
-      (enrollment) =>
+      enrollment =>
         new Date(enrollment.accessExpiresAt).getTime() > new Date(now).getTime()
     )
     .sort(

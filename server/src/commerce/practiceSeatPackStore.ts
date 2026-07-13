@@ -1,4 +1,5 @@
 import type { VerifiedPurchaseRecord } from "./purchaseStore";
+import type { StoreResult } from "./purchaseStore";
 
 export type PracticeSeatPackStatus = "active" | "expired";
 export type PracticeSeatAssignmentStatus = "active" | "revoked";
@@ -45,18 +46,23 @@ export type PracticeSeatAssignmentResult =
     };
 
 export interface PracticeSeatPackStore {
-  provisionPracticeSeatPack(seatPack: PracticeSeatPackRecord): {
-    created: boolean;
-    seatPack: PracticeSeatPackRecord;
-  };
-  listPracticeSeatPacks(): PracticeSeatPackRecord[];
+  provisionPracticeSeatPack(seatPack: PracticeSeatPackRecord):
+    | {
+        created: boolean;
+        seatPack: PracticeSeatPackRecord;
+      }
+    | Promise<{
+        created: boolean;
+        seatPack: PracticeSeatPackRecord;
+      }>;
+  listPracticeSeatPacks(): StoreResult<PracticeSeatPackRecord[]>;
   findPracticeSeatPacksByPurchaserEmail(
     email: string
-  ): PracticeSeatPackRecord[];
+  ): StoreResult<PracticeSeatPackRecord[]>;
   assignPracticeSeat(
     input: PracticeSeatAssignmentInput
-  ): PracticeSeatAssignmentResult;
-  listPracticeSeatAssignments(): PracticeSeatAssignmentRecord[];
+  ): StoreResult<PracticeSeatAssignmentResult>;
+  listPracticeSeatAssignments(): StoreResult<PracticeSeatAssignmentRecord[]>;
 }
 
 function addMonths(date: Date, months: number): Date {

@@ -1,4 +1,5 @@
 import type { VerifiedPurchaseRecord } from "./purchaseStore";
+import type { StoreResult } from "./purchaseStore";
 import type { PracticeSeatAssignmentRecord } from "./practiceSeatPackStore";
 
 export type EnrollmentStatus = "active" | "expired";
@@ -14,12 +15,17 @@ export interface EnrollmentRecord {
 }
 
 export interface EnrollmentStore {
-  provisionEnrollment(enrollment: EnrollmentRecord): {
-    created: boolean;
-    enrollment: EnrollmentRecord;
-  };
-  listEnrollments(): EnrollmentRecord[];
-  findEnrollmentsByEmail(email: string): EnrollmentRecord[];
+  provisionEnrollment(enrollment: EnrollmentRecord):
+    | {
+        created: boolean;
+        enrollment: EnrollmentRecord;
+      }
+    | Promise<{
+        created: boolean;
+        enrollment: EnrollmentRecord;
+      }>;
+  listEnrollments(): StoreResult<EnrollmentRecord[]>;
+  findEnrollmentsByEmail(email: string): StoreResult<EnrollmentRecord[]>;
 }
 
 function addMonths(date: Date, months: number): Date {

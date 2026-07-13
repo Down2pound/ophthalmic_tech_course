@@ -10,24 +10,40 @@ import {
 } from "./practiceSeatPackStore";
 import {
   createVerifiedPurchaseRecord,
+  type StoreResult,
   type PurchaseStore,
   type VerifiedPurchaseRecord,
 } from "./purchaseStore";
 import type { PurchaseEvent } from "./stripeWebhook";
 
 export interface CommerceFulfillmentStore {
-  recordPurchase(purchase: VerifiedPurchaseRecord): {
-    created: boolean;
-    purchase: VerifiedPurchaseRecord;
-  };
-  provisionEnrollment(enrollment: EnrollmentRecord): {
-    created: boolean;
-    enrollment: EnrollmentRecord;
-  };
-  provisionPracticeSeatPack?(seatPack: PracticeSeatPackRecord): {
-    created: boolean;
-    seatPack: PracticeSeatPackRecord;
-  };
+  recordPurchase(purchase: VerifiedPurchaseRecord):
+    | {
+        created: boolean;
+        purchase: VerifiedPurchaseRecord;
+      }
+    | Promise<{
+        created: boolean;
+        purchase: VerifiedPurchaseRecord;
+      }>;
+  provisionEnrollment(enrollment: EnrollmentRecord):
+    | {
+        created: boolean;
+        enrollment: EnrollmentRecord;
+      }
+    | Promise<{
+        created: boolean;
+        enrollment: EnrollmentRecord;
+      }>;
+  provisionPracticeSeatPack?(seatPack: PracticeSeatPackRecord):
+    | {
+        created: boolean;
+        seatPack: PracticeSeatPackRecord;
+      }
+    | Promise<{
+        created: boolean;
+        seatPack: PracticeSeatPackRecord;
+      }>;
 }
 
 export interface CommerceFulfillmentServiceOptions {
@@ -74,45 +90,48 @@ export function createCommerceFulfillmentService(
   return {
     fulfillPurchaseEvent(
       purchaseEvent: PurchaseEvent
-    ): PurchaseFulfillmentResult {
+    ): StoreResult<PurchaseFulfillmentResult> {
       const verifiedPurchase = createVerifiedPurchaseRecord(
         purchaseEvent,
         now()
       );
-      const purchaseResult = store.recordPurchase(verifiedPurchase);
+      return Promise.resolve(store.recordPurchase(verifiedPurchase)).then(
+        async purchaseResult => {
+          if (!purchaseResult.created) {
+            return {
+              purchaseRecorded: false,
+              enrollmentProvisioned: false,
+              practiceSeatPackProvisioned: false,
+            };
+          }
 
-      if (!purchaseResult.created) {
-        return {
-          purchaseRecorded: false,
-          enrollmentProvisioned: false,
-          practiceSeatPackProvisioned: false,
-        };
-      }
+          const practiceSeatPack = createPracticeSeatPackFromPurchase(
+            purchaseResult.purchase
+          );
 
-      const practiceSeatPack = createPracticeSeatPackFromPurchase(
-        purchaseResult.purchase
+          if (practiceSeatPack) {
+            const seatPackResult = store.provisionPracticeSeatPack
+              ? await store.provisionPracticeSeatPack(practiceSeatPack)
+              : null;
+
+            return {
+              purchaseRecorded: true,
+              enrollmentProvisioned: false,
+              practiceSeatPackProvisioned: Boolean(seatPackResult?.created),
+            };
+          }
+
+          const enrollmentResult = await store.provisionEnrollment(
+            createEnrollmentFromPurchase(purchaseResult.purchase)
+          );
+
+          return {
+            purchaseRecorded: true,
+            enrollmentProvisioned: enrollmentResult.created,
+            practiceSeatPackProvisioned: false,
+          };
+        }
       );
-
-      if (practiceSeatPack) {
-        const seatPackResult =
-          store.provisionPracticeSeatPack?.(practiceSeatPack);
-
-        return {
-          purchaseRecorded: true,
-          enrollmentProvisioned: false,
-          practiceSeatPackProvisioned: Boolean(seatPackResult?.created),
-        };
-      }
-
-      const enrollmentResult = store.provisionEnrollment(
-        createEnrollmentFromPurchase(purchaseResult.purchase)
-      );
-
-      return {
-        purchaseRecorded: true,
-        enrollmentProvisioned: enrollmentResult.created,
-        practiceSeatPackProvisioned: false,
-      };
     },
   };
 }

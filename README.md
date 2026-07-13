@@ -58,6 +58,8 @@ Required environment variables:
 ```text
 STRIPE_SECRET_KEY=sk_test_replace_with_your_secret_key
 PUBLIC_APP_URL=http://localhost:3000
+DATABASE_URL=replace_with_managed_postgres_connection_string
+DATABASE_SSL=true
 STRIPE_WEBHOOK_SECRET=whsec_replace_with_your_webhook_signing_secret
 AUTH_SESSION_SECRET=replace_with_a_long_random_session_secret
 TRANSACTIONAL_EMAIL_API_URL=https://email-provider.example.com/send
@@ -84,6 +86,8 @@ Stripe key guide:
   for passwordless sign-in email delivery.
 - `PRACTICE_SEAT_ADMIN_TOKEN` is a server-only private token used to protect the
   temporary practice-seat assignment API until a full admin login exists.
+- `DATABASE_URL` points the server at managed PostgreSQL so purchases,
+  enrollments, practice seat packs, and assignments survive restarts.
 
 Checkout routes:
 
@@ -161,8 +165,10 @@ The first production release needs managed PostgreSQL before paid access can be
 durable. Current schema contracts live in:
 
 - `server/src/commerce/commerceSchema.ts` for purchases and enrollments.
-- `server/src/commerce/practiceSeatPackStore.ts` for temporary practice pack
-  seat tracking and assignment until a durable database repository is connected.
+- `server/src/commerce/postgresCommerceStore.ts` for PostgreSQL-backed
+  purchase, enrollment, practice seat pack, and assignment repositories.
+- `server/src/commerce/practiceSeatPackStore.ts` for the shared practice pack
+  seat tracking and assignment interface, including the local in-memory fallback.
 - `server/src/auth/authSchema.ts` for passwordless users, magic-link tokens,
   and sessions.
 - `server/src/auth/magicLinkToken.ts` for creating raw email tokens while

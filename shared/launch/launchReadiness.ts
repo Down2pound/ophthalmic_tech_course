@@ -49,18 +49,18 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Verified Stripe webhook fulfillment",
     status: "blocked",
     evidence:
-      "A signed Stripe webhook receiver can report missing setup variables, verify checkout.session.completed events, record purchases, provision temporary individual enrollments idempotently, provision temporary practice seat packs from Stripe metadata, and a protected practice-seat manager page can list packs, list assignments, and enforce purchased seat capacity through protected admin endpoints, but records are not connected to a live database yet.",
+      "A signed Stripe webhook receiver can report missing setup variables, verify checkout.session.completed events, record purchases, provision individual enrollments idempotently, provision practice seat packs from Stripe metadata, and a protected practice-seat manager page can list packs, list assignments, and enforce purchased seat capacity through protected admin endpoints. PostgreSQL repositories now exist and are selected when DATABASE_URL is configured, but the schema still needs to be run against a managed database and verified in deployment.",
     nextAction:
-      "Run the commerce schema against managed PostgreSQL, replace temporary stores with database repositories, add a manager/admin seat-assignment workflow, and unlock paid access from durable server-side records.",
+      "Run the commerce schema against managed PostgreSQL, configure DATABASE_URL in production, test Stripe webhook fulfillment against durable records, and unlock paid access from durable server-side records.",
   },
   {
     id: "learner-access-control",
     title: "Learner accounts and access control",
     status: "blocked",
     evidence:
-      "A server-side entitlement rule can derive access from verified purchases, the webhook can create temporary individual enrollments and practice seat packs, a protected practice-seat manager page can list packs and create learner enrollments without exceeding paid seats, a PostgreSQL-ready passwordless auth schema exists, magic-link request/token helpers exist, a safe passwordless sign-in request route stores hashed magic-link records server-side and sends through a configured transactional email endpoint, a callback route consumes one-time links into HTTP-only session cookies, a session access endpoint checks active server-side enrollments, Module 1 lesson bodies are served through a protected lesson endpoint, and runtime readiness checks auth environment setup, but there is no durable PostgreSQL-backed enrollment or practice seat assignment repository yet.",
+      "A server-side entitlement rule can derive access from verified purchases, the webhook can create individual enrollments and practice seat packs, a protected practice-seat manager page can list packs and create learner enrollments without exceeding paid seats, PostgreSQL commerce repositories exist for durable purchases and enrollments, a PostgreSQL-ready passwordless auth schema exists, magic-link request/token helpers exist, a safe passwordless sign-in request route stores hashed magic-link records server-side and sends through a configured transactional email endpoint, a callback route consumes one-time links into HTTP-only session cookies, a session access endpoint checks active server-side enrollments, Module 1 lesson bodies are served through a protected lesson endpoint, and runtime readiness checks auth environment setup, but passwordless auth and assessment attempts still need durable repositories before full production sale.",
     nextAction:
-      "Run auth and commerce schemas against managed PostgreSQL, add durable enrollment and practice seat assignment repositories, and expand server-checked authorization to future paid modules before selling durable access.",
+      "Run auth and commerce schemas against managed PostgreSQL, add durable passwordless auth and assessment repositories, and expand server-checked authorization to future paid modules before selling durable access.",
   },
   {
     id: "assessment-security",

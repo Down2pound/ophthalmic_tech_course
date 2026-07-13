@@ -34,12 +34,12 @@ function createStoresWithSeatPack() {
 }
 
 describe("assignPracticeSeatToLearner", () => {
-  it("assigns one learner seat and provisions a matching enrollment", () => {
+  it("assigns one learner seat and provisions a matching enrollment", async () => {
     const { practiceSeatPackStore, enrollmentStore, seatPack } =
       createStoresWithSeatPack();
 
     expect(
-      assignPracticeSeatToLearner({
+      await assignPracticeSeatToLearner({
         seatPackId: seatPack.seatPackId,
         learnerEmail: " Tech@Example.com ",
         practiceSeatPackStore,
@@ -64,21 +64,21 @@ describe("assignPracticeSeatToLearner", () => {
       },
     });
     expect(
-      enrollmentStore.findEnrollmentsByEmail("tech@example.com")
+      await enrollmentStore.findEnrollmentsByEmail("tech@example.com")
     ).toHaveLength(1);
   });
 
-  it("does not burn another seat when the same learner is assigned twice", () => {
+  it("does not burn another seat when the same learner is assigned twice", async () => {
     const { practiceSeatPackStore, enrollmentStore, seatPack } =
       createStoresWithSeatPack();
 
-    assignPracticeSeatToLearner({
+    await assignPracticeSeatToLearner({
       seatPackId: seatPack.seatPackId,
       learnerEmail: "tech@example.com",
       practiceSeatPackStore,
       enrollmentStore,
     });
-    const secondResult = assignPracticeSeatToLearner({
+    const secondResult = await assignPracticeSeatToLearner({
       seatPackId: seatPack.seatPackId,
       learnerEmail: " TECH@example.com ",
       practiceSeatPackStore,
@@ -92,15 +92,17 @@ describe("assignPracticeSeatToLearner", () => {
         assignedSeats: 1,
       },
     });
-    expect(practiceSeatPackStore.listPracticeSeatAssignments()).toHaveLength(1);
-    expect(enrollmentStore.listEnrollments()).toHaveLength(1);
+    expect(
+      await practiceSeatPackStore.listPracticeSeatAssignments()
+    ).toHaveLength(1);
+    expect(await enrollmentStore.listEnrollments()).toHaveLength(1);
   });
 
-  it("blocks assignment when no seats remain", () => {
+  it("blocks assignment when no seats remain", async () => {
     const { practiceSeatPackStore, enrollmentStore, seatPack } =
       createStoresWithSeatPack();
 
-    assignPracticeSeatToLearner({
+    await assignPracticeSeatToLearner({
       seatPackId: seatPack.seatPackId,
       learnerEmail: "first@example.com",
       practiceSeatPackStore,
@@ -108,7 +110,7 @@ describe("assignPracticeSeatToLearner", () => {
     });
 
     expect(
-      assignPracticeSeatToLearner({
+      await assignPracticeSeatToLearner({
         seatPackId: seatPack.seatPackId,
         learnerEmail: "second@example.com",
         practiceSeatPackStore,
@@ -120,12 +122,12 @@ describe("assignPracticeSeatToLearner", () => {
     });
   });
 
-  it("rejects invalid learner emails", () => {
+  it("rejects invalid learner emails", async () => {
     const { practiceSeatPackStore, enrollmentStore, seatPack } =
       createStoresWithSeatPack();
 
     expect(
-      assignPracticeSeatToLearner({
+      await assignPracticeSeatToLearner({
         seatPackId: seatPack.seatPackId,
         learnerEmail: "not-an-email",
         practiceSeatPackStore,

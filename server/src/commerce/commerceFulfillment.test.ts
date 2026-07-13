@@ -22,7 +22,7 @@ const purchaseEvent: PurchaseEvent = {
 };
 
 describe("createCommerceFulfillmentService", () => {
-  it("records a verified purchase and provisions one matching enrollment", () => {
+  it("records a verified purchase and provisions one matching enrollment", async () => {
     const purchaseStore = createInMemoryPurchaseStore();
     const enrollmentStore = createInMemoryEnrollmentStore();
     const service = createCommerceFulfillmentService({
@@ -31,19 +31,19 @@ describe("createCommerceFulfillmentService", () => {
       now: () => "2026-06-26T14:00:00.000Z",
     });
 
-    expect(service.fulfillPurchaseEvent(purchaseEvent)).toEqual({
+    await expect(service.fulfillPurchaseEvent(purchaseEvent)).resolves.toEqual({
       purchaseRecorded: true,
       enrollmentProvisioned: true,
       practiceSeatPackProvisioned: false,
     });
-    expect(service.fulfillPurchaseEvent(purchaseEvent)).toEqual({
+    await expect(service.fulfillPurchaseEvent(purchaseEvent)).resolves.toEqual({
       purchaseRecorded: false,
       enrollmentProvisioned: false,
       practiceSeatPackProvisioned: false,
     });
-    expect(purchaseStore.listPurchases()).toHaveLength(1);
-    expect(enrollmentStore.listEnrollments()).toHaveLength(1);
-    expect(enrollmentStore.listEnrollments()[0]).toMatchObject({
+    expect(await purchaseStore.listPurchases()).toHaveLength(1);
+    expect(await enrollmentStore.listEnrollments()).toHaveLength(1);
+    expect((await enrollmentStore.listEnrollments())[0]).toMatchObject({
       checkoutSessionId: "cs_test_123",
       learnerEmail: "learner@example.com",
       accessStartedAt: "2026-06-26T14:00:00.000Z",
@@ -51,7 +51,7 @@ describe("createCommerceFulfillmentService", () => {
     });
   });
 
-  it("can use one repository object so database storage can be swapped in later", () => {
+  it("can use one repository object so database storage can be swapped in later", async () => {
     const purchaseStore = createInMemoryPurchaseStore();
     const enrollmentStore = createInMemoryEnrollmentStore();
     const repository: CommerceFulfillmentStore = {
@@ -63,14 +63,14 @@ describe("createCommerceFulfillmentService", () => {
       now: () => "2026-06-26T14:00:00.000Z",
     });
 
-    expect(service.fulfillPurchaseEvent(purchaseEvent)).toEqual({
+    await expect(service.fulfillPurchaseEvent(purchaseEvent)).resolves.toEqual({
       purchaseRecorded: true,
       enrollmentProvisioned: true,
       practiceSeatPackProvisioned: false,
     });
   });
 
-  it("records a practice purchase as a seat pack instead of one learner enrollment", () => {
+  it("records a practice purchase as a seat pack instead of one learner enrollment", async () => {
     const purchaseStore = createInMemoryPurchaseStore();
     const enrollmentStore = createInMemoryEnrollmentStore();
     const practiceSeatPackStore = createInMemoryPracticeSeatPackStore();
@@ -81,7 +81,7 @@ describe("createCommerceFulfillmentService", () => {
       now: () => "2026-06-26T14:00:00.000Z",
     });
 
-    expect(
+    await expect(
       service.fulfillPurchaseEvent({
         ...purchaseEvent,
         checkoutSessionId: "cs_test_practice",
@@ -90,14 +90,16 @@ describe("createCommerceFulfillmentService", () => {
         amountTotal: 79900,
         seatCount: 5,
       })
-    ).toEqual({
+    ).resolves.toEqual({
       purchaseRecorded: true,
       enrollmentProvisioned: false,
       practiceSeatPackProvisioned: true,
     });
-    expect(enrollmentStore.listEnrollments()).toHaveLength(0);
-    expect(practiceSeatPackStore.listPracticeSeatPacks()).toHaveLength(1);
-    expect(practiceSeatPackStore.listPracticeSeatPacks()[0]).toMatchObject({
+    expect(await enrollmentStore.listEnrollments()).toHaveLength(0);
+    expect(await practiceSeatPackStore.listPracticeSeatPacks()).toHaveLength(1);
+    expect(
+      (await practiceSeatPackStore.listPracticeSeatPacks())[0]
+    ).toMatchObject({
       checkoutSessionId: "cs_test_practice",
       purchaserEmail: "manager@example.com",
       totalSeats: 5,
@@ -105,7 +107,7 @@ describe("createCommerceFulfillmentService", () => {
     });
   });
 
-  it("does not provision enrollment when recording the purchase fails", () => {
+  it("does not provision enrollment when recording the purchase fails", async () => {
     const service = createCommerceFulfillmentService({
       store: {
         recordPurchase: (purchase: VerifiedPurchaseRecord) => ({
@@ -118,7 +120,7 @@ describe("createCommerceFulfillmentService", () => {
       },
     });
 
-    expect(service.fulfillPurchaseEvent(purchaseEvent)).toEqual({
+    await expect(service.fulfillPurchaseEvent(purchaseEvent)).resolves.toEqual({
       purchaseRecorded: false,
       enrollmentProvisioned: false,
       practiceSeatPackProvisioned: false,

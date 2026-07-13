@@ -1,8 +1,23 @@
 import express, { type Express, type Request, type Response } from "express";
 import { createCommerceFulfillmentService } from "../commerce/commerceFulfillment";
-import { createInMemoryEnrollmentStore } from "../commerce/enrollmentStore";
-import { createInMemoryPracticeSeatPackStore } from "../commerce/practiceSeatPackStore";
-import { createInMemoryPurchaseStore } from "../commerce/purchaseStore";
+import {
+  createInMemoryEnrollmentStore,
+  type EnrollmentStore,
+} from "../commerce/enrollmentStore";
+import {
+  createInMemoryPracticeSeatPackStore,
+  type PracticeSeatPackStore,
+} from "../commerce/practiceSeatPackStore";
+import {
+  createInMemoryPurchaseStore,
+  type PurchaseStore,
+} from "../commerce/purchaseStore";
+import {
+  createPostgresEnrollmentStore,
+  createPostgresPracticeSeatPackStore,
+  createPostgresPurchaseStore,
+} from "../commerce/postgresCommerceStore";
+import { getPostgresPool } from "../db/postgres";
 import {
   createPurchaseEventFromStripeEvent,
   verifyStripeWebhookSignature,
@@ -10,9 +25,30 @@ import {
 } from "../commerce/stripeWebhook";
 import { getCommerceEnvironmentStatus } from "../config/environment";
 
-const purchaseStore = createInMemoryPurchaseStore();
-const enrollmentStore = createInMemoryEnrollmentStore();
-const practiceSeatPackStore = createInMemoryPracticeSeatPackStore();
+function createCommerceStores(): {
+  purchaseStore: PurchaseStore;
+  enrollmentStore: EnrollmentStore;
+  practiceSeatPackStore: PracticeSeatPackStore;
+} {
+  const postgresPool = getPostgresPool();
+
+  if (postgresPool) {
+    return {
+      purchaseStore: createPostgresPurchaseStore(postgresPool),
+      enrollmentStore: createPostgresEnrollmentStore(postgresPool),
+      practiceSeatPackStore: createPostgresPracticeSeatPackStore(postgresPool),
+    };
+  }
+
+  return {
+    purchaseStore: createInMemoryPurchaseStore(),
+    enrollmentStore: createInMemoryEnrollmentStore(),
+    practiceSeatPackStore: createInMemoryPracticeSeatPackStore(),
+  };
+}
+
+const { purchaseStore, enrollmentStore, practiceSeatPackStore } =
+  createCommerceStores();
 const commerceFulfillmentService = createCommerceFulfillmentService({
   purchaseStore,
   enrollmentStore,
@@ -84,7 +120,7 @@ export function setupStripeWebhookRoute(app: Express) {
 
       if (purchaseEvent) {
         const fulfillment =
-          commerceFulfillmentService.fulfillPurchaseEvent(purchaseEvent);
+          await commerceFulfillmentService.fulfillPurchaseEvent(purchaseEvent);
         purchaseRecorded = fulfillment.purchaseRecorded;
         enrollmentProvisioned = fulfillment.enrollmentProvisioned;
         practiceSeatPackProvisioned = fulfillment.practiceSeatPackProvisioned;

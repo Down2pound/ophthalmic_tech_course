@@ -22,6 +22,10 @@ export interface RuntimeLaunchReadinessReport {
     practiceSeatAdminConfigured: boolean;
     missingPracticeSeatAdminVariables: string[];
   };
+  database: {
+    databaseConfigured: boolean;
+    missingDatabaseVariables: string[];
+  };
   warnings: string[];
 }
 
