@@ -18,6 +18,11 @@ export interface PurchaseAssurance {
   description: string;
 }
 
+export interface PracticeValueProofPoint {
+  title: string;
+  description: string;
+}
+
 export const individualLearnerSalesPath: BuyerPathSection[] = [
   {
     title: "Best fit",
@@ -143,6 +148,29 @@ export const purchaseAssurances: PurchaseAssurance[] = [
     title: "Expectations stay honest",
     description:
       "The course supports foundational learning and supervised practice preparation; it does not promise certification, employment, or independent competency.",
+  },
+];
+
+export const practiceValueProofPoints: PracticeValueProofPoint[] = [
+  {
+    title: "Same first explanation for every learner",
+    description:
+      "New hires hear the same foundation for clinic language, patient communication, scope, and safety before local hands-on training begins.",
+  },
+  {
+    title: "Less repeated basic onboarding",
+    description:
+      "Supervisors can spend more time observing, coaching, and explaining practice-specific workflows instead of repeating the same starter vocabulary.",
+  },
+  {
+    title: "Seat packs match small teams",
+    description:
+      "Five-seat and fifteen-seat packs give managers a simple way to plan access for one hiring class or a larger onboarding group.",
+  },
+  {
+    title: "Local signoff stays local",
+    description:
+      "The course supports preparation and shared language, while clinical protocols, competency observation, and employment decisions stay with the practice.",
   },
 ];
 

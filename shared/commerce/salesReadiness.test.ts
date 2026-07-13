@@ -5,6 +5,7 @@ import {
   individualLearnerSalesPath,
   individualLearnerStartSteps,
   practiceBuyerSalesPath,
+  practiceValueProofPoints,
   purchaseAssurances,
 } from "./salesReadiness";
 
@@ -100,5 +101,26 @@ describe("sales readiness copy", () => {
     expect(combined).toMatch(/refund review/i);
     expect(combined).toMatch(/does not promise certification/i);
     expect(combined).not.toMatch(/guarantee/i);
+  });
+
+  it("helps practice managers justify a pack without promising staffing outcomes", () => {
+    expect(practiceValueProofPoints.map(point => point.title)).toEqual([
+      "Same first explanation for every learner",
+      "Less repeated basic onboarding",
+      "Seat packs match small teams",
+      "Local signoff stays local",
+    ]);
+
+    const combined = practiceValueProofPoints
+      .map(point => `${point.title} ${point.description}`)
+      .join(" ");
+
+    expect(combined).toMatch(/New hires hear the same foundation/i);
+    expect(combined).toMatch(/Supervisors can spend more time/i);
+    expect(combined).toMatch(/Five-seat and fifteen-seat packs/i);
+    expect(combined).toMatch(/competency observation/i);
+    expect(combined).not.toMatch(/guarantee/i);
+    expect(combined).not.toMatch(/retention/i);
+    expect(combined).not.toMatch(/staffing outcome/i);
   });
 });
