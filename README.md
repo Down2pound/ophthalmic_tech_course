@@ -105,6 +105,9 @@ Stripe key guide:
 - `DATABASE_URL` points the server at managed PostgreSQL so purchases,
   enrollments, practice seat packs, assignments, sign-in sessions, and quiz
   attempts survive restarts.
+- `VITE_ANALYTICS_ENDPOINT` and `VITE_ANALYTICS_WEBSITE_ID` are optional
+  browser analytics values. If either is missing, the app does not inject the
+  analytics script.
 
 Checkout routes:
 

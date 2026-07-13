@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
-import { defineConfig, type Plugin, type ViteDevServer } from "vite";
+import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 // =============================================================================
@@ -56,7 +56,7 @@ function writeToLogFile(source: LogSource, entries: unknown[]) {
   const logPath = path.join(LOG_DIR, `${source}.log`);
 
   // Format entries with timestamps
-  const lines = entries.map((entry) => {
+  const lines = entries.map(entry => {
     const ts = new Date().toISOString();
     return `[${ts}] ${JSON.stringify(entry)}`;
   });
@@ -132,7 +132,7 @@ function vitePluginManusDebugCollector(): Plugin {
         }
 
         let body = "";
-        req.on("data", (chunk) => {
+        req.on("data", chunk => {
           body += chunk.toString();
         });
 
@@ -150,7 +150,51 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+function vitePluginOptionalAnalytics(): Plugin {
+  let analyticsEndpoint = "";
+  let analyticsWebsiteId = "";
+
+  return {
+    name: "optional-analytics",
+
+    configResolved(config) {
+      const env = loadEnv(config.mode, PROJECT_ROOT, "");
+      analyticsEndpoint = env.VITE_ANALYTICS_ENDPOINT?.trim().replace(
+        /\/$/,
+        ""
+      );
+      analyticsWebsiteId = env.VITE_ANALYTICS_WEBSITE_ID?.trim();
+    },
+
+    transformIndexHtml(html) {
+      if (!analyticsEndpoint || !analyticsWebsiteId) return html;
+
+      return {
+        html,
+        tags: [
+          {
+            tag: "script",
+            attrs: {
+              src: `${analyticsEndpoint}/umami`,
+              "data-website-id": analyticsWebsiteId,
+              defer: true,
+            },
+            injectTo: "body",
+          },
+        ],
+      };
+    },
+  };
+}
+
+const plugins = [
+  react(),
+  tailwindcss(),
+  jsxLocPlugin(),
+  vitePluginManusRuntime(),
+  vitePluginManusDebugCollector(),
+  vitePluginOptionalAnalytics(),
+];
 
 export default defineConfig({
   plugins,
