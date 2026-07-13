@@ -10,16 +10,16 @@ const verifiedDatabaseReadiness = {
 };
 
 const launchReadyEnv = {
-  STRIPE_SECRET_KEY: "sk_test_secret_value",
+  STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
   PUBLIC_APP_URL: "https://academy.spindeleye.com",
   ENABLE_PAID_ENROLLMENT: "true",
-  STRIPE_WEBHOOK_SECRET: "whsec_secret_value",
-  AUTH_SESSION_SECRET: "session-secret-value",
+  STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",
+  AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
   TRANSACTIONAL_EMAIL_API_URL: "https://email.spindeleye.com/send",
-  TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value",
+  TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value-123456",
   SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
-  PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token",
-  DATABASE_URL: "redacted-database-url",
+  PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token-with-at-least-32-chars",
+  DATABASE_URL: "postgres://optitech_user:credential@db.internal:5432/optitech",
   MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
   MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
   MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",

@@ -111,6 +111,10 @@ Stripe key guide:
 - The launch readiness check treats copied placeholders as missing. Values such
   as `replace_with...`, `...example.com`, and `PUBLIC_APP_URL=http://localhost`
   are fine in examples, but they will not unlock paid checkout.
+- Launch-critical values must also look production-ready: public and email API
+  URLs must use `https`, `DATABASE_URL` must be PostgreSQL, Stripe server values
+  must use the expected `sk_` and `whsec_` prefixes, and private session/admin
+  secrets must be at least 32 characters long.
 
 Checkout routes:
 

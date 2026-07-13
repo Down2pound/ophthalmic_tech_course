@@ -7,6 +7,7 @@ import {
   getMissingEnvironmentVariables,
   getPracticeSeatEnvironmentStatus,
   isPlaceholderEnvironmentValue,
+  isUnsafeLaunchEnvironmentValue,
 } from "./environment";
 
 describe("getMissingEnvironmentVariables", () => {
@@ -19,11 +20,7 @@ describe("getMissingEnvironmentVariables", () => {
         },
         ["STRIPE_SECRET_KEY", "PUBLIC_APP_URL", "STRIPE_WEBHOOK_SECRET"]
       )
-    ).toEqual([
-      "STRIPE_SECRET_KEY",
-      "PUBLIC_APP_URL",
-      "STRIPE_WEBHOOK_SECRET",
-    ]);
+    ).toEqual(["STRIPE_SECRET_KEY", "PUBLIC_APP_URL", "STRIPE_WEBHOOK_SECRET"]);
   });
 
   it("reports placeholder values as missing", () => {
@@ -90,14 +87,58 @@ describe("isPlaceholderEnvironmentValue", () => {
   });
 });
 
+describe("isUnsafeLaunchEnvironmentValue", () => {
+  it("rejects weak or malformed launch-critical values", () => {
+    expect(isUnsafeLaunchEnvironmentValue("STRIPE_SECRET_KEY", "sk_tiny")).toBe(
+      true
+    );
+    expect(
+      isUnsafeLaunchEnvironmentValue("STRIPE_WEBHOOK_SECRET", "sk_123")
+    ).toBe(true);
+    expect(
+      isUnsafeLaunchEnvironmentValue("PUBLIC_APP_URL", "http://academy.test")
+    ).toBe(true);
+    expect(isUnsafeLaunchEnvironmentValue("AUTH_SESSION_SECRET", "short")).toBe(
+      true
+    );
+    expect(
+      isUnsafeLaunchEnvironmentValue(
+        "DATABASE_URL",
+        "mysql://optitech:credential@db.internal/optitech"
+      )
+    ).toBe(true);
+  });
+
+  it("allows realistic launch-critical values", () => {
+    expect(
+      isUnsafeLaunchEnvironmentValue(
+        "STRIPE_SECRET_KEY",
+        "sk_test_1234567890abcdef"
+      )
+    ).toBe(false);
+    expect(
+      isUnsafeLaunchEnvironmentValue(
+        "STRIPE_WEBHOOK_SECRET",
+        "whsec_1234567890abcdef"
+      )
+    ).toBe(false);
+    expect(
+      isUnsafeLaunchEnvironmentValue(
+        "AUTH_SESSION_SECRET",
+        "session-secret-value-with-at-least-32-chars"
+      )
+    ).toBe(false);
+  });
+});
+
 describe("getCommerceEnvironmentStatus", () => {
   it("marks checkout and webhooks as configured when required values exist", () => {
     expect(
       getCommerceEnvironmentStatus({
-        STRIPE_SECRET_KEY: "sk_test_123",
+        STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "true",
-        STRIPE_WEBHOOK_SECRET: "whsec_123",
+        STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",
       })
     ).toEqual({
       checkoutConfigured: true,
@@ -125,10 +166,10 @@ describe("getCommerceEnvironmentStatus", () => {
   it("keeps checkout configured but paid enrollment disabled when the launch switch is false", () => {
     expect(
       getCommerceEnvironmentStatus({
-        STRIPE_SECRET_KEY: "sk_test_123",
+        STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "false",
-        STRIPE_WEBHOOK_SECRET: "whsec_123",
+        STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",
       })
     ).toEqual({
       checkoutConfigured: true,
@@ -144,9 +185,9 @@ describe("getAuthEnvironmentStatus", () => {
   it("marks passwordless sign-in as configured when required values exist", () => {
     expect(
       getAuthEnvironmentStatus({
-        AUTH_SESSION_SECRET: "session-secret",
+        AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
         TRANSACTIONAL_EMAIL_API_URL: "https://email.spindeleye.com/send",
-        TRANSACTIONAL_EMAIL_API_KEY: "email-api-key",
+        TRANSACTIONAL_EMAIL_API_KEY: "email-api-key-123456",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
       })
@@ -178,7 +219,8 @@ describe("getPracticeSeatEnvironmentStatus", () => {
   it("marks practice seat assignment as configured when the admin token exists", () => {
     expect(
       getPracticeSeatEnvironmentStatus({
-        PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-secret",
+        PRACTICE_SEAT_ADMIN_TOKEN:
+          "practice-seat-secret-with-at-least-32-chars",
       })
     ).toEqual({
       practiceSeatAdminConfigured: true,

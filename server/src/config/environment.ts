@@ -98,6 +98,57 @@ export function isPlaceholderEnvironmentValue(
   return false;
 }
 
+function hasMinimumLength(value: string, minimumLength: number): boolean {
+  return value.trim().length >= minimumLength;
+}
+
+function isHttpsUrl(value: string): boolean {
+  try {
+    return new URL(value.trim()).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function isPostgresUrl(value: string): boolean {
+  try {
+    const protocol = new URL(value.trim()).protocol;
+    return protocol === "postgres:" || protocol === "postgresql:";
+  } catch {
+    return false;
+  }
+}
+
+export function isUnsafeLaunchEnvironmentValue(
+  variableName: string,
+  value: string
+): boolean {
+  if (isPlaceholderEnvironmentValue(variableName, value)) return true;
+
+  const trimmedValue = value.trim();
+
+  switch (variableName) {
+    case "STRIPE_SECRET_KEY":
+      return !trimmedValue.startsWith("sk_") || !hasMinimumLength(value, 16);
+    case "STRIPE_WEBHOOK_SECRET":
+      return !trimmedValue.startsWith("whsec_") || !hasMinimumLength(value, 16);
+    case "PUBLIC_APP_URL":
+    case "TRANSACTIONAL_EMAIL_API_URL":
+      return !isHttpsUrl(trimmedValue);
+    case "AUTH_SESSION_SECRET":
+    case "PRACTICE_SEAT_ADMIN_TOKEN":
+      return !hasMinimumLength(value, 32);
+    case "DATABASE_URL":
+      return !isPostgresUrl(trimmedValue);
+    case "TRANSACTIONAL_EMAIL_API_KEY":
+      return !hasMinimumLength(value, 16);
+    case "SIGN_IN_FROM_EMAIL":
+      return !trimmedValue.includes("@");
+    default:
+      return false;
+  }
+}
+
 export function getMissingEnvironmentVariables(
   env: EnvironmentMap,
   requiredVariables: readonly string[]
@@ -107,7 +158,7 @@ export function getMissingEnvironmentVariables(
     return (
       !value ||
       value.trim().length === 0 ||
-      isPlaceholderEnvironmentValue(variableName, value)
+      isUnsafeLaunchEnvironmentValue(variableName, value)
     );
   });
 }

@@ -9,7 +9,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "false",
         STRIPE_WEBHOOK_SECRET: "",
-        AUTH_SESSION_SECRET: "session-secret",
+        AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
         TRANSACTIONAL_EMAIL_API_URL: "https://email.spindeleye.com/send",
         TRANSACTIONAL_EMAIL_API_KEY: "",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
@@ -127,16 +127,17 @@ describe("getRuntimeLaunchReadinessReport", () => {
   it("blocks paid launch when DATABASE_URL exists but launch tables are missing", () => {
     const report = getRuntimeLaunchReadinessReport({
       env: {
-        STRIPE_SECRET_KEY: "sk_test_secret_value",
+        STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "true",
-        STRIPE_WEBHOOK_SECRET: "whsec_secret_value",
-        AUTH_SESSION_SECRET: "session-secret-value",
+        STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",
+        AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
         TRANSACTIONAL_EMAIL_API_URL: "https://email.spindeleye.com/send",
-        TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value",
+        TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value-123456",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
-        PRACTICE_SEAT_ADMIN_TOKEN: "redacted-practice-token",
-        DATABASE_URL: "redacted-database-url",
+        PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token-with-at-least-32-chars",
+        DATABASE_URL:
+          "postgres://optitech_user:credential@db.internal:5432/optitech",
         MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
         MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
         MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
@@ -161,16 +162,17 @@ describe("getRuntimeLaunchReadinessReport", () => {
   it("never includes actual secret values in warnings or missing variable lists", () => {
     const report = getRuntimeLaunchReadinessReport({
       env: {
-        STRIPE_SECRET_KEY: "sk_test_secret_value",
+        STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "true",
-        STRIPE_WEBHOOK_SECRET: "whsec_secret_value",
-        AUTH_SESSION_SECRET: "session-secret-value",
+        STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",
+        AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
         TRANSACTIONAL_EMAIL_API_URL: "https://email.spindeleye.com/send",
-        TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value",
+        TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value-123456",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
-        PRACTICE_SEAT_ADMIN_TOKEN: "redacted-practice-token",
-        DATABASE_URL: "redacted-database-url",
+        PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token-with-at-least-32-chars",
+        DATABASE_URL:
+          "postgres://optitech_user:credential@db.internal:5432/optitech",
         MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
         MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
         MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
@@ -188,11 +190,17 @@ describe("getRuntimeLaunchReadinessReport", () => {
 
     const serializedReport = JSON.stringify(report);
 
-    expect(serializedReport).not.toContain("sk_test_secret_value");
-    expect(serializedReport).not.toContain("whsec_secret_value");
-    expect(serializedReport).not.toContain("session-secret-value");
-    expect(serializedReport).not.toContain("email-secret-value");
-    expect(serializedReport).not.toContain("redacted-practice-token");
-    expect(serializedReport).not.toContain("redacted-database-url");
+    expect(serializedReport).not.toContain("sk_test_1234567890abcdef");
+    expect(serializedReport).not.toContain("whsec_1234567890abcdef");
+    expect(serializedReport).not.toContain(
+      "session-secret-value-with-at-least-32-chars"
+    );
+    expect(serializedReport).not.toContain("email-secret-value-123456");
+    expect(serializedReport).not.toContain(
+      "practice-seat-token-with-at-least-32-chars"
+    );
+    expect(serializedReport).not.toContain(
+      "postgres://optitech_user:credential@db.internal:5432/optitech"
+    );
   });
 });

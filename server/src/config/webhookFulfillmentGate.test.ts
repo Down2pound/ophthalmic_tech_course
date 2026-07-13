@@ -1,11 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { getWebhookFulfillmentGateStatus } from "./webhookFulfillmentGate";
 
+const configuredDatabaseEnv = {
+  DATABASE_URL: "postgres://optitech_user:credential@db.internal:5432/optitech",
+};
+
 describe("getWebhookFulfillmentGateStatus", () => {
   it("allows webhook fulfillment when durable launch tables are verified", () => {
     expect(
       getWebhookFulfillmentGateStatus({
-        env: { DATABASE_URL: "redacted-database-url" },
+        env: configuredDatabaseEnv,
         databaseReadiness: {
           schemaVerified: true,
           requiredTables: ["commerce_purchases"],
@@ -43,7 +47,7 @@ describe("getWebhookFulfillmentGateStatus", () => {
   it("blocks webhook fulfillment when launch tables are missing", () => {
     expect(
       getWebhookFulfillmentGateStatus({
-        env: { DATABASE_URL: "redacted-database-url" },
+        env: configuredDatabaseEnv,
         databaseReadiness: {
           schemaVerified: false,
           requiredTables: ["commerce_purchases", "commerce_enrollments"],
@@ -63,7 +67,7 @@ describe("getWebhookFulfillmentGateStatus", () => {
   it("blocks webhook fulfillment when the schema check fails", () => {
     expect(
       getWebhookFulfillmentGateStatus({
-        env: { DATABASE_URL: "redacted-database-url" },
+        env: configuredDatabaseEnv,
         databaseReadiness: {
           schemaVerified: false,
           requiredTables: ["commerce_purchases"],
