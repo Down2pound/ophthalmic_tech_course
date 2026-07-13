@@ -274,6 +274,16 @@ The smoke test checks `/api/health` and `/api/launch/readiness`. It exits with
 an error until the live app reports that paid launch readiness is complete.
 When it fails, it prints the first launch actions to handle next.
 
+Create a local handoff folder for Google Drive with safe launch artifacts:
+
+```bash
+pnpm launch:bundle
+```
+
+The generated `launch-evidence/` folder is ignored by Git and should not
+contain `.env`, live secrets, raw tokens, cookies, database passwords, or Stripe
+secret keys.
+
 ## Database Contracts
 
 The first production release needs managed PostgreSQL before paid access can be

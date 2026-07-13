@@ -36,6 +36,12 @@ Run this after the app is online:
 LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
 
+Create a local handoff folder for Google Drive after checks are complete:
+
+```bash
+pnpm launch:bundle
+```
+
 Run this after `DATABASE_URL` points to the managed PostgreSQL database:
 
 ```bash
@@ -167,6 +173,7 @@ LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 
 When the launch package is ready to archive, save these files together:
 
+- Generated `launch-evidence/` folder from `pnpm launch:bundle`
 - `docs/launch/production-launch-package.md`
 - Downloaded `/api/launch/clinical-review-packet.md`
 - Clinical reviewer signoff evidence
