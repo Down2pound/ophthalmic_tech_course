@@ -239,8 +239,11 @@ The production start command is:
 node dist/index.js
 ```
 
-For container hosts, use the included `Dockerfile`. Configure these environment
-variables in the host dashboard, not in Git: `DATABASE_URL`,
+For container hosts, use the included `Dockerfile`. The image includes a
+container health check against `/api/health`, and `.dockerignore` keeps local
+env files, build outputs, dependencies, logs, databases, and generated launch
+evidence out of the Docker build context. Configure these environment variables
+in the host dashboard, not in Git: `DATABASE_URL`,
 `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PUBLIC_APP_URL`,
 `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
 `TRANSACTIONAL_EMAIL_API_KEY`, `SIGN_IN_FROM_EMAIL`, and
