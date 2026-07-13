@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
+  fetchModuleOneCertificateEligibility,
+  type CertificateEligibility,
+} from "@/lib/certificateEligibilityClient";
+import {
   certificatePreview,
   getCertificateDisplayName,
 } from "@shared/certificate/certificate";
@@ -11,11 +15,44 @@ import {
   Printer,
   ShieldAlert,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CertificatePreview() {
   const [learnerName, setLearnerName] = useState("");
+  const [eligibility, setEligibility] = useState<CertificateEligibility | null>(
+    null
+  );
+  const [eligibilityError, setEligibilityError] = useState("");
   const displayName = getCertificateDisplayName(learnerName);
+  const requirements =
+    eligibility?.requirements ??
+    certificatePreview.requirements.map(requirement => ({
+      id: requirement,
+      label: requirement,
+      met: false,
+    }));
+
+  useEffect(() => {
+    let active = true;
+
+    fetchModuleOneCertificateEligibility()
+      .then(payload => {
+        if (!active) return;
+        setEligibility(payload);
+      })
+      .catch(error => {
+        if (!active) return;
+        setEligibilityError(
+          error instanceof Error
+            ? error.message
+            : "Certificate eligibility is unavailable right now."
+        );
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -48,9 +85,10 @@ export default function CertificatePreview() {
           <Button
             className="w-full bg-blue-700 text-white hover:bg-blue-800 md:w-auto"
             onClick={() => window.print()}
+            disabled={!eligibility?.eligible}
           >
             <Printer className="mr-2 h-4 w-4" />
-            Print preview
+            {eligibility?.eligible ? "Print certificate" : "Certificate locked"}
           </Button>
         </div>
       </section>
@@ -72,10 +110,12 @@ export default function CertificatePreview() {
               {displayName}
             </p>
             <p className="mx-auto mt-8 max-w-2xl leading-7 text-slate-700">
-              {certificatePreview.completionStatement}
+              {eligibility?.completionStatement ??
+                certificatePreview.completionStatement}
             </p>
             <p className="mx-auto mt-6 max-w-2xl rounded-md border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
-              {certificatePreview.limitationStatement}
+              {eligibility?.limitationStatement ??
+                certificatePreview.limitationStatement}
             </p>
           </Card>
         </section>
@@ -91,7 +131,7 @@ export default function CertificatePreview() {
             <input
               id="certificate-name"
               value={learnerName}
-              onChange={(event) => setLearnerName(event.target.value)}
+              onChange={event => setLearnerName(event.target.value)}
               placeholder="Learner Name"
               className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
             />
@@ -99,14 +139,23 @@ export default function CertificatePreview() {
 
           <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
             <h3 className="font-semibold">Completion requirements</h3>
+            {eligibilityError && (
+              <p className="mt-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-900">
+                {eligibilityError}
+              </p>
+            )}
             <ul className="mt-4 space-y-3">
-              {certificatePreview.requirements.map((requirement) => (
+              {requirements.map(requirement => (
                 <li
-                  key={requirement}
+                  key={requirement.id}
                   className="flex gap-2 text-sm text-slate-700"
                 >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-                  <span>{requirement}</span>
+                  <CheckCircle2
+                    className={`mt-0.5 h-4 w-4 flex-shrink-0 ${
+                      requirement.met ? "text-green-600" : "text-slate-300"
+                    }`}
+                  />
+                  <span>{requirement.label}</span>
                 </li>
               ))}
             </ul>

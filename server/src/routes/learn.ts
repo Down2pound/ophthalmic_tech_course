@@ -15,6 +15,7 @@ import { getProtectedModuleOneLessons } from "../course/protectedLessons";
 import { getPostgresPool } from "../db/postgres";
 import { createPostgresAssessmentAttemptStore } from "../assessments/postgresAssessmentAttemptStore";
 import { moduleOneLessons } from "../../../shared/course/moduleOneLessons";
+import { getCertificateEligibility } from "../certificate/completionEligibility";
 import {
   createInMemoryLessonProgressStore,
   createLessonCompletionRecord,
@@ -25,6 +26,7 @@ import { getSessionStore } from "./auth";
 import { getEnrollmentStore } from "./stripeWebhook";
 
 const MODULE_ONE_ID = "entering-ophthalmic-care";
+const MODULE_ONE_QUIZ_ID = "quiz-entering-ophthalmic-care";
 const MODULE_ONE_LESSON_IDS = moduleOneLessons.map(lesson => lesson.id);
 
 function createAssessmentAttemptStore(): AssessmentAttemptStore {
@@ -158,6 +160,42 @@ export function setupLearnRoutes(router: Router) {
           learnerEmail: access.email,
           moduleId: MODULE_ONE_ID,
           lessonIds: MODULE_ONE_LESSON_IDS,
+        }),
+      });
+    }
+  );
+
+  router.get(
+    "/learn/module-one/certificate/eligibility",
+    async (req: Request, res: Response) => {
+      const access = await getAccess(req);
+
+      if (!access.authenticated) {
+        res.status(401).json({ error: access.reason });
+        return;
+      }
+
+      if (!access.hasAccess) {
+        res.status(403).json({ error: access.reason });
+        return;
+      }
+
+      const lessonProgress = await lessonProgressStore.getModuleLessonProgress({
+        learnerEmail: access.email,
+        moduleId: MODULE_ONE_ID,
+        lessonIds: MODULE_ONE_LESSON_IDS,
+      });
+      const quizProgress = await assessmentAttemptStore.getLearnerQuizProgress(
+        access.email,
+        MODULE_ONE_QUIZ_ID
+      );
+
+      res.json({
+        eligibility: getCertificateEligibility({
+          learnerEmail: access.email,
+          moduleId: MODULE_ONE_ID,
+          lessonProgress,
+          quizProgress,
         }),
       });
     }

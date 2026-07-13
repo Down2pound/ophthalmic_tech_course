@@ -104,6 +104,8 @@ Checkout routes:
 - Protected lesson progress endpoint: `GET /api/learn/module-one/progress`
 - Protected lesson completion endpoint:
   `POST /api/learn/module-one/lessons/:lessonId/complete`
+- Protected certificate eligibility endpoint:
+  `GET /api/learn/module-one/certificate/eligibility`
 - Protected quiz endpoint: `GET /api/learn/module-one/quiz`
 - Protected quiz submission endpoint: `POST /api/learn/module-one/quiz/submit`
 - Protected practice seat assignment endpoint:
@@ -165,6 +167,12 @@ into the browser bundle.
 progress for the signed-in learner. `POST
 /api/learn/module-one/lessons/:lessonId/complete` records a protected lesson
 completion server-side after the same session and enrollment check.
+
+`GET /api/learn/module-one/certificate/eligibility` checks durable lesson
+completion and server-scored quiz progress before marking a learner eligible for
+the certificate language. The certificate still clearly says it is completion,
+not certification, licensure, employment verification, or proof of independent
+hands-on competency.
 
 `GET /api/learn/module-one/quiz` returns Module 1 knowledge-check questions
 without the answer key. `POST /api/learn/module-one/quiz/submit` scores learner
@@ -252,6 +260,8 @@ durable. Current schema contracts live in:
   against active server-side enrollments.
 - `server/src/course/protectedLessons.ts` for serving paid lesson content only
   after server-side access approval.
+- `server/src/certificate/completionEligibility.ts` for server-side certificate
+  eligibility using durable lesson and quiz progress.
 - `server/src/progress/learningSchema.ts` for durable lesson completion tables.
 - `server/src/progress/postgresLessonProgressStore.ts` for PostgreSQL-backed
   lesson completion and module progress repositories.
