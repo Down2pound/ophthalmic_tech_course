@@ -37,6 +37,72 @@ function renderEvidenceSection(action: LaunchActionItem): string[] {
   ];
 }
 
+function renderPaidLaunchEvidencePrompts(): string[] {
+  return [
+    "## Paid Launch Evidence Details",
+    "",
+    "Record IDs and screenshots only when they do not expose secrets, card numbers, cookies, patient information, or private learner data.",
+    "",
+    "### Stripe Individual Learner Test",
+    "",
+    "Stripe checkout session ID:",
+    "",
+    "Stripe event ID:",
+    "",
+    "Webhook delivery status:",
+    "",
+    "Learner email used:",
+    "",
+    "Enrollment/access result:",
+    "",
+    "### Stripe Practice Pack Test",
+    "",
+    "Stripe checkout session ID:",
+    "",
+    "Stripe event ID:",
+    "",
+    "Webhook delivery status:",
+    "",
+    "Practice manager email used:",
+    "",
+    "Seat pack size purchased:",
+    "",
+    "Seat assignment result:",
+    "",
+    "### Webhook Failure Handling",
+    "",
+    renderChecklistItem(
+      "Invalid webhook signature was rejected in test mode or by automated test evidence"
+    ),
+    renderChecklistItem(
+      "Completed checkout event with missing purchase data does not get marked as successfully fulfilled"
+    ),
+    "",
+    "Notes:",
+    "",
+    "### Search And Sharing",
+    "",
+    "Public domain:",
+    "",
+    "Sitemap URL or generated sitemap path:",
+    "",
+    "Shared-link preview checked for title/description:",
+    "",
+    "### Final Paid Enrollment Switch",
+    "",
+    renderChecklistItem(
+      "ENABLE_PAID_ENROLLMENT stayed false until all gates passed"
+    ),
+    renderChecklistItem(
+      "Final readiness check passed after the switch was enabled"
+    ),
+    renderChecklistItem(
+      "One low-risk live-mode internal purchase was verified"
+    ),
+    "",
+  ];
+}
+
 export function renderManualQaTemplate({
   generatedAt = new Date().toISOString(),
   launchActions = getRemainingLaunchActions(),
@@ -77,6 +143,7 @@ export function renderManualQaTemplate({
     ),
     "",
     ...manualQaActions.flatMap(renderEvidenceSection),
+    ...renderPaidLaunchEvidencePrompts(),
     "## Final Decision",
     "",
     renderChecklistItem("No blocking checkout issue"),

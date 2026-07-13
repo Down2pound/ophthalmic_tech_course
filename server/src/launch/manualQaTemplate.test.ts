@@ -11,6 +11,11 @@ describe("renderManualQaTemplate", () => {
     expect(template).toContain("Test Stripe checkout and webhook fulfillment");
     expect(template).toContain("Test the paid learner flow end to end");
     expect(template).toContain("Run browser and accessibility QA");
+    expect(template).toContain("Paid Launch Evidence Details");
+    expect(template).toContain("Stripe checkout session ID:");
+    expect(template).toContain("Webhook delivery status:");
+    expect(template).toContain("Sitemap URL or generated sitemap path:");
+    expect(template).toContain("ENABLE_PAID_ENROLLMENT stayed false");
     expect(template).toContain("Do not paste card numbers");
     expect(template).toContain("Deployment URL:");
     expect(template).toContain("Commit SHA:");
