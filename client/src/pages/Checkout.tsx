@@ -15,6 +15,7 @@ import {
   foundingLearnerOffer,
 } from "@shared/commerce/offers";
 import { commercePolicies } from "@shared/commerce/policies";
+import { individualLearnerSalesPath } from "@shared/commerce/salesReadiness";
 import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
@@ -124,6 +125,25 @@ export default function Checkout() {
                 </li>
               ))}
             </ul>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
+            <h2 className="text-2xl font-bold">Is this a good fit?</h2>
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              {individualLearnerSalesPath.map(section => (
+                <section
+                  key={section.title}
+                  className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                >
+                  <h3 className="font-semibold">{section.title}</h3>
+                  <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                    {section.items.map(item => (
+                      <li key={item}>- {item}</li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
           </Card>
 
           <Card className="border-amber-200 bg-amber-50 p-6 text-amber-950 shadow-sm">

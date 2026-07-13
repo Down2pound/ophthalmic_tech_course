@@ -9,6 +9,7 @@ import {
   Users,
 } from "lucide-react";
 import { formatOfferPrice, practicePackOffers } from "@shared/commerce/offers";
+import { practiceBuyerSalesPath } from "@shared/commerce/salesReadiness";
 import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
 
@@ -73,6 +74,27 @@ export default function PracticePacks() {
 
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1fr_340px]">
         <section className="grid gap-5 md:grid-cols-2">
+          <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm md:col-span-2">
+            <h2 className="text-2xl font-bold">
+              What buying for a practice looks like
+            </h2>
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              {practiceBuyerSalesPath.map(section => (
+                <section
+                  key={section.title}
+                  className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                >
+                  <h3 className="font-semibold">{section.title}</h3>
+                  <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                    {section.items.map(item => (
+                      <li key={item}>- {item}</li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          </Card>
+
           {practicePackOffers.map(offer => (
             <Card
               key={offer.id}
