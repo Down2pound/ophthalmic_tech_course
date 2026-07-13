@@ -59,6 +59,19 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(report.launchActions.map(action => action.id)).toContain(
       "production-database"
     );
+    expect(report.nextSetupSteps.map(step => step.title)).toEqual([
+      "Finish Module 1 clinical review",
+      "Connect hosted PostgreSQL",
+      "Finish Stripe checkout and webhook setup",
+      "Configure passwordless sign-in email",
+      "Protect practice seat assignment",
+      "Keep paid enrollment disabled until final proof",
+    ]);
+    expect(
+      report.nextSetupSteps.find(step => step.title === "Connect hosted PostgreSQL")
+    ).toMatchObject({
+      command: "DATABASE_URL=... DATABASE_SSL=true",
+    });
     expect(report.clinicalReviewPacket.lessons.length).toBeGreaterThan(0);
     expect(report.clinicalReviewPacket.signoffFields).toContain(
       "Clinical reviewer name"
@@ -157,6 +170,12 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(report.warnings).toContain(
       "Launch database schema is not verified. Missing tables: auth_users."
     );
+    expect(report.nextSetupSteps).toContainEqual({
+      title: "Create launch database tables",
+      detail:
+        "Run the setup command against the same hosted database used by the deployed app, then recheck launch readiness.",
+      command: "pnpm db:setup",
+    });
   });
 
   it("never includes actual secret values in warnings or missing variable lists", () => {
@@ -202,5 +221,6 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(serializedReport).not.toContain(
       "postgres://optitech_user:credential@db.internal:5432/optitech"
     );
+    expect(serializedReport).not.toContain("email-secret-value-123456");
   });
 });

@@ -98,6 +98,16 @@ export function renderLaunchDoctorReport({
     "",
     ...renderList(readiness.warnings, "No active warnings."),
     "",
+    "## Recommended Next Setup Steps",
+    "",
+    ...readiness.nextSetupSteps.flatMap(step => [
+      `- ${step.title}: ${step.detail}`,
+      step.command ? `  Command or setting: \`${step.command}\`` : "",
+    ]).filter(Boolean),
+    ...(readiness.nextSetupSteps.length === 0
+      ? ["- No runtime setup steps reported."]
+      : []),
+    "",
     "## Next Actions",
     "",
     ...readiness.launchActions.map(

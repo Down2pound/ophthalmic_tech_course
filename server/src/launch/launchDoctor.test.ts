@@ -52,6 +52,13 @@ const readinessReport: RuntimeLaunchReadinessReport = {
     "Stripe checkout setup is missing: STRIPE_SECRET_KEY.",
     "Database setup is missing: DATABASE_URL.",
   ],
+  nextSetupSteps: [
+    {
+      title: "Connect hosted PostgreSQL",
+      detail: "Set DATABASE_URL in the production host dashboard.",
+      command: "DATABASE_URL=...",
+    },
+  ],
   launchActions: [
     {
       id: "clinical-review-signoff",
@@ -81,6 +88,9 @@ describe("renderLaunchDoctorReport", () => {
     expect(report).toContain("- Stripe checkout: NEEDS WORK");
     expect(report).toContain("- STRIPE_SECRET_KEY");
     expect(report).toContain("- auth_users");
+    expect(report).toContain("## Recommended Next Setup Steps");
+    expect(report).toContain("Connect hosted PostgreSQL");
+    expect(report).toContain("Command or setting: `DATABASE_URL=...`");
     expect(report).toContain(
       "Get clinical review signoff: Have a reviewer approve Module 1."
     );

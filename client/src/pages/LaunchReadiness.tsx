@@ -292,6 +292,44 @@ export default function LaunchReadiness() {
             )}
           </Card>
 
+          {runtimeReport && runtimeReport.nextSetupSteps.length > 0 && (
+            <Card className="border-blue-100 bg-blue-50 p-6 text-blue-950 shadow-sm">
+              <div className="flex items-start gap-3">
+                <ListChecks className="mt-1 h-6 w-6 text-blue-700" />
+                <div>
+                  <p className="text-sm font-semibold text-blue-700">
+                    Runtime next steps
+                  </p>
+                  <h2 className="mt-1 text-xl font-bold">
+                    Do these next on the live setup
+                  </h2>
+                  <p className="mt-3 leading-7 text-blue-900">
+                    These steps are generated from the current server settings
+                    and database readiness check.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                {runtimeReport.nextSetupSteps.map(step => (
+                  <section
+                    key={step.title}
+                    className="rounded-md border border-blue-100 bg-white p-4"
+                  >
+                    <h3 className="font-semibold">{step.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {step.detail}
+                    </p>
+                    {step.command && (
+                      <p className="mt-3 break-words rounded-md border border-slate-200 bg-slate-50 p-3 font-mono text-xs leading-5 text-slate-700">
+                        {step.command}
+                      </p>
+                    )}
+                  </section>
+                ))}
+              </div>
+            </Card>
+          )}
+
           {runtimeReport && (
             <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
               <div className="flex items-start gap-3">

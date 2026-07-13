@@ -50,6 +50,11 @@ export interface RuntimeLaunchReadinessReport {
     approvedVersion: string;
   };
   warnings: string[];
+  nextSetupSteps: Array<{
+    title: string;
+    detail: string;
+    command?: string;
+  }>;
   launchActions: LaunchActionItem[];
   clinicalReviewPacket: ClinicalReviewPacket;
 }

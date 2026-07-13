@@ -59,6 +59,13 @@ const runtimeReport = {
     approvedVersion: "",
   },
   warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
+  nextSetupSteps: [
+    {
+      title: "Finish Stripe checkout and webhook setup",
+      detail: "Add Stripe keys.",
+      command: "POST /api/stripe/webhook",
+    },
+  ],
   launchActions: [
     {
       id: "production-database",
