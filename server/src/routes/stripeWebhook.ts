@@ -22,6 +22,7 @@ import { getLaunchDatabaseReadiness } from "../db/launchDatabaseReadiness";
 import {
   createPurchaseEventFromStripeEvent,
   verifyStripeWebhookSignature,
+  type PurchaseEvent,
   type StripeCheckoutCompletedEvent,
 } from "../commerce/stripeWebhook";
 import { getCommerceEnvironmentStatus } from "../config/environment";
@@ -75,6 +76,13 @@ export function getPracticeSeatPackStore() {
 
 export function getEnrollmentStore() {
   return enrollmentStore;
+}
+
+export function isUnfulfillableCheckoutCompletedEvent(
+  stripeEvent: StripeCheckoutCompletedEvent,
+  purchaseEvent: PurchaseEvent | null
+): boolean {
+  return stripeEvent.type === "checkout.session.completed" && !purchaseEvent;
 }
 
 export function setupStripeWebhookRoute(app: Express) {
@@ -132,6 +140,15 @@ export function setupStripeWebhookRoute(app: Express) {
       }
 
       const purchaseEvent = createPurchaseEventFromStripeEvent(stripeEvent);
+
+      if (isUnfulfillableCheckoutCompletedEvent(stripeEvent, purchaseEvent)) {
+        res.status(422).json({
+          error:
+            "Stripe checkout completed, but the event did not include enough valid purchase data to provision access.",
+        });
+        return;
+      }
+
       let purchaseRecorded = false;
       let enrollmentProvisioned = false;
       let practiceSeatPackProvisioned = false;
