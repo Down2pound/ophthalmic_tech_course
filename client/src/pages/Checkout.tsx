@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import {
   ArrowLeft,
   ArrowRight,
+  Building2,
   CheckCircle2,
   Clock,
   CreditCard,
@@ -18,7 +19,7 @@ import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 
-const policySummary = commercePolicies.slice(0, 3);
+const policySummary = commercePolicies;
 
 export default function Checkout() {
   const [email, setEmail] = useState("");
@@ -72,8 +73,8 @@ export default function Checkout() {
               {foundingLearnerOffer.description}
             </p>
           </div>
-          <div className="rounded-md border border-blue-100 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-900">
-            Draft checkout preview
+          <div className="rounded-md border border-green-100 bg-green-50 px-4 py-3 text-sm font-semibold text-green-900">
+            Secure Stripe checkout
           </div>
         </div>
       </section>
@@ -91,7 +92,7 @@ export default function Checkout() {
               <h2 className="text-xl font-bold">{checkoutStatus.title}</h2>
               <p className="mt-2 leading-7">{checkoutStatus.message}</p>
               <ul className="mt-3 space-y-1 text-sm leading-6">
-                {checkoutStatus.nextSteps.map((step) => (
+                {checkoutStatus.nextSteps.map(step => (
                   <li key={step} className="flex gap-2">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0" />
                     <span>{step}</span>
@@ -116,7 +117,7 @@ export default function Checkout() {
               <h2 className="text-2xl font-bold">What is included</h2>
             </div>
             <ul className="mt-5 space-y-3">
-              {foundingLearnerOffer.includes.map((item) => (
+              {foundingLearnerOffer.includes.map(item => (
                 <li key={item} className="flex gap-3 text-slate-700">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
                   <span>{item}</span>
@@ -131,7 +132,7 @@ export default function Checkout() {
               <h2 className="text-2xl font-bold">Clear expectations</h2>
             </div>
             <ul className="mt-5 space-y-3">
-              {foundingLearnerOffer.limitations.map((item) => (
+              {foundingLearnerOffer.limitations.map(item => (
                 <li key={item} className="flex gap-3">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-700" />
                   <span>{item}</span>
@@ -143,7 +144,7 @@ export default function Checkout() {
           <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
             <h2 className="text-2xl font-bold">Before you enroll</h2>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
-              {policySummary.map((policy) => (
+              {policySummary.map(policy => (
                 <section
                   key={policy.slug}
                   className="rounded-md border border-slate-200 bg-slate-50 p-4"
@@ -186,7 +187,7 @@ export default function Checkout() {
             <input
               type="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={event => setEmail(event.target.value)}
               placeholder="learner@example.com"
               className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
             />
@@ -201,12 +202,36 @@ export default function Checkout() {
               onClick={startCheckout}
             >
               <CreditCard className="mr-2 h-4 w-4" />
-              {isStartingCheckout ? "Starting checkout..." : "Continue to Stripe"}
+              {isStartingCheckout
+                ? "Starting checkout..."
+                : "Continue to Stripe"}
             </Button>
             <p className="mt-4 text-sm leading-6 text-slate-600">
               Payment details are handled securely by Stripe Checkout, not by
               this app.
             </p>
+            <div className="mt-5 space-y-3 border-t border-slate-200 pt-5 text-sm leading-6 text-slate-700">
+              <p className="flex gap-2">
+                <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
+                Access opens only after Stripe confirms payment.
+              </p>
+              <p className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
+                The course is education, not certification or employment
+                verification.
+              </p>
+              <p className="flex gap-2">
+                <Building2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-700" />
+                Buying for a team? Practice seat packs are available.
+              </p>
+            </div>
+            <a
+              href="/practice-packs"
+              className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900"
+            >
+              View practice packs
+              <ArrowRight className="h-4 w-4" />
+            </a>
           </Card>
         </aside>
       </div>
