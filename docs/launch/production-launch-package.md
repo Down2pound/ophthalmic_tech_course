@@ -35,6 +35,8 @@ For production domain, sitemap, and shared-link setup, use
 `docs/launch/domain-and-sharing-guide.md`.
 If a work computer blocks tests or launch commands, use
 `docs/launch/home-pc-runbook.md`.
+For first-customer outreach, sales scripts, and feedback tracking, use
+`docs/launch/first-customers-sales-packet.md`.
 For Stripe-specific setup, use `docs/launch/stripe-setup-guide.md`.
 For passwordless sign-in email setup, use
 `docs/launch/email-setup-guide.md`.
@@ -209,6 +211,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/deployment-guide.md`
 - `docs/launch/domain-and-sharing-guide.md`
 - `docs/launch/home-pc-runbook.md`
+- `docs/launch/first-customers-sales-packet.md`
 - `docs/launch/stripe-setup-guide.md`
 - `docs/launch/email-setup-guide.md`
 - `docs/launch/database-setup-guide.md`

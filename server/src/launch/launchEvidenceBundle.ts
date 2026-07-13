@@ -40,6 +40,7 @@ function renderReadme({
     "- `deployment-guide.md`: beginner-friendly production setup recipe.",
     "- `domain-and-sharing-guide.md`: production URL, sitemap, and shared-link setup recipe.",
     "- `home-pc-runbook.md`: beginner-friendly fallback for admin-blocked work computers.",
+    "- `first-customers-sales-packet.md`: first-buyer outreach scripts and feedback tracker.",
     "- `stripe-setup-guide.md`: Stripe checkout and webhook setup recipe.",
     "- `email-setup-guide.md`: passwordless sign-in email setup recipe.",
     "- `database-setup-guide.md`: managed PostgreSQL setup recipe.",
@@ -84,6 +85,7 @@ export async function createLaunchEvidenceBundle({
     "deployment-guide.md",
     "domain-and-sharing-guide.md",
     "home-pc-runbook.md",
+    "first-customers-sales-packet.md",
     "stripe-setup-guide.md",
     "email-setup-guide.md",
     "database-setup-guide.md",
@@ -111,6 +113,10 @@ export async function createLaunchEvidenceBundle({
   );
   const homePcRunbook = await readFile(
     path.resolve(projectRoot, "docs/launch/home-pc-runbook.md"),
+    "utf8"
+  );
+  const firstCustomersSalesPacket = await readFile(
+    path.resolve(projectRoot, "docs/launch/first-customers-sales-packet.md"),
     "utf8"
   );
   const stripeSetupGuide = await readFile(
@@ -153,6 +159,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "home-pc-runbook.md"),
     homePcRunbook
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "first-customers-sales-packet.md"),
+    firstCustomersSalesPacket
   );
   await writeFile(
     path.join(resolvedOutputDir, "stripe-setup-guide.md"),
