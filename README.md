@@ -1,12 +1,25 @@
-# Ophthalmic Technician Training Course
+# OptiTech Academy Ophthalmic Technician Foundations
 
-## 10-Day Super Course Overview
+## Founding Course Overview
 
-A professional enrollment website for a **10-day high-intensity multimedia training program** designed to prepare new hires and career changers to become clinic-ready ophthalmic technicians.
+OptiTech Academy is a founding-course web app for ophthalmic technician
+foundations. It is designed for career changers, medical assistants moving into
+eye care, new ophthalmic technicians, and practices that need a consistent first
+layer of onboarding before hands-on supervised training.
 
-### 10-Day Curriculum Structure
+The current paid-launch path publishes Module 1 first, then uses the Bootcamp
+source map to guide future releases as clinical review, accessibility review,
+asset migration, and launch gates are completed.
 
-Each day features a dedicated module with comprehensive training materials, hands-on exercises, and assessments.
+Completion is educational. It is not certification, licensure, employment
+verification, or proof of independent hands-on competency.
+
+### Planned 10-Day Bootcamp Source Path
+
+The repository preserves a 10-day Bootcamp source map with videos, PDFs, audio,
+images, outcomes, review prompts, and clinic tasks. Those materials are source
+content until they pass rights review, clinical review, accessibility review,
+and public/practice-only classification.
 
 - **Day 1**: Ophthalmic Fundamentals & Anatomy
 - **Day 2**: Patient Assessment & History Taking
@@ -21,13 +34,14 @@ Each day features a dedicated module with comprehensive training materials, hand
 
 ### Features
 
-- Comprehensive curriculum overview for all 10 modules
-- Flexible pricing tiers for individual technicians and practice managers
-- Verified instructor credentials and expertise
-- Interactive enrollment forms
-- Video content and multimedia learning materials
-- Quizzes and assessments for each module
-- Hands-on practical exercises
+- Published Module 1 foundations lessons with protected learner access.
+- Planned 10-day Bootcamp source path for future reviewed releases.
+- Stripe-hosted checkout for individual learner and practice-pack purchases.
+- Practice pack purchase and protected seat-assignment workflow.
+- Passwordless sign-in for learners using the checkout email.
+- Module progress, protected quiz flow, and certificate eligibility checks.
+- Launch readiness gates for Stripe, email, PostgreSQL, clinical review, and paid enrollment.
+- Launch handoff bundle for Google Drive, clinical review, QA, support, and first-buyer operations.
 
 **Built with TypeScript, Vite, and modern web technologies.**
 
