@@ -7,10 +7,14 @@ import {
   commerceSchemaSql,
   commerceSchemaTables,
 } from "../commerce/commerceSchema";
+import {
+  learningSchemaSql,
+  learningSchemaTables,
+} from "../progress/learningSchema";
 import type { Queryable } from "./postgres";
 
 export interface LaunchDatabaseSchema {
-  id: "commerce" | "auth" | "assessment";
+  id: "commerce" | "auth" | "learning" | "assessment";
   tables: readonly string[];
   sql: string;
 }
@@ -32,6 +36,11 @@ export const launchDatabaseSchemas: LaunchDatabaseSchema[] = [
     id: "auth",
     tables: authSchemaTables,
     sql: authSchemaSql,
+  },
+  {
+    id: "learning",
+    tables: learningSchemaTables,
+    sql: learningSchemaSql,
   },
   {
     id: "assessment",

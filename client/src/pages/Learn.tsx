@@ -5,7 +5,6 @@ import {
   createEmptyProgress,
   getProgressPercent,
   loadProgress,
-  markLessonComplete,
   saveProgress,
 } from "@/lib/progressStore";
 import {
@@ -17,6 +16,10 @@ import {
   type ProtectedModuleOneLessons,
 } from "@/lib/protectedLessonsClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
+import {
+  fetchModuleOneLessonProgress,
+  markModuleOneLessonComplete,
+} from "@/lib/lessonProgressClient";
 import { optiTechCourse } from "@shared/course/courseCatalog";
 import {
   Award,
@@ -43,11 +46,12 @@ export default function Learn() {
   const [protectedLessons, setProtectedLessons] =
     useState<ProtectedModuleOneLessons | null>(null);
   const [lessonContentError, setLessonContentError] = useState("");
+  const [lessonProgressError, setLessonProgressError] = useState("");
 
   const lessonList = protectedLessons?.lessons ?? [];
   const selectedLesson = useMemo(
     () =>
-      lessonList.find((lesson) => lesson.id === selectedLessonId) ??
+      lessonList.find(lesson => lesson.id === selectedLessonId) ??
       lessonList[0],
     [lessonList, selectedLessonId]
   );
@@ -59,22 +63,42 @@ export default function Learn() {
       ? null
       : getCheckoutStatus(window.location.search);
 
-  const completeLesson = () => {
-    if (!selectedLesson || !storage) return;
-    const nextProgress = markLessonComplete(progress, selectedLesson.id);
-    setProgress(nextProgress);
-    saveProgress(storage, nextProgress);
+  const completeLesson = async () => {
+    if (!selectedLesson) return;
+
+    try {
+      setLessonProgressError("");
+      const serverProgress = await markModuleOneLessonComplete({
+        lessonId: selectedLesson.id,
+      });
+      const nextProgress = {
+        completedLessonIds: serverProgress.completedLessonIds,
+        quizScores: progress.quizScores,
+        updatedAt: serverProgress.updatedAt,
+      };
+
+      setProgress(nextProgress);
+      if (storage) {
+        saveProgress(storage, nextProgress);
+      }
+    } catch (error) {
+      setLessonProgressError(
+        error instanceof Error
+          ? error.message
+          : "Lesson progress could not be saved."
+      );
+    }
   };
 
   useEffect(() => {
     let active = true;
 
     fetchLearnerSessionAccess()
-      .then((access) => {
+      .then(access => {
         if (!active) return;
         setLearnerAccess(access);
       })
-      .catch((error) => {
+      .catch(error => {
         if (!active) return;
         setLearnerAccessError(
           error instanceof Error
@@ -92,15 +116,15 @@ export default function Learn() {
     let active = true;
 
     fetchProtectedModuleOneLessons()
-      .then((payload) => {
+      .then(payload => {
         if (!active) return;
         setProtectedLessons(payload);
         setLearnerAccess(payload.access);
-        setSelectedLessonId((currentLessonId) =>
-          currentLessonId ?? payload.lessons[0]?.id
+        setSelectedLessonId(
+          currentLessonId => currentLessonId ?? payload.lessons[0]?.id
         );
       })
-      .catch((error) => {
+      .catch(error => {
         if (!active) return;
         setLessonContentError(
           error instanceof Error
@@ -114,6 +138,41 @@ export default function Learn() {
     };
   }, []);
 
+  useEffect(() => {
+    let active = true;
+
+    if (!learnerAccess?.hasAccess || !storage) {
+      return () => {
+        active = false;
+      };
+    }
+
+    fetchModuleOneLessonProgress()
+      .then(serverProgress => {
+        if (!active) return;
+        const nextProgress = {
+          completedLessonIds: serverProgress.completedLessonIds,
+          quizScores: progress.quizScores,
+          updatedAt: serverProgress.updatedAt,
+        };
+
+        setProgress(nextProgress);
+        saveProgress(storage, nextProgress);
+      })
+      .catch(error => {
+        if (!active) return;
+        setLessonProgressError(
+          error instanceof Error
+            ? error.message
+            : "Lesson progress is unavailable right now."
+        );
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [learnerAccess?.hasAccess]);
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="border-b bg-white">
@@ -123,9 +182,7 @@ export default function Learn() {
               OptiTech Academy
             </p>
             <h1 className="mt-2 text-3xl font-bold">{moduleOne.title}</h1>
-            <p className="mt-2 max-w-3xl text-slate-600">
-              {moduleOne.outcome}
-            </p>
+            <p className="mt-2 max-w-3xl text-slate-600">{moduleOne.outcome}</p>
           </div>
           <a href="/">
             <Button variant="outline">Back to course home</Button>
@@ -138,11 +195,9 @@ export default function Learn() {
           {checkoutStatus?.tone === "success" && (
             <Card className="border-green-200 bg-green-50 p-4 text-green-950 shadow-sm">
               <h2 className="font-semibold">{checkoutStatus.title}</h2>
-              <p className="mt-2 text-sm leading-6">
-                {checkoutStatus.message}
-              </p>
+              <p className="mt-2 text-sm leading-6">{checkoutStatus.message}</p>
               <ul className="mt-3 space-y-1 text-sm leading-6">
-                {checkoutStatus.nextSteps.map((step) => (
+                {checkoutStatus.nextSteps.map(step => (
                   <li key={step} className="flex gap-2">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0" />
                     <span>{step}</span>
@@ -261,6 +316,11 @@ export default function Learn() {
               <span className="text-sm text-slate-600">{completePercent}%</span>
             </div>
             <Progress className="mt-3" value={completePercent} />
+            {lessonProgressError && (
+              <p className="mt-3 text-sm leading-6 text-amber-700">
+                {lessonProgressError}
+              </p>
+            )}
           </Card>
 
           <Card className="overflow-hidden border-slate-200 bg-white text-slate-950 shadow-sm">
@@ -270,7 +330,7 @@ export default function Learn() {
                   "Checking whether lesson content is available..."}
               </div>
             )}
-            {lessonList.map((lesson) => {
+            {lessonList.map(lesson => {
               const complete = progress.completedLessonIds.includes(lesson.id);
               const active = selectedLesson?.id === lesson.id;
               return (
@@ -324,7 +384,7 @@ export default function Learn() {
                 {selectedLesson.outcome}
               </p>
               <div className="mt-6 space-y-4">
-                {selectedLesson.body.map((paragraph) => (
+                {selectedLesson.body.map(paragraph => (
                   <p key={paragraph} className="leading-7 text-slate-700">
                     {paragraph}
                   </p>
@@ -350,7 +410,7 @@ export default function Learn() {
             <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
               <h3 className="font-semibold">Common mistakes to avoid</h3>
               <ul className="mt-3 space-y-2">
-                {selectedLesson.commonMistakes.map((mistake) => (
+                {selectedLesson.commonMistakes.map(mistake => (
                   <li key={mistake} className="flex gap-2 text-slate-700">
                     <ShieldAlert className="mt-0.5 h-4 w-4 text-amber-600" />
                     <span>{mistake}</span>
@@ -376,7 +436,7 @@ export default function Learn() {
                 {selectedLesson.review.clinicalReviewer}.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {selectedLesson.sources.map((source) => (
+                {selectedLesson.sources.map(source => (
                   <a
                     key={source.id}
                     href={source.url}

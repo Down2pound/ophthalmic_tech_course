@@ -18,7 +18,7 @@ class FakeDatabase implements Queryable {
 }
 
 describe("setupLaunchDatabase", () => {
-  it("applies commerce, auth, and assessment schemas in launch order", async () => {
+  it("applies commerce, auth, learning, and assessment schemas in launch order", async () => {
     const db = new FakeDatabase();
 
     const result = await setupLaunchDatabase({ db });
@@ -26,6 +26,7 @@ describe("setupLaunchDatabase", () => {
     expect(result.appliedSchemas.map(schema => schema.id)).toEqual([
       "commerce",
       "auth",
+      "learning",
       "assessment",
     ]);
     expect(db.calls.map(call => call.sql)).toEqual(
@@ -39,6 +40,7 @@ describe("setupLaunchDatabase", () => {
       "auth_users",
       "auth_magic_links",
       "auth_sessions",
+      "learning_lesson_completions",
       "assessment_attempts",
       "assessment_question_results",
     ]);

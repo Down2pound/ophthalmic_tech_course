@@ -101,6 +101,9 @@ Checkout routes:
 - Passwordless callback endpoint: `GET /api/auth/callback?token=...`
 - Current learner access endpoint: `GET /api/auth/session`
 - Protected lesson endpoint: `GET /api/learn/module-one/lessons`
+- Protected lesson progress endpoint: `GET /api/learn/module-one/progress`
+- Protected lesson completion endpoint:
+  `POST /api/learn/module-one/lessons/:lessonId/complete`
 - Protected quiz endpoint: `GET /api/learn/module-one/quiz`
 - Protected quiz submission endpoint: `POST /api/learn/module-one/quiz/submit`
 - Protected practice seat assignment endpoint:
@@ -157,6 +160,11 @@ enrollment. It does not trust browser-provided email addresses.
 after the session cookie maps to an active server-side enrollment. The learner
 dashboard uses this endpoint instead of importing paid lesson bodies directly
 into the browser bundle.
+
+`GET /api/learn/module-one/progress` returns durable Module 1 lesson completion
+progress for the signed-in learner. `POST
+/api/learn/module-one/lessons/:lessonId/complete` records a protected lesson
+completion server-side after the same session and enrollment check.
 
 `GET /api/learn/module-one/quiz` returns Module 1 knowledge-check questions
 without the answer key. `POST /api/learn/module-one/quiz/submit` scores learner
@@ -244,6 +252,9 @@ durable. Current schema contracts live in:
   against active server-side enrollments.
 - `server/src/course/protectedLessons.ts` for serving paid lesson content only
   after server-side access approval.
+- `server/src/progress/learningSchema.ts` for durable lesson completion tables.
+- `server/src/progress/postgresLessonProgressStore.ts` for PostgreSQL-backed
+  lesson completion and module progress repositories.
 - `server/src/assessments/moduleOneKnowledgeCheck.ts` for Module 1
   server-side quiz delivery and scoring without exposing answer keys.
 - `server/src/assessments/assessmentAttemptStore.ts` for recording server-side
