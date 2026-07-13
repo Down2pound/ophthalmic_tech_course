@@ -16,6 +16,7 @@ import {
   foundingLearnerOffer,
   createMailtoHref,
 } from "@shared/commerce/offers";
+import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
 import {
   buyerSupportContact,
   commercePolicies,
@@ -45,6 +46,9 @@ export default function Checkout() {
     typeof window === "undefined"
       ? null
       : getCheckoutStatus(window.location.search);
+  const normalizedEmail = normalizeCheckoutEmail(email);
+  const emailHasText = email.trim().length > 0;
+  const showEmailValidation = emailHasText && !normalizedEmail;
 
   const startCheckout = async () => {
     setIsStartingCheckout(true);
@@ -278,11 +282,23 @@ export default function Checkout() {
             <input
               type="email"
               required
+              aria-invalid={showEmailValidation}
+              aria-describedby="checkout-email-help"
               value={email}
               onChange={event => setEmail(event.target.value)}
               placeholder="learner@example.com"
               className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
             />
+            <p
+              id="checkout-email-help"
+              className={`mt-2 text-sm leading-5 ${
+                showEmailValidation ? "text-red-700" : "text-slate-500"
+              }`}
+            >
+              {showEmailValidation
+                ? "Enter a valid email like learner@example.com."
+                : "We use this email for your receipt and course access."}
+            </p>
             {checkoutError && (
               <p className="mt-3 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
                 {checkoutError}
@@ -290,7 +306,7 @@ export default function Checkout() {
             )}
             <Button
               className="mt-4 w-full bg-blue-700 text-white hover:bg-blue-800"
-              disabled={isStartingCheckout}
+              disabled={isStartingCheckout || !normalizedEmail}
               onClick={startCheckout}
             >
               <CreditCard className="mr-2 h-4 w-4" />

@@ -15,6 +15,7 @@ import {
   formatOfferPrice,
   practicePackOffers,
 } from "@shared/commerce/offers";
+import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
 import { buyerSupportContact } from "@shared/commerce/policies";
 import {
   practiceBuyerSalesPath,
@@ -51,6 +52,16 @@ export default function PracticePacks() {
     } finally {
       setActiveOfferId(null);
     }
+  };
+  const getOfferEmailState = (offerId: string) => {
+    const email = emailByOfferId[offerId] ?? "";
+    const normalizedEmail = normalizeCheckoutEmail(email);
+
+    return {
+      email,
+      normalizedEmail,
+      showEmailValidation: email.trim().length > 0 && !normalizedEmail,
+    };
   };
   const customPracticeHref = createMailtoHref({
     email: customPracticeInquiryOffer.contactEmail,
@@ -153,92 +164,115 @@ export default function PracticePacks() {
           </Card>
 
           {practicePackOffers.map(offer => (
-            <Card
-              key={offer.id}
-              className="flex flex-col border-slate-200 bg-white p-6 text-slate-950 shadow-sm"
-            >
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm font-semibold text-blue-700">
-                    {offer.seatCount} learner seats
-                  </p>
-                  <h2 className="mt-2 text-2xl font-bold">{offer.name}</h2>
-                </div>
-                <Users className="h-8 w-8 flex-shrink-0 text-blue-700" />
-              </div>
+            (() => {
+              const { email, normalizedEmail, showEmailValidation } =
+                getOfferEmailState(offer.id);
+              const emailHelpId = `${offer.id}-email-help`;
 
-              <p className="mt-4 leading-7 text-slate-600">
-                {offer.description}
-              </p>
-              <p className="mt-4 rounded-md border border-blue-100 bg-blue-50 p-3 text-sm font-semibold text-blue-950">
-                {offer.idealFor}
-              </p>
-
-              <div className="mt-6">
-                <span className="text-4xl font-bold">
-                  {formatOfferPrice(offer)}
-                </span>
-                <span className="ml-2 text-slate-500">one-time</span>
-              </div>
-
-              <section className="mt-6">
-                <h3 className="font-semibold">Included</h3>
-                <ul className="mt-3 space-y-2">
-                  {offer.includes.map(item => (
-                    <li
-                      key={item}
-                      className="flex gap-2 text-sm text-slate-700"
-                    >
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-
-              <section className="mt-6">
-                <h3 className="flex items-center gap-2 font-semibold">
-                  <ShieldCheck className="h-4 w-4 text-amber-700" />
-                  Clear limits
-                </h3>
-                <ul className="mt-3 space-y-2">
-                  {offer.limitations.map(item => (
-                    <li key={item} className="text-sm leading-6 text-slate-700">
-                      - {item}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-
-              <div className="mt-6 border-t border-slate-200 pt-5">
-                <label className="block text-sm font-semibold text-slate-700">
-                  Billing email
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={emailByOfferId[offer.id] ?? ""}
-                  onChange={event =>
-                    setEmailByOfferId(current => ({
-                      ...current,
-                      [offer.id]: event.target.value,
-                    }))
-                  }
-                  placeholder="manager@example.com"
-                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
-                />
-                <Button
-                  className="mt-4 w-full bg-blue-700 text-white hover:bg-blue-800"
-                  disabled={activeOfferId === offer.id}
-                  onClick={() => startCheckout(offer.id)}
+              return (
+                <Card
+                  key={offer.id}
+                  className="flex flex-col border-slate-200 bg-white p-6 text-slate-950 shadow-sm"
                 >
-                  {activeOfferId === offer.id
-                    ? "Starting checkout..."
-                    : "Buy with Stripe"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </Card>
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-blue-700">
+                        {offer.seatCount} learner seats
+                      </p>
+                      <h2 className="mt-2 text-2xl font-bold">{offer.name}</h2>
+                    </div>
+                    <Users className="h-8 w-8 flex-shrink-0 text-blue-700" />
+                  </div>
+
+                  <p className="mt-4 leading-7 text-slate-600">
+                    {offer.description}
+                  </p>
+                  <p className="mt-4 rounded-md border border-blue-100 bg-blue-50 p-3 text-sm font-semibold text-blue-950">
+                    {offer.idealFor}
+                  </p>
+
+                  <div className="mt-6">
+                    <span className="text-4xl font-bold">
+                      {formatOfferPrice(offer)}
+                    </span>
+                    <span className="ml-2 text-slate-500">one-time</span>
+                  </div>
+
+                  <section className="mt-6">
+                    <h3 className="font-semibold">Included</h3>
+                    <ul className="mt-3 space-y-2">
+                      {offer.includes.map(item => (
+                        <li
+                          key={item}
+                          className="flex gap-2 text-sm text-slate-700"
+                        >
+                          <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  <section className="mt-6">
+                    <h3 className="flex items-center gap-2 font-semibold">
+                      <ShieldCheck className="h-4 w-4 text-amber-700" />
+                      Clear limits
+                    </h3>
+                    <ul className="mt-3 space-y-2">
+                      {offer.limitations.map(item => (
+                        <li
+                          key={item}
+                          className="text-sm leading-6 text-slate-700"
+                        >
+                          - {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  <div className="mt-6 border-t border-slate-200 pt-5">
+                    <label className="block text-sm font-semibold text-slate-700">
+                      Billing email
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      aria-invalid={showEmailValidation}
+                      aria-describedby={emailHelpId}
+                      value={email}
+                      onChange={event =>
+                        setEmailByOfferId(current => ({
+                          ...current,
+                          [offer.id]: event.target.value,
+                        }))
+                      }
+                      placeholder="manager@example.com"
+                      className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                    />
+                    <p
+                      id={emailHelpId}
+                      className={`mt-2 text-sm leading-5 ${
+                        showEmailValidation ? "text-red-700" : "text-slate-500"
+                      }`}
+                    >
+                      {showEmailValidation
+                        ? "Enter a valid email like manager@example.com."
+                        : "We use this email for the receipt and seat setup."}
+                    </p>
+                    <Button
+                      className="mt-4 w-full bg-blue-700 text-white hover:bg-blue-800"
+                      disabled={activeOfferId === offer.id || !normalizedEmail}
+                      onClick={() => startCheckout(offer.id)}
+                    >
+                      {activeOfferId === offer.id
+                        ? "Starting checkout..."
+                        : "Buy with Stripe"}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </Card>
+              );
+            })()
           ))}
         </section>
 
