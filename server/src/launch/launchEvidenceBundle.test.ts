@@ -94,6 +94,7 @@ describe("createLaunchEvidenceBundle", () => {
       "home-pc-runbook.md",
       "first-customers-sales-packet.md",
       "first-buyer-fulfillment-checklist.md",
+      "revenue-and-sales-tracker-template.md",
       "stripe-setup-guide.md",
       "email-setup-guide.md",
       "database-setup-guide.md",
@@ -137,6 +138,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const firstBuyerFulfillmentChecklist = await readFile(
       path.join(result.outputDir, "first-buyer-fulfillment-checklist.md"),
+      "utf8"
+    );
+    const revenueAndSalesTrackerTemplate = await readFile(
+      path.join(result.outputDir, "revenue-and-sales-tracker-template.md"),
       "utf8"
     );
     const stripeSetupGuide = await readFile(
@@ -201,6 +206,15 @@ describe("createLaunchEvidenceBundle", () => {
     expect(firstBuyerFulfillmentChecklist).toContain(
       "Practice Pack Fulfillment"
     );
+    expect(revenueAndSalesTrackerTemplate).toContain(
+      "OptiTech Academy Revenue And Sales Tracker Template"
+    );
+    expect(revenueAndSalesTrackerTemplate).toContain("Weekly Business Review");
+    expect(revenueAndSalesTrackerTemplate).toContain(
+      "Do not paste secrets, private medical details, or raw access links"
+    );
+    expect(revenueAndSalesTrackerTemplate).not.toContain("sk_test_");
+    expect(revenueAndSalesTrackerTemplate).not.toContain("whsec_");
     expect(stripeSetupGuide).toContain("OptiTech Academy Stripe Setup Guide");
     expect(stripeSetupGuide).toContain("checkout.session.completed");
     expect(emailSetupGuide).toContain("OptiTech Academy Email Setup Guide");

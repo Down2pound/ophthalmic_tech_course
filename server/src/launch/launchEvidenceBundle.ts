@@ -42,6 +42,7 @@ function renderReadme({
     "- `home-pc-runbook.md`: beginner-friendly fallback for admin-blocked work computers.",
     "- `first-customers-sales-packet.md`: first-buyer outreach scripts and feedback tracker.",
     "- `first-buyer-fulfillment-checklist.md`: first paid buyer receipt, access, and welcome checklist.",
+    "- `revenue-and-sales-tracker-template.md`: safe lead, purchase, support, and weekly revenue tracker.",
     "- `stripe-setup-guide.md`: Stripe checkout and webhook setup recipe.",
     "- `email-setup-guide.md`: passwordless sign-in email setup recipe.",
     "- `database-setup-guide.md`: managed PostgreSQL setup recipe.",
@@ -88,6 +89,7 @@ export async function createLaunchEvidenceBundle({
     "home-pc-runbook.md",
     "first-customers-sales-packet.md",
     "first-buyer-fulfillment-checklist.md",
+    "revenue-and-sales-tracker-template.md",
     "stripe-setup-guide.md",
     "email-setup-guide.md",
     "database-setup-guide.md",
@@ -125,6 +127,13 @@ export async function createLaunchEvidenceBundle({
     path.resolve(
       projectRoot,
       "docs/launch/first-buyer-fulfillment-checklist.md"
+    ),
+    "utf8"
+  );
+  const revenueAndSalesTrackerTemplate = await readFile(
+    path.resolve(
+      projectRoot,
+      "docs/launch/revenue-and-sales-tracker-template.md"
     ),
     "utf8"
   );
@@ -176,6 +185,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "first-buyer-fulfillment-checklist.md"),
     firstBuyerFulfillmentChecklist
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "revenue-and-sales-tracker-template.md"),
+    revenueAndSalesTrackerTemplate
   );
   await writeFile(
     path.join(resolvedOutputDir, "stripe-setup-guide.md"),
