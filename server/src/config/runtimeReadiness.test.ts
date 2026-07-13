@@ -46,6 +46,10 @@ describe("getRuntimeLaunchReadinessReport", () => {
         databaseConfigured: false,
         missingDatabaseVariables: ["DATABASE_URL"],
       },
+      databaseReadiness: {
+        schemaVerified: false,
+        checkedTableCount: 0,
+      },
       clinicalReview: {
         moduleOneReviewConfigured: false,
         moduleOneReviewApproved: false,
@@ -91,6 +95,13 @@ describe("getRuntimeLaunchReadinessReport", () => {
         MODULE_ONE_CLINICAL_APPROVED_VERSION: "module-one-v1",
         MODULE_ONE_CLINICAL_REVIEW_APPROVED: "true",
       },
+      databaseReadiness: {
+        schemaVerified: true,
+        requiredTables: ["commerce_purchases"],
+        checkedTableCount: 1,
+        missingTables: [],
+        checkFailed: false,
+      },
     });
 
     expect(report.clinicalReview).toMatchObject({
@@ -113,6 +124,40 @@ describe("getRuntimeLaunchReadinessReport", () => {
     );
   });
 
+  it("blocks paid launch when DATABASE_URL exists but launch tables are missing", () => {
+    const report = getRuntimeLaunchReadinessReport({
+      env: {
+        STRIPE_SECRET_KEY: "sk_test_secret_value",
+        PUBLIC_APP_URL: "http://localhost:3000",
+        ENABLE_PAID_ENROLLMENT: "true",
+        STRIPE_WEBHOOK_SECRET: "whsec_secret_value",
+        AUTH_SESSION_SECRET: "session-secret-value",
+        TRANSACTIONAL_EMAIL_API_URL: "https://email-provider.example.com/send",
+        TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value",
+        SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
+        PRACTICE_SEAT_ADMIN_TOKEN: "redacted-practice-token",
+        DATABASE_URL: "redacted-database-url",
+        MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
+        MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
+        MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
+        MODULE_ONE_CLINICAL_APPROVED_VERSION: "module-one-v1",
+        MODULE_ONE_CLINICAL_REVIEW_APPROVED: "true",
+      },
+      databaseReadiness: {
+        schemaVerified: false,
+        requiredTables: ["commerce_purchases", "auth_users"],
+        checkedTableCount: 2,
+        missingTables: ["auth_users"],
+        checkFailed: false,
+      },
+    });
+
+    expect(report.readyForPaidLaunch).toBe(false);
+    expect(report.warnings).toContain(
+      "Launch database schema is not verified. Missing tables: auth_users."
+    );
+  });
+
   it("never includes actual secret values in warnings or missing variable lists", () => {
     const report = getRuntimeLaunchReadinessReport({
       env: {
@@ -131,6 +176,13 @@ describe("getRuntimeLaunchReadinessReport", () => {
         MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
         MODULE_ONE_CLINICAL_APPROVED_VERSION: "module-one-v1",
         MODULE_ONE_CLINICAL_REVIEW_APPROVED: "true",
+      },
+      databaseReadiness: {
+        schemaVerified: false,
+        requiredTables: ["commerce_purchases"],
+        checkedTableCount: 1,
+        missingTables: ["commerce_purchases"],
+        checkFailed: false,
       },
     });
 

@@ -13,6 +13,10 @@ import {
   type ClinicalReviewPacket,
 } from "../../../shared/course/clinicalReviewPacket";
 import {
+  unverifiedLaunchDatabaseReadiness,
+  type LaunchDatabaseReadinessStatus,
+} from "../db/launchDatabaseReadiness";
+import {
   getAuthEnvironmentStatus,
   getClinicalReviewEnvironmentStatus,
   getCommerceEnvironmentStatus,
@@ -28,6 +32,7 @@ import {
 
 export interface RuntimeLaunchReadinessInput {
   env?: EnvironmentMap;
+  databaseReadiness?: LaunchDatabaseReadinessStatus;
   now?: () => string;
 }
 
@@ -40,6 +45,7 @@ export interface RuntimeLaunchReadinessReport {
   auth: AuthEnvironmentStatus;
   practiceSeatAdmin: PracticeSeatEnvironmentStatus;
   database: DatabaseEnvironmentStatus;
+  databaseReadiness: LaunchDatabaseReadinessStatus;
   clinicalReview: ClinicalReviewEnvironmentStatus;
   warnings: string[];
   launchActions: LaunchActionItem[];
@@ -71,6 +77,7 @@ function getRuntimeLaunchChecklist(
 
 export function getRuntimeLaunchReadinessReport({
   env = process.env,
+  databaseReadiness = unverifiedLaunchDatabaseReadiness,
   now = () => new Date().toISOString(),
 }: RuntimeLaunchReadinessInput = {}): RuntimeLaunchReadinessReport {
   const clinicalReview = getClinicalReviewEnvironmentStatus(env);
@@ -95,6 +102,12 @@ export function getRuntimeLaunchReadinessReport({
       practiceSeatAdmin.missingPracticeSeatAdminVariables
     ),
     formatMissingWarning("Database", database.missingDatabaseVariables),
+    database.databaseConfigured && databaseReadiness.checkFailed
+      ? "Launch database schema check failed. Confirm the database is reachable and run pnpm db:setup."
+      : null,
+    database.databaseConfigured && !databaseReadiness.schemaVerified
+      ? `Launch database schema is not verified. Missing tables: ${databaseReadiness.missingTables.join(", ")}.`
+      : null,
     clinicalReview.moduleOneReviewApproved
       ? null
       : "Module 1 clinical review signoff is missing or not approved.",
@@ -116,13 +129,15 @@ export function getRuntimeLaunchReadinessReport({
       commerce.webhookConfigured &&
       auth.passwordlessConfigured &&
       practiceSeatAdmin.practiceSeatAdminConfigured &&
-      database.databaseConfigured,
+      database.databaseConfigured &&
+      databaseReadiness.schemaVerified,
     staticSummary,
     launchChecklist,
     commerce,
     auth,
     practiceSeatAdmin,
     database,
+    databaseReadiness,
     clinicalReview,
     warnings,
     launchActions: getRemainingLaunchActions(),

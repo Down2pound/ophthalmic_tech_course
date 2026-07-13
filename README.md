@@ -159,7 +159,9 @@ Stripe key values. It also includes the ordered launch action plan and Module 1
 clinical review packet so reviewers can see exactly what still needs signoff.
 When the Module 1 clinical signoff environment values are present and
 `MODULE_ONE_CLINICAL_REVIEW_APPROVED=true`, the clinical review launch gate is
-marked ready in the runtime report.
+marked ready in the runtime report. When `DATABASE_URL` is configured, the same
+endpoint checks that the required launch database tables exist before paid
+launch can be marked ready.
 
 `GET /api/launch/clinical-review-packet.md` downloads a Markdown packet with
 Module 1 lesson bodies, scope notes, sources, review questions, and signoff
@@ -249,7 +251,8 @@ pnpm db:setup
 Then verify:
 
 - `GET /api/health` returns `ok: true`.
-- `GET /api/launch/readiness` shows no missing environment variables.
+- `GET /api/launch/readiness` shows no missing environment variables and
+  reports the launch database schema as verified.
 - Stripe test checkout creates a durable enrollment through the webhook.
 - A learner can sign in, open Module 1, and submit the protected quiz.
 

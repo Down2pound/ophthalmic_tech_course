@@ -195,7 +195,7 @@ export default function LaunchReadiness() {
             )}
 
             {runtimeReport && (
-              <div className="mt-5 grid gap-3 md:grid-cols-4 xl:grid-cols-7">
+              <div className="mt-5 grid gap-3 md:grid-cols-4 xl:grid-cols-8">
                 <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
                   <p className="text-sm font-semibold text-slate-700">
                     Clinical review
@@ -258,6 +258,16 @@ export default function LaunchReadiness() {
                 </div>
                 <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
                   <p className="text-sm font-semibold text-slate-700">
+                    Database schema
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {runtimeReport.databaseReadiness.schemaVerified
+                      ? `${runtimeReport.databaseReadiness.checkedTableCount} tables verified`
+                      : `Missing ${runtimeReport.databaseReadiness.missingTables.length} table(s)`}
+                  </p>
+                </div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-sm font-semibold text-slate-700">
                     Paid enrollment
                   </p>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -267,7 +277,7 @@ export default function LaunchReadiness() {
                   </p>
                 </div>
                 {runtimeReport.warnings.length > 0 && (
-                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-4 xl:col-span-7">
+                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-4 xl:col-span-8">
                     <p className="text-sm font-semibold text-amber-950">
                       Runtime warnings
                     </p>

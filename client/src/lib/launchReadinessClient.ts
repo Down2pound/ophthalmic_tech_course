@@ -33,6 +33,13 @@ export interface RuntimeLaunchReadinessReport {
     databaseConfigured: boolean;
     missingDatabaseVariables: string[];
   };
+  databaseReadiness: {
+    schemaVerified: boolean;
+    requiredTables: string[];
+    checkedTableCount: number;
+    missingTables: string[];
+    checkFailed: boolean;
+  };
   clinicalReview: {
     moduleOneReviewConfigured: boolean;
     moduleOneReviewApproved: boolean;

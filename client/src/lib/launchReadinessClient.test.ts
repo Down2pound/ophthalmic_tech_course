@@ -39,6 +39,13 @@ const runtimeReport = {
     databaseConfigured: false,
     missingDatabaseVariables: ["DATABASE_URL"],
   },
+  databaseReadiness: {
+    schemaVerified: false,
+    requiredTables: ["commerce_purchases"],
+    checkedTableCount: 0,
+    missingTables: ["commerce_purchases"],
+    checkFailed: false,
+  },
   clinicalReview: {
     moduleOneReviewConfigured: false,
     moduleOneReviewApproved: false,
