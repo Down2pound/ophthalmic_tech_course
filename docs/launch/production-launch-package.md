@@ -35,6 +35,8 @@ For production domain, sitemap, and shared-link setup, use
 `docs/launch/domain-and-sharing-guide.md`.
 If a work computer blocks tests or launch commands, use
 `docs/launch/home-pc-runbook.md`.
+For the short home-PC command list, use
+`docs/launch/home-pc-command-cheatsheet.md`.
 For first-customer outreach, sales scripts, and feedback tracking, use
 `docs/launch/first-customers-sales-packet.md`.
 For first paid buyer receipt, access, and welcome checks, use
@@ -226,6 +228,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/deployment-guide.md`
 - `docs/launch/domain-and-sharing-guide.md`
 - `docs/launch/home-pc-runbook.md`
+- `docs/launch/home-pc-command-cheatsheet.md`
 - `docs/launch/first-customers-sales-packet.md`
 - `docs/launch/first-buyer-fulfillment-checklist.md`
 - `docs/launch/revenue-and-sales-tracker-template.md`

@@ -92,6 +92,7 @@ describe("createLaunchEvidenceBundle", () => {
       "deployment-guide.md",
       "domain-and-sharing-guide.md",
       "home-pc-runbook.md",
+      "home-pc-command-cheatsheet.md",
       "first-customers-sales-packet.md",
       "first-buyer-fulfillment-checklist.md",
       "revenue-and-sales-tracker-template.md",
@@ -130,6 +131,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const homePcRunbook = await readFile(
       path.join(result.outputDir, "home-pc-runbook.md"),
+      "utf8"
+    );
+    const homePcCommandCheatsheet = await readFile(
+      path.join(result.outputDir, "home-pc-command-cheatsheet.md"),
       "utf8"
     );
     const firstCustomersSalesPacket = await readFile(
@@ -192,6 +197,15 @@ describe("createLaunchEvidenceBundle", () => {
     expect(homePcRunbook).toContain("OptiTech Academy Home PC Runbook");
     expect(homePcRunbook).toContain("spawn EPERM");
     expect(homePcRunbook).toContain("pnpm launch:preflight");
+    expect(homePcCommandCheatsheet).toContain(
+      "OptiTech Academy Home PC Command Cheat Sheet"
+    );
+    expect(homePcCommandCheatsheet).toContain(
+      "LAUNCH_SMOKE_ALLOW_NOT_READY=true"
+    );
+    expect(homePcCommandCheatsheet).toContain("pnpm db:setup");
+    expect(homePcCommandCheatsheet).not.toContain("sk_test_");
+    expect(homePcCommandCheatsheet).not.toContain("whsec_");
     expect(firstCustomersSalesPacket).toContain(
       "OptiTech Academy First Customers Sales Packet"
     );

@@ -40,6 +40,7 @@ function renderReadme({
     "- `deployment-guide.md`: beginner-friendly production setup recipe.",
     "- `domain-and-sharing-guide.md`: production URL, sitemap, and shared-link setup recipe.",
     "- `home-pc-runbook.md`: beginner-friendly fallback for admin-blocked work computers.",
+    "- `home-pc-command-cheatsheet.md`: short command list for finishing checks on a home PC.",
     "- `first-customers-sales-packet.md`: first-buyer outreach scripts and feedback tracker.",
     "- `first-buyer-fulfillment-checklist.md`: first paid buyer receipt, access, and welcome checklist.",
     "- `revenue-and-sales-tracker-template.md`: safe lead, purchase, support, and weekly revenue tracker.",
@@ -87,6 +88,7 @@ export async function createLaunchEvidenceBundle({
     "deployment-guide.md",
     "domain-and-sharing-guide.md",
     "home-pc-runbook.md",
+    "home-pc-command-cheatsheet.md",
     "first-customers-sales-packet.md",
     "first-buyer-fulfillment-checklist.md",
     "revenue-and-sales-tracker-template.md",
@@ -117,6 +119,10 @@ export async function createLaunchEvidenceBundle({
   );
   const homePcRunbook = await readFile(
     path.resolve(projectRoot, "docs/launch/home-pc-runbook.md"),
+    "utf8"
+  );
+  const homePcCommandCheatsheet = await readFile(
+    path.resolve(projectRoot, "docs/launch/home-pc-command-cheatsheet.md"),
     "utf8"
   );
   const firstCustomersSalesPacket = await readFile(
@@ -177,6 +183,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "home-pc-runbook.md"),
     homePcRunbook
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "home-pc-command-cheatsheet.md"),
+    homePcCommandCheatsheet
   );
   await writeFile(
     path.join(resolvedOutputDir, "first-customers-sales-packet.md"),
