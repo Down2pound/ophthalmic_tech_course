@@ -1,9 +1,13 @@
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { runDeploymentSmokeTest } from "./deploymentSmokeTest";
+import { renderDeploymentSmokeReport } from "./deploymentSmokeTest";
 
 async function main() {
   const baseUrl =
     process.env.LAUNCH_BASE_URL || process.env.PUBLIC_APP_URL || "";
   const report = await runDeploymentSmokeTest({ baseUrl });
+  const renderedReport = renderDeploymentSmokeReport(report);
 
   console.log(`Deployment smoke test for ${report.baseUrl}`);
   console.log(`- Health: ${report.healthOk ? "ok" : "failed"}`);
@@ -29,6 +33,13 @@ async function main() {
     for (const action of report.launchActions.slice(0, 3)) {
       console.log(`  - ${action.title}: ${action.action}`);
     }
+  }
+
+  if (process.env.LAUNCH_SMOKE_REPORT_PATH) {
+    const reportPath = path.resolve(process.env.LAUNCH_SMOKE_REPORT_PATH);
+    await mkdir(path.dirname(reportPath), { recursive: true });
+    await writeFile(reportPath, renderedReport);
+    console.log(`- Report written: ${reportPath}`);
   }
 
   if (!report.healthOk || !report.readyForPaidLaunch) {
