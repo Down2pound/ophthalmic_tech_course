@@ -62,12 +62,12 @@ export function setupCheckoutRoutes(router: Router) {
 
       const offer = getCheckoutOfferById(offerId);
       const baseUrl = getCheckoutBaseUrl(req.get("origin"));
-      const cancelPath = isPracticePackOffer(offer)
-        ? "/practice-packs"
-        : "/checkout";
+      const isPracticePurchase = isPracticePackOffer(offer);
+      const successPath = isPracticePurchase ? "/practice-packs" : "/learn";
+      const cancelPath = isPracticePurchase ? "/practice-packs" : "/checkout";
       const params = buildStripeCheckoutParams(
         {
-          successUrl: `${baseUrl}/learn?checkout=success&offer=${encodeURIComponent(
+          successUrl: `${baseUrl}${successPath}?checkout=success&offer=${encodeURIComponent(
             offer.id
           )}`,
           cancelUrl: `${baseUrl}${cancelPath}?checkout=cancelled`,

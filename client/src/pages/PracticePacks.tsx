@@ -17,6 +17,7 @@ import {
 } from "@shared/commerce/offers";
 import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
 import { buyerSupportContact } from "@shared/commerce/policies";
+import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import {
   practiceBuyerSalesPath,
   practiceValueProofPoints,
@@ -31,6 +32,10 @@ export default function PracticePacks() {
   );
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const checkoutStatus =
+    typeof window === "undefined"
+      ? null
+      : getCheckoutStatus(window.location.search);
 
   const startCheckout = async (offerId: string) => {
     setActiveOfferId(offerId);
@@ -106,6 +111,27 @@ export default function PracticePacks() {
 
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1fr_340px]">
         <section className="grid gap-5 md:grid-cols-2">
+          {checkoutStatus && (
+            <Card
+              className={`border p-5 shadow-sm md:col-span-2 ${
+                checkoutStatus.tone === "success"
+                  ? "border-green-200 bg-green-50 text-green-950"
+                  : "border-blue-200 bg-blue-50 text-blue-950"
+              }`}
+            >
+              <h2 className="text-xl font-bold">{checkoutStatus.title}</h2>
+              <p className="mt-2 leading-7">{checkoutStatus.message}</p>
+              <ul className="mt-3 space-y-1 text-sm leading-6">
+                {checkoutStatus.nextSteps.map(step => (
+                  <li key={step} className="flex gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
+
           <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm md:col-span-2">
             <h2 className="text-2xl font-bold">
               What buying for a practice looks like
