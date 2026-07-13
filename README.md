@@ -251,6 +251,7 @@ Use `docs/launch/deployment-guide.md` as the beginner-friendly setup path and
 checklist before opening paid enrollment.
 Use `docs/launch/stripe-setup-guide.md` for the Stripe checkout and webhook
 setup steps.
+Use `docs/launch/email-setup-guide.md` for passwordless sign-in email setup.
 
 ```bash
 pnpm build

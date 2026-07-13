@@ -32,6 +32,8 @@ For a step-by-step beginner deployment recipe, use
 `docs/launch/deployment-guide.md`.
 
 For Stripe-specific setup, use `docs/launch/stripe-setup-guide.md`.
+For passwordless sign-in email setup, use
+`docs/launch/email-setup-guide.md`.
 
 Run this after the app is online:
 
@@ -198,6 +200,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/production-launch-package.md`
 - `docs/launch/deployment-guide.md`
 - `docs/launch/stripe-setup-guide.md`
+- `docs/launch/email-setup-guide.md`
 - `first-sale-support-runbook.md` from the generated launch evidence folder
 - Downloaded `/api/launch/clinical-review-packet.md`
 - Clinical reviewer signoff evidence

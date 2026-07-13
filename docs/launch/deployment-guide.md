@@ -123,6 +123,9 @@ database is ready.
 
 ## Email Setup
 
+Use `docs/launch/email-setup-guide.md` as the detailed passwordless email
+recipe.
+
 Set up a transactional email provider and add:
 
 ```text
