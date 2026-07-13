@@ -14,6 +14,12 @@ describe("renderManualQaTemplate", () => {
     expect(template).toContain("Paid Launch Evidence Details");
     expect(template).toContain("Stripe checkout session ID:");
     expect(template).toContain("Webhook delivery status:");
+    expect(template).toContain("Passwordless Email Delivery");
+    expect(template).toContain(
+      "Sign-in email arrived without exposing raw token"
+    );
+    expect(template).toContain("Custom Practice Inquiry Test");
+    expect(template).toContain("Larger-practice inquiry path is visible");
     expect(template).toContain("Sitemap URL or generated sitemap path:");
     expect(template).toContain("ENABLE_PAID_ENROLLMENT stayed false");
     expect(template).toContain("Do not paste card numbers");

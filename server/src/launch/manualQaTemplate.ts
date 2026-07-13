@@ -55,6 +55,24 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     "",
     "Enrollment/access result:",
     "",
+    "### Passwordless Email Delivery",
+    "",
+    "Email provider used:",
+    "",
+    "Sender address verified:",
+    "",
+    "Test learner inbox:",
+    "",
+    "Delivery result:",
+    "",
+    renderChecklistItem(
+      "Sign-in email arrived without exposing raw token in support notes"
+    ),
+    renderChecklistItem(
+      "Sign-in link opened the deployed app and created a session"
+    ),
+    renderChecklistItem("Failed or expired sign-in link showed a safe error"),
+    "",
     "### Stripe Practice Pack Test",
     "",
     "Stripe checkout session ID:",
@@ -68,6 +86,22 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     "Seat pack size purchased:",
     "",
     "Seat assignment result:",
+    "",
+    "### Custom Practice Inquiry Test",
+    "",
+    "Inquiry email address:",
+    "",
+    "Inquiry subject:",
+    "",
+    "Practice size or rollout note:",
+    "",
+    renderChecklistItem("Larger-practice inquiry path is visible on `/practice-packs`"),
+    renderChecklistItem(
+      "Inquiry message does not include patient information or secrets"
+    ),
+    renderChecklistItem(
+      "Custom inquiry is treated as a conversation, not an automatic purchase agreement"
+    ),
     "",
     "### Webhook Failure Handling",
     "",
