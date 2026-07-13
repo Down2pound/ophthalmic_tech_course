@@ -25,6 +25,7 @@ describe("renderManualQaTemplate", () => {
     expect(template).toContain(
       "Learner could request a fresh sign-in link from the Learn page access panel"
     );
+    expect(template).toContain("returned 429 with Retry-After");
     expect(template).toContain("Practice checkout success return URL:");
     expect(template).toContain(
       "Practice success return showed practice pack payment received next steps"

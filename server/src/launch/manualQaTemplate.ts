@@ -86,6 +86,9 @@ function renderPaidLaunchEvidencePrompts(): string[] {
       "Learner could request a fresh sign-in link from the Learn page access panel"
     ),
     renderChecklistItem("Failed or expired sign-in link showed a safe error"),
+    renderChecklistItem(
+      "Repeated sign-in requests eventually returned 429 with Retry-After"
+    ),
     "",
     "### Stripe Practice Pack Test",
     "",
@@ -130,6 +133,9 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     renderChecklistItem(
       "Custom inquiry is treated as a conversation, not an automatic purchase agreement"
     ),
+    renderChecklistItem(
+      "Repeated practice inquiry submissions eventually returned 429 with Retry-After"
+    ),
     "",
     "### Webhook Failure Handling",
     "",
@@ -138,6 +144,9 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     ),
     renderChecklistItem(
       "Completed checkout event with missing purchase data does not get marked as successfully fulfilled"
+    ),
+    renderChecklistItem(
+      "Repeated checkout session starts eventually returned 429 with Retry-After"
     ),
     "",
     "Notes:",

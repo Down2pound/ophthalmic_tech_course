@@ -18,6 +18,7 @@ async function startServer() {
   const server = createServer(app);
   const apiRouter = express.Router();
 
+  app.set("trust proxy", 1);
   app.disable("x-powered-by");
   app.use(applySecurityHeaders);
   setupStripeWebhookRoute(app);

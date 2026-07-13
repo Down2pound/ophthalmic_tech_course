@@ -27,6 +27,7 @@ import {
   getAuthEnvironmentStatus,
   getPracticeSeatEnvironmentStatus,
 } from "../config/environment";
+import { createRateLimitMiddleware } from "../config/rateLimit";
 import { getPostgresPool } from "../db/postgres";
 import {
   getEnrollmentStore,
@@ -38,6 +39,12 @@ import { getPracticeInquiryStore } from "./checkout";
 interface PasswordlessStartRequestBody {
   email?: string;
 }
+
+const passwordlessStartRateLimit = createRateLimitMiddleware({
+  label: "passwordless-start",
+  windowMs: 15 * 60 * 1000,
+  maxRequests: 5,
+});
 
 interface PracticeSeatAssignmentRequestBody {
   learnerEmail?: string;
@@ -157,6 +164,7 @@ function authorizePracticeSeatAdminRequest(
 export function setupAuthRoutes(router: Router) {
   router.post(
     "/auth/passwordless/start",
+    passwordlessStartRateLimit,
     async (req: Request, res: Response) => {
       const environmentStatus = getAuthEnvironmentStatus();
 

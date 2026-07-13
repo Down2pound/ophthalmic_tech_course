@@ -130,6 +130,20 @@ confirm the live site response includes:
 
 The response should not include `X-Powered-By`.
 
+## Public Endpoint Rate Limits
+
+The app applies simple abuse protection to public form-style endpoints:
+
+- Passwordless sign-in start: 5 requests per 15 minutes per client.
+- Checkout session start: 10 requests per 15 minutes per client.
+- Practice inquiry form: 5 requests per hour per client.
+
+If one of these endpoints returns `429 Too Many Requests`, wait for the
+`Retry-After` time before testing again.
+
+The server trusts one hosting proxy hop so these limits use the client IP
+reported by common managed hosts.
+
 ## Stripe Setup
 
 Use `docs/launch/stripe-setup-guide.md` as the detailed Stripe recipe.
