@@ -42,6 +42,7 @@ function renderReadme({
     "- `email-setup-guide.md`: passwordless sign-in email setup recipe.",
     "- `database-setup-guide.md`: managed PostgreSQL setup recipe.",
     "- `clinical-review-guide.md`: Module 1 review and signoff recipe.",
+    "- `go-live-checklist.md`: final launch-day sequence.",
     "- `production-env-checklist.md`: safe fill-in checklist for host dashboard settings.",
     "- `launch-doctor-report.md`: human-readable paid launch preflight report.",
     "- `manual-launch-qa-evidence.md`: safe template for Stripe, learner-flow, practice-pack, browser, and accessibility QA notes.",
@@ -83,6 +84,7 @@ export async function createLaunchEvidenceBundle({
     "email-setup-guide.md",
     "database-setup-guide.md",
     "clinical-review-guide.md",
+    "go-live-checklist.md",
     "production-env-checklist.md",
     "launch-doctor-report.md",
     "manual-launch-qa-evidence.md",
@@ -115,6 +117,10 @@ export async function createLaunchEvidenceBundle({
     path.resolve(projectRoot, "docs/launch/clinical-review-guide.md"),
     "utf8"
   );
+  const goLiveChecklist = await readFile(
+    path.resolve(projectRoot, "docs/launch/go-live-checklist.md"),
+    "utf8"
+  );
 
   await writeFile(
     path.join(resolvedOutputDir, "README.md"),
@@ -143,6 +149,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "clinical-review-guide.md"),
     clinicalReviewGuide
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "go-live-checklist.md"),
+    goLiveChecklist
   );
   await writeFile(
     path.join(resolvedOutputDir, "production-env-checklist.md"),

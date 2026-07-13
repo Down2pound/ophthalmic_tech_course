@@ -254,6 +254,7 @@ setup steps.
 Use `docs/launch/email-setup-guide.md` for passwordless sign-in email setup.
 Use `docs/launch/database-setup-guide.md` for managed PostgreSQL setup.
 Use `docs/launch/clinical-review-guide.md` for Module 1 clinical signoff.
+Use `docs/launch/go-live-checklist.md` as the final launch-day sequence.
 
 ```bash
 pnpm build

@@ -37,6 +37,7 @@ For passwordless sign-in email setup, use
 For managed PostgreSQL setup, use `docs/launch/database-setup-guide.md`.
 For Module 1 clinical review setup, use
 `docs/launch/clinical-review-guide.md`.
+For the final launch-day sequence, use `docs/launch/go-live-checklist.md`.
 
 Run this after the app is online:
 
@@ -206,6 +207,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/email-setup-guide.md`
 - `docs/launch/database-setup-guide.md`
 - `docs/launch/clinical-review-guide.md`
+- `docs/launch/go-live-checklist.md`
 - `first-sale-support-runbook.md` from the generated launch evidence folder
 - Downloaded `/api/launch/clinical-review-packet.md`
 - Clinical reviewer signoff evidence
