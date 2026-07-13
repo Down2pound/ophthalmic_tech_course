@@ -12,8 +12,11 @@ describe("getModuleOneKnowledgeCheck", () => {
     expect(quiz.id).toBe("quiz-entering-ophthalmic-care");
     expect(quiz.questions).toHaveLength(4);
     expect(serializedQuiz).not.toContain("correctAnswer");
-    expect(serializedQuiz).not.toContain(
-      "A clinical team member who gathers accurate information"
+    expect(
+      quiz.questions.every(question => !("correctAnswer" in question))
+    ).toBe(true);
+    expect(quiz.questions[0].options).toContain(
+      "A clinical team member who gathers accurate information and performs starting tests"
     );
   });
 });

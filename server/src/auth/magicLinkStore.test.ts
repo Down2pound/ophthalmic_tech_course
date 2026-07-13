@@ -24,32 +24,36 @@ describe("createStoredMagicLinkRecord", () => {
 });
 
 describe("createInMemoryMagicLinkStore", () => {
-  it("stores one magic link per id", () => {
+  it("stores one magic link per id", async () => {
     const store = createInMemoryMagicLinkStore();
 
-    expect(store.storeMagicLink(magicLinkRecord).created).toBe(true);
-    expect(store.storeMagicLink(magicLinkRecord)).toEqual({
+    expect((await store.storeMagicLink(magicLinkRecord)).created).toBe(true);
+    expect(await store.storeMagicLink(magicLinkRecord)).toEqual({
       created: false,
       magicLink: {
         ...magicLinkRecord,
         email: "learner@example.com",
       },
     });
-    expect(store.listMagicLinks()).toHaveLength(1);
+    expect(await store.listMagicLinks()).toHaveLength(1);
   });
 
-  it("finds magic links by normalized email and token hash", () => {
+  it("finds magic links by normalized email and token hash", async () => {
     const store = createInMemoryMagicLinkStore();
 
-    store.storeMagicLink(magicLinkRecord);
+    await store.storeMagicLink(magicLinkRecord);
 
-    expect(store.findMagicLinksByEmail(" learner@example.com ")).toHaveLength(
-      1
-    );
-    expect(store.findMagicLinkByTokenHash("stored-token-hash")).toMatchObject({
+    expect(
+      await store.findMagicLinksByEmail(" learner@example.com ")
+    ).toHaveLength(1);
+    expect(
+      await store.findMagicLinkByTokenHash("stored-token-hash")
+    ).toMatchObject({
       id: "magic_link_123",
       email: "learner@example.com",
     });
-    expect(store.findMagicLinkByTokenHash("missing-token-hash")).toBeUndefined();
+    expect(
+      await store.findMagicLinkByTokenHash("missing-token-hash")
+    ).toBeUndefined();
   });
 });

@@ -171,6 +171,8 @@ durable. Current schema contracts live in:
   seat tracking and assignment interface, including the local in-memory fallback.
 - `server/src/auth/authSchema.ts` for passwordless users, magic-link tokens,
   and sessions.
+- `server/src/auth/postgresAuthStore.ts` for PostgreSQL-backed magic-link and
+  session repositories.
 - `server/src/auth/magicLinkToken.ts` for creating raw email tokens while
   storing only SHA-256 token hashes.
 - `server/src/auth/magicLinkEmail.ts` for sending magic-link emails through a
@@ -193,6 +195,7 @@ durable. Current schema contracts live in:
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.
 
-These files are blueprints. They still need to be run through the production
-migration tool and wired to real database repositories before selling durable
-learner access.
+These files are blueprints plus repository wiring. They still need to be run
+through the production migration tool, pointed at managed PostgreSQL with
+`DATABASE_URL`, and verified in the deployed app before selling durable learner
+access.

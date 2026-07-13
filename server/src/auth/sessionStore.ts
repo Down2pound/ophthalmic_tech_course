@@ -1,4 +1,5 @@
 import { createHash, randomBytes as nodeRandomBytes } from "node:crypto";
+import type { AuthStoreResult } from "./magicLinkStore";
 
 export interface AuthSessionRecord {
   id: string;
@@ -12,9 +13,11 @@ export interface AuthSessionRecord {
 export interface AuthSessionStore {
   storeSession(
     session: AuthSessionRecord
-  ): { created: boolean; session: AuthSessionRecord };
-  listSessions(): AuthSessionRecord[];
-  findSessionByHash(sessionHash: string): AuthSessionRecord | undefined;
+  ): AuthStoreResult<{ created: boolean; session: AuthSessionRecord }>;
+  listSessions(): AuthStoreResult<AuthSessionRecord[]>;
+  findSessionByHash(
+    sessionHash: string
+  ): AuthStoreResult<AuthSessionRecord | undefined>;
 }
 
 interface CreateAuthSessionInput {
@@ -88,7 +91,7 @@ export function createInMemoryAuthSessionStore(): AuthSessionStore {
     },
     findSessionByHash(sessionHash) {
       return Array.from(sessionsById.values()).find(
-        (session) => session.sessionHash === sessionHash
+        session => session.sessionHash === sessionHash
       );
     },
   };

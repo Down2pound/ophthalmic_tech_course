@@ -43,7 +43,7 @@ export async function authorizeLearnerSession({
     };
   }
 
-  const session = sessionStore.findSessionByHash(
+  const session = await sessionStore.findSessionByHash(
     hashSessionToken(rawSessionToken)
   );
 

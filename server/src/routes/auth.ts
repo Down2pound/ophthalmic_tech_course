@@ -2,16 +2,27 @@ import type { Request, Response, Router } from "express";
 import { COOKIE_NAME } from "../../../shared/const";
 import { consumeMagicLink } from "../auth/consumeMagicLink";
 import { sendMagicLinkEmail } from "../auth/magicLinkEmail";
-import { createInMemoryMagicLinkStore } from "../auth/magicLinkStore";
+import {
+  createInMemoryMagicLinkStore,
+  type MagicLinkStore,
+} from "../auth/magicLinkStore";
 import { preparePasswordlessSignInResponse } from "../auth/passwordlessSignInResponse";
+import {
+  createPostgresAuthSessionStore,
+  createPostgresMagicLinkStore,
+} from "../auth/postgresAuthStore";
 import { authorizeLearnerSession } from "../auth/sessionAccess";
-import { createInMemoryAuthSessionStore } from "../auth/sessionStore";
+import {
+  createInMemoryAuthSessionStore,
+  type AuthSessionStore,
+} from "../auth/sessionStore";
 import { assignPracticeSeatToLearner } from "../commerce/practiceSeatAssignment";
 import { getCheckoutBaseUrl } from "../commerce/stripeCheckout";
 import {
   getAuthEnvironmentStatus,
   getPracticeSeatEnvironmentStatus,
 } from "../config/environment";
+import { getPostgresPool } from "../db/postgres";
 import { getEnrollmentStore, getPracticeSeatPackStore } from "./stripeWebhook";
 
 interface PasswordlessStartRequestBody {
@@ -26,8 +37,26 @@ type PracticeSeatAdminAuthorization =
   | { authorized: true }
   | { authorized: false; status: number; payload: Record<string, unknown> };
 
-const magicLinkStore = createInMemoryMagicLinkStore();
-const sessionStore = createInMemoryAuthSessionStore();
+function createAuthStores(): {
+  magicLinkStore: MagicLinkStore;
+  sessionStore: AuthSessionStore;
+} {
+  const postgresPool = getPostgresPool();
+
+  if (postgresPool) {
+    return {
+      magicLinkStore: createPostgresMagicLinkStore(postgresPool),
+      sessionStore: createPostgresAuthSessionStore(postgresPool),
+    };
+  }
+
+  return {
+    magicLinkStore: createInMemoryMagicLinkStore(),
+    sessionStore: createInMemoryAuthSessionStore(),
+  };
+}
+
+const { magicLinkStore, sessionStore } = createAuthStores();
 
 function getCookieValue(cookieHeader: string | undefined, name: string) {
   if (!cookieHeader) return "";
@@ -102,7 +131,9 @@ export function setupAuthRoutes(router: Router) {
           appBaseUrl: getCheckoutBaseUrl(req.get("origin")),
         });
 
-        magicLinkStore.storeMagicLink(prepared.signInRequest.magicLinkRecord);
+        await magicLinkStore.storeMagicLink(
+          prepared.signInRequest.magicLinkRecord
+        );
         await sendMagicLinkEmail({
           payload: prepared.signInRequest.emailPayload,
           from: process.env.SIGN_IN_FROM_EMAIL ?? "",
@@ -123,9 +154,9 @@ export function setupAuthRoutes(router: Router) {
     }
   );
 
-  router.get("/auth/callback", (req: Request, res: Response) => {
+  router.get("/auth/callback", async (req: Request, res: Response) => {
     const token = typeof req.query.token === "string" ? req.query.token : "";
-    const result = consumeMagicLink({
+    const result = await consumeMagicLink({
       rawToken: token,
       magicLinkStore,
       sessionStore,

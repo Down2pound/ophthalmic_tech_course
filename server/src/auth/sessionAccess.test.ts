@@ -11,7 +11,7 @@ describe("authorizeLearnerSession", () => {
     const sessionStore = createInMemoryAuthSessionStore();
     const enrollmentStore = createInMemoryEnrollmentStore();
 
-    sessionStore.storeSession(
+    await sessionStore.storeSession(
       createAuthSession({
         email: "learner@example.com",
         rawSessionToken: "private-session-token",
@@ -19,7 +19,7 @@ describe("authorizeLearnerSession", () => {
         createdAt: "2026-07-02T12:00:00.000Z",
       })
     );
-    enrollmentStore.provisionEnrollment({
+    await enrollmentStore.provisionEnrollment({
       enrollmentId: "enrollment_123",
       checkoutSessionId: "cs_123",
       offerId: "founding-learner",
@@ -50,7 +50,7 @@ describe("authorizeLearnerSession", () => {
     const sessionStore = createInMemoryAuthSessionStore();
     const enrollmentStore = createInMemoryEnrollmentStore();
 
-    sessionStore.storeSession(
+    await sessionStore.storeSession(
       createAuthSession({
         email: "learner@example.com",
         rawSessionToken: "private-session-token",

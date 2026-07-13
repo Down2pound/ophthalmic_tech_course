@@ -1,16 +1,20 @@
 import type { MagicLinkRecord } from "./passwordlessSignIn";
 
+export type AuthStoreResult<T> = T | Promise<T>;
+
 export interface MagicLinkStore {
   storeMagicLink(
     magicLink: MagicLinkRecord
-  ): { created: boolean; magicLink: MagicLinkRecord };
-  listMagicLinks(): MagicLinkRecord[];
-  findMagicLinksByEmail(email: string): MagicLinkRecord[];
-  findMagicLinkByTokenHash(tokenHash: string): MagicLinkRecord | undefined;
+  ): AuthStoreResult<{ created: boolean; magicLink: MagicLinkRecord }>;
+  listMagicLinks(): AuthStoreResult<MagicLinkRecord[]>;
+  findMagicLinksByEmail(email: string): AuthStoreResult<MagicLinkRecord[]>;
+  findMagicLinkByTokenHash(
+    tokenHash: string
+  ): AuthStoreResult<MagicLinkRecord | undefined>;
   markMagicLinkConsumed(
     id: string,
     consumedAt: string
-  ): MagicLinkRecord | undefined;
+  ): AuthStoreResult<MagicLinkRecord | undefined>;
 }
 
 export function createStoredMagicLinkRecord(
@@ -45,12 +49,12 @@ export function createInMemoryMagicLinkStore(): MagicLinkStore {
       const normalizedEmail = email.trim().toLowerCase();
 
       return Array.from(magicLinksById.values()).filter(
-        (magicLink) => magicLink.email === normalizedEmail
+        magicLink => magicLink.email === normalizedEmail
       );
     },
     findMagicLinkByTokenHash(tokenHash) {
       return Array.from(magicLinksById.values()).find(
-        (magicLink) => magicLink.tokenHash === tokenHash
+        magicLink => magicLink.tokenHash === tokenHash
       );
     },
     markMagicLinkConsumed(id, consumedAt) {

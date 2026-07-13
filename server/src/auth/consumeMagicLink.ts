@@ -52,7 +52,7 @@ function createDefaultSessionId(): string {
   return `session_${randomUUID()}`;
 }
 
-export function consumeMagicLink({
+export async function consumeMagicLink({
   rawToken,
   magicLinkStore,
   sessionStore,
@@ -60,9 +60,9 @@ export function consumeMagicLink({
   createSessionRawToken = createRawSessionToken,
   createSessionId = createDefaultSessionId,
   secureCookie = process.env.NODE_ENV === "production",
-}: ConsumeMagicLinkInput): ConsumeMagicLinkResult {
+}: ConsumeMagicLinkInput): Promise<ConsumeMagicLinkResult> {
   const tokenHash = hashMagicLinkToken(rawToken);
-  const magicLink = magicLinkStore.findMagicLinkByTokenHash(tokenHash);
+  const magicLink = await magicLinkStore.findMagicLinkByTokenHash(tokenHash);
   const consumedAt = now();
 
   if (
@@ -82,8 +82,8 @@ export function consumeMagicLink({
     createdAt: consumedAt,
   });
 
-  magicLinkStore.markMagicLinkConsumed(magicLink.id, consumedAt);
-  sessionStore.storeSession(session);
+  await magicLinkStore.markMagicLinkConsumed(magicLink.id, consumedAt);
+  await sessionStore.storeSession(session);
 
   return {
     ok: true,
