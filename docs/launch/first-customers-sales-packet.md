@@ -9,15 +9,41 @@ packet is the script for inviting the first customers inside.
 
 ## Current Offers
 
-| Buyer | Offer | Price | Best Fit |
-| --- | --- | ---: | --- |
-| Individual learner | Founding Learner Access | `$199` | Career changers, medical assistants, and new techs who want ophthalmic foundations. |
-| Practice buyer | Five-Seat Practice Onboarding Pack | `$799` | Small practices training one hiring class or a few new team members. |
-| Practice buyer | Fifteen-Seat Practice Onboarding Pack | `$1,799` | Growing practices standardizing onboarding across locations, hires, or supervisors. |
-| Larger practice | Custom Practice Onboarding Conversation | Contact first | More than 15 seats, Spindel pilot training, or custom rollout planning. |
+| Buyer              | Offer                                   |         Price | Best Fit                                                                            |
+| ------------------ | --------------------------------------- | ------------: | ----------------------------------------------------------------------------------- |
+| Individual learner | Founding Learner Access                 |        `$199` | Career changers, medical assistants, and new techs who want ophthalmic foundations. |
+| Practice buyer     | Five-Seat Practice Onboarding Pack      |        `$799` | Small practices training one hiring class or a few new team members.                |
+| Practice buyer     | Fifteen-Seat Practice Onboarding Pack   |      `$1,799` | Growing practices standardizing onboarding across locations, hires, or supervisors. |
+| Larger practice    | Custom Practice Onboarding Conversation | Contact first | More than 15 seats, Spindel pilot training, or custom rollout planning.             |
 
 Do not promise certification, employment, promotion, clinical competency, exam
 success, income, or that the course replaces hands-on supervision.
+
+## Links To Send When The Site Is Live
+
+Replace `https://your-real-domain.example` with the final production domain:
+
+```text
+Individual learners: https://your-real-domain.example/checkout
+Practice buyers: https://your-real-domain.example/practice-packs
+Course overview: https://your-real-domain.example/
+Policies: https://your-real-domain.example/policies
+```
+
+Send the individual learner link to career changers, medical assistants, and
+new technicians buying for themselves. Send the practice pack link to managers,
+supervisors, owners, or training leads buying seats for a team.
+
+Do not send paid checkout links broadly until:
+
+- `/api/launch/readiness` reports paid launch readiness is complete.
+- The final deployment smoke test passes without
+  `LAUNCH_SMOKE_ALLOW_NOT_READY=true`.
+- A Stripe test purchase has created durable access.
+- Clinical review signoff is saved.
+
+If someone asks before paid enrollment is open, send the course overview or
+practice inquiry path instead of a checkout link.
 
 ## The First 10 Buyer Targets
 
@@ -27,18 +53,18 @@ the course.
 
 Track these 10 conversations:
 
-| # | Name / Practice | Buyer Type | Contact Date | Status | Notes |
-| --- | --- | --- | --- | --- | --- |
-| 1 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 2 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 3 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 4 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 5 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 6 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 7 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 8 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 9 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
-| 10 |  | Individual / Practice |  | Not contacted / Contacted / Interested / Bought / Not now |  |
+| #   | Name / Practice | Buyer Type            | Contact Date | Status                                                    | Notes |
+| --- | --------------- | --------------------- | ------------ | --------------------------------------------------------- | ----- |
+| 1   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 2   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 3   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 4   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 5   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 6   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 7   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 8   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 9   |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
+| 10  |                 | Individual / Practice |              | Not contacted / Contacted / Interested / Bought / Not now |       |
 
 Safe places to start:
 

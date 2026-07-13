@@ -247,6 +247,18 @@ describe("createLaunchEvidenceBundle", () => {
     expect(firstCustomersSalesPacket).toContain(
       "OptiTech Academy First Customers Sales Packet"
     );
+    expect(firstCustomersSalesPacket).toContain(
+      "Links To Send When The Site Is Live"
+    );
+    expect(firstCustomersSalesPacket).toContain(
+      "Individual learners: https://your-real-domain.example/checkout"
+    );
+    expect(firstCustomersSalesPacket).toContain(
+      "Practice buyers: https://your-real-domain.example/practice-packs"
+    );
+    expect(firstCustomersSalesPacket).toContain(
+      "LAUNCH_SMOKE_ALLOW_NOT_READY=true"
+    );
     expect(firstCustomersSalesPacket).toContain("Five seats for $799");
     expect(firstCustomersSalesPacket).toContain("Do not promise certification");
     expect(firstBuyerFulfillmentChecklist).toContain(
