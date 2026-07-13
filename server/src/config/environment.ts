@@ -23,6 +23,16 @@ export interface DatabaseEnvironmentStatus {
   missingDatabaseVariables: string[];
 }
 
+export interface ClinicalReviewEnvironmentStatus {
+  moduleOneReviewConfigured: boolean;
+  moduleOneReviewApproved: boolean;
+  missingModuleOneReviewVariables: string[];
+  reviewerName: string;
+  reviewerRole: string;
+  reviewDate: string;
+  approvedVersion: string;
+}
+
 export const checkoutEnvironmentVariables = [
   "STRIPE_SECRET_KEY",
   "PUBLIC_APP_URL",
@@ -44,6 +54,14 @@ export const practiceSeatAdminEnvironmentVariables = [
 ] as const;
 
 export const databaseEnvironmentVariables = ["DATABASE_URL"] as const;
+
+export const moduleOneClinicalReviewEnvironmentVariables = [
+  "MODULE_ONE_CLINICAL_REVIEWER_NAME",
+  "MODULE_ONE_CLINICAL_REVIEWER_ROLE",
+  "MODULE_ONE_CLINICAL_REVIEW_DATE",
+  "MODULE_ONE_CLINICAL_APPROVED_VERSION",
+  "MODULE_ONE_CLINICAL_REVIEW_APPROVED",
+] as const;
 
 export function isEnvironmentFlagEnabled(
   env: EnvironmentMap,
@@ -125,5 +143,29 @@ export function getDatabaseEnvironmentStatus(
   return {
     databaseConfigured: missingDatabaseVariables.length === 0,
     missingDatabaseVariables,
+  };
+}
+
+export function getClinicalReviewEnvironmentStatus(
+  env: EnvironmentMap = process.env
+): ClinicalReviewEnvironmentStatus {
+  const missingModuleOneReviewVariables = getMissingEnvironmentVariables(
+    env,
+    moduleOneClinicalReviewEnvironmentVariables
+  );
+  const moduleOneReviewApproved = isEnvironmentFlagEnabled(
+    env,
+    "MODULE_ONE_CLINICAL_REVIEW_APPROVED"
+  );
+
+  return {
+    moduleOneReviewConfigured: missingModuleOneReviewVariables.length === 0,
+    moduleOneReviewApproved:
+      missingModuleOneReviewVariables.length === 0 && moduleOneReviewApproved,
+    missingModuleOneReviewVariables,
+    reviewerName: env.MODULE_ONE_CLINICAL_REVIEWER_NAME?.trim() ?? "",
+    reviewerRole: env.MODULE_ONE_CLINICAL_REVIEWER_ROLE?.trim() ?? "",
+    reviewDate: env.MODULE_ONE_CLINICAL_REVIEW_DATE?.trim() ?? "",
+    approvedVersion: env.MODULE_ONE_CLINICAL_APPROVED_VERSION?.trim() ?? "",
   };
 }

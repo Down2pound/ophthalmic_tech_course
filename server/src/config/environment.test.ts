@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   getAuthEnvironmentStatus,
+  getClinicalReviewEnvironmentStatus,
   getCommerceEnvironmentStatus,
   getDatabaseEnvironmentStatus,
   getMissingEnvironmentVariables,
@@ -141,6 +142,58 @@ describe("getDatabaseEnvironmentStatus", () => {
     expect(getDatabaseEnvironmentStatus({})).toEqual({
       databaseConfigured: false,
       missingDatabaseVariables: ["DATABASE_URL"],
+    });
+  });
+});
+
+describe("getClinicalReviewEnvironmentStatus", () => {
+  it("marks Module 1 clinical review approved when required signoff values exist", () => {
+    expect(
+      getClinicalReviewEnvironmentStatus({
+        MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
+        MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
+        MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
+        MODULE_ONE_CLINICAL_APPROVED_VERSION: "module-one-v1",
+        MODULE_ONE_CLINICAL_REVIEW_APPROVED: "true",
+      })
+    ).toEqual({
+      moduleOneReviewConfigured: true,
+      moduleOneReviewApproved: true,
+      missingModuleOneReviewVariables: [],
+      reviewerName: "Dr. Reviewer",
+      reviewerRole: "Ophthalmologist",
+      reviewDate: "2026-07-13",
+      approvedVersion: "module-one-v1",
+    });
+  });
+
+  it("keeps Module 1 clinical review blocked when the approval switch is false", () => {
+    expect(
+      getClinicalReviewEnvironmentStatus({
+        MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
+        MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
+        MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
+        MODULE_ONE_CLINICAL_APPROVED_VERSION: "module-one-v1",
+        MODULE_ONE_CLINICAL_REVIEW_APPROVED: "false",
+      })
+    ).toMatchObject({
+      moduleOneReviewConfigured: true,
+      moduleOneReviewApproved: false,
+      missingModuleOneReviewVariables: [],
+    });
+  });
+
+  it("shows which Module 1 clinical review signoff values are missing", () => {
+    expect(getClinicalReviewEnvironmentStatus({})).toMatchObject({
+      moduleOneReviewConfigured: false,
+      moduleOneReviewApproved: false,
+      missingModuleOneReviewVariables: [
+        "MODULE_ONE_CLINICAL_REVIEWER_NAME",
+        "MODULE_ONE_CLINICAL_REVIEWER_ROLE",
+        "MODULE_ONE_CLINICAL_REVIEW_DATE",
+        "MODULE_ONE_CLINICAL_APPROVED_VERSION",
+        "MODULE_ONE_CLINICAL_REVIEW_APPROVED",
+      ],
     });
   });
 });

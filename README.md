@@ -59,6 +59,11 @@ Required environment variables:
 STRIPE_SECRET_KEY=sk_test_replace_with_your_secret_key
 PUBLIC_APP_URL=http://localhost:3000
 ENABLE_PAID_ENROLLMENT=false
+MODULE_ONE_CLINICAL_REVIEWER_NAME=
+MODULE_ONE_CLINICAL_REVIEWER_ROLE=
+MODULE_ONE_CLINICAL_REVIEW_DATE=
+MODULE_ONE_CLINICAL_APPROVED_VERSION=
+MODULE_ONE_CLINICAL_REVIEW_APPROVED=false
 DATABASE_URL=replace_with_managed_postgres_connection_string
 DATABASE_SSL=true
 STRIPE_WEBHOOK_SECRET=whsec_replace_with_your_webhook_signing_secret
@@ -86,6 +91,12 @@ Stripe key guide:
   until clinical review, database setup, Stripe webhook testing, and deployed
   smoke testing are complete. Set it to `true` only when you are ready to accept
   real paid enrollment.
+- `MODULE_ONE_CLINICAL_REVIEWER_NAME`,
+  `MODULE_ONE_CLINICAL_REVIEWER_ROLE`, `MODULE_ONE_CLINICAL_REVIEW_DATE`,
+  `MODULE_ONE_CLINICAL_APPROVED_VERSION`, and
+  `MODULE_ONE_CLINICAL_REVIEW_APPROVED` record Module 1 signoff after a
+  qualified reviewer approves the clinical review packet. Keep
+  `MODULE_ONE_CLINICAL_REVIEW_APPROVED=false` until corrections are resolved.
 - `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
   `TRANSACTIONAL_EMAIL_API_KEY`, and `SIGN_IN_FROM_EMAIL` are server-only values
   for passwordless sign-in email delivery.
@@ -146,6 +157,9 @@ checkout fails closed with a setup message and does not collect payment.
 counts and missing environment variable names. It must never return actual
 Stripe key values. It also includes the ordered launch action plan and Module 1
 clinical review packet so reviewers can see exactly what still needs signoff.
+When the Module 1 clinical signoff environment values are present and
+`MODULE_ONE_CLINICAL_REVIEW_APPROVED=true`, the clinical review launch gate is
+marked ready in the runtime report.
 
 `GET /api/launch/clinical-review-packet.md` downloads a Markdown packet with
 Module 1 lesson bodies, scope notes, sources, review questions, and signoff
@@ -221,8 +235,9 @@ variables in the host dashboard, not in Git: `DATABASE_URL`,
 `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PUBLIC_APP_URL`,
 `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
 `TRANSACTIONAL_EMAIL_API_KEY`, `SIGN_IN_FROM_EMAIL`, and
-`PRACTICE_SEAT_ADMIN_TOKEN`. Keep `ENABLE_PAID_ENROLLMENT=false` until the
-live checklist passes, then set `ENABLE_PAID_ENROLLMENT=true` to open paid
+`PRACTICE_SEAT_ADMIN_TOKEN`. Add the `MODULE_ONE_CLINICAL_*` signoff values
+after the review packet is approved. Keep `ENABLE_PAID_ENROLLMENT=false` until
+the live checklist passes, then set `ENABLE_PAID_ENROLLMENT=true` to open paid
 checkout.
 
 After the managed PostgreSQL database is created and `DATABASE_URL` is set, run:

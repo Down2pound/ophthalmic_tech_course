@@ -11,6 +11,15 @@ const runtimeReport = {
     blockedCount: 4,
     blockers: ["Clinical content review"],
   },
+  launchChecklist: [
+    {
+      id: "clinical-review",
+      title: "Clinical content review",
+      status: "blocked",
+      evidence: "Clinical review required.",
+      nextAction: "Collect clinical review signoff.",
+    },
+  ],
   commerce: {
     checkoutConfigured: true,
     paidEnrollmentEnabled: false,
@@ -29,6 +38,18 @@ const runtimeReport = {
   database: {
     databaseConfigured: false,
     missingDatabaseVariables: ["DATABASE_URL"],
+  },
+  clinicalReview: {
+    moduleOneReviewConfigured: false,
+    moduleOneReviewApproved: false,
+    missingModuleOneReviewVariables: [
+      "MODULE_ONE_CLINICAL_REVIEWER_NAME",
+      "MODULE_ONE_CLINICAL_REVIEWER_ROLE",
+    ],
+    reviewerName: "",
+    reviewerRole: "",
+    reviewDate: "",
+    approvedVersion: "",
   },
   warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
   launchActions: [

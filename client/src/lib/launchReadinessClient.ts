@@ -1,4 +1,7 @@
-import type { LaunchReadinessSummary } from "@shared/launch/launchReadiness";
+import type {
+  LaunchReadinessItem,
+  LaunchReadinessSummary,
+} from "@shared/launch/launchReadiness";
 import type { LaunchActionItem } from "@shared/launch/launchActionPlan";
 import type { ClinicalReviewPacket } from "@shared/course/clinicalReviewPacket";
 
@@ -16,6 +19,7 @@ export interface RuntimeLaunchReadinessReport {
   generatedAt: string;
   readyForPaidLaunch: boolean;
   staticSummary: LaunchReadinessSummary;
+  launchChecklist: LaunchReadinessItem[];
   commerce: RuntimeCommerceStatus;
   auth: {
     passwordlessConfigured: boolean;
@@ -28,6 +32,15 @@ export interface RuntimeLaunchReadinessReport {
   database: {
     databaseConfigured: boolean;
     missingDatabaseVariables: string[];
+  };
+  clinicalReview: {
+    moduleOneReviewConfigured: boolean;
+    moduleOneReviewApproved: boolean;
+    missingModuleOneReviewVariables: string[];
+    reviewerName: string;
+    reviewerRole: string;
+    reviewDate: string;
+    approvedVersion: string;
   };
   warnings: string[];
   launchActions: LaunchActionItem[];

@@ -1,6 +1,7 @@
 import {
   getLaunchReadinessSummary,
   launchReadinessChecklist,
+  type LaunchReadinessItem,
   type LaunchReadinessSummary,
 } from "../../../shared/launch/launchReadiness";
 import {
@@ -13,10 +14,12 @@ import {
 } from "../../../shared/course/clinicalReviewPacket";
 import {
   getAuthEnvironmentStatus,
+  getClinicalReviewEnvironmentStatus,
   getCommerceEnvironmentStatus,
   getDatabaseEnvironmentStatus,
   getPracticeSeatEnvironmentStatus,
   type AuthEnvironmentStatus,
+  type ClinicalReviewEnvironmentStatus,
   type CommerceEnvironmentStatus,
   type DatabaseEnvironmentStatus,
   type EnvironmentMap,
@@ -32,10 +35,12 @@ export interface RuntimeLaunchReadinessReport {
   generatedAt: string;
   readyForPaidLaunch: boolean;
   staticSummary: LaunchReadinessSummary;
+  launchChecklist: LaunchReadinessItem[];
   commerce: CommerceEnvironmentStatus;
   auth: AuthEnvironmentStatus;
   practiceSeatAdmin: PracticeSeatEnvironmentStatus;
   database: DatabaseEnvironmentStatus;
+  clinicalReview: ClinicalReviewEnvironmentStatus;
   warnings: string[];
   launchActions: LaunchActionItem[];
   clinicalReviewPacket: ClinicalReviewPacket;
@@ -46,11 +51,31 @@ function formatMissingWarning(label: string, missingVariables: string[]) {
   return `${label} setup is missing: ${missingVariables.join(", ")}.`;
 }
 
+function getRuntimeLaunchChecklist(
+  clinicalReview: ClinicalReviewEnvironmentStatus
+): LaunchReadinessItem[] {
+  return launchReadinessChecklist.map(item => {
+    if (item.id !== "clinical-review") return item;
+
+    if (!clinicalReview.moduleOneReviewApproved) return item;
+
+    return {
+      ...item,
+      status: "ready",
+      evidence: `Module 1 clinical review approved by ${clinicalReview.reviewerName}, ${clinicalReview.reviewerRole}, on ${clinicalReview.reviewDate} for ${clinicalReview.approvedVersion}.`,
+      nextAction:
+        "Keep the approved packet with launch records and repeat clinical review whenever lesson content changes.",
+    };
+  });
+}
+
 export function getRuntimeLaunchReadinessReport({
   env = process.env,
   now = () => new Date().toISOString(),
 }: RuntimeLaunchReadinessInput = {}): RuntimeLaunchReadinessReport {
-  const staticSummary = getLaunchReadinessSummary(launchReadinessChecklist);
+  const clinicalReview = getClinicalReviewEnvironmentStatus(env);
+  const launchChecklist = getRuntimeLaunchChecklist(clinicalReview);
+  const staticSummary = getLaunchReadinessSummary(launchChecklist);
   const commerce = getCommerceEnvironmentStatus(env);
   const auth = getAuthEnvironmentStatus(env);
   const practiceSeatAdmin = getPracticeSeatEnvironmentStatus(env);
@@ -70,6 +95,13 @@ export function getRuntimeLaunchReadinessReport({
       practiceSeatAdmin.missingPracticeSeatAdminVariables
     ),
     formatMissingWarning("Database", database.missingDatabaseVariables),
+    clinicalReview.moduleOneReviewApproved
+      ? null
+      : "Module 1 clinical review signoff is missing or not approved.",
+    formatMissingWarning(
+      "Module 1 clinical review",
+      clinicalReview.missingModuleOneReviewVariables
+    ),
     commerce.paidEnrollmentEnabled
       ? null
       : "Paid enrollment launch switch is disabled: ENABLE_PAID_ENROLLMENT must be true.",
@@ -86,10 +118,12 @@ export function getRuntimeLaunchReadinessReport({
       practiceSeatAdmin.practiceSeatAdminConfigured &&
       database.databaseConfigured,
     staticSummary,
+    launchChecklist,
     commerce,
     auth,
     practiceSeatAdmin,
     database,
+    clinicalReview,
     warnings,
     launchActions: getRemainingLaunchActions(),
     clinicalReviewPacket: getModuleOneClinicalReviewPacket(),

@@ -15,6 +15,11 @@ describe("getRuntimeLaunchReadinessReport", () => {
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
         PRACTICE_SEAT_ADMIN_TOKEN: "",
         DATABASE_URL: "",
+        MODULE_ONE_CLINICAL_REVIEWER_NAME: "",
+        MODULE_ONE_CLINICAL_REVIEWER_ROLE: "",
+        MODULE_ONE_CLINICAL_REVIEW_DATE: "",
+        MODULE_ONE_CLINICAL_APPROVED_VERSION: "",
+        MODULE_ONE_CLINICAL_REVIEW_APPROVED: "false",
       },
       now: () => "2026-06-26T12:00:00.000Z",
     });
@@ -41,6 +46,10 @@ describe("getRuntimeLaunchReadinessReport", () => {
         databaseConfigured: false,
         missingDatabaseVariables: ["DATABASE_URL"],
       },
+      clinicalReview: {
+        moduleOneReviewConfigured: false,
+        moduleOneReviewApproved: false,
+      },
     });
     expect(report.staticSummary.blockedCount).toBeGreaterThan(0);
     expect(report.launchActions.map(action => action.id)).toContain(
@@ -65,6 +74,43 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(report.warnings).toContain(
       "Database setup is missing: DATABASE_URL."
     );
+    expect(report.warnings).toContain(
+      "Module 1 clinical review signoff is missing or not approved."
+    );
+    expect(report.warnings).toContain(
+      "Module 1 clinical review setup is missing: MODULE_ONE_CLINICAL_REVIEWER_NAME, MODULE_ONE_CLINICAL_REVIEWER_ROLE, MODULE_ONE_CLINICAL_REVIEW_DATE, MODULE_ONE_CLINICAL_APPROVED_VERSION."
+    );
+  });
+
+  it("marks the clinical review launch gate ready when Module 1 signoff is approved", () => {
+    const report = getRuntimeLaunchReadinessReport({
+      env: {
+        MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
+        MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
+        MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
+        MODULE_ONE_CLINICAL_APPROVED_VERSION: "module-one-v1",
+        MODULE_ONE_CLINICAL_REVIEW_APPROVED: "true",
+      },
+    });
+
+    expect(report.clinicalReview).toMatchObject({
+      moduleOneReviewConfigured: true,
+      moduleOneReviewApproved: true,
+      reviewerName: "Dr. Reviewer",
+      reviewerRole: "Ophthalmologist",
+      reviewDate: "2026-07-13",
+      approvedVersion: "module-one-v1",
+    });
+    expect(
+      report.launchChecklist.find(item => item.id === "clinical-review")
+    ).toMatchObject({
+      status: "ready",
+      nextAction:
+        "Keep the approved packet with launch records and repeat clinical review whenever lesson content changes.",
+    });
+    expect(report.warnings).not.toContain(
+      "Module 1 clinical review signoff is missing or not approved."
+    );
   });
 
   it("never includes actual secret values in warnings or missing variable lists", () => {
@@ -80,6 +126,11 @@ describe("getRuntimeLaunchReadinessReport", () => {
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
         PRACTICE_SEAT_ADMIN_TOKEN: "redacted-practice-token",
         DATABASE_URL: "redacted-database-url",
+        MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
+        MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
+        MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
+        MODULE_ONE_CLINICAL_APPROVED_VERSION: "module-one-v1",
+        MODULE_ONE_CLINICAL_REVIEW_APPROVED: "true",
       },
     });
 

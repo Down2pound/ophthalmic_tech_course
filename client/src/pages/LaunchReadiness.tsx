@@ -44,10 +44,14 @@ const actionStatusLabels = {
 };
 
 export default function LaunchReadiness() {
-  const summary = getLaunchReadinessSummary(launchReadinessChecklist);
   const [runtimeReport, setRuntimeReport] =
     useState<RuntimeLaunchReadinessReport | null>(null);
   const [runtimeError, setRuntimeError] = useState<string | null>(null);
+  const displayedChecklist =
+    runtimeReport?.launchChecklist ?? launchReadinessChecklist;
+  const summary =
+    runtimeReport?.staticSummary ??
+    getLaunchReadinessSummary(displayedChecklist);
 
   useEffect(() => {
     let isMounted = true;
@@ -191,7 +195,17 @@ export default function LaunchReadiness() {
             )}
 
             {runtimeReport && (
-              <div className="mt-5 grid gap-3 md:grid-cols-6">
+              <div className="mt-5 grid gap-3 md:grid-cols-4 xl:grid-cols-7">
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-sm font-semibold text-slate-700">
+                    Clinical review
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {runtimeReport.clinicalReview.moduleOneReviewApproved
+                      ? `Approved by ${runtimeReport.clinicalReview.reviewerName}`
+                      : `Missing ${runtimeReport.clinicalReview.missingModuleOneReviewVariables.join(", ")}`}
+                  </p>
+                </div>
                 <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
                   <p className="text-sm font-semibold text-slate-700">
                     Stripe checkout
@@ -253,7 +267,7 @@ export default function LaunchReadiness() {
                   </p>
                 </div>
                 {runtimeReport.warnings.length > 0 && (
-                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-6">
+                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-4 xl:col-span-7">
                     <p className="text-sm font-semibold text-amber-950">
                       Runtime warnings
                     </p>
@@ -396,7 +410,7 @@ export default function LaunchReadiness() {
             </Card>
           )}
 
-          {launchReadinessChecklist.map(item => {
+          {displayedChecklist.map(item => {
             const Icon = statusIcons[item.status];
 
             return (
