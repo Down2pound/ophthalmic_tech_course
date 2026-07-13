@@ -15,7 +15,10 @@ import {
   practicePackOffers,
 } from "@shared/commerce/offers";
 import { buyerSupportContact } from "@shared/commerce/policies";
-import { practiceBuyerSalesPath } from "@shared/commerce/salesReadiness";
+import {
+  practiceBuyerSalesPath,
+  purchaseAssurances,
+} from "@shared/commerce/salesReadiness";
 import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
 
@@ -102,6 +105,23 @@ export default function PracticePacks() {
                       <li key={item}>- {item}</li>
                     ))}
                   </ul>
+                </section>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="border-blue-100 bg-blue-50 p-6 text-blue-950 shadow-sm md:col-span-2">
+            <h2 className="text-2xl font-bold">Purchase confidence</h2>
+            <div className="mt-5 grid gap-4 md:grid-cols-4">
+              {purchaseAssurances.map(item => (
+                <section
+                  key={item.title}
+                  className="rounded-md border border-blue-100 bg-white p-4"
+                >
+                  <h3 className="font-semibold">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {item.description}
+                  </p>
                 </section>
               ))}
             </div>

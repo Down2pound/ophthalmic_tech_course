@@ -5,6 +5,7 @@ import {
   individualLearnerSalesPath,
   individualLearnerStartSteps,
   practiceBuyerSalesPath,
+  purchaseAssurances,
 } from "./salesReadiness";
 
 describe("sales readiness copy", () => {
@@ -80,5 +81,24 @@ describe("sales readiness copy", () => {
     expect(combined).not.toMatch(/guarantee/i);
     expect(combined).not.toMatch(/certified technician/i);
     expect(combined).not.toMatch(/proves competency/i);
+  });
+
+  it("gives buyers purchase assurances without risky claims", () => {
+    expect(purchaseAssurances.map(item => item.title)).toEqual([
+      "Stripe handles payment",
+      "Access follows the buyer email",
+      "Support path is visible",
+      "Expectations stay honest",
+    ]);
+
+    const combined = purchaseAssurances
+      .map(item => `${item.title} ${item.description}`)
+      .join(" ");
+
+    expect(combined).toMatch(/does not store card details/i);
+    expect(combined).toMatch(/same email/i);
+    expect(combined).toMatch(/refund review/i);
+    expect(combined).toMatch(/does not promise certification/i);
+    expect(combined).not.toMatch(/guarantee/i);
   });
 });

@@ -13,6 +13,11 @@ export interface BuyerConfidenceAnswer {
   answer: string;
 }
 
+export interface PurchaseAssurance {
+  title: string;
+  description: string;
+}
+
 export const individualLearnerSalesPath: BuyerPathSection[] = [
   {
     title: "Best fit",
@@ -115,6 +120,29 @@ export const buyerConfidenceAnswers: BuyerConfidenceAnswer[] = [
     question: "Why buy while it is still a founding course?",
     answer:
       "Founding access gives early learners and practices the published foundations now, plus future modules released during the access period. Early feedback helps shape what gets improved next.",
+  },
+];
+
+export const purchaseAssurances: PurchaseAssurance[] = [
+  {
+    title: "Stripe handles payment",
+    description:
+      "Checkout runs through Stripe, and this app does not store card details.",
+  },
+  {
+    title: "Access follows the buyer email",
+    description:
+      "Use the same email for checkout and sign-in so the app can find the learner or practice access record.",
+  },
+  {
+    title: "Support path is visible",
+    description:
+      "Buyers can contact support for account access, purchase questions, refund review, course navigation, and basic technical issues.",
+  },
+  {
+    title: "Expectations stay honest",
+    description:
+      "The course supports foundational learning and supervised practice preparation; it does not promise certification, employment, or independent competency.",
   },
 ];
 
