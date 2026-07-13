@@ -63,6 +63,7 @@ AUTH_SESSION_SECRET=replace_with_a_long_random_session_secret
 TRANSACTIONAL_EMAIL_API_URL=https://email-provider.example.com/send
 TRANSACTIONAL_EMAIL_API_KEY=replace_with_your_email_provider_api_key
 SIGN_IN_FROM_EMAIL="OptiTech Academy <noreply@example.com>"
+PRACTICE_SEAT_ADMIN_TOKEN=replace_with_a_long_random_admin_token
 ```
 
 `PUBLIC_APP_URL` should be the real deployed site URL in production. The server
@@ -81,6 +82,8 @@ Stripe key guide:
 - `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
   `TRANSACTIONAL_EMAIL_API_KEY`, and `SIGN_IN_FROM_EMAIL` are server-only values
   for passwordless sign-in email delivery.
+- `PRACTICE_SEAT_ADMIN_TOKEN` is a server-only private token used to protect the
+  temporary practice-seat assignment API until a full admin login exists.
 
 Checkout routes:
 
@@ -94,6 +97,8 @@ Checkout routes:
 - Protected lesson endpoint: `GET /api/learn/module-one/lessons`
 - Protected quiz endpoint: `GET /api/learn/module-one/quiz`
 - Protected quiz submission endpoint: `POST /api/learn/module-one/quiz/submit`
+- Protected practice seat assignment endpoint:
+  `POST /api/practice-seat-packs/:seatPackId/assignments`
 - Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success&offer=...`
 - Cancel return: `/checkout?checkout=cancelled`
@@ -107,6 +112,10 @@ learner enrollment. Practice pack purchases provision one temporary seat-pack
 record with the purchased seat count. Core practice-seat assignment logic can
 assign learner emails without exceeding purchased capacity. The next production
 step is connecting those records to durable PostgreSQL storage and a
+manager/admin workflow.
+
+The temporary practice-seat assignment endpoint requires an `x-admin-token`
+header matching `PRACTICE_SEAT_ADMIN_TOKEN`. It should only be used by a trusted
 manager/admin workflow.
 
 If `STRIPE_SECRET_KEY` is missing, checkout fails closed with a setup message and

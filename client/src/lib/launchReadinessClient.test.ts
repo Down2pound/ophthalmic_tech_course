@@ -21,6 +21,10 @@ const runtimeReport = {
     passwordlessConfigured: false,
     missingPasswordlessVariables: ["TRANSACTIONAL_EMAIL_API_KEY"],
   },
+  practiceSeatAdmin: {
+    practiceSeatAdminConfigured: false,
+    missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
+  },
   warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
 };
 

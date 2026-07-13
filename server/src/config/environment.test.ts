@@ -3,6 +3,7 @@ import {
   getAuthEnvironmentStatus,
   getCommerceEnvironmentStatus,
   getMissingEnvironmentVariables,
+  getPracticeSeatEnvironmentStatus,
 } from "./environment";
 
 describe("getMissingEnvironmentVariables", () => {
@@ -75,6 +76,26 @@ describe("getAuthEnvironmentStatus", () => {
         "TRANSACTIONAL_EMAIL_API_KEY",
         "SIGN_IN_FROM_EMAIL",
       ],
+    });
+  });
+});
+
+describe("getPracticeSeatEnvironmentStatus", () => {
+  it("marks practice seat assignment as configured when the admin token exists", () => {
+    expect(
+      getPracticeSeatEnvironmentStatus({
+        PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-secret",
+      })
+    ).toEqual({
+      practiceSeatAdminConfigured: true,
+      missingPracticeSeatAdminVariables: [],
+    });
+  });
+
+  it("shows when the practice seat admin token is missing", () => {
+    expect(getPracticeSeatEnvironmentStatus({})).toEqual({
+      practiceSeatAdminConfigured: false,
+      missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
     });
   });
 });

@@ -12,6 +12,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         TRANSACTIONAL_EMAIL_API_URL: "https://email-provider.example.com/send",
         TRANSACTIONAL_EMAIL_API_KEY: "",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
+        PRACTICE_SEAT_ADMIN_TOKEN: "",
       },
       now: () => "2026-06-26T12:00:00.000Z",
     });
@@ -29,6 +30,10 @@ describe("getRuntimeLaunchReadinessReport", () => {
         passwordlessConfigured: false,
         missingPasswordlessVariables: ["TRANSACTIONAL_EMAIL_API_KEY"],
       },
+      practiceSeatAdmin: {
+        practiceSeatAdminConfigured: false,
+        missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
+      },
     });
     expect(report.staticSummary.blockedCount).toBeGreaterThan(0);
     expect(report.warnings).toContain(
@@ -36,6 +41,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
     );
     expect(report.warnings).toContain(
       "Passwordless sign-in setup is missing: TRANSACTIONAL_EMAIL_API_KEY."
+    );
+    expect(report.warnings).toContain(
+      "Practice seat assignment setup is missing: PRACTICE_SEAT_ADMIN_TOKEN."
     );
   });
 
@@ -49,6 +57,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         TRANSACTIONAL_EMAIL_API_URL: "https://email-provider.example.com/send",
         TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
+        PRACTICE_SEAT_ADMIN_TOKEN: "redacted-practice-token",
       },
     });
 
@@ -58,5 +67,6 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(serializedReport).not.toContain("whsec_secret_value");
     expect(serializedReport).not.toContain("session-secret-value");
     expect(serializedReport).not.toContain("email-secret-value");
+    expect(serializedReport).not.toContain("redacted-practice-token");
   });
 });

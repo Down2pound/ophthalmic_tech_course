@@ -45,7 +45,7 @@ export default function LaunchReadiness() {
     let isMounted = true;
 
     fetchRuntimeLaunchReadiness()
-      .then((report) => {
+      .then(report => {
         if (!isMounted) return;
         setRuntimeReport(report);
         setRuntimeError(null);
@@ -183,7 +183,7 @@ export default function LaunchReadiness() {
             )}
 
             {runtimeReport && (
-              <div className="mt-5 grid gap-3 md:grid-cols-3">
+              <div className="mt-5 grid gap-3 md:grid-cols-4">
                 <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
                   <p className="text-sm font-semibold text-slate-700">
                     Stripe checkout
@@ -214,13 +214,23 @@ export default function LaunchReadiness() {
                       : `Missing ${runtimeReport.auth.missingPasswordlessVariables.join(", ")}`}
                   </p>
                 </div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-sm font-semibold text-slate-700">
+                    Practice seats
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {runtimeReport.practiceSeatAdmin.practiceSeatAdminConfigured
+                      ? "Configured"
+                      : `Missing ${runtimeReport.practiceSeatAdmin.missingPracticeSeatAdminVariables.join(", ")}`}
+                  </p>
+                </div>
                 {runtimeReport.warnings.length > 0 && (
-                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-3">
+                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-4">
                     <p className="text-sm font-semibold text-amber-950">
                       Runtime warnings
                     </p>
                     <ul className="mt-2 space-y-1 text-sm leading-6 text-amber-950">
-                      {runtimeReport.warnings.map((warning) => (
+                      {runtimeReport.warnings.map(warning => (
                         <li key={warning}>{warning}</li>
                       ))}
                     </ul>
@@ -230,7 +240,7 @@ export default function LaunchReadiness() {
             )}
           </Card>
 
-          {launchReadinessChecklist.map((item) => {
+          {launchReadinessChecklist.map(item => {
             const Icon = statusIcons[item.status];
 
             return (

@@ -18,6 +18,10 @@ export interface RuntimeLaunchReadinessReport {
     passwordlessConfigured: boolean;
     missingPasswordlessVariables: string[];
   };
+  practiceSeatAdmin: {
+    practiceSeatAdminConfigured: boolean;
+    missingPracticeSeatAdminVariables: string[];
+  };
   warnings: string[];
 }
 

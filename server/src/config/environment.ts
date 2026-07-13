@@ -12,6 +12,11 @@ export interface AuthEnvironmentStatus {
   missingPasswordlessVariables: string[];
 }
 
+export interface PracticeSeatEnvironmentStatus {
+  practiceSeatAdminConfigured: boolean;
+  missingPracticeSeatAdminVariables: string[];
+}
+
 export const checkoutEnvironmentVariables = [
   "STRIPE_SECRET_KEY",
   "PUBLIC_APP_URL",
@@ -27,11 +32,15 @@ export const passwordlessEnvironmentVariables = [
   "PUBLIC_APP_URL",
 ] as const;
 
+export const practiceSeatAdminEnvironmentVariables = [
+  "PRACTICE_SEAT_ADMIN_TOKEN",
+] as const;
+
 export function getMissingEnvironmentVariables(
   env: EnvironmentMap,
   requiredVariables: readonly string[]
 ): string[] {
-  return requiredVariables.filter((variableName) => {
+  return requiredVariables.filter(variableName => {
     const value = env[variableName];
     return !value || value.trim().length === 0;
   });
@@ -68,5 +77,19 @@ export function getAuthEnvironmentStatus(
   return {
     passwordlessConfigured: missingPasswordlessVariables.length === 0,
     missingPasswordlessVariables,
+  };
+}
+
+export function getPracticeSeatEnvironmentStatus(
+  env: EnvironmentMap = process.env
+): PracticeSeatEnvironmentStatus {
+  const missingPracticeSeatAdminVariables = getMissingEnvironmentVariables(
+    env,
+    practiceSeatAdminEnvironmentVariables
+  );
+
+  return {
+    practiceSeatAdminConfigured: missingPracticeSeatAdminVariables.length === 0,
+    missingPracticeSeatAdminVariables,
   };
 }

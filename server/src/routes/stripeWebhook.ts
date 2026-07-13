@@ -31,6 +31,10 @@ export function getProvisionedPracticeSeatPacks() {
   return practiceSeatPackStore.listPracticeSeatPacks();
 }
 
+export function getPracticeSeatPackStore() {
+  return practiceSeatPackStore;
+}
+
 export function getEnrollmentStore() {
   return enrollmentStore;
 }

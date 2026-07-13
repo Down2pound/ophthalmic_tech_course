@@ -6,9 +6,11 @@ import {
 import {
   getAuthEnvironmentStatus,
   getCommerceEnvironmentStatus,
+  getPracticeSeatEnvironmentStatus,
   type AuthEnvironmentStatus,
   type CommerceEnvironmentStatus,
   type EnvironmentMap,
+  type PracticeSeatEnvironmentStatus,
 } from "./environment";
 
 export interface RuntimeLaunchReadinessInput {
@@ -22,6 +24,7 @@ export interface RuntimeLaunchReadinessReport {
   staticSummary: LaunchReadinessSummary;
   commerce: CommerceEnvironmentStatus;
   auth: AuthEnvironmentStatus;
+  practiceSeatAdmin: PracticeSeatEnvironmentStatus;
   warnings: string[];
 }
 
@@ -37,18 +40,20 @@ export function getRuntimeLaunchReadinessReport({
   const staticSummary = getLaunchReadinessSummary(launchReadinessChecklist);
   const commerce = getCommerceEnvironmentStatus(env);
   const auth = getAuthEnvironmentStatus(env);
+  const practiceSeatAdmin = getPracticeSeatEnvironmentStatus(env);
   const warnings = [
     staticSummary.ready
       ? null
       : `Launch checklist still has ${staticSummary.blockedCount} blocked gate(s).`,
-    formatMissingWarning(
-      "Stripe checkout",
-      commerce.missingCheckoutVariables
-    ),
+    formatMissingWarning("Stripe checkout", commerce.missingCheckoutVariables),
     formatMissingWarning("Stripe webhook", commerce.missingWebhookVariables),
     formatMissingWarning(
       "Passwordless sign-in",
       auth.missingPasswordlessVariables
+    ),
+    formatMissingWarning(
+      "Practice seat assignment",
+      practiceSeatAdmin.missingPracticeSeatAdminVariables
     ),
   ].filter((warning): warning is string => Boolean(warning));
 
@@ -58,10 +63,12 @@ export function getRuntimeLaunchReadinessReport({
       staticSummary.ready &&
       commerce.checkoutConfigured &&
       commerce.webhookConfigured &&
-      auth.passwordlessConfigured,
+      auth.passwordlessConfigured &&
+      practiceSeatAdmin.practiceSeatAdminConfigured,
     staticSummary,
     commerce,
     auth,
+    practiceSeatAdmin,
     warnings,
   };
 }
