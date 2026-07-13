@@ -1,11 +1,24 @@
 import { Card } from "@/components/ui/card";
-import { CheckCircle2, Clock, Users, Award, ArrowRight, Eye, Sparkles } from "lucide-react";
+import {
+  Award,
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+  Clock,
+  Eye,
+  Sparkles,
+  Users,
+} from "lucide-react";
 import { curriculumModules } from "@/data/curriculum";
 import { Button } from "@/components/ui/button";
-import { formatOfferPrice, foundingLearnerOffer } from "@shared/commerce/offers";
+import {
+  formatOfferPrice,
+  foundingLearnerOffer,
+  practicePackOffers,
+} from "@shared/commerce/offers";
 
 export default function Home() {
-  const curriculumDays = curriculumModules.map((module) => ({
+  const curriculumDays = curriculumModules.map(module => ({
     day: `Day ${module.day}`,
     title: module.title,
     description: module.description,
@@ -17,12 +30,15 @@ export default function Home() {
       id: "standard",
       name: "Ophthalmic Technician Foundations",
       price: formatOfferPrice(foundingLearnerOffer),
-      description: "Founding learner access to the self-paced foundations course",
+      description:
+        "Founding learner access to the self-paced foundations course",
       features: foundingLearnerOffer.includes,
       cta: "Enroll Now",
       highlighted: true,
-    }
+    },
   ];
+
+  const starterPracticePack = practicePackOffers[0];
 
   const stats = [
     { number: "10", label: "Planned modules" },
@@ -45,26 +61,47 @@ export default function Home() {
         <div className="container flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
             <Eye className="w-6 h-6 text-blue-400" />
-            <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">OptiTech Academy</span>
+            <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              OptiTech Academy
+            </span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#curriculum" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+            <a
+              href="#curriculum"
+              className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+            >
               Curriculum
             </a>
-            <a href="#pricing" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+            <a
+              href="#pricing"
+              className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+            >
               Pricing
             </a>
-            <a href="/practice-packs" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+            <a
+              href="/practice-packs"
+              className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+            >
               Practice Packs
             </a>
-            <a href="/launch-readiness" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+            <a
+              href="/launch-readiness"
+              className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+            >
               Launch Readiness
             </a>
-            <a href="#why" className="text-sm text-gray-300 hover:text-blue-400 transition-colors">
+            <a
+              href="#why"
+              className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+            >
               Why Us
             </a>
           </div>
-          <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">Get Started</Button>
+          <a href="#pricing">
+            <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">
+              Get Started
+            </Button>
+          </a>
         </div>
       </nav>
 
@@ -75,7 +112,9 @@ export default function Home() {
             <div className="space-y-8 relative z-10">
               <div className="inline-flex items-center gap-2 glass-dark px-4 py-2 w-fit">
                 <Sparkles className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-semibold text-blue-300">Founding learner preview now open</span>
+                <span className="text-sm font-semibold text-blue-300">
+                  Founding learner preview now open
+                </span>
               </div>
               <h1 className="text-6xl md:text-7xl font-bold leading-tight">
                 <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-300 bg-clip-text text-transparent">
@@ -85,59 +124,111 @@ export default function Home() {
                 <span className="text-white">Ophthalmic Technician</span>
               </h1>
               <p className="text-xl text-gray-300 leading-relaxed">
-                Build the vocabulary, habits, and supervised practice plan needed to begin training for an ophthalmic assistant or technician role.
+                Build the vocabulary, habits, and supervised practice plan
+                needed to begin training for an ophthalmic assistant or
+                technician role.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="grid gap-4 pt-4 sm:grid-cols-2">
                 <a href="/checkout">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
+                    className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
                   >
-                    Enroll Now <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </a>
-                <a href="/onboarding">
-                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
-                    Find Your Path
-                  </Button>
-                </a>
-                <a href="/curriculum">
-                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
-                    View Curriculum
-                  </Button>
-                </a>
-                <a href="/learn">
-                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
-                    Preview Module 1
-                  </Button>
-                </a>
-                <a href="/skills-passport">
-                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
-                    Skills Passport
-                  </Button>
-                </a>
-                <a href="/career-toolkit">
-                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
-                    Career Toolkit
+                    Buy for Myself <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </a>
                 <a href="/practice-packs">
-                  <Button size="lg" className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base">
-                    Practice Packs
+                  <Button
+                    size="lg"
+                    className="w-full glass-dark text-white border border-white/20 hover:bg-white/10 text-base"
+                  >
+                    Buy for My Practice
+                    <Building2 className="ml-2 w-4 h-4" />
+                  </Button>
+                </a>
+                <a href="/curriculum">
+                  <Button
+                    size="lg"
+                    className="w-full glass-dark text-white border border-white/20 hover:bg-white/10 text-base"
+                  >
+                    View Curriculum
+                  </Button>
+                </a>
+                <a href="/skills-passport">
+                  <Button
+                    size="lg"
+                    className="w-full glass-dark text-white border border-white/20 hover:bg-white/10 text-base"
+                  >
+                    Skills Passport
                   </Button>
                 </a>
               </div>
               <div className="flex items-center gap-2 text-green-400 pt-4">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm font-medium">Completion is education, not certification</span>
+                <span className="text-sm font-medium">
+                  Completion is education, not certification
+                </span>
               </div>
             </div>
             <div className="relative z-10">
-              <div className="glass-card p-8 aspect-video flex items-center justify-center">
-                <div className="text-center">
-                  <Eye className="w-20 h-20 text-blue-400/50 mx-auto mb-4" />
-                  <p className="text-gray-300">Professional Medical Training</p>
-                </div>
+              <div className="grid gap-4">
+                <a
+                  href="/checkout"
+                  className="glass-card block p-6 transition-all hover:bg-white/10"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-cyan-300">
+                        Individual learners
+                      </p>
+                      <h2 className="mt-2 text-2xl font-bold text-white">
+                        Start a new ophthalmic career path
+                      </h2>
+                    </div>
+                    <Users className="h-8 w-8 flex-shrink-0 text-cyan-300" />
+                  </div>
+                  <p className="mt-4 text-gray-300">
+                    Self-paced access for career changers, medical assistants,
+                    and new technicians who want practical clinic vocabulary and
+                    safer onboarding confidence.
+                  </p>
+                  <div className="mt-5 flex items-end gap-2">
+                    <span className="text-4xl font-bold text-white">
+                      {formatOfferPrice(foundingLearnerOffer)}
+                    </span>
+                    <span className="pb-1 text-sm text-gray-400">one-time</span>
+                  </div>
+                </a>
+
+                <a
+                  href="/practice-packs"
+                  className="glass-card block p-6 transition-all hover:bg-white/10"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-cyan-300">
+                        Practices and managers
+                      </p>
+                      <h2 className="mt-2 text-2xl font-bold text-white">
+                        Give new hires a shared foundation
+                      </h2>
+                    </div>
+                    <Building2 className="h-8 w-8 flex-shrink-0 text-cyan-300" />
+                  </div>
+                  <p className="mt-4 text-gray-300">
+                    Seat packs help practices onboard multiple learners with the
+                    same core lessons, Skills Passport language, and
+                    supervisor-led follow-up.
+                  </p>
+                  <div className="mt-5 flex items-end gap-2">
+                    <span className="text-4xl font-bold text-white">
+                      {formatOfferPrice(starterPracticePack)}
+                    </span>
+                    <span className="pb-1 text-sm text-gray-400">
+                      starts at {starterPracticePack.seatCount} seats
+                    </span>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
@@ -170,15 +261,21 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-              Structured learning path covering everything from fundamentals to advanced clinical techniques
+              Structured learning path covering everything from fundamentals to
+              advanced clinical techniques
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             {curriculumDays.map((day, idx) => (
-              <div key={idx} className="glass-card p-6 hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+              <div
+                key={idx}
+                className="glass-card p-6 hover:bg-white/10 transition-all duration-300 group cursor-pointer"
+              >
                 <div className="text-blue-400 font-bold mb-2">{day.day}</div>
-                <h3 className="text-white font-semibold mb-2 group-hover:text-blue-300 transition-colors">{day.title}</h3>
+                <h3 className="text-white font-semibold mb-2 group-hover:text-blue-300 transition-colors">
+                  {day.title}
+                </h3>
                 <p className="text-gray-400 text-sm">{day.description}</p>
               </div>
             ))}
@@ -186,7 +283,10 @@ export default function Home() {
 
           <div className="text-center mt-12">
             <a href="/curriculum">
-              <Button size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0"
+              >
                 View Full Curriculum
               </Button>
             </a>
@@ -203,11 +303,13 @@ export default function Home() {
                 Simple, Transparent Pricing
               </span>
             </h2>
-            <p className="text-gray-300 text-lg">One comprehensive package with everything you need</p>
+            <p className="text-gray-300 text-lg">
+              One comprehensive package with everything you need
+            </p>
           </div>
 
           <div className="flex justify-center max-w-2xl mx-auto">
-            {pricingTiers.map((tier) => (
+            {pricingTiers.map(tier => (
               <Card
                 key={tier.id}
                 className="relative p-8 border-2 transition-all w-full max-w-md glass-card border-blue-500/50 hover:border-blue-400"
@@ -215,10 +317,14 @@ export default function Home() {
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
                   Most Popular
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">{tier.name}</h3>
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  {tier.name}
+                </h3>
                 <p className="text-gray-300 text-sm mb-4">{tier.description}</p>
                 <div className="mb-6">
-                  <span className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{tier.price}</span>
+                  <span className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    {tier.price}
+                  </span>
                   <span className="text-gray-400 ml-2">one-time</span>
                 </div>
                 <a href="/checkout">
@@ -253,13 +359,27 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: Clock, title: "Self-Paced Learning", desc: "Learn at your own pace with 12 months of founding learner access" },
-              { icon: Award, title: "Completion Certificate", desc: "Receive a certificate of completion for finished published content" },
-              { icon: Users, title: "Expert Instruction", desc: "Learn from experienced ophthalmic professionals with 40+ years in the field" },
+              {
+                icon: Clock,
+                title: "Self-Paced Learning",
+                desc: "Learn at your own pace with 12 months of founding learner access",
+              },
+              {
+                icon: Award,
+                title: "Completion Certificate",
+                desc: "Receive a certificate of completion for finished published content",
+              },
+              {
+                icon: Users,
+                title: "Expert Instruction",
+                desc: "Learn from experienced ophthalmic professionals with 40+ years in the field",
+              },
             ].map((item, idx) => (
               <div key={idx} className="glass-card p-8">
                 <item.icon className="w-12 h-12 text-blue-400 mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  {item.title}
+                </h3>
                 <p className="text-gray-300">{item.desc}</p>
               </div>
             ))}
@@ -271,9 +391,12 @@ export default function Home() {
       <section className="relative z-10 py-20 px-4">
         <div className="container">
           <div className="glass-card p-12 text-center">
-            <h2 className="text-4xl font-bold text-white mb-4">Ready to Transform Your Career?</h2>
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Ready to Transform Your Career?
+            </h2>
             <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-              Join the founding learner group and help shape a practical, honest training path for new ophthalmic techs
+              Join the founding learner group and help shape a practical, honest
+              training path for new ophthalmic techs
             </p>
             <a href="/checkout">
               <Button
