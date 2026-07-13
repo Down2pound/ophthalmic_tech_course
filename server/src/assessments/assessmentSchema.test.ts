@@ -45,7 +45,7 @@ describe("getAssessmentSchemaChecklist", () => {
   it("summarizes production migration steps", () => {
     expect(getAssessmentSchemaChecklist()).toEqual([
       "Run the assessment schema against managed PostgreSQL.",
-      "Replace temporary in-memory assessment attempt storage with a database repository.",
+      "Configure DATABASE_URL so assessment attempts use the PostgreSQL repository.",
       "Use durable attempts for refund rules, completion rules, and learner progress reporting.",
       "Keep answer keys server-side and store only scored results.",
     ]);

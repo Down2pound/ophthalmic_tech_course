@@ -47,11 +47,11 @@ describe("createAssessmentAttemptRecord", () => {
 });
 
 describe("createInMemoryAssessmentAttemptStore", () => {
-  it("records attempts and reports learner progress", () => {
+  it("records attempts and reports learner progress", async () => {
     const store = createInMemoryAssessmentAttemptStore();
 
     expect(
-      store.recordAttempt(
+      await store.recordAttempt(
         createAssessmentAttemptRecord({
           score: baseScore,
           attemptNumber: 1,
@@ -60,7 +60,7 @@ describe("createInMemoryAssessmentAttemptStore", () => {
       )
     ).toMatchObject({ created: true });
     expect(
-      store.recordAttempt(
+      await store.recordAttempt(
         createAssessmentAttemptRecord({
           score: {
             ...baseScore,
@@ -76,13 +76,13 @@ describe("createInMemoryAssessmentAttemptStore", () => {
     ).toMatchObject({ created: true });
 
     expect(
-      store.findAttemptsByLearnerAndQuiz(
+      await store.findAttemptsByLearnerAndQuiz(
         " learner@example.com ",
         "quiz-entering-ophthalmic-care"
       )
     ).toHaveLength(2);
     expect(
-      store.getLearnerQuizProgress(
+      await store.getLearnerQuizProgress(
         "learner@example.com",
         "quiz-entering-ophthalmic-care"
       )

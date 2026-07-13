@@ -26,19 +26,22 @@ export interface LearnerQuizProgress {
   lastAttemptAt: string;
 }
 
+export type AssessmentStoreResult<T> = T | Promise<T>;
+
 export interface AssessmentAttemptStore {
-  recordAttempt(
-    attempt: AssessmentAttemptRecord
-  ): { created: boolean; attempt: AssessmentAttemptRecord };
-  listAttempts(): AssessmentAttemptRecord[];
+  recordAttempt(attempt: AssessmentAttemptRecord): AssessmentStoreResult<{
+    created: boolean;
+    attempt: AssessmentAttemptRecord;
+  }>;
+  listAttempts(): AssessmentStoreResult<AssessmentAttemptRecord[]>;
   findAttemptsByLearnerAndQuiz(
     learnerEmail: string,
     quizId: string
-  ): AssessmentAttemptRecord[];
+  ): AssessmentStoreResult<AssessmentAttemptRecord[]>;
   getLearnerQuizProgress(
     learnerEmail: string,
     quizId: string
-  ): LearnerQuizProgress | null;
+  ): AssessmentStoreResult<LearnerQuizProgress | null>;
 }
 
 export function createAssessmentAttemptRecord({
@@ -53,7 +56,7 @@ export function createAssessmentAttemptRecord({
   return {
     id: createId(),
     quizId: score.quizId,
-    learnerEmail: score.learnerEmail.trim().toLowerCase(),
+    learnerEmail: normalizeLearnerEmail(score.learnerEmail),
     submittedAt: score.submittedAt,
     attemptNumber,
     score: score.score,
@@ -65,6 +68,51 @@ export function createAssessmentAttemptRecord({
   };
 }
 
+export function normalizeLearnerEmail(learnerEmail: string): string {
+  return learnerEmail.trim().toLowerCase();
+}
+
+export function sortAssessmentAttempts(
+  attempts: AssessmentAttemptRecord[]
+): AssessmentAttemptRecord[] {
+  return [...attempts].sort(
+    (left, right) =>
+      new Date(left.submittedAt).getTime() -
+      new Date(right.submittedAt).getTime()
+  );
+}
+
+export function buildLearnerQuizProgress({
+  learnerEmail,
+  quizId,
+  attempts,
+}: {
+  learnerEmail: string;
+  quizId: string;
+  attempts: AssessmentAttemptRecord[];
+}): LearnerQuizProgress | null {
+  const sortedAttempts = sortAssessmentAttempts(attempts);
+  const lastAttempt = sortedAttempts[sortedAttempts.length - 1];
+
+  if (!lastAttempt) {
+    return null;
+  }
+
+  const bestScore = Math.max(...sortedAttempts.map(attempt => attempt.score));
+  const firstPassedAttempt = sortedAttempts.find(attempt => attempt.passed);
+
+  return {
+    learnerEmail: normalizeLearnerEmail(learnerEmail),
+    quizId,
+    attemptCount: sortedAttempts.length,
+    bestScore,
+    lastAttemptScore: lastAttempt.score,
+    passed: sortedAttempts.some(attempt => attempt.passed),
+    firstPassedAt: firstPassedAttempt?.submittedAt,
+    lastAttemptAt: lastAttempt.submittedAt,
+  };
+}
+
 export function createInMemoryAssessmentAttemptStore(): AssessmentAttemptStore {
   const attemptsById = new Map<string, AssessmentAttemptRecord>();
 
@@ -72,18 +120,14 @@ export function createInMemoryAssessmentAttemptStore(): AssessmentAttemptStore {
     learnerEmail: string,
     quizId: string
   ): AssessmentAttemptRecord[] {
-    const normalizedEmail = learnerEmail.trim().toLowerCase();
+    const normalizedEmail = normalizeLearnerEmail(learnerEmail);
 
-    return Array.from(attemptsById.values())
-      .filter(
-        (attempt) =>
+    return sortAssessmentAttempts(
+      Array.from(attemptsById.values()).filter(
+        attempt =>
           attempt.learnerEmail === normalizedEmail && attempt.quizId === quizId
       )
-      .sort(
-        (left, right) =>
-          new Date(left.submittedAt).getTime() -
-          new Date(right.submittedAt).getTime()
-      );
+    );
   }
 
   return {
@@ -103,26 +147,11 @@ export function createInMemoryAssessmentAttemptStore(): AssessmentAttemptStore {
     },
     findAttemptsByLearnerAndQuiz,
     getLearnerQuizProgress(learnerEmail, quizId) {
-      const attempts = findAttemptsByLearnerAndQuiz(learnerEmail, quizId);
-      const lastAttempt = attempts[attempts.length - 1];
-
-      if (!lastAttempt) {
-        return null;
-      }
-
-      const bestScore = Math.max(...attempts.map((attempt) => attempt.score));
-      const firstPassedAttempt = attempts.find((attempt) => attempt.passed);
-
-      return {
-        learnerEmail: learnerEmail.trim().toLowerCase(),
+      return buildLearnerQuizProgress({
+        learnerEmail,
         quizId,
-        attemptCount: attempts.length,
-        bestScore,
-        lastAttemptScore: lastAttempt.score,
-        passed: attempts.some((attempt) => attempt.passed),
-        firstPassedAt: firstPassedAttempt?.submittedAt,
-        lastAttemptAt: lastAttempt.submittedAt,
-      };
+        attempts: findAttemptsByLearnerAndQuiz(learnerEmail, quizId),
+      });
     },
   };
 }

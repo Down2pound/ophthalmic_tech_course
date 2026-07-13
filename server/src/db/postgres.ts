@@ -2,7 +2,7 @@ import pg from "pg";
 
 const { Pool } = pg;
 
-export type QueryParameters = Array<string | number | Date | null>;
+export type QueryParameters = Array<string | number | boolean | Date | null>;
 
 export interface Queryable {
   query<T extends Record<string, unknown> = Record<string, unknown>>(

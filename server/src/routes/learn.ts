@@ -9,12 +9,25 @@ import {
 import {
   createAssessmentAttemptRecord,
   createInMemoryAssessmentAttemptStore,
+  type AssessmentAttemptStore,
 } from "../assessments/assessmentAttemptStore";
 import { getProtectedModuleOneLessons } from "../course/protectedLessons";
+import { getPostgresPool } from "../db/postgres";
+import { createPostgresAssessmentAttemptStore } from "../assessments/postgresAssessmentAttemptStore";
 import { getSessionStore } from "./auth";
 import { getEnrollmentStore } from "./stripeWebhook";
 
-const assessmentAttemptStore = createInMemoryAssessmentAttemptStore();
+function createAssessmentAttemptStore(): AssessmentAttemptStore {
+  const postgresPool = getPostgresPool();
+
+  if (postgresPool) {
+    return createPostgresAssessmentAttemptStore(postgresPool);
+  }
+
+  return createInMemoryAssessmentAttemptStore();
+}
+
+const assessmentAttemptStore = createAssessmentAttemptStore();
 
 function getCookieValue(cookieHeader: string | undefined, name: string) {
   if (!cookieHeader) return "";
@@ -88,7 +101,7 @@ export function setupLearnRoutes(router: Router) {
         answers,
       });
       const previousAttempts =
-        assessmentAttemptStore.findAttemptsByLearnerAndQuiz(
+        await assessmentAttemptStore.findAttemptsByLearnerAndQuiz(
           access.email,
           score.quizId
         );
@@ -97,12 +110,12 @@ export function setupLearnRoutes(router: Router) {
         attemptNumber: previousAttempts.length + 1,
       });
 
-      assessmentAttemptStore.recordAttempt(attempt);
+      await assessmentAttemptStore.recordAttempt(attempt);
 
       res.json({
         ...score,
         attempt,
-        progress: assessmentAttemptStore.getLearnerQuizProgress(
+        progress: await assessmentAttemptStore.getLearnerQuizProgress(
           access.email,
           score.quizId
         ),

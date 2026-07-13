@@ -58,18 +58,18 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Learner accounts and access control",
     status: "blocked",
     evidence:
-      "A server-side entitlement rule can derive access from verified purchases, the webhook can create individual enrollments and practice seat packs, a protected practice-seat manager page can list packs and create learner enrollments without exceeding paid seats, PostgreSQL commerce repositories exist for durable purchases and enrollments, PostgreSQL auth repositories exist for durable magic links and sessions when DATABASE_URL is configured, magic-link request/token helpers exist, a safe passwordless sign-in request route stores hashed magic-link records server-side and sends through a configured transactional email endpoint, a callback route consumes one-time links into HTTP-only session cookies, a session access endpoint checks active server-side enrollments, Module 1 lesson bodies are served through a protected lesson endpoint, and runtime readiness checks auth environment setup, but assessment attempts still need a durable repository before full production sale.",
+      "A server-side entitlement rule can derive access from verified purchases, the webhook can create individual enrollments and practice seat packs, a protected practice-seat manager page can list packs and create learner enrollments without exceeding paid seats, PostgreSQL commerce repositories exist for durable purchases and enrollments, PostgreSQL auth repositories exist for durable magic links and sessions when DATABASE_URL is configured, magic-link request/token helpers exist, a safe passwordless sign-in request route stores hashed magic-link records server-side and sends through a configured transactional email endpoint, a callback route consumes one-time links into HTTP-only session cookies, a session access endpoint checks active server-side enrollments, Module 1 lesson bodies are served through a protected lesson endpoint, Module 1 assessment attempts use PostgreSQL when DATABASE_URL is configured, and runtime readiness checks auth environment setup, but schemas still need to be run and verified in deployment before full production sale.",
     nextAction:
-      "Run auth and commerce schemas against managed PostgreSQL, configure DATABASE_URL in production, add a durable assessment repository, and expand server-checked authorization to future paid modules before selling durable access.",
+      "Run auth, commerce, and assessment schemas against managed PostgreSQL, configure DATABASE_URL in production, test the full purchase-to-sign-in-to-quiz flow in deployment, and expand server-checked authorization to future paid modules before selling durable access.",
   },
   {
     id: "assessment-security",
     title: "Assessment security",
     status: "in-progress",
     evidence:
-      "Module 1 has a protected server-side knowledge-check endpoint that returns questions without answer keys, a protected submit endpoint that scores answers server-side, a server-side attempt store that tracks quiz progress, and a PostgreSQL-ready assessment schema, but attempts are not connected to a live database and older client quiz data plus future module assessments still need migration before high-stakes completion logic.",
+      "Module 1 has a protected server-side knowledge-check endpoint that returns questions without answer keys, a protected submit endpoint that scores answers server-side, a server-side attempt store that tracks quiz progress, a PostgreSQL assessment repository for durable attempts when DATABASE_URL is configured, and a PostgreSQL-ready assessment schema, but the schema still needs to be run in production and older client quiz data plus future module assessments still need migration before high-stakes completion logic.",
     nextAction:
-      "Run the assessment schema against managed PostgreSQL, replace the in-memory attempt store with a database repository, migrate remaining quiz data out of browser bundles, and connect completion rules to server-scored assessments before high-stakes completion logic.",
+      "Run the assessment schema against managed PostgreSQL, configure DATABASE_URL in production, migrate remaining quiz data out of browser bundles, and connect completion rules to server-scored assessments before high-stakes completion logic.",
   },
   {
     id: "browser-and-accessibility-qa",
