@@ -8,6 +8,9 @@ import {
   getCheckoutBaseUrl,
 } from "../commerce/stripeCheckout";
 import { getCommerceEnvironmentStatus } from "../config/environment";
+import { getPaidCheckoutGateStatus } from "../config/paidCheckoutGate";
+import { getLaunchDatabaseReadiness } from "../db/launchDatabaseReadiness";
+import { getPostgresPool } from "../db/postgres";
 
 const STRIPE_CHECKOUT_SESSIONS_URL =
   "https://api.stripe.com/v1/checkout/sessions";
@@ -22,11 +25,16 @@ export function setupCheckoutRoutes(router: Router) {
   router.post("/checkout/sessions", async (req: Request, res: Response) => {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     const environmentStatus = getCommerceEnvironmentStatus();
+    const databaseReadiness = await getLaunchDatabaseReadiness({
+      db: getPostgresPool(),
+    });
+    const checkoutGate = getPaidCheckoutGateStatus({ databaseReadiness });
 
-    if (!environmentStatus.paidEnrollmentEnabled) {
+    if (!checkoutGate.ready) {
       res.status(503).json({
-        error: "Paid enrollment is not enabled yet.",
-        missing: ["ENABLE_PAID_ENROLLMENT"],
+        error: "Paid enrollment is not ready for checkout yet.",
+        missing: checkoutGate.missingVariables,
+        warnings: checkoutGate.warnings,
       });
       return;
     }

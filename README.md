@@ -150,8 +150,11 @@ the same header and returns current temporary seat packs plus assignments. These
 endpoints are used by the protected practice seat manager page and should only
 be used by a trusted manager/admin workflow.
 
-If `STRIPE_SECRET_KEY` is missing or `ENABLE_PAID_ENROLLMENT` is not `true`,
-checkout fails closed with a setup message and does not collect payment.
+If `STRIPE_SECRET_KEY` is missing, `ENABLE_PAID_ENROLLMENT` is not `true`, the
+Stripe webhook is not configured, passwordless sign-in is not configured,
+practice-seat administration is not configured, Module 1 clinical signoff is
+not approved, or the launch database schema is not verified, checkout fails
+closed with a setup message and does not collect payment.
 
 `GET /api/launch/readiness` returns a safe setup report with launch blocker
 counts and missing environment variable names. It must never return actual
