@@ -68,6 +68,7 @@ Do not publish patient information, staff personal details, provider credentials
   - Marks Day 1 assets as free-preview candidates.
 - Action:
   - Use this as the strongest Drive-folder map for matching raw Bootcamp files to the current repository catalog.
+  - Maintain the typed migration map in `shared/course/bootcampSourceMap.ts`.
   - Reconcile duplicate or older media filenames before copying anything into production storage.
   - Keep clinical review and public/practice-only classification gates before publishing.
 
