@@ -79,6 +79,13 @@ can pass before `readyForPaidLaunch` is true, as long as health and public buyer
 pages load. For the final go-live check after every paid launch gate is
 complete, run the same command without `LAUNCH_SMOKE_ALLOW_NOT_READY=true`.
 
+To also prove custom-practice lead capture after deployment, run one smoke test
+with:
+
+```bash
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
+```
+
 If the command is blocked on a work computer, run it later from your home PC and
 keep the output.
 

@@ -10,7 +10,9 @@ async function main() {
   const baseUrl =
     process.env.LAUNCH_BASE_URL || process.env.PUBLIC_APP_URL || "";
   const allowNotReady = process.env.LAUNCH_SMOKE_ALLOW_NOT_READY === "true";
-  const report = await runDeploymentSmokeTest({ baseUrl });
+  const testPracticeInquiry =
+    process.env.LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY === "true";
+  const report = await runDeploymentSmokeTest({ baseUrl, testPracticeInquiry });
   const renderedReport = renderDeploymentSmokeReport(report);
 
   console.log(`Deployment smoke test for ${report.baseUrl}`);
@@ -28,6 +30,18 @@ async function main() {
       report.readyForPaidLaunch ? "ready" : "not ready"
     }`
   );
+  console.log(
+    `- Practice inquiry capture: ${
+      report.practiceInquiry.tested
+        ? report.practiceInquiry.ok
+          ? "ok"
+          : "failed"
+        : "not tested"
+    }`
+  );
+  if (report.practiceInquiry.inquiryId) {
+    console.log(`  - Inquiry ID: ${report.practiceInquiry.inquiryId}`);
+  }
   if (allowNotReady && !report.readyForPaidLaunch) {
     console.log(
       "- Not-ready launch status allowed for this pre-launch smoke run."

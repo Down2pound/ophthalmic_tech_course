@@ -100,6 +100,12 @@ describe("runDeploymentSmokeTest", () => {
         { path: "/curriculum", ok: true, status: 200 },
         { path: "/onboarding", ok: true, status: 200 },
       ],
+      practiceInquiry: {
+        tested: false,
+        ok: false,
+        skippedReason:
+          "Set LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true to submit a safe test inquiry.",
+      },
       readyForPaidLaunch: false,
       generatedAt: "2026-07-13T12:00:00.000Z",
       blockers: ["Clinical content review"],
@@ -129,6 +135,80 @@ describe("runDeploymentSmokeTest", () => {
       "https://example.com/curriculum",
       "https://example.com/onboarding",
     ]);
+  });
+
+  it("can submit a safe practice inquiry smoke check when enabled", async () => {
+    const requestedRequests: Array<{
+      url: string;
+      method?: string;
+      body?: unknown;
+    }> = [];
+    const fetcher = async (
+      url: string | URL | Request,
+      init?: RequestInit
+    ) => {
+      const requestedUrl = String(url);
+      requestedRequests.push({
+        url: requestedUrl,
+        method: init?.method,
+        body:
+          typeof init?.body === "string" ? JSON.parse(init.body) : undefined,
+      });
+
+      if (requestedUrl.endsWith("/api/health")) {
+        return createResponse({ ok: true });
+      }
+
+      if (requestedUrl.endsWith("/api/launch/readiness")) {
+        return createResponse({
+          readyForPaidLaunch: true,
+          staticSummary: {
+            blockers: [],
+          },
+          warnings: [],
+          launchActions: [],
+        });
+      }
+
+      if (requestedUrl.endsWith("/api/practice-inquiries")) {
+        return createResponse(
+          {
+            inquiry: {
+              inquiryId: "practice_inquiry_smoke",
+            },
+            notification: {
+              sent: true,
+            },
+          },
+          { status: 201 }
+        );
+      }
+
+      return createTextResponse();
+    };
+
+    const report = await runDeploymentSmokeTest({
+      baseUrl: "https://example.com",
+      testPracticeInquiry: true,
+      fetcher: fetcher as typeof fetch,
+      now: () => "2026-07-13T12:00:00.000Z",
+    });
+
+    expect(report.practiceInquiry).toEqual({
+      tested: true,
+      ok: true,
+      status: 201,
+      inquiryId: "practice_inquiry_smoke",
+      notificationSent: true,
+    });
+    expect(requestedRequests.at(-1)).toMatchObject({
+      url: "https://example.com/api/practice-inquiries",
+      method: "POST",
+      body: {
+        practiceName: "OptiTech Smoke Test Practice",
+        contactEmail: "launch-smoke@example.com",
+      },
+    });
   });
 
   it("reports public buyer page failures", async () => {
@@ -179,6 +259,13 @@ describe("runDeploymentSmokeTest", () => {
         { path: "/", ok: true, status: 200 },
         { path: "/checkout", ok: true, status: 200 },
       ],
+      practiceInquiry: {
+        tested: true,
+        ok: true,
+        status: 201,
+        inquiryId: "practice_inquiry_smoke",
+        notificationSent: false,
+      },
       readyForPaidLaunch: false,
       generatedAt: "2026-07-13T12:00:00.000Z",
       blockers: ["Clinical content review"],
@@ -199,7 +286,9 @@ describe("runDeploymentSmokeTest", () => {
     expect(report).toContain("Deployment URL: https://academy.spindeleye.com");
     expect(report).toContain("- Health endpoint: ok");
     expect(report).toContain("- Public buyer pages: ok");
+    expect(report).toContain("- Practice inquiry capture: ok");
     expect(report).toContain("/checkout: ok (HTTP 200)");
+    expect(report).toContain("Inquiry ID: practice_inquiry_smoke");
     expect(report).toContain("- Paid launch readiness: not ready");
     expect(report).toContain("Create and initialize hosted PostgreSQL");
     expect(report).not.toContain("sk_test_");
@@ -212,6 +301,11 @@ describe("runDeploymentSmokeTest", () => {
       healthOk: true,
       publicPagesOk: true,
       publicPages: [],
+      practiceInquiry: {
+        tested: false,
+        ok: false,
+        skippedReason: "not requested",
+      },
       readyForPaidLaunch: false,
       generatedAt: "2026-07-13T12:00:00.000Z",
       blockers: [],
@@ -237,7 +331,36 @@ describe("runDeploymentSmokeTest", () => {
               status: 500,
             },
           ],
+          practiceInquiry: {
+            tested: false,
+            ok: false,
+            skippedReason: "not requested",
+          },
           readyForPaidLaunch: false,
+          generatedAt: "2026-07-13T12:00:00.000Z",
+          blockers: [],
+          warnings: [],
+          launchActions: [],
+        },
+        { allowNotReady: true }
+      )
+    ).toBe(1);
+  });
+
+  it("fails when the optional practice inquiry smoke check is requested and broken", () => {
+    expect(
+      getDeploymentSmokeExitCode(
+        {
+          baseUrl: "https://academy.spindeleye.com",
+          healthOk: true,
+          publicPagesOk: true,
+          publicPages: [],
+          practiceInquiry: {
+            tested: true,
+            ok: false,
+            status: 500,
+          },
+          readyForPaidLaunch: true,
           generatedAt: "2026-07-13T12:00:00.000Z",
           blockers: [],
           warnings: [],

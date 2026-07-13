@@ -361,9 +361,18 @@ To save a Markdown smoke-test report with your launch records:
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_SMOKE_REPORT_PATH=launch-evidence/deployment-smoke-report.md pnpm launch:smoke
 ```
 
+To also submit one safe custom-practice test inquiry and prove lead capture
+works after deployment:
+
+```bash
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
+```
+
 The smoke test checks `/api/health`, `/api/launch/readiness`, and the public
 buyer pages for home, checkout, individual checkout return states, practice
 packs, practice checkout return states, policies, curriculum, and onboarding.
+When `LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true`, it also posts a clearly labeled
+safe test inquiry through `/api/practice-inquiries`.
 With `LAUNCH_SMOKE_ALLOW_NOT_READY=true`, it can pass while
 `readyForPaidLaunch` is still `false`, as long as health and public pages load.
 For the final go-live check, run the command without

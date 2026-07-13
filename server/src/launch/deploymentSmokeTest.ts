@@ -6,6 +6,7 @@ export interface DeploymentSmokeTestReport {
   healthOk: boolean;
   publicPagesOk: boolean;
   publicPages: DeploymentSmokePublicPageResult[];
+  practiceInquiry: DeploymentSmokePracticeInquiryResult;
   readyForPaidLaunch: boolean;
   generatedAt: string;
   blockers: string[];
@@ -15,6 +16,7 @@ export interface DeploymentSmokeTestReport {
 
 export interface DeploymentSmokeTestInput {
   baseUrl: string;
+  testPracticeInquiry?: boolean;
   fetcher?: typeof fetch;
   now?: () => string;
 }
@@ -23,6 +25,15 @@ export interface DeploymentSmokePublicPageResult {
   path: string;
   ok: boolean;
   status: number;
+}
+
+export interface DeploymentSmokePracticeInquiryResult {
+  tested: boolean;
+  ok: boolean;
+  status?: number;
+  inquiryId?: string;
+  notificationSent?: boolean;
+  skippedReason?: string;
 }
 
 export interface DeploymentSmokeExitOptions {
@@ -84,8 +95,49 @@ async function fetchPublicPage({
   };
 }
 
+async function submitPracticeInquirySmoke({
+  fetcher,
+  baseUrl,
+}: {
+  fetcher: typeof fetch;
+  baseUrl: string;
+}): Promise<DeploymentSmokePracticeInquiryResult> {
+  const response = await fetcher(`${baseUrl}/api/practice-inquiries`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      practiceName: "OptiTech Smoke Test Practice",
+      contactName: "Launch Smoke Test",
+      contactEmail: "launch-smoke@example.com",
+      estimatedLearnerCount: 16,
+      targetTimeline: "Deployment smoke test",
+      message:
+        "Safe deployment smoke test inquiry. No patient information, card data, secrets, or private employee details.",
+    }),
+  });
+  const payload = (await response.json().catch(() => ({}))) as {
+    inquiry?: {
+      inquiryId?: string;
+    };
+    notification?: {
+      sent?: boolean;
+    };
+  };
+
+  return {
+    tested: true,
+    ok: response.ok && Boolean(payload.inquiry?.inquiryId),
+    status: response.status,
+    ...(payload.inquiry?.inquiryId
+      ? { inquiryId: payload.inquiry.inquiryId }
+      : {}),
+    notificationSent: Boolean(payload.notification?.sent),
+  };
+}
+
 export async function runDeploymentSmokeTest({
   baseUrl,
+  testPracticeInquiry = false,
   fetcher = fetch,
   now = () => new Date().toISOString(),
 }: DeploymentSmokeTestInput): Promise<DeploymentSmokeTestReport> {
@@ -108,12 +160,24 @@ export async function runDeploymentSmokeTest({
       fetchPublicPage({ fetcher, baseUrl: normalizedBaseUrl, path })
     )
   );
+  const practiceInquiry = testPracticeInquiry
+    ? await submitPracticeInquirySmoke({
+        fetcher,
+        baseUrl: normalizedBaseUrl,
+      })
+    : {
+        tested: false,
+        ok: false,
+        skippedReason:
+          "Set LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true to submit a safe test inquiry.",
+      };
 
   return {
     baseUrl: normalizedBaseUrl,
     healthOk: health.ok === true,
     publicPagesOk: publicPages.every(page => page.ok),
     publicPages,
+    practiceInquiry,
     readyForPaidLaunch: readiness.readyForPaidLaunch,
     generatedAt: now(),
     blockers: readiness.staticSummary.blockers,
@@ -127,6 +191,7 @@ export function getDeploymentSmokeExitCode(
   { allowNotReady = false }: DeploymentSmokeExitOptions = {}
 ): number {
   if (!report.healthOk || !report.publicPagesOk) return 1;
+  if (report.practiceInquiry.tested && !report.practiceInquiry.ok) return 1;
   if (!allowNotReady && !report.readyForPaidLaunch) return 1;
 
   return 0;
@@ -151,6 +216,13 @@ export function renderDeploymentSmokeReport(
     "",
     `- Health endpoint: ${report.healthOk ? "ok" : "failed"}`,
     `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
+    `- Practice inquiry capture: ${
+      report.practiceInquiry.tested
+        ? report.practiceInquiry.ok
+          ? "ok"
+          : "failed"
+        : "not tested"
+    }`,
     `- Paid launch readiness: ${report.readyForPaidLaunch ? "ready" : "not ready"}`,
     "",
     "## Public Page Checks",
@@ -159,6 +231,18 @@ export function renderDeploymentSmokeReport(
       page =>
         `- ${page.path}: ${page.ok ? "ok" : "failed"} (HTTP ${page.status})`
     ),
+    "",
+    "## Practice Inquiry Check",
+    "",
+    report.practiceInquiry.tested
+      ? `- Test inquiry: ${report.practiceInquiry.ok ? "ok" : "failed"} (HTTP ${report.practiceInquiry.status ?? "unknown"})`
+      : `- Test inquiry: not tested. ${report.practiceInquiry.skippedReason}`,
+    ...(report.practiceInquiry.inquiryId
+      ? [`- Inquiry ID: ${report.practiceInquiry.inquiryId}`]
+      : []),
+    `- Notification email: ${
+      report.practiceInquiry.notificationSent ? "sent" : "not confirmed"
+    }`,
     "",
     "## Blockers",
     "",
