@@ -49,18 +49,18 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Verified Stripe webhook fulfillment",
     status: "blocked",
     evidence:
-      "A signed Stripe webhook receiver can report missing setup variables, verify checkout.session.completed events, record purchases, provision temporary enrollments idempotently, and now has a PostgreSQL-ready commerce schema, but records are not connected to a live database yet.",
+      "A signed Stripe webhook receiver can report missing setup variables, verify checkout.session.completed events, record purchases, provision temporary individual enrollments idempotently, provision temporary practice seat packs from Stripe metadata, and now has a PostgreSQL-ready commerce schema, but records are not connected to a live database yet.",
     nextAction:
-      "Run the commerce schema against managed PostgreSQL, replace temporary stores with database repositories, and unlock paid access from durable server-side records.",
+      "Run the commerce schema against managed PostgreSQL, replace temporary stores with database repositories, assign practice seats to learner emails, and unlock paid access from durable server-side records.",
   },
   {
     id: "learner-access-control",
     title: "Learner accounts and access control",
     status: "blocked",
     evidence:
-      "A server-side entitlement rule can derive access from verified purchases, the webhook can create temporary enrollments, a PostgreSQL-ready passwordless auth schema exists, magic-link request/token helpers exist, a safe passwordless sign-in request route stores hashed magic-link records server-side and sends through a configured transactional email endpoint, a callback route consumes one-time links into HTTP-only session cookies, a session access endpoint checks active server-side enrollments, Module 1 lesson bodies are served through a protected lesson endpoint, and runtime readiness checks auth environment setup, but there is no durable PostgreSQL-backed enrollment repository yet.",
+      "A server-side entitlement rule can derive access from verified purchases, the webhook can create temporary individual enrollments and practice seat packs, a PostgreSQL-ready passwordless auth schema exists, magic-link request/token helpers exist, a safe passwordless sign-in request route stores hashed magic-link records server-side and sends through a configured transactional email endpoint, a callback route consumes one-time links into HTTP-only session cookies, a session access endpoint checks active server-side enrollments, Module 1 lesson bodies are served through a protected lesson endpoint, and runtime readiness checks auth environment setup, but there is no durable PostgreSQL-backed enrollment or practice seat assignment repository yet.",
     nextAction:
-      "Run auth and commerce schemas against managed PostgreSQL, add durable enrollment repositories, and expand server-checked authorization to future paid modules before selling durable access.",
+      "Run auth and commerce schemas against managed PostgreSQL, add durable enrollment and practice seat assignment repositories, and expand server-checked authorization to future paid modules before selling durable access.",
   },
   {
     id: "assessment-security",
@@ -85,17 +85,17 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
 export function getLaunchReadinessSummary(
   items: LaunchReadinessItem[]
 ): LaunchReadinessSummary {
-  const readyCount = items.filter((item) => item.status === "ready").length;
+  const readyCount = items.filter(item => item.status === "ready").length;
   const inProgressCount = items.filter(
-    (item) => item.status === "in-progress"
+    item => item.status === "in-progress"
   ).length;
-  const blockedItems = items.filter((item) => item.status === "blocked");
+  const blockedItems = items.filter(item => item.status === "blocked");
 
   return {
     ready: blockedItems.length === 0 && inProgressCount === 0,
     readyCount,
     inProgressCount,
     blockedCount: blockedItems.length,
-    blockers: blockedItems.map((item) => item.title),
+    blockers: blockedItems.map(item => item.title),
   };
 }

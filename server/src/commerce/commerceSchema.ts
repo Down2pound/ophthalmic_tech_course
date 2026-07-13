@@ -1,6 +1,7 @@
 export const commerceSchemaTables = [
   "commerce_purchases",
   "commerce_enrollments",
+  "commerce_practice_seat_packs",
 ] as const;
 
 export const commerceSchemaSql = `
@@ -13,6 +14,7 @@ CREATE TABLE IF NOT EXISTS commerce_purchases (
   amount_total INTEGER NOT NULL,
   currency TEXT NOT NULL,
   access_months INTEGER NOT NULL,
+  seat_count INTEGER,
   recorded_at TIMESTAMPTZ NOT NULL
 );
 
@@ -34,6 +36,27 @@ CREATE INDEX IF NOT EXISTS commerce_purchases_purchaser_email_idx
 
 CREATE INDEX IF NOT EXISTS commerce_enrollments_learner_email_idx
   ON commerce_enrollments (learner_email);
+
+CREATE TABLE IF NOT EXISTS commerce_practice_seat_packs (
+  id TEXT PRIMARY KEY,
+  purchase_id TEXT NOT NULL REFERENCES commerce_purchases(id),
+  checkout_session_id TEXT NOT NULL UNIQUE,
+  offer_id TEXT NOT NULL,
+  purchaser_email TEXT NOT NULL,
+  total_seats INTEGER NOT NULL,
+  assigned_seats INTEGER NOT NULL DEFAULT 0,
+  status TEXT NOT NULL,
+  access_started_at TIMESTAMPTZ NOT NULL,
+  access_expires_at TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CHECK (total_seats > 0),
+  CHECK (assigned_seats >= 0),
+  CHECK (assigned_seats <= total_seats)
+);
+
+CREATE INDEX IF NOT EXISTS commerce_practice_seat_packs_purchaser_email_idx
+  ON commerce_practice_seat_packs (purchaser_email);
 `;
 
 export function getCommerceSchemaChecklist(): string[] {
@@ -42,5 +65,6 @@ export function getCommerceSchemaChecklist(): string[] {
     "Replace temporary in-memory purchase and enrollment stores with database repositories.",
     "Wrap purchase recording and enrollment provisioning in one transaction.",
     "Keep Stripe webhook idempotency enforced by unique event and checkout session fields.",
+    "Provision practice seat packs from checkout metadata before inviting individual learners.",
   ];
 }

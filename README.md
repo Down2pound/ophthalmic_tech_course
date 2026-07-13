@@ -102,6 +102,12 @@ Checkout routes:
 is sent, it uses the founding learner offer. Practice pack offer IDs are also
 accepted and sent to Stripe with seat-count metadata for fulfillment.
 
+When Stripe confirms payment, individual purchases provision one temporary
+learner enrollment. Practice pack purchases provision one temporary seat-pack
+record with the purchased seat count. The next production step is connecting
+that seat pack to durable PostgreSQL storage and a manager workflow for
+assigning learner emails.
+
 If `STRIPE_SECRET_KEY` is missing, checkout fails closed with a setup message and
 does not collect payment.
 
@@ -141,6 +147,8 @@ The first production release needs managed PostgreSQL before paid access can be
 durable. Current schema contracts live in:
 
 - `server/src/commerce/commerceSchema.ts` for purchases and enrollments.
+- `server/src/commerce/practiceSeatPackStore.ts` for temporary practice pack
+  seat tracking until a durable database repository is connected.
 - `server/src/auth/authSchema.ts` for passwordless users, magic-link tokens,
   and sessions.
 - `server/src/auth/magicLinkToken.ts` for creating raw email tokens while

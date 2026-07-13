@@ -1,6 +1,7 @@
 import express, { type Express, type Request, type Response } from "express";
 import { createCommerceFulfillmentService } from "../commerce/commerceFulfillment";
 import { createInMemoryEnrollmentStore } from "../commerce/enrollmentStore";
+import { createInMemoryPracticeSeatPackStore } from "../commerce/practiceSeatPackStore";
 import { createInMemoryPurchaseStore } from "../commerce/purchaseStore";
 import {
   createPurchaseEventFromStripeEvent,
@@ -11,9 +12,11 @@ import { getCommerceEnvironmentStatus } from "../config/environment";
 
 const purchaseStore = createInMemoryPurchaseStore();
 const enrollmentStore = createInMemoryEnrollmentStore();
+const practiceSeatPackStore = createInMemoryPracticeSeatPackStore();
 const commerceFulfillmentService = createCommerceFulfillmentService({
   purchaseStore,
   enrollmentStore,
+  practiceSeatPackStore,
 });
 
 export function getReceivedPurchaseEvents() {
@@ -22,6 +25,10 @@ export function getReceivedPurchaseEvents() {
 
 export function getProvisionedEnrollments() {
   return enrollmentStore.listEnrollments();
+}
+
+export function getProvisionedPracticeSeatPacks() {
+  return practiceSeatPackStore.listPracticeSeatPacks();
 }
 
 export function getEnrollmentStore() {
@@ -69,15 +76,22 @@ export function setupStripeWebhookRoute(app: Express) {
       const purchaseEvent = createPurchaseEventFromStripeEvent(stripeEvent);
       let purchaseRecorded = false;
       let enrollmentProvisioned = false;
+      let practiceSeatPackProvisioned = false;
 
       if (purchaseEvent) {
         const fulfillment =
           commerceFulfillmentService.fulfillPurchaseEvent(purchaseEvent);
         purchaseRecorded = fulfillment.purchaseRecorded;
         enrollmentProvisioned = fulfillment.enrollmentProvisioned;
+        practiceSeatPackProvisioned = fulfillment.practiceSeatPackProvisioned;
       }
 
-      res.json({ received: true, purchaseRecorded, enrollmentProvisioned });
+      res.json({
+        received: true,
+        purchaseRecorded,
+        enrollmentProvisioned,
+        practiceSeatPackProvisioned,
+      });
     }
   );
 }

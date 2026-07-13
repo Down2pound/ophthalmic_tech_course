@@ -8,6 +8,7 @@ import {
   createInMemoryPurchaseStore,
   type VerifiedPurchaseRecord,
 } from "./purchaseStore";
+import { createInMemoryPracticeSeatPackStore } from "./practiceSeatPackStore";
 import type { PurchaseEvent } from "./stripeWebhook";
 
 const purchaseEvent: PurchaseEvent = {
@@ -33,10 +34,12 @@ describe("createCommerceFulfillmentService", () => {
     expect(service.fulfillPurchaseEvent(purchaseEvent)).toEqual({
       purchaseRecorded: true,
       enrollmentProvisioned: true,
+      practiceSeatPackProvisioned: false,
     });
     expect(service.fulfillPurchaseEvent(purchaseEvent)).toEqual({
       purchaseRecorded: false,
       enrollmentProvisioned: false,
+      practiceSeatPackProvisioned: false,
     });
     expect(purchaseStore.listPurchases()).toHaveLength(1);
     expect(enrollmentStore.listEnrollments()).toHaveLength(1);
@@ -63,6 +66,42 @@ describe("createCommerceFulfillmentService", () => {
     expect(service.fulfillPurchaseEvent(purchaseEvent)).toEqual({
       purchaseRecorded: true,
       enrollmentProvisioned: true,
+      practiceSeatPackProvisioned: false,
+    });
+  });
+
+  it("records a practice purchase as a seat pack instead of one learner enrollment", () => {
+    const purchaseStore = createInMemoryPurchaseStore();
+    const enrollmentStore = createInMemoryEnrollmentStore();
+    const practiceSeatPackStore = createInMemoryPracticeSeatPackStore();
+    const service = createCommerceFulfillmentService({
+      purchaseStore,
+      enrollmentStore,
+      practiceSeatPackStore,
+      now: () => "2026-06-26T14:00:00.000Z",
+    });
+
+    expect(
+      service.fulfillPurchaseEvent({
+        ...purchaseEvent,
+        checkoutSessionId: "cs_test_practice",
+        offerId: "practice-five-seat-pack",
+        purchaserEmail: "manager@example.com",
+        amountTotal: 79900,
+        seatCount: 5,
+      })
+    ).toEqual({
+      purchaseRecorded: true,
+      enrollmentProvisioned: false,
+      practiceSeatPackProvisioned: true,
+    });
+    expect(enrollmentStore.listEnrollments()).toHaveLength(0);
+    expect(practiceSeatPackStore.listPracticeSeatPacks()).toHaveLength(1);
+    expect(practiceSeatPackStore.listPracticeSeatPacks()[0]).toMatchObject({
+      checkoutSessionId: "cs_test_practice",
+      purchaserEmail: "manager@example.com",
+      totalSeats: 5,
+      assignedSeats: 0,
     });
   });
 
@@ -82,6 +121,7 @@ describe("createCommerceFulfillmentService", () => {
     expect(service.fulfillPurchaseEvent(purchaseEvent)).toEqual({
       purchaseRecorded: false,
       enrollmentProvisioned: false,
+      practiceSeatPackProvisioned: false,
     });
   });
 });

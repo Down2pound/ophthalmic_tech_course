@@ -4,6 +4,11 @@ import {
   type EnrollmentStore,
 } from "./enrollmentStore";
 import {
+  createPracticeSeatPackFromPurchase,
+  type PracticeSeatPackRecord,
+  type PracticeSeatPackStore,
+} from "./practiceSeatPackStore";
+import {
   createVerifiedPurchaseRecord,
   type PurchaseStore,
   type VerifiedPurchaseRecord,
@@ -11,30 +16,39 @@ import {
 import type { PurchaseEvent } from "./stripeWebhook";
 
 export interface CommerceFulfillmentStore {
-  recordPurchase(
-    purchase: VerifiedPurchaseRecord
-  ): { created: boolean; purchase: VerifiedPurchaseRecord };
-  provisionEnrollment(
-    enrollment: EnrollmentRecord
-  ): { created: boolean; enrollment: EnrollmentRecord };
+  recordPurchase(purchase: VerifiedPurchaseRecord): {
+    created: boolean;
+    purchase: VerifiedPurchaseRecord;
+  };
+  provisionEnrollment(enrollment: EnrollmentRecord): {
+    created: boolean;
+    enrollment: EnrollmentRecord;
+  };
+  provisionPracticeSeatPack?(seatPack: PracticeSeatPackRecord): {
+    created: boolean;
+    seatPack: PracticeSeatPackRecord;
+  };
 }
 
 export interface CommerceFulfillmentServiceOptions {
   store?: CommerceFulfillmentStore;
   purchaseStore?: PurchaseStore;
   enrollmentStore?: EnrollmentStore;
+  practiceSeatPackStore?: PracticeSeatPackStore;
   now?: () => string;
 }
 
 export interface PurchaseFulfillmentResult {
   purchaseRecorded: boolean;
   enrollmentProvisioned: boolean;
+  practiceSeatPackProvisioned: boolean;
 }
 
 function resolveStore({
   store,
   purchaseStore,
   enrollmentStore,
+  practiceSeatPackStore,
 }: CommerceFulfillmentServiceOptions): CommerceFulfillmentStore {
   if (store) return store;
 
@@ -47,6 +61,7 @@ function resolveStore({
   return {
     recordPurchase: purchaseStore.recordPurchase,
     provisionEnrollment: enrollmentStore.provisionEnrollment,
+    provisionPracticeSeatPack: practiceSeatPackStore?.provisionPracticeSeatPack,
   };
 }
 
@@ -70,6 +85,22 @@ export function createCommerceFulfillmentService(
         return {
           purchaseRecorded: false,
           enrollmentProvisioned: false,
+          practiceSeatPackProvisioned: false,
+        };
+      }
+
+      const practiceSeatPack = createPracticeSeatPackFromPurchase(
+        purchaseResult.purchase
+      );
+
+      if (practiceSeatPack) {
+        const seatPackResult =
+          store.provisionPracticeSeatPack?.(practiceSeatPack);
+
+        return {
+          purchaseRecorded: true,
+          enrollmentProvisioned: false,
+          practiceSeatPackProvisioned: Boolean(seatPackResult?.created),
         };
       }
 
@@ -80,6 +111,7 @@ export function createCommerceFulfillmentService(
       return {
         purchaseRecorded: true,
         enrollmentProvisioned: enrollmentResult.created,
+        practiceSeatPackProvisioned: false,
       };
     },
   };

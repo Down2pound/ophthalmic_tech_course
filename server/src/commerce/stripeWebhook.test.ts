@@ -72,6 +72,55 @@ describe("createPurchaseEventFromStripeEvent", () => {
     });
   });
 
+  it("includes practice seat count metadata when present", () => {
+    expect(
+      createPurchaseEventFromStripeEvent({
+        id: "evt_practice",
+        type: "checkout.session.completed",
+        data: {
+          object: {
+            id: "cs_test_practice",
+            customer_email: "manager@example.com",
+            metadata: {
+              offer_id: "practice-five-seat-pack",
+              access_months: "12",
+              seat_count: "5",
+            },
+            amount_total: 79900,
+            currency: "usd",
+          },
+        },
+      })
+    ).toMatchObject({
+      checkoutSessionId: "cs_test_practice",
+      offerId: "practice-five-seat-pack",
+      purchaserEmail: "manager@example.com",
+      seatCount: 5,
+    });
+  });
+
+  it("rejects invalid practice seat count metadata", () => {
+    expect(
+      createPurchaseEventFromStripeEvent({
+        id: "evt_bad_practice",
+        type: "checkout.session.completed",
+        data: {
+          object: {
+            id: "cs_test_practice",
+            customer_email: "manager@example.com",
+            metadata: {
+              offer_id: "practice-five-seat-pack",
+              access_months: "12",
+              seat_count: "0",
+            },
+            amount_total: 79900,
+            currency: "usd",
+          },
+        },
+      })
+    ).toBeNull();
+  });
+
   it("ignores unrelated Stripe events", () => {
     expect(
       createPurchaseEventFromStripeEvent({

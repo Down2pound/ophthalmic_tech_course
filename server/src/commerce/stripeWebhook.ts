@@ -30,18 +30,18 @@ export interface PurchaseEvent {
   amountTotal: number;
   currency: string;
   accessMonths: number;
+  seatCount?: number;
 }
 
 function parseStripeSignatureHeader(signatureHeader: string) {
-  return signatureHeader.split(",").reduce<Record<string, string[]>>(
-    (parts, pair) => {
+  return signatureHeader
+    .split(",")
+    .reduce<Record<string, string[]>>((parts, pair) => {
       const [key, value] = pair.split("=");
       if (!key || !value) return parts;
       parts[key] = [...(parts[key] ?? []), value];
       return parts;
-    },
-    {}
-  );
+    }, {});
 }
 
 export function verifyStripeWebhookSignature({
@@ -65,7 +65,7 @@ export function verifyStripeWebhookSignature({
     .digest("hex");
   const expectedBuffer = Buffer.from(expectedSignature);
 
-  return signatures.some((signature) => {
+  return signatures.some(signature => {
     const signatureBuffer = Buffer.from(signature);
     return (
       signatureBuffer.length === expectedBuffer.length &&
@@ -82,6 +82,9 @@ export function createPurchaseEventFromStripeEvent(
   const session = event.data.object;
   const offerId = session.metadata?.offer_id;
   const accessMonths = Number(session.metadata?.access_months);
+  const seatCount = session.metadata?.seat_count
+    ? Number(session.metadata.seat_count)
+    : undefined;
 
   if (
     !session.id ||
@@ -89,7 +92,9 @@ export function createPurchaseEventFromStripeEvent(
     !session.customer_email ||
     !session.amount_total ||
     !session.currency ||
-    !Number.isFinite(accessMonths)
+    !Number.isFinite(accessMonths) ||
+    (seatCount !== undefined &&
+      (!Number.isInteger(seatCount) || seatCount <= 0))
   ) {
     return null;
   }
@@ -102,5 +107,6 @@ export function createPurchaseEventFromStripeEvent(
     amountTotal: session.amount_total,
     currency: session.currency,
     accessMonths,
+    ...(seatCount ? { seatCount } : {}),
   };
 }
