@@ -330,7 +330,8 @@ pnpm launch:bundle
 The generated `launch-evidence/` folder is ignored by Git and should not
 contain `.env`, live secrets, raw tokens, cookies, database passwords, or Stripe
 secret keys. It includes the production launch package, clinical review packet,
-launch doctor report, and runtime readiness snapshot.
+launch doctor report, manual launch QA evidence template, and runtime readiness
+snapshot.
 
 ## Database Contracts
 
