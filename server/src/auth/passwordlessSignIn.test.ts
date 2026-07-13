@@ -29,7 +29,7 @@ describe("requestPasswordlessSignIn", () => {
         to: "learner@example.com",
         subject: "Your OptiTech Academy sign-in link",
         signInUrl:
-          "https://optitech.example.com/auth/callback?token=raw-token-value",
+          "https://optitech.example.com/api/auth/callback?token=raw-token-value",
       },
     });
     expect(JSON.stringify(request.magicLinkRecord)).not.toContain(

@@ -7,7 +7,8 @@ import {
 const emailPayload = {
   to: "learner@example.com",
   subject: "Your OptiTech Academy sign-in link",
-  signInUrl: "https://optitech.example.com/auth/callback?token=private-token",
+  signInUrl:
+    "https://optitech.example.com/api/auth/callback?token=private-token",
 };
 
 describe("createMagicLinkEmailMessage", () => {
@@ -22,9 +23,9 @@ describe("createMagicLinkEmailMessage", () => {
       to: "learner@example.com",
       subject: "Your OptiTech Academy sign-in link",
       text:
-        "Use this secure link to sign in to OptiTech Academy: https://optitech.example.com/auth/callback?token=private-token\n\nThis link expires soon and can only be used once.",
+        "Use this secure link to sign in to OptiTech Academy: https://optitech.example.com/api/auth/callback?token=private-token\n\nThis link expires soon and can only be used once.",
       html:
-        '<p>Use this secure link to sign in to OptiTech Academy:</p><p><a href="https://optitech.example.com/auth/callback?token=private-token">Sign in to OptiTech Academy</a></p><p>This link expires soon and can only be used once.</p>',
+        '<p>Use this secure link to sign in to OptiTech Academy:</p><p><a href="https://optitech.example.com/api/auth/callback?token=private-token">Sign in to OptiTech Academy</a></p><p>This link expires soon and can only be used once.</p>',
     });
   });
 });

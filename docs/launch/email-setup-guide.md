@@ -49,7 +49,7 @@ PUBLIC_APP_URL=
 back to:
 
 ```text
-https://your-domain.example/auth/callback?token=...
+https://your-domain.example/api/auth/callback?token=...
 ```
 
 ## Sender Setup

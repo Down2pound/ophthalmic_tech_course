@@ -28,6 +28,9 @@ describe("preparePasswordlessSignInResponse", () => {
     expect(JSON.stringify(prepared.publicResponse)).not.toContain(
       "auth/callback"
     );
+    expect(JSON.stringify(prepared.publicResponse)).not.toContain(
+      "api/auth/callback"
+    );
     expect(prepared.signInRequest.emailPayload.signInUrl).toContain(
       "private-raw-token"
     );

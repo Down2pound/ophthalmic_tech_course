@@ -69,7 +69,9 @@ export function requestPasswordlessSignIn({
   const createdAt = new Date(now());
   const expiresAt = addMinutes(createdAt, expiresInMinutes);
   const token = createToken();
-  const signInUrl = new URL(`${normalizeBaseUrl(appBaseUrl)}/auth/callback`);
+  const signInUrl = new URL(
+    `${normalizeBaseUrl(appBaseUrl)}/api/auth/callback`
+  );
   signInUrl.searchParams.set("token", token.rawToken);
 
   return {
