@@ -62,7 +62,9 @@ Record safe evidence in `manual-launch-qa-evidence.md`.
 - [ ] Practice seat assignment works and cannot exceed purchased capacity.
 - [ ] Learner can sign in, open Module 1, complete progress, submit quiz, and
       see certificate eligibility only after requirements are met.
-- [ ] Custom practice inquiry path is visible and works as a conversation path.
+- [ ] Custom practice inquiry path is visible and creates a durable lead record.
+- [ ] Protected practice inquiry list shows the test lead without exposing
+      secrets or private clinical details.
 
 ## 6. Run Browser And Sharing Checks
 

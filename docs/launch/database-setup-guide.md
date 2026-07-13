@@ -40,6 +40,7 @@ That command creates these launch tables when they do not already exist:
 - `commerce_enrollments`
 - `commerce_practice_seat_packs`
 - `commerce_practice_seat_assignments`
+- `commerce_practice_inquiries`
 - `auth_users`
 - `auth_magic_links`
 - `auth_sessions`
@@ -67,6 +68,7 @@ Save safe evidence that shows:
 - `/api/launch/readiness` reports the launch database schema as verified.
 - Stripe test checkout created a durable individual enrollment.
 - Stripe test checkout created a durable practice seat pack.
+- A custom practice inquiry created a durable lead record.
 - A learner's lesson progress survives refresh and sign-out/sign-in.
 - A quiz attempt is saved server-side.
 

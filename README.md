@@ -170,6 +170,9 @@ Checkout routes:
   `GET /api/support/buyer-lookup?email=buyer@example.com`
 - Protected access revocation endpoint for refunds or support corrections:
   `POST /api/support/access-revocations`
+- Custom practice inquiry capture endpoint: `POST /api/practice-inquiries`
+- Protected practice inquiry list endpoint:
+  `GET /api/support/practice-inquiries`
 - Health check endpoint: `GET /api/health`
 - Runtime launch check: `GET /api/launch/readiness`
 - Clinical review packet export:
@@ -417,6 +420,8 @@ durable. Current schema contracts live in:
   purchase, enrollment, practice seat pack, and assignment repositories.
 - `server/src/commerce/practiceSeatPackStore.ts` for the shared practice pack
   seat tracking and assignment interface, including the local in-memory fallback.
+- `server/src/commerce/practiceInquiryStore.ts` for larger-practice lead
+  capture, durable inquiry storage, and internal notification emails.
 - `server/src/auth/authSchema.ts` for passwordless users, magic-link tokens,
   and sessions.
 - `server/src/auth/postgresAuthStore.ts` for PostgreSQL-backed magic-link and

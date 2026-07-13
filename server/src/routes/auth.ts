@@ -33,6 +33,7 @@ import {
   getPracticeSeatPackStore,
   getPurchaseStore,
 } from "./stripeWebhook";
+import { getPracticeInquiryStore } from "./checkout";
 
 interface PasswordlessStartRequestBody {
   email?: string;
@@ -350,4 +351,17 @@ export function setupAuthRoutes(router: Router) {
       res.status(result.revoked ? 200 : 404).json(result);
     }
   );
+
+  router.get("/support/practice-inquiries", async (req: Request, res: Response) => {
+    const authorization = authorizePracticeSeatAdminRequest(req);
+
+    if (!authorization.authorized) {
+      res.status(authorization.status).json(authorization.payload);
+      return;
+    }
+
+    res.json({
+      inquiries: await getPracticeInquiryStore().listPracticeInquiries(),
+    });
+  });
 }

@@ -69,6 +69,16 @@ Use this table when a practice buys seats for employees.
 | --- | ---: | ---: | ---: | --- | --- | --- | --- |
 | Example Eye Care | 5 | 2 | 3 | admin@example.com | Jeff | 2026-07-20 | Two new technicians starting Module 1. |
 
+## Practice Inquiry Tracker
+
+Use this table for larger-practice conversations that start before purchase.
+Do not save patient details, private employee performance notes, passwords,
+card data, raw sign-in links, or secrets.
+
+| Date | Inquiry ID | Practice | Contact Email | Estimated Learners | Timeline | Status | Next Step |
+| --- | --- | --- | --- | ---: | --- | --- | --- |
+| 2026-07-13 | practice_inquiry_example | Example Eye Care | manager@example.com | 18 | Next hiring class | New | Schedule rollout call. |
+
 ## Refund And Support Tracker
 
 Use this table when someone needs help or requests a refund.

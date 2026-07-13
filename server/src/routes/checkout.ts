@@ -2,11 +2,22 @@ import { getCheckoutOfferById } from "@shared/commerce/offers";
 import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
 import type { Request, Response, Router } from "express";
 import {
+  createInMemoryPracticeInquiryStore,
+  createPostgresPracticeInquiryStore,
+  preparePracticeInquiryRecord,
+  sendPracticeInquiryNotification,
+  type PracticeInquiryInput,
+  type PracticeInquiryStore,
+} from "../commerce/practiceInquiryStore";
+import {
   buildCheckoutReturnUrls,
   buildStripeCheckoutParams,
   getCheckoutBaseUrl,
 } from "../commerce/stripeCheckout";
-import { getCommerceEnvironmentStatus } from "../config/environment";
+import {
+  getAuthEnvironmentStatus,
+  getCommerceEnvironmentStatus,
+} from "../config/environment";
 import { getPaidCheckoutGateStatus } from "../config/paidCheckoutGate";
 import { getLaunchDatabaseReadiness } from "../db/launchDatabaseReadiness";
 import { getPostgresPool } from "../db/postgres";
@@ -20,7 +31,111 @@ interface CheckoutRequestBody {
   offerId?: string;
 }
 
+interface PracticeInquiryRequestBody {
+  practiceName?: string;
+  contactName?: string;
+  contactEmail?: string;
+  estimatedLearnerCount?: number;
+  targetTimeline?: string;
+  message?: string;
+}
+
+function createPracticeInquiryStore(): PracticeInquiryStore {
+  const postgresPool = getPostgresPool();
+
+  if (postgresPool) {
+    return createPostgresPracticeInquiryStore(postgresPool);
+  }
+
+  return createInMemoryPracticeInquiryStore();
+}
+
+const practiceInquiryStore = createPracticeInquiryStore();
+
+export function getPracticeInquiryStore() {
+  return practiceInquiryStore;
+}
+
+function toPracticeInquiryInput(
+  body: PracticeInquiryRequestBody
+): PracticeInquiryInput {
+  return {
+    practiceName: body.practiceName ?? "",
+    contactName: body.contactName ?? "",
+    contactEmail: body.contactEmail ?? "",
+    ...(body.estimatedLearnerCount
+      ? { estimatedLearnerCount: body.estimatedLearnerCount }
+      : {}),
+    targetTimeline: body.targetTimeline ?? "",
+    message: body.message ?? "",
+  };
+}
+
 export function setupCheckoutRoutes(router: Router) {
+  router.post("/practice-inquiries", async (req: Request, res: Response) => {
+    try {
+      const inquiry = preparePracticeInquiryRecord({
+        inquiry: toPracticeInquiryInput(
+          (req.body ?? {}) as PracticeInquiryRequestBody
+        ),
+      });
+      const storedInquiry =
+        await practiceInquiryStore.recordPracticeInquiry(inquiry);
+      const authStatus = getAuthEnvironmentStatus();
+      const from = process.env.SIGN_IN_FROM_EMAIL?.trim();
+      const apiUrl = process.env.TRANSACTIONAL_EMAIL_API_URL?.trim();
+      const apiKey = process.env.TRANSACTIONAL_EMAIL_API_KEY?.trim();
+      let notification: {
+        attempted: boolean;
+        sent: boolean;
+        providerMessageId?: string;
+        skippedReason?: string;
+        error?: string;
+      } = {
+        attempted: false,
+        sent: false,
+        skippedReason: "Transactional email is not configured.",
+      };
+
+      if (authStatus.passwordlessConfigured && from && apiUrl && apiKey) {
+        try {
+          const result = await sendPracticeInquiryNotification({
+            inquiry: storedInquiry,
+            from,
+            apiUrl,
+            apiKey,
+          });
+
+          notification = {
+            attempted: true,
+            sent: true,
+            ...(result.providerMessageId
+              ? { providerMessageId: result.providerMessageId }
+              : {}),
+          };
+        } catch {
+          notification = {
+            attempted: true,
+            sent: false,
+            error: "Practice inquiry notification could not be sent.",
+          };
+        }
+      }
+
+      res.status(201).json({
+        inquiry: storedInquiry,
+        notification,
+      });
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Practice inquiry could not be recorded.";
+
+      res.status(400).json({ error: message });
+    }
+  });
+
   router.post("/checkout/sessions", async (req: Request, res: Response) => {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     const environmentStatus = getCommerceEnvironmentStatus();

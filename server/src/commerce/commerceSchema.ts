@@ -3,6 +3,7 @@ export const commerceSchemaTables = [
   "commerce_enrollments",
   "commerce_practice_seat_packs",
   "commerce_practice_seat_assignments",
+  "commerce_practice_inquiries",
 ] as const;
 
 export const commerceSchemaSql = `
@@ -75,6 +76,21 @@ CREATE TABLE IF NOT EXISTS commerce_practice_seat_assignments (
 
 CREATE INDEX IF NOT EXISTS commerce_practice_seat_assignments_learner_email_idx
   ON commerce_practice_seat_assignments (learner_email);
+
+CREATE TABLE IF NOT EXISTS commerce_practice_inquiries (
+  id TEXT PRIMARY KEY,
+  practice_name TEXT NOT NULL,
+  contact_name TEXT NOT NULL,
+  contact_email TEXT NOT NULL,
+  estimated_learner_count INTEGER,
+  target_timeline TEXT NOT NULL,
+  message TEXT NOT NULL,
+  status TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS commerce_practice_inquiries_contact_email_idx
+  ON commerce_practice_inquiries (contact_email);
 `;
 
 export function getCommerceSchemaChecklist(): string[] {
@@ -85,5 +101,6 @@ export function getCommerceSchemaChecklist(): string[] {
     "Keep Stripe webhook idempotency enforced by unique event and checkout session fields.",
     "Provision practice seat packs from checkout metadata before inviting individual learners.",
     "Assign practice seats to learner emails without exceeding purchased seat capacity.",
+    "Store practice inquiries durably so larger team leads do not depend on mailto links.",
   ];
 }
