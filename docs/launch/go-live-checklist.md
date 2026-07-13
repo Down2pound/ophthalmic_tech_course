@@ -82,6 +82,9 @@ Record safe evidence in `manual-launch-qa-evidence.md`.
 
 Only after every earlier section passes:
 
+- [ ] Stripe live secret key is configured.
+- [ ] Stripe live-mode webhook endpoint is configured.
+- [ ] `/api/launch/readiness` no longer warns that Stripe is in test mode.
 - [ ] Set `ENABLE_PAID_ENROLLMENT=true`.
 - [ ] Redeploy or restart the app.
 - [ ] Run `LAUNCH_BASE_URL=https://your-domain.example pnpm launch:smoke`.

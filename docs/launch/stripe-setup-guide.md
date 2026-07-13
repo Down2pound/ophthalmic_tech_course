@@ -94,9 +94,10 @@ webhook fulfillment, and deployed smoke testing pass:
 2. Create the live-mode webhook endpoint for `/api/stripe/webhook`.
 3. Set the live webhook signing secret.
 4. Recheck `/api/launch/readiness`.
-5. Set `ENABLE_PAID_ENROLLMENT=true`.
-6. Redeploy or restart the app.
-7. Run one low-risk internal live purchase.
+5. Confirm the readiness report no longer warns that Stripe is in test mode.
+6. Set `ENABLE_PAID_ENROLLMENT=true`.
+7. Redeploy or restart the app.
+8. Run one low-risk internal live purchase.
 
 If that live purchase fails, turn `ENABLE_PAID_ENROLLMENT=false` again before
 debugging.

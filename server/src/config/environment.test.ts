@@ -6,6 +6,7 @@ import {
   getDatabaseEnvironmentStatus,
   getMissingEnvironmentVariables,
   getPracticeSeatEnvironmentStatus,
+  getStripeSecretKeyMode,
   isPlaceholderEnvironmentValue,
   isUnsafeLaunchEnvironmentValue,
 } from "./environment";
@@ -118,6 +119,12 @@ describe("isUnsafeLaunchEnvironmentValue", () => {
     ).toBe(false);
     expect(
       isUnsafeLaunchEnvironmentValue(
+        "STRIPE_SECRET_KEY",
+        "sk_live_1234567890abcdef"
+      )
+    ).toBe(false);
+    expect(
+      isUnsafeLaunchEnvironmentValue(
         "STRIPE_WEBHOOK_SECRET",
         "whsec_1234567890abcdef"
       )
@@ -131,11 +138,32 @@ describe("isUnsafeLaunchEnvironmentValue", () => {
   });
 });
 
+describe("getStripeSecretKeyMode", () => {
+  it("identifies missing, test, live, and unknown Stripe secret keys", () => {
+    expect(getStripeSecretKeyMode({})).toBe("missing");
+    expect(
+      getStripeSecretKeyMode({
+        STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
+      })
+    ).toBe("test");
+    expect(
+      getStripeSecretKeyMode({
+        STRIPE_SECRET_KEY: "sk_live_1234567890abcdef",
+      })
+    ).toBe("live");
+    expect(
+      getStripeSecretKeyMode({
+        STRIPE_SECRET_KEY: "sk_something_else_1234567890abcdef",
+      })
+    ).toBe("unknown");
+  });
+});
+
 describe("getCommerceEnvironmentStatus", () => {
   it("marks checkout and webhooks as configured when required values exist", () => {
     expect(
       getCommerceEnvironmentStatus({
-        STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
+        STRIPE_SECRET_KEY: "sk_live_1234567890abcdef",
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "true",
         STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",
@@ -144,6 +172,7 @@ describe("getCommerceEnvironmentStatus", () => {
       checkoutConfigured: true,
       paidEnrollmentEnabled: true,
       webhookConfigured: true,
+      stripeSecretKeyMode: "live",
       missingCheckoutVariables: [],
       missingWebhookVariables: [],
     });
@@ -154,6 +183,7 @@ describe("getCommerceEnvironmentStatus", () => {
       checkoutConfigured: false,
       paidEnrollmentEnabled: false,
       webhookConfigured: false,
+      stripeSecretKeyMode: "missing",
       missingCheckoutVariables: [
         "STRIPE_SECRET_KEY",
         "PUBLIC_APP_URL",
@@ -175,6 +205,7 @@ describe("getCommerceEnvironmentStatus", () => {
       checkoutConfigured: true,
       paidEnrollmentEnabled: false,
       webhookConfigured: true,
+      stripeSecretKeyMode: "test",
       missingCheckoutVariables: [],
       missingWebhookVariables: [],
     });

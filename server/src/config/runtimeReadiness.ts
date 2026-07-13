@@ -133,6 +133,15 @@ function getRuntimeLaunchNextSteps({
     });
   }
 
+  if (commerce.checkoutConfigured && commerce.stripeSecretKeyMode !== "live") {
+    steps.push({
+      title: "Switch Stripe to live mode before real sales",
+      detail:
+        "Test mode is useful for practice purchases, but final paid launch requires a live Stripe secret key and live webhook endpoint.",
+      command: "STRIPE_SECRET_KEY=sk_live_...",
+    });
+  }
+
   if (!auth.passwordlessConfigured) {
     steps.push({
       title: "Configure passwordless sign-in email",
@@ -198,6 +207,12 @@ export function getRuntimeLaunchReadinessReport({
       ? null
       : `Launch checklist still has ${staticSummary.blockedCount} blocked gate(s).`,
     formatMissingWarning("Stripe checkout", commerce.missingCheckoutVariables),
+    commerce.checkoutConfigured && commerce.stripeSecretKeyMode === "test"
+      ? "Stripe checkout is configured with a test-mode secret key. Use a live Stripe secret key before real sales."
+      : null,
+    commerce.checkoutConfigured && commerce.stripeSecretKeyMode === "unknown"
+      ? "Stripe checkout secret key does not look like a Stripe test or live secret key."
+      : null,
     formatMissingWarning("Stripe webhook", commerce.missingWebhookVariables),
     formatMissingWarning(
       "Passwordless sign-in",
@@ -231,6 +246,7 @@ export function getRuntimeLaunchReadinessReport({
     readyForPaidLaunch:
       staticSummary.ready &&
       commerce.checkoutConfigured &&
+      commerce.stripeSecretKeyMode === "live" &&
       commerce.paidEnrollmentEnabled &&
       commerce.webhookConfigured &&
       auth.passwordlessConfigured &&

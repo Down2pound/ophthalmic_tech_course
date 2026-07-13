@@ -10,7 +10,7 @@ const verifiedDatabaseReadiness = {
 };
 
 const launchReadyEnv = {
-  STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
+  STRIPE_SECRET_KEY: "sk_live_1234567890abcdef",
   PUBLIC_APP_URL: "https://academy.spindeleye.com",
   ENABLE_PAID_ENROLLMENT: "true",
   STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",

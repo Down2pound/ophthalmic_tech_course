@@ -20,6 +20,7 @@ const readinessReport: RuntimeLaunchReadinessReport = {
     checkoutConfigured: false,
     paidEnrollmentEnabled: false,
     webhookConfigured: false,
+    stripeSecretKeyMode: "missing",
     missingCheckoutVariables: ["STRIPE_SECRET_KEY"],
     missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],
   },

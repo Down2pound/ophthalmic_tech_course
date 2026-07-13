@@ -24,6 +24,7 @@ const runtimeReport = {
     checkoutConfigured: true,
     paidEnrollmentEnabled: false,
     webhookConfigured: false,
+    stripeSecretKeyMode: "test",
     missingCheckoutVariables: [],
     missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],
   },

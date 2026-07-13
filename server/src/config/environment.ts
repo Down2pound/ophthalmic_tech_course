@@ -1,9 +1,12 @@
 export type EnvironmentMap = Record<string, string | undefined>;
 
+export type StripeSecretKeyMode = "missing" | "test" | "live" | "unknown";
+
 export interface CommerceEnvironmentStatus {
   checkoutConfigured: boolean;
   paidEnrollmentEnabled: boolean;
   webhookConfigured: boolean;
+  stripeSecretKeyMode: StripeSecretKeyMode;
   missingCheckoutVariables: string[];
   missingWebhookVariables: string[];
 }
@@ -119,6 +122,17 @@ function isPostgresUrl(value: string): boolean {
   }
 }
 
+export function getStripeSecretKeyMode(
+  env: EnvironmentMap = process.env
+): StripeSecretKeyMode {
+  const secretKey = env.STRIPE_SECRET_KEY?.trim();
+
+  if (!secretKey || secretKey.length === 0) return "missing";
+  if (secretKey.startsWith("sk_test_")) return "test";
+  if (secretKey.startsWith("sk_live_")) return "live";
+  return "unknown";
+}
+
 export function isUnsafeLaunchEnvironmentValue(
   variableName: string,
   value: string
@@ -129,7 +143,10 @@ export function isUnsafeLaunchEnvironmentValue(
 
   switch (variableName) {
     case "STRIPE_SECRET_KEY":
-      return !trimmedValue.startsWith("sk_") || !hasMinimumLength(value, 16);
+      return (
+        getStripeSecretKeyMode({ STRIPE_SECRET_KEY: trimmedValue }) ===
+          "unknown" || !hasMinimumLength(value, 16)
+      );
     case "STRIPE_WEBHOOK_SECRET":
       return !trimmedValue.startsWith("whsec_") || !hasMinimumLength(value, 16);
     case "PUBLIC_APP_URL":
@@ -182,6 +199,7 @@ export function getCommerceEnvironmentStatus(
       "ENABLE_PAID_ENROLLMENT"
     ),
     webhookConfigured: missingWebhookVariables.length === 0,
+    stripeSecretKeyMode: getStripeSecretKeyMode(env),
     missingCheckoutVariables,
     missingWebhookVariables,
   };

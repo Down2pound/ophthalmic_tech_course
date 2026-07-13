@@ -31,6 +31,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         checkoutConfigured: true,
         paidEnrollmentEnabled: false,
         webhookConfigured: false,
+        stripeSecretKeyMode: "test",
         missingCheckoutVariables: [],
         missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],
       },
@@ -63,6 +64,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
       "Finish Module 1 clinical review",
       "Connect hosted PostgreSQL",
       "Finish Stripe checkout and webhook setup",
+      "Switch Stripe to live mode before real sales",
       "Configure passwordless sign-in email",
       "Protect practice seat assignment",
       "Keep paid enrollment disabled until final proof",
@@ -78,6 +80,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
     );
     expect(report.warnings).toContain(
       "Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."
+    );
+    expect(report.warnings).toContain(
+      "Stripe checkout is configured with a test-mode secret key. Use a live Stripe secret key before real sales."
     );
     expect(report.warnings).toContain(
       "Paid enrollment launch switch is disabled: ENABLE_PAID_ENROLLMENT must be true."
@@ -140,7 +145,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
   it("blocks paid launch when DATABASE_URL exists but launch tables are missing", () => {
     const report = getRuntimeLaunchReadinessReport({
       env: {
-        STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
+        STRIPE_SECRET_KEY: "sk_live_1234567890abcdef",
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "true",
         STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",
@@ -181,7 +186,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
   it("never includes actual secret values in warnings or missing variable lists", () => {
     const report = getRuntimeLaunchReadinessReport({
       env: {
-        STRIPE_SECRET_KEY: "sk_test_1234567890abcdef",
+        STRIPE_SECRET_KEY: "sk_live_1234567890abcdef",
         PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "true",
         STRIPE_WEBHOOK_SECRET: "whsec_1234567890abcdef",
@@ -209,7 +214,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
 
     const serializedReport = JSON.stringify(report);
 
-    expect(serializedReport).not.toContain("sk_test_1234567890abcdef");
+    expect(serializedReport).not.toContain("sk_live_1234567890abcdef");
     expect(serializedReport).not.toContain("whsec_1234567890abcdef");
     expect(serializedReport).not.toContain(
       "session-secret-value-with-at-least-32-chars"

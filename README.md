@@ -127,8 +127,10 @@ Stripe key guide:
   are fine in examples, but they will not unlock paid checkout.
 - Launch-critical values must also look production-ready: public and email API
   URLs must use `https`, `DATABASE_URL` must be PostgreSQL, Stripe server values
-  must use the expected `sk_` and `whsec_` prefixes, and private session/admin
-  secrets must be at least 32 characters long.
+  must use the expected `sk_test_` or `sk_live_` and `whsec_` prefixes, and
+  private session/admin secrets must be at least 32 characters long.
+- Stripe test keys are useful for practice purchases, but final paid readiness
+  requires a live `sk_live_...` secret key.
 
 Generate strong local values for the private session/admin secrets with:
 

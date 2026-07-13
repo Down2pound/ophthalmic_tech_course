@@ -11,6 +11,7 @@ export interface RuntimeCommerceStatus {
   checkoutConfigured: boolean;
   paidEnrollmentEnabled: boolean;
   webhookConfigured: boolean;
+  stripeSecretKeyMode: "missing" | "test" | "live" | "unknown";
   missingCheckoutVariables: string[];
   missingWebhookVariables: string[];
 }
