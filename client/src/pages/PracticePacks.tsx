@@ -10,6 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import {
+  createMailtoHref,
   customPracticeInquiryOffer,
   formatOfferPrice,
   practicePackOffers,
@@ -51,9 +52,11 @@ export default function PracticePacks() {
       setActiveOfferId(null);
     }
   };
-  const customPracticeHref = `mailto:${customPracticeInquiryOffer.contactEmail}?subject=${encodeURIComponent(
-    customPracticeInquiryOffer.subject
-  )}`;
+  const customPracticeHref = createMailtoHref({
+    email: customPracticeInquiryOffer.contactEmail,
+    subject: customPracticeInquiryOffer.subject,
+    body: customPracticeInquiryOffer.emailBody,
+  });
   const supportHref = `mailto:${buyerSupportContact.email}?subject=${encodeURIComponent(
     buyerSupportContact.subject
   )}`;

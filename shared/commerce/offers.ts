@@ -22,6 +22,7 @@ export interface PracticeInquiryOffer {
   idealFor: string;
   contactEmail: string;
   subject: string;
+  emailBody: string;
   includes: string[];
   nextSteps: string[];
   limitations: string[];
@@ -112,6 +113,20 @@ export const customPracticeInquiryOffer: PracticeInquiryOffer = {
     "Practices that need more than 15 seats, want a rollout plan, or need to coordinate supervisors before purchase.",
   contactEmail: "jeff.chapin@spindeleye.com",
   subject: "OptiTech custom practice onboarding inquiry",
+  emailBody: [
+    "Hi Jeff,",
+    "",
+    "I am interested in OptiTech Academy practice onboarding.",
+    "",
+    "Practice name:",
+    "Primary contact:",
+    "Approximate learner count:",
+    "Target onboarding timeline:",
+    "Interested in: five seats / fifteen seats / larger custom quote",
+    "Main onboarding challenge:",
+    "",
+    "I understand this course supports foundational learning and does not replace local supervision, clinical policy, or hands-on competency signoff.",
+  ].join("\n"),
   includes: [
     "Seat-count planning before purchase.",
     "Discussion of supervisor roles and Skills Passport use.",
@@ -161,4 +176,22 @@ export function formatOfferPrice(offer: CourseOffer): string {
     currency: offer.currency,
     maximumFractionDigits: 0,
   }).format(offer.priceCents / 100);
+}
+
+export function createMailtoHref({
+  email,
+  subject,
+  body,
+}: {
+  email: string;
+  subject: string;
+  body?: string;
+}): string {
+  const params = new URLSearchParams({ subject });
+
+  if (body) {
+    params.set("body", body);
+  }
+
+  return `mailto:${email}?${params.toString()}`;
 }

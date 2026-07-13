@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { normalizeCheckoutEmail } from "./checkoutEmail";
 import {
+  createMailtoHref,
   customPracticeInquiryOffer,
   foundingLearnerOffer,
   practicePackOffers,
@@ -75,6 +76,11 @@ describe("customPracticeInquiryOffer", () => {
     expect(customPracticeInquiryOffer.id).toBe("custom-practice-onboarding");
     expect(customPracticeInquiryOffer.contactEmail).toContain("@");
     expect(customPracticeInquiryOffer.subject).toMatch(/custom practice/i);
+    expect(customPracticeInquiryOffer.emailBody).toMatch(/Practice name/i);
+    expect(customPracticeInquiryOffer.emailBody).toMatch(/learner count/i);
+    expect(customPracticeInquiryOffer.emailBody).toMatch(
+      /larger custom quote/i
+    );
     expect(customPracticeInquiryOffer.nextSteps.join(" ")).toMatch(
       /larger custom quote/i
     );
@@ -92,6 +98,22 @@ describe("customPracticeInquiryOffer", () => {
     expect(combined).toMatch(/separate written agreement/i);
     expect(combined).toMatch(/employer supervision/i);
     expect(combined).not.toMatch(/guarantee/i);
+  });
+
+  it("builds a safe prefilled inquiry email link", () => {
+    const href = createMailtoHref({
+      email: customPracticeInquiryOffer.contactEmail,
+      subject: customPracticeInquiryOffer.subject,
+      body: customPracticeInquiryOffer.emailBody,
+    });
+
+    expect(href).toContain("mailto:jeff.chapin@spindeleye.com");
+    expect(href).toContain("subject=OptiTech+custom+practice+onboarding");
+    expect(href).toContain("body=");
+    expect(decodeURIComponent(href)).toContain("Practice name:");
+    expect(decodeURIComponent(href)).toContain("Approximate learner count:");
+    expect(decodeURIComponent(href)).not.toMatch(/patient/i);
+    expect(decodeURIComponent(href)).not.toMatch(/card number/i);
   });
 });
 
