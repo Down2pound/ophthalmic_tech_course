@@ -27,6 +27,8 @@ recipe.
 
 If you want the simplest hosted path, use Render with the included
 `render.yaml` Blueprint and follow `docs/launch/render-deployment-guide.md`.
+That Blueprint runs `pnpm db:setup` as a pre-deploy command so the launch
+database tables are created before the service starts.
 
 ## Host Settings
 

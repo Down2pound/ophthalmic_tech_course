@@ -31,6 +31,7 @@ describe("deployment files", () => {
     expect(renderBlueprint).toContain("name: optitech-academy");
     expect(renderBlueprint).toContain("runtime: node");
     expect(renderBlueprint).toContain("pnpm build");
+    expect(renderBlueprint).toContain("preDeployCommand: pnpm db:setup");
     expect(renderBlueprint).toContain("startCommand: node dist/index.js");
     expect(renderBlueprint).toContain("healthCheckPath: /api/health");
     expect(renderBlueprint).toContain("fromDatabase:");

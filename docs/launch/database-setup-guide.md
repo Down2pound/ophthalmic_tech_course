@@ -30,6 +30,10 @@ Run:
 pnpm db:setup
 ```
 
+On Render, the included `render.yaml` Blueprint runs this as a pre-deploy
+command. If you are using a different host, run it manually after `DATABASE_URL`
+points to managed PostgreSQL.
+
 That command creates these launch tables when they do not already exist:
 
 - `commerce_purchases`

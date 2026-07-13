@@ -203,6 +203,7 @@ describe("createLaunchEvidenceBundle", () => {
       "OptiTech Academy Render Deployment Guide"
     );
     expect(renderDeploymentGuide).toContain("render.yaml");
+    expect(renderDeploymentGuide).toContain("pre-deploy database setup");
     expect(renderDeploymentGuide).toContain("pnpm db:setup");
     expect(renderDeploymentGuide).not.toContain("sk_test_");
     expect(renderDeploymentGuide).not.toContain("whsec_");

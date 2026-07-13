@@ -11,6 +11,7 @@ safe setup recipe. It creates:
 - A Node web service named `optitech-academy`.
 - A managed PostgreSQL database named `optitech-academy-db`.
 - The build command: `pnpm install --frozen-lockfile && pnpm build`.
+- The pre-deploy database setup command: `pnpm db:setup`.
 - The start command: `node dist/index.js`.
 - The health check path: `/api/health`.
 
@@ -76,6 +77,29 @@ DATABASE_SSL=true
 
 Leave paid enrollment off until every launch gate passes.
 
+## Database Tables
+
+The Blueprint runs this before the web service starts:
+
+```bash
+pnpm db:setup
+```
+
+That command creates the tables the app needs for purchases, learner access,
+practice seat packs, sign-in links, lesson progress, and quiz attempts.
+
+If the first deploy fails at the pre-deploy step, check that Render created the
+database and connected `DATABASE_URL`. After fixing the database setting, run a
+manual deploy again.
+
+You can also rerun setup later from a Render shell:
+
+```bash
+pnpm db:setup
+```
+
+The setup is safe to rerun because it uses `CREATE TABLE IF NOT EXISTS`.
+
 ## After The First Deploy
 
 Open the deployed URL and check:
@@ -86,25 +110,9 @@ https://your-render-or-custom-domain.example/api/launch/readiness
 ```
 
 The health endpoint should respond. The readiness endpoint will probably say
-paid launch is not ready yet. That is expected until Stripe, email, database
-schema setup, clinical review, and smoke testing are complete.
-
-## Set Up The Database Tables
-
-After Render creates the PostgreSQL database, open a Render shell for the web
-service and run:
-
-```bash
-pnpm db:setup
-```
-
-Then reopen:
-
-```text
-https://your-render-or-custom-domain.example/api/launch/readiness
-```
-
-The database section should say the launch schema is verified.
+paid launch is not ready yet. That is expected until Stripe, email, clinical
+review, and smoke testing are complete. The database section should say the
+launch schema is verified after `pnpm db:setup` has run successfully.
 
 ## Connect Stripe
 
@@ -144,6 +152,7 @@ Only accept real buyers after that final smoke test passes.
 ## Render Blueprint Notes
 
 - Render's Blueprint docs say `render.yaml` belongs in the repo root.
+- `preDeployCommand` runs `pnpm db:setup` after build and before the app starts.
 - `sync: false` asks Render to collect secret values in the dashboard instead
   of storing them in Git.
 - `fromDatabase` connects `DATABASE_URL` to the managed PostgreSQL database.
