@@ -117,6 +117,19 @@ https://your-domain.example/api/launch/readiness
 The database gate is ready only when the report says the launch schema is
 verified.
 
+## Browser Safety Headers
+
+The server adds basic browser safety headers to every response. After deploy,
+confirm the live site response includes:
+
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: DENY`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy`
+- `Cross-Origin-Opener-Policy: same-origin`
+
+The response should not include `X-Powered-By`.
+
 ## Stripe Setup
 
 Use `docs/launch/stripe-setup-guide.md` as the detailed Stripe recipe.

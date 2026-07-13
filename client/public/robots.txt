@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin
+Disallow: /send
 Disallow: /practice-seat-admin
 Disallow: /launch-readiness
-

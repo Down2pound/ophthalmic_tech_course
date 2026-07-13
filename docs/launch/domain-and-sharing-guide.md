@@ -64,7 +64,7 @@ https://your-real-domain.example/policies
 ```
 
 Each page should load without asking for an admin token. The practice-seat admin
-page should stay protected.
+page and alert-button admin page should stay protected.
 
 ## Run The Smoke Test
 
@@ -159,6 +159,8 @@ Policies: https://your-real-domain.example/policies
 Do not share:
 
 - `/practice-seat-admin`
+- `/admin`
+- `/send`
 - `/launch-readiness`
 - `/api/...`
 - Any Stripe dashboard URL

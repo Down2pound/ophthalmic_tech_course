@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { publicSitemapRoutes, renderLaunchSitemap } from "./sitemap";
 
@@ -17,6 +19,8 @@ describe("renderLaunchSitemap", () => {
     );
     expect(sitemap).toContain("<lastmod>2026-07-13</lastmod>");
     expect(sitemap).not.toContain("/api/");
+    expect(sitemap).not.toContain("/admin");
+    expect(sitemap).not.toContain("/send");
     expect(sitemap).not.toContain("/practice-seat-admin");
     expect(sitemap).not.toContain("/launch-readiness");
 
@@ -40,5 +44,21 @@ describe("renderLaunchSitemap", () => {
     expect(() =>
       renderLaunchSitemap({ publicAppUrl: "http://academy.spindeleye.com" })
     ).toThrow("Set PUBLIC_APP_URL");
+  });
+});
+
+describe("robots.txt", () => {
+  it("blocks private and admin-style routes from public indexing", async () => {
+    const robots = await readFile(
+      path.resolve(process.cwd(), "client/public/robots.txt"),
+      "utf8"
+    );
+
+    expect(robots).toContain("Allow: /");
+    expect(robots).toContain("Disallow: /api/");
+    expect(robots).toContain("Disallow: /admin");
+    expect(robots).toContain("Disallow: /send");
+    expect(robots).toContain("Disallow: /practice-seat-admin");
+    expect(robots).toContain("Disallow: /launch-readiness");
   });
 });

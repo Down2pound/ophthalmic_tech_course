@@ -8,6 +8,7 @@ import { setupLearnRoutes } from "./src/routes/learn";
 import { setupLaunchReadinessRoutes } from "./src/routes/launchReadiness";
 import { setupStripeWebhookRoute } from "./src/routes/stripeWebhook";
 import { setupAlertTemplateRoutes } from "./src/routes/alertTemplates";
+import { applySecurityHeaders } from "./src/config/securityHeaders";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +18,8 @@ async function startServer() {
   const server = createServer(app);
   const apiRouter = express.Router();
 
+  app.disable("x-powered-by");
+  app.use(applySecurityHeaders);
   setupStripeWebhookRoute(app);
   app.use(express.json());
   setupAuthRoutes(apiRouter);
