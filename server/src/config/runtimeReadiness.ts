@@ -41,6 +41,7 @@ export interface RuntimeLaunchReadinessInput {
 export interface RuntimeLaunchReadinessReport {
   generatedAt: string;
   readyForPaidLaunch: boolean;
+  salesChannels: RuntimeSalesChannelReadiness;
   staticSummary: LaunchReadinessSummary;
   launchChecklist: LaunchReadinessItem[];
   commerce: CommerceEnvironmentStatus;
@@ -60,6 +61,16 @@ export interface RuntimeLaunchNextStep {
   title: string;
   detail: string;
   command?: string;
+}
+
+export interface RuntimeSalesChannelReadiness {
+  individualLearner: RuntimeSalesChannelStatus;
+  practicePacks: RuntimeSalesChannelStatus;
+}
+
+export interface RuntimeSalesChannelStatus {
+  ready: boolean;
+  blockers: string[];
 }
 
 function formatMissingWarning(label: string, missingVariables: string[]) {
@@ -196,6 +207,85 @@ function getRuntimeLaunchNextSteps({
   return steps;
 }
 
+function getSalesChannelReadiness({
+  staticSummary,
+  commerce,
+  auth,
+  practiceSeatAdmin,
+  alertAdmin,
+  database,
+  databaseReadiness,
+  clinicalReview,
+}: {
+  staticSummary: LaunchReadinessSummary;
+  commerce: CommerceEnvironmentStatus;
+  auth: AuthEnvironmentStatus;
+  practiceSeatAdmin: PracticeSeatEnvironmentStatus;
+  alertAdmin: AlertAdminEnvironmentStatus;
+  database: DatabaseEnvironmentStatus;
+  databaseReadiness: LaunchDatabaseReadinessStatus;
+  clinicalReview: ClinicalReviewEnvironmentStatus;
+}): RuntimeSalesChannelReadiness {
+  const sharedBlockers: string[] = [];
+
+  if (!staticSummary.ready) {
+    sharedBlockers.push(
+      ...staticSummary.blockers.map(blocker => `${blocker} is not ready`)
+    );
+  }
+
+  if (!clinicalReview.moduleOneReviewApproved) {
+    sharedBlockers.push("Module 1 clinical review is not approved");
+  }
+
+  if (!commerce.checkoutConfigured) {
+    sharedBlockers.push("Stripe checkout is not configured");
+  }
+
+  if (commerce.stripeSecretKeyMode !== "live") {
+    sharedBlockers.push("Stripe live-mode secret key is not configured");
+  }
+
+  if (!commerce.webhookConfigured) {
+    sharedBlockers.push("Stripe webhook is not configured");
+  }
+
+  if (!commerce.paidEnrollmentEnabled) {
+    sharedBlockers.push("Paid enrollment switch is off");
+  }
+
+  if (!auth.passwordlessConfigured) {
+    sharedBlockers.push("Passwordless sign-in email is not configured");
+  }
+
+  if (!alertAdmin.alertAdminConfigured) {
+    sharedBlockers.push("Alert administration token is not configured");
+  }
+
+  if (!database.databaseConfigured) {
+    sharedBlockers.push("Hosted database is not configured");
+  } else if (!databaseReadiness.schemaVerified) {
+    sharedBlockers.push("Hosted database schema is not verified");
+  }
+
+  const practiceBlockers = [...sharedBlockers];
+
+  if (!practiceSeatAdmin.practiceSeatAdminConfigured) {
+    practiceBlockers.push("Practice seat administration is not protected");
+  }
+
+  return {
+    individualLearner: {
+      ready: sharedBlockers.length === 0,
+      blockers: sharedBlockers,
+    },
+    practicePacks: {
+      ready: practiceBlockers.length === 0,
+      blockers: practiceBlockers,
+    },
+  };
+}
+
 export function getRuntimeLaunchReadinessReport({
   env = process.env,
   databaseReadiness = unverifiedLaunchDatabaseReadiness,
@@ -210,6 +300,16 @@ export function getRuntimeLaunchReadinessReport({
   const alertAdmin = getAlertAdminEnvironmentStatus(env);
   const database = getDatabaseEnvironmentStatus(env);
   const nextSetupSteps = getRuntimeLaunchNextSteps({
+    commerce,
+    auth,
+    practiceSeatAdmin,
+    alertAdmin,
+    database,
+    databaseReadiness,
+    clinicalReview,
+  });
+  const salesChannels = getSalesChannelReadiness({
+    staticSummary,
     commerce,
     auth,
     practiceSeatAdmin,
@@ -274,6 +374,7 @@ export function getRuntimeLaunchReadinessReport({
       alertAdmin.alertAdminConfigured &&
       database.databaseConfigured &&
       databaseReadiness.schemaVerified,
+    salesChannels,
     staticSummary,
     launchChecklist,
     commerce,

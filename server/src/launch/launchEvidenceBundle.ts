@@ -62,6 +62,8 @@ function renderReadme({
     "## Current Snapshot",
     "",
     `- Ready for paid launch: ${readinessReport.readyForPaidLaunch ? "yes" : "no"}`,
+    `- Individual learner sales: ${readinessReport.salesChannels.individualLearner.ready ? "ready" : "blocked"}`,
+    `- Practice pack sales: ${readinessReport.salesChannels.practicePacks.ready ? "ready" : "blocked"}`,
     `- Runtime warnings: ${readinessReport.warnings.length}`,
     `- Launch blockers: ${readinessReport.staticSummary.blockers.join(", ") || "none"}`,
     "",

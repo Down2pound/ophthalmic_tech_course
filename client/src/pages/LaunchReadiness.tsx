@@ -195,99 +195,155 @@ export default function LaunchReadiness() {
             )}
 
             {runtimeReport && (
-              <div className="mt-5 grid gap-3 md:grid-cols-4 xl:grid-cols-8">
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-slate-700">
-                    Clinical review
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {runtimeReport.clinicalReview.moduleOneReviewApproved
-                      ? `Approved by ${runtimeReport.clinicalReview.reviewerName}`
-                      : `Missing ${runtimeReport.clinicalReview.missingModuleOneReviewVariables.join(", ")}`}
-                  </p>
-                </div>
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-slate-700">
-                    Stripe checkout
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {runtimeReport.commerce.checkoutConfigured
-                      ? "Configured"
-                      : `Missing ${runtimeReport.commerce.missingCheckoutVariables.join(", ")}`}
-                  </p>
-                </div>
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-slate-700">
-                    Stripe webhook
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {runtimeReport.commerce.webhookConfigured
-                      ? "Configured"
-                      : `Missing ${runtimeReport.commerce.missingWebhookVariables.join(", ")}`}
-                  </p>
-                </div>
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-slate-700">
-                    Passwordless sign-in
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {runtimeReport.auth.passwordlessConfigured
-                      ? "Configured"
-                      : `Missing ${runtimeReport.auth.missingPasswordlessVariables.join(", ")}`}
-                  </p>
-                </div>
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-slate-700">
-                    Practice seats
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {runtimeReport.practiceSeatAdmin.practiceSeatAdminConfigured
-                      ? "Configured"
-                      : `Missing ${runtimeReport.practiceSeatAdmin.missingPracticeSeatAdminVariables.join(", ")}`}
-                  </p>
-                </div>
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-slate-700">
-                    Database
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {runtimeReport.database.databaseConfigured
-                      ? "Configured"
-                      : `Missing ${runtimeReport.database.missingDatabaseVariables.join(", ")}`}
-                  </p>
-                </div>
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-slate-700">
-                    Database schema
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {runtimeReport.databaseReadiness.schemaVerified
-                      ? `${runtimeReport.databaseReadiness.checkedTableCount} tables verified`
-                      : `Missing ${runtimeReport.databaseReadiness.missingTables.length} table(s)`}
-                  </p>
-                </div>
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-slate-700">
-                    Paid enrollment
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {runtimeReport.commerce.paidEnrollmentEnabled
-                      ? "Enabled"
-                      : "Set ENABLE_PAID_ENROLLMENT=true after launch gates pass"}
-                  </p>
-                </div>
-                {runtimeReport.warnings.length > 0 && (
-                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-4 xl:col-span-8">
-                    <p className="text-sm font-semibold text-amber-950">
-                      Runtime warnings
+              <div className="mt-5 space-y-5">
+                <div className="grid gap-3 md:grid-cols-2">
+                  <section
+                    className={`rounded-md border p-4 ${
+                      runtimeReport.salesChannels.individualLearner.ready
+                        ? runtimeStatusStyles.ready
+                        : runtimeStatusStyles.blocked
+                    }`}
+                  >
+                    <p className="text-sm font-semibold">
+                      Individual learner sales
                     </p>
-                    <ul className="mt-2 space-y-1 text-sm leading-6 text-amber-950">
-                      {runtimeReport.warnings.map(warning => (
-                        <li key={warning}>{warning}</li>
-                      ))}
+                    <p className="mt-2 text-2xl font-bold">
+                      {runtimeReport.salesChannels.individualLearner.ready
+                        ? "Ready"
+                        : "Blocked"}
+                    </p>
+                    <ul className="mt-3 space-y-1 text-sm leading-6">
+                      {runtimeReport.salesChannels.individualLearner.blockers
+                        .length > 0 ? (
+                        runtimeReport.salesChannels.individualLearner.blockers.map(
+                          blocker => <li key={blocker}>{blocker}</li>
+                        )
+                      ) : (
+                        <li>Ready to sell individual learner access.</li>
+                      )}
                     </ul>
+                  </section>
+                  <section
+                    className={`rounded-md border p-4 ${
+                      runtimeReport.salesChannels.practicePacks.ready
+                        ? runtimeStatusStyles.ready
+                        : runtimeStatusStyles.blocked
+                    }`}
+                  >
+                    <p className="text-sm font-semibold">Practice pack sales</p>
+                    <p className="mt-2 text-2xl font-bold">
+                      {runtimeReport.salesChannels.practicePacks.ready
+                        ? "Ready"
+                        : "Blocked"}
+                    </p>
+                    <ul className="mt-3 space-y-1 text-sm leading-6">
+                      {runtimeReport.salesChannels.practicePacks.blockers
+                        .length > 0 ? (
+                        runtimeReport.salesChannels.practicePacks.blockers.map(
+                          blocker => <li key={blocker}>{blocker}</li>
+                        )
+                      ) : (
+                        <li>Ready to sell practice pack access.</li>
+                      )}
+                    </ul>
+                  </section>
+                </div>
+
+                <div className="grid gap-3 md:grid-cols-4 xl:grid-cols-8">
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-700">
+                      Clinical review
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {runtimeReport.clinicalReview.moduleOneReviewApproved
+                        ? `Approved by ${runtimeReport.clinicalReview.reviewerName}`
+                        : `Missing ${runtimeReport.clinicalReview.missingModuleOneReviewVariables.join(", ")}`}
+                    </p>
                   </div>
-                )}
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-700">
+                      Stripe checkout
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {runtimeReport.commerce.checkoutConfigured
+                        ? "Configured"
+                        : `Missing ${runtimeReport.commerce.missingCheckoutVariables.join(", ")}`}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-700">
+                      Stripe webhook
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {runtimeReport.commerce.webhookConfigured
+                        ? "Configured"
+                        : `Missing ${runtimeReport.commerce.missingWebhookVariables.join(", ")}`}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-700">
+                      Passwordless sign-in
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {runtimeReport.auth.passwordlessConfigured
+                        ? "Configured"
+                        : `Missing ${runtimeReport.auth.missingPasswordlessVariables.join(", ")}`}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-700">
+                      Practice seats
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {runtimeReport.practiceSeatAdmin
+                        .practiceSeatAdminConfigured
+                        ? "Configured"
+                        : `Missing ${runtimeReport.practiceSeatAdmin.missingPracticeSeatAdminVariables.join(", ")}`}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-700">
+                      Database
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {runtimeReport.database.databaseConfigured
+                        ? "Configured"
+                        : `Missing ${runtimeReport.database.missingDatabaseVariables.join(", ")}`}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-700">
+                      Database schema
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {runtimeReport.databaseReadiness.schemaVerified
+                        ? `${runtimeReport.databaseReadiness.checkedTableCount} tables verified`
+                        : `Missing ${runtimeReport.databaseReadiness.missingTables.length} table(s)`}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-semibold text-slate-700">
+                      Paid enrollment
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {runtimeReport.commerce.paidEnrollmentEnabled
+                        ? "Enabled"
+                        : "Set ENABLE_PAID_ENROLLMENT=true after launch gates pass"}
+                    </p>
+                  </div>
+                  {runtimeReport.warnings.length > 0 && (
+                    <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-4 xl:col-span-8">
+                      <p className="text-sm font-semibold text-amber-950">
+                        Runtime warnings
+                      </p>
+                      <ul className="mt-2 space-y-1 text-sm leading-6 text-amber-950">
+                        {runtimeReport.warnings.map(warning => (
+                          <li key={warning}>{warning}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </Card>

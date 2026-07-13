@@ -5,6 +5,19 @@ import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 const readinessReport: RuntimeLaunchReadinessReport = {
   generatedAt: "2026-07-13T12:00:00.000Z",
   readyForPaidLaunch: false,
+  salesChannels: {
+    individualLearner: {
+      ready: false,
+      blockers: ["Stripe checkout is not configured"],
+    },
+    practicePacks: {
+      ready: false,
+      blockers: [
+        "Stripe checkout is not configured",
+        "Practice seat administration is not protected",
+      ],
+    },
+  },
   staticSummary: {
     ready: false,
     readyCount: 1,
@@ -90,12 +103,16 @@ describe("renderLaunchDoctorReport", () => {
 
     expect(report).toContain("# OptiTech Academy Launch Doctor");
     expect(report).toContain("- Paid launch ready: no");
+    expect(report).toContain("- Individual learner sales: blocked");
+    expect(report).toContain("- Practice pack sales: blocked");
     expect(report).toContain("- Stripe checkout: NEEDS WORK");
     expect(report).toContain("- Alert admin: NEEDS WORK");
     expect(report).toContain("- ALERT_ADMIN_TOKEN");
     expect(report).toContain("- STRIPE_SECRET_KEY");
     expect(report).toContain("- auth_users");
     expect(report).toContain("## Recommended Next Setup Steps");
+    expect(report).toContain("## Buyer Channel Readiness");
+    expect(report).toContain("Practice seat administration is not protected");
     expect(report).toContain("Connect hosted PostgreSQL");
     expect(report).toContain("Command or setting: `DATABASE_URL=...`");
     expect(report).toContain(

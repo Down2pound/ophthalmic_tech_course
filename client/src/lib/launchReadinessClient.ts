@@ -19,6 +19,10 @@ export interface RuntimeCommerceStatus {
 export interface RuntimeLaunchReadinessReport {
   generatedAt: string;
   readyForPaidLaunch: boolean;
+  salesChannels: {
+    individualLearner: RuntimeSalesChannelStatus;
+    practicePacks: RuntimeSalesChannelStatus;
+  };
   staticSummary: LaunchReadinessSummary;
   launchChecklist: LaunchReadinessItem[];
   commerce: RuntimeCommerceStatus;
@@ -58,6 +62,11 @@ export interface RuntimeLaunchReadinessReport {
   }>;
   launchActions: LaunchActionItem[];
   clinicalReviewPacket: ClinicalReviewPacket;
+}
+
+export interface RuntimeSalesChannelStatus {
+  ready: boolean;
+  blockers: string[];
 }
 
 interface RuntimeReadinessErrorResponse {

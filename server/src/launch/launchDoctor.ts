@@ -73,6 +73,8 @@ export function renderLaunchDoctorReport({
     "## Summary",
     "",
     `- Paid launch ready: ${readiness.readyForPaidLaunch ? "yes" : "no"}`,
+    `- Individual learner sales: ${readiness.salesChannels.individualLearner.ready ? "ready" : "blocked"}`,
+    `- Practice pack sales: ${readiness.salesChannels.practicePacks.ready ? "ready" : "blocked"}`,
     `- Static launch checklist: ${statusLabel(readiness.staticSummary.ready)}`,
     `- Paid enrollment switch: ${readiness.commerce.paidEnrollmentEnabled ? "on" : "off"}`,
     `- Database schema verified: ${readiness.databaseReadiness.schemaVerified ? "yes" : "no"}`,
@@ -88,6 +90,22 @@ export function renderLaunchDoctorReport({
     ...setupSections.flatMap(section =>
       renderMissingVariables(section.label, section.missing)
     ),
+    "## Buyer Channel Readiness",
+    "",
+    "### Individual Learners",
+    "",
+    ...renderList(
+      readiness.salesChannels.individualLearner.blockers,
+      "Ready to sell individual learner access."
+    ),
+    "",
+    "### Practice Packs",
+    "",
+    ...renderList(
+      readiness.salesChannels.practicePacks.blockers,
+      "Ready to sell practice pack access."
+    ),
+    "",
     "## Database Schema",
     "",
     `- Required tables: ${readiness.databaseReadiness.requiredTables.length}`,
@@ -105,10 +123,12 @@ export function renderLaunchDoctorReport({
     "",
     "## Recommended Next Setup Steps",
     "",
-    ...readiness.nextSetupSteps.flatMap(step => [
-      `- ${step.title}: ${step.detail}`,
-      step.command ? `  Command or setting: \`${step.command}\`` : "",
-    ]).filter(Boolean),
+    ...readiness.nextSetupSteps
+      .flatMap(step => [
+        `- ${step.title}: ${step.detail}`,
+        step.command ? `  Command or setting: \`${step.command}\`` : "",
+      ])
+      .filter(Boolean),
     ...(readiness.nextSetupSteps.length === 0
       ? ["- No runtime setup steps reported."]
       : []),

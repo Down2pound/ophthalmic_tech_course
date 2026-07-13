@@ -4,6 +4,19 @@ import { fetchRuntimeLaunchReadiness } from "./launchReadinessClient";
 const runtimeReport = {
   generatedAt: "2026-06-26T12:00:00.000Z",
   readyForPaidLaunch: false,
+  salesChannels: {
+    individualLearner: {
+      ready: false,
+      blockers: ["Stripe checkout is not configured"],
+    },
+    practicePacks: {
+      ready: false,
+      blockers: [
+        "Stripe checkout is not configured",
+        "Practice seat administration is not protected",
+      ],
+    },
+  },
   staticSummary: {
     ready: false,
     readyCount: 1,

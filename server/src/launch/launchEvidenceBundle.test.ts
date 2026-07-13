@@ -8,6 +8,19 @@ import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 const readinessReport: RuntimeLaunchReadinessReport = {
   generatedAt: "2026-07-13T12:00:00.000Z",
   readyForPaidLaunch: false,
+  salesChannels: {
+    individualLearner: {
+      ready: false,
+      blockers: ["Stripe checkout is not configured"],
+    },
+    practicePacks: {
+      ready: false,
+      blockers: [
+        "Stripe checkout is not configured",
+        "Practice seat administration is not protected",
+      ],
+    },
+  },
   staticSummary: {
     ready: false,
     readyCount: 1,
@@ -199,6 +212,8 @@ describe("createLaunchEvidenceBundle", () => {
 
     expect(readme).toContain("safe to save to Google Drive");
     expect(readme).toContain("Ready for paid launch: no");
+    expect(readme).toContain("Individual learner sales: blocked");
+    expect(readme).toContain("Practice pack sales: blocked");
     expect(productionEnvChecklist).toContain(
       "OptiTech Academy Production Environment Checklist"
     );
@@ -280,15 +295,11 @@ describe("createLaunchEvidenceBundle", () => {
     expect(manualQaEvidence).toContain(
       "Individual checkout success return URL:"
     );
-    expect(manualQaEvidence).toContain(
-      "Practice checkout success return URL:"
-    );
+    expect(manualQaEvidence).toContain("Practice checkout success return URL:");
     expect(supportRunbook).toContain(
       "OptiTech Academy First Sale Support Runbook"
     );
-    expect(supportRunbook).toContain(
-      "Payment Succeeded But Access Is Missing"
-    );
+    expect(supportRunbook).toContain("Payment Succeeded But Access Is Missing");
     expect(supportRunbook).toContain("recommended next support actions");
     expect(bootcampContentMigrationChecklist).toContain(
       "OptiTech Academy Bootcamp Content Migration Checklist"

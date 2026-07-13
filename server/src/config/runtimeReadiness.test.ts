@@ -28,6 +28,14 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(report).toMatchObject({
       generatedAt: "2026-06-26T12:00:00.000Z",
       readyForPaidLaunch: false,
+      salesChannels: {
+        individualLearner: {
+          ready: false,
+        },
+        practicePacks: {
+          ready: false,
+        },
+      },
       commerce: {
         checkoutConfigured: true,
         paidEnrollmentEnabled: false,
@@ -65,6 +73,12 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(report.launchActions.map(action => action.id)).toContain(
       "production-database"
     );
+    expect(report.salesChannels.individualLearner.blockers).toContain(
+      "Stripe live-mode secret key is not configured"
+    );
+    expect(report.salesChannels.practicePacks.blockers).toContain(
+      "Practice seat administration is not protected"
+    );
     expect(report.nextSetupSteps.map(step => step.title)).toEqual([
       "Finish Module 1 clinical review",
       "Connect hosted PostgreSQL",
@@ -76,7 +90,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
       "Keep paid enrollment disabled until final proof",
     ]);
     expect(
-      report.nextSetupSteps.find(step => step.title === "Connect hosted PostgreSQL")
+      report.nextSetupSteps.find(
+        step => step.title === "Connect hosted PostgreSQL"
+      )
     ).toMatchObject({
       command: "DATABASE_URL=... DATABASE_SSL=true",
     });
@@ -149,6 +165,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(report.warnings).not.toContain(
       "Module 1 clinical review signoff is missing or not approved."
     );
+    expect(report.salesChannels.individualLearner.blockers).not.toContain(
+      "Module 1 clinical review is not approved"
+    );
   });
 
   it("blocks paid launch when DATABASE_URL exists but launch tables are missing", () => {
@@ -182,6 +201,14 @@ describe("getRuntimeLaunchReadinessReport", () => {
     });
 
     expect(report.readyForPaidLaunch).toBe(false);
+    expect(report.salesChannels.individualLearner).toMatchObject({
+      ready: false,
+      blockers: ["Hosted database schema is not verified"],
+    });
+    expect(report.salesChannels.practicePacks).toMatchObject({
+      ready: false,
+      blockers: ["Hosted database schema is not verified"],
+    });
     expect(report.warnings).toContain(
       "Launch database schema is not verified. Missing tables: auth_users."
     );
