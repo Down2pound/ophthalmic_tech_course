@@ -191,7 +191,7 @@ export default function LaunchReadiness() {
             )}
 
             {runtimeReport && (
-              <div className="mt-5 grid gap-3 md:grid-cols-5">
+              <div className="mt-5 grid gap-3 md:grid-cols-6">
                 <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
                   <p className="text-sm font-semibold text-slate-700">
                     Stripe checkout
@@ -242,8 +242,18 @@ export default function LaunchReadiness() {
                       : `Missing ${runtimeReport.database.missingDatabaseVariables.join(", ")}`}
                   </p>
                 </div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-sm font-semibold text-slate-700">
+                    Paid enrollment
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {runtimeReport.commerce.paidEnrollmentEnabled
+                      ? "Enabled"
+                      : "Set ENABLE_PAID_ENROLLMENT=true after launch gates pass"}
+                  </p>
+                </div>
                 {runtimeReport.warnings.length > 0 && (
-                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-5">
+                  <div className="rounded-md border border-amber-200 bg-amber-50 p-4 md:col-span-6">
                     <p className="text-sm font-semibold text-amber-950">
                       Runtime warnings
                     </p>

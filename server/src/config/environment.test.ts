@@ -27,10 +27,12 @@ describe("getCommerceEnvironmentStatus", () => {
       getCommerceEnvironmentStatus({
         STRIPE_SECRET_KEY: "sk_test_123",
         PUBLIC_APP_URL: "http://localhost:3000",
+        ENABLE_PAID_ENROLLMENT: "true",
         STRIPE_WEBHOOK_SECRET: "whsec_123",
       })
     ).toEqual({
       checkoutConfigured: true,
+      paidEnrollmentEnabled: true,
       webhookConfigured: true,
       missingCheckoutVariables: [],
       missingWebhookVariables: [],
@@ -40,9 +42,31 @@ describe("getCommerceEnvironmentStatus", () => {
   it("shows which commerce setup values are still missing", () => {
     expect(getCommerceEnvironmentStatus({})).toEqual({
       checkoutConfigured: false,
+      paidEnrollmentEnabled: false,
       webhookConfigured: false,
-      missingCheckoutVariables: ["STRIPE_SECRET_KEY", "PUBLIC_APP_URL"],
+      missingCheckoutVariables: [
+        "STRIPE_SECRET_KEY",
+        "PUBLIC_APP_URL",
+        "ENABLE_PAID_ENROLLMENT",
+      ],
       missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],
+    });
+  });
+
+  it("keeps checkout configured but paid enrollment disabled when the launch switch is false", () => {
+    expect(
+      getCommerceEnvironmentStatus({
+        STRIPE_SECRET_KEY: "sk_test_123",
+        PUBLIC_APP_URL: "http://localhost:3000",
+        ENABLE_PAID_ENROLLMENT: "false",
+        STRIPE_WEBHOOK_SECRET: "whsec_123",
+      })
+    ).toEqual({
+      checkoutConfigured: true,
+      paidEnrollmentEnabled: false,
+      webhookConfigured: true,
+      missingCheckoutVariables: [],
+      missingWebhookVariables: [],
     });
   });
 });

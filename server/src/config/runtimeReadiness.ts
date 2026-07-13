@@ -70,6 +70,9 @@ export function getRuntimeLaunchReadinessReport({
       practiceSeatAdmin.missingPracticeSeatAdminVariables
     ),
     formatMissingWarning("Database", database.missingDatabaseVariables),
+    commerce.paidEnrollmentEnabled
+      ? null
+      : "Paid enrollment launch switch is disabled: ENABLE_PAID_ENROLLMENT must be true.",
   ].filter((warning): warning is string => Boolean(warning));
 
   return {
@@ -77,6 +80,7 @@ export function getRuntimeLaunchReadinessReport({
     readyForPaidLaunch:
       staticSummary.ready &&
       commerce.checkoutConfigured &&
+      commerce.paidEnrollmentEnabled &&
       commerce.webhookConfigured &&
       auth.passwordlessConfigured &&
       practiceSeatAdmin.practiceSeatAdminConfigured &&

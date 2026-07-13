@@ -6,6 +6,7 @@ type Fetcher = typeof fetch;
 
 export interface RuntimeCommerceStatus {
   checkoutConfigured: boolean;
+  paidEnrollmentEnabled: boolean;
   webhookConfigured: boolean;
   missingCheckoutVariables: string[];
   missingWebhookVariables: string[];

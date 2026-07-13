@@ -23,6 +23,14 @@ export function setupCheckoutRoutes(router: Router) {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     const environmentStatus = getCommerceEnvironmentStatus();
 
+    if (!environmentStatus.paidEnrollmentEnabled) {
+      res.status(503).json({
+        error: "Paid enrollment is not enabled yet.",
+        missing: ["ENABLE_PAID_ENROLLMENT"],
+      });
+      return;
+    }
+
     if (!environmentStatus.checkoutConfigured || !stripeSecretKey) {
       res.status(503).json({
         error: "Stripe checkout is not configured yet.",

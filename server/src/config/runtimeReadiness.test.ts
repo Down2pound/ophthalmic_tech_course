@@ -7,6 +7,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
       env: {
         STRIPE_SECRET_KEY: "sk_test_secret_value",
         PUBLIC_APP_URL: "http://localhost:3000",
+        ENABLE_PAID_ENROLLMENT: "false",
         STRIPE_WEBHOOK_SECRET: "",
         AUTH_SESSION_SECRET: "session-secret",
         TRANSACTIONAL_EMAIL_API_URL: "https://email-provider.example.com/send",
@@ -23,6 +24,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
       readyForPaidLaunch: false,
       commerce: {
         checkoutConfigured: true,
+        paidEnrollmentEnabled: false,
         webhookConfigured: false,
         missingCheckoutVariables: [],
         missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],
@@ -52,6 +54,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
       "Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."
     );
     expect(report.warnings).toContain(
+      "Paid enrollment launch switch is disabled: ENABLE_PAID_ENROLLMENT must be true."
+    );
+    expect(report.warnings).toContain(
       "Passwordless sign-in setup is missing: TRANSACTIONAL_EMAIL_API_KEY."
     );
     expect(report.warnings).toContain(
@@ -67,6 +72,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
       env: {
         STRIPE_SECRET_KEY: "sk_test_secret_value",
         PUBLIC_APP_URL: "http://localhost:3000",
+        ENABLE_PAID_ENROLLMENT: "true",
         STRIPE_WEBHOOK_SECRET: "whsec_secret_value",
         AUTH_SESSION_SECRET: "session-secret-value",
         TRANSACTIONAL_EMAIL_API_URL: "https://email-provider.example.com/send",

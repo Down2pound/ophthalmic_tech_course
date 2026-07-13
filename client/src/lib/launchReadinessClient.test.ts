@@ -13,6 +13,7 @@ const runtimeReport = {
   },
   commerce: {
     checkoutConfigured: true,
+    paidEnrollmentEnabled: false,
     webhookConfigured: false,
     missingCheckoutVariables: [],
     missingWebhookVariables: ["STRIPE_WEBHOOK_SECRET"],

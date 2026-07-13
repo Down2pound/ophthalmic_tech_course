@@ -2,6 +2,7 @@ export type EnvironmentMap = Record<string, string | undefined>;
 
 export interface CommerceEnvironmentStatus {
   checkoutConfigured: boolean;
+  paidEnrollmentEnabled: boolean;
   webhookConfigured: boolean;
   missingCheckoutVariables: string[];
   missingWebhookVariables: string[];
@@ -25,6 +26,7 @@ export interface DatabaseEnvironmentStatus {
 export const checkoutEnvironmentVariables = [
   "STRIPE_SECRET_KEY",
   "PUBLIC_APP_URL",
+  "ENABLE_PAID_ENROLLMENT",
 ] as const;
 
 export const webhookEnvironmentVariables = ["STRIPE_WEBHOOK_SECRET"] as const;
@@ -42,6 +44,13 @@ export const practiceSeatAdminEnvironmentVariables = [
 ] as const;
 
 export const databaseEnvironmentVariables = ["DATABASE_URL"] as const;
+
+export function isEnvironmentFlagEnabled(
+  env: EnvironmentMap,
+  variableName: string
+): boolean {
+  return env[variableName]?.trim().toLowerCase() === "true";
+}
 
 export function getMissingEnvironmentVariables(
   env: EnvironmentMap,
@@ -67,6 +76,10 @@ export function getCommerceEnvironmentStatus(
 
   return {
     checkoutConfigured: missingCheckoutVariables.length === 0,
+    paidEnrollmentEnabled: isEnvironmentFlagEnabled(
+      env,
+      "ENABLE_PAID_ENROLLMENT"
+    ),
     webhookConfigured: missingWebhookVariables.length === 0,
     missingCheckoutVariables,
     missingWebhookVariables,

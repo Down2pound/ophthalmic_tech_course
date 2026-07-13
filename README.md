@@ -58,6 +58,7 @@ Required environment variables:
 ```text
 STRIPE_SECRET_KEY=sk_test_replace_with_your_secret_key
 PUBLIC_APP_URL=http://localhost:3000
+ENABLE_PAID_ENROLLMENT=false
 DATABASE_URL=replace_with_managed_postgres_connection_string
 DATABASE_SSL=true
 STRIPE_WEBHOOK_SECRET=whsec_replace_with_your_webhook_signing_secret
@@ -81,6 +82,10 @@ Stripe key guide:
   but the current hosted Checkout flow does not require it.
 - `sk_test_...` is a secret test key. It must stay server-only in `.env`.
 - `whsec_...` is the webhook signing secret. It must stay server-only in `.env`.
+- `ENABLE_PAID_ENROLLMENT` is the final paid-launch switch. Keep it `false`
+  until clinical review, database setup, Stripe webhook testing, and deployed
+  smoke testing are complete. Set it to `true` only when you are ready to accept
+  real paid enrollment.
 - `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
   `TRANSACTIONAL_EMAIL_API_KEY`, and `SIGN_IN_FROM_EMAIL` are server-only values
   for passwordless sign-in email delivery.
@@ -132,8 +137,8 @@ the same header and returns current temporary seat packs plus assignments. These
 endpoints are used by the protected practice seat manager page and should only
 be used by a trusted manager/admin workflow.
 
-If `STRIPE_SECRET_KEY` is missing, checkout fails closed with a setup message and
-does not collect payment.
+If `STRIPE_SECRET_KEY` is missing or `ENABLE_PAID_ENROLLMENT` is not `true`,
+checkout fails closed with a setup message and does not collect payment.
 
 `GET /api/launch/readiness` returns a safe setup report with launch blocker
 counts and missing environment variable names. It must never return actual
@@ -210,7 +215,9 @@ variables in the host dashboard, not in Git: `DATABASE_URL`,
 `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PUBLIC_APP_URL`,
 `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
 `TRANSACTIONAL_EMAIL_API_KEY`, `SIGN_IN_FROM_EMAIL`, and
-`PRACTICE_SEAT_ADMIN_TOKEN`.
+`PRACTICE_SEAT_ADMIN_TOKEN`. Keep `ENABLE_PAID_ENROLLMENT=false` until the
+live checklist passes, then set `ENABLE_PAID_ENROLLMENT=true` to open paid
+checkout.
 
 After the managed PostgreSQL database is created and `DATABASE_URL` is set, run:
 
