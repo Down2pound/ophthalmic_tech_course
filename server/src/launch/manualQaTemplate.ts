@@ -55,6 +55,17 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     "",
     "Enrollment/access result:",
     "",
+    "Individual checkout success return URL:",
+    "",
+    "Individual checkout cancel return URL:",
+    "",
+    renderChecklistItem(
+      "Individual success return showed the learner payment received message"
+    ),
+    renderChecklistItem(
+      "Individual cancel return showed no payment was taken"
+    ),
+    "",
     "### Passwordless Email Delivery",
     "",
     "Email provider used:",
@@ -71,6 +82,9 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     renderChecklistItem(
       "Sign-in link opened the deployed app and created a session"
     ),
+    renderChecklistItem(
+      "Learner could request a fresh sign-in link from the Learn page access panel"
+    ),
     renderChecklistItem("Failed or expired sign-in link showed a safe error"),
     "",
     "### Stripe Practice Pack Test",
@@ -86,6 +100,20 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     "Seat pack size purchased:",
     "",
     "Seat assignment result:",
+    "",
+    "Practice checkout success return URL:",
+    "",
+    "Practice checkout cancel return URL:",
+    "",
+    renderChecklistItem(
+      "Practice success return showed practice pack payment received next steps"
+    ),
+    renderChecklistItem(
+      "Practice cancel return kept the buyer on the practice pack options"
+    ),
+    renderChecklistItem(
+      "Practice success next steps asked for learner emails without requesting private patient or staff details"
+    ),
     "",
     "### Custom Practice Inquiry Test",
     "",

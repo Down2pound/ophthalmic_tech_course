@@ -14,9 +14,20 @@ describe("renderManualQaTemplate", () => {
     expect(template).toContain("Paid Launch Evidence Details");
     expect(template).toContain("Stripe checkout session ID:");
     expect(template).toContain("Webhook delivery status:");
+    expect(template).toContain("Individual checkout success return URL:");
+    expect(template).toContain(
+      "Individual success return showed the learner payment received message"
+    );
     expect(template).toContain("Passwordless Email Delivery");
     expect(template).toContain(
       "Sign-in email arrived without exposing raw token"
+    );
+    expect(template).toContain(
+      "Learner could request a fresh sign-in link from the Learn page access panel"
+    );
+    expect(template).toContain("Practice checkout success return URL:");
+    expect(template).toContain(
+      "Practice success return showed practice pack payment received next steps"
     );
     expect(template).toContain("Custom Practice Inquiry Test");
     expect(template).toContain("Larger-practice inquiry path is visible");

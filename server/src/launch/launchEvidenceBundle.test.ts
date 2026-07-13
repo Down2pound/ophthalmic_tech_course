@@ -238,6 +238,12 @@ describe("createLaunchEvidenceBundle", () => {
       "OptiTech Academy Manual Launch QA Evidence"
     );
     expect(manualQaEvidence).toContain("Test the paid learner flow end to end");
+    expect(manualQaEvidence).toContain(
+      "Individual checkout success return URL:"
+    );
+    expect(manualQaEvidence).toContain(
+      "Practice checkout success return URL:"
+    );
     expect(supportRunbook).toContain(
       "OptiTech Academy First Sale Support Runbook"
     );
