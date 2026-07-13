@@ -99,6 +99,7 @@ Checkout routes:
 - Protected quiz submission endpoint: `POST /api/learn/module-one/quiz/submit`
 - Protected practice seat assignment endpoint:
   `POST /api/practice-seat-packs/:seatPackId/assignments`
+- Protected practice seat pack list endpoint: `GET /api/practice-seat-packs`
 - Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success&offer=...`
 - Cancel return: `/checkout?checkout=cancelled`
@@ -115,8 +116,9 @@ step is connecting those records to durable PostgreSQL storage and a
 manager/admin workflow.
 
 The temporary practice-seat assignment endpoint requires an `x-admin-token`
-header matching `PRACTICE_SEAT_ADMIN_TOKEN`. It should only be used by a trusted
-manager/admin workflow.
+header matching `PRACTICE_SEAT_ADMIN_TOKEN`. The protected list endpoint uses
+the same header and returns current temporary seat packs plus assignments. These
+endpoints should only be used by a trusted manager/admin workflow.
 
 If `STRIPE_SECRET_KEY` is missing, checkout fails closed with a setup message and
 does not collect payment.

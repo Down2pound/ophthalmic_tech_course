@@ -22,6 +22,10 @@ interface PracticeSeatAssignmentRequestBody {
   learnerEmail?: string;
 }
 
+type PracticeSeatAdminAuthorization =
+  | { authorized: true }
+  | { authorized: false; status: number; payload: Record<string, unknown> };
+
 const magicLinkStore = createInMemoryMagicLinkStore();
 const sessionStore = createInMemoryAuthSessionStore();
 
@@ -47,6 +51,34 @@ export function listPreparedSessions() {
 
 export function getSessionStore() {
   return sessionStore;
+}
+
+function authorizePracticeSeatAdminRequest(
+  req: Request
+): PracticeSeatAdminAuthorization {
+  const environmentStatus = getPracticeSeatEnvironmentStatus();
+  const configuredToken = process.env.PRACTICE_SEAT_ADMIN_TOKEN?.trim();
+
+  if (!environmentStatus.practiceSeatAdminConfigured || !configuredToken) {
+    return {
+      authorized: false,
+      status: 503,
+      payload: {
+        error: "Practice seat assignment is not configured yet.",
+        missing: environmentStatus.missingPracticeSeatAdminVariables,
+      },
+    };
+  }
+
+  if (req.get("x-admin-token") !== configuredToken) {
+    return {
+      authorized: false,
+      status: 403,
+      payload: { error: "Practice seat assignment is protected." },
+    };
+  }
+
+  return { authorized: true };
 }
 
 export function setupAuthRoutes(router: Router) {
@@ -128,21 +160,10 @@ export function setupAuthRoutes(router: Router) {
   router.post(
     "/practice-seat-packs/:seatPackId/assignments",
     (req: Request, res: Response) => {
-      const environmentStatus = getPracticeSeatEnvironmentStatus();
-      const configuredToken = process.env.PRACTICE_SEAT_ADMIN_TOKEN?.trim();
+      const authorization = authorizePracticeSeatAdminRequest(req);
 
-      if (!environmentStatus.practiceSeatAdminConfigured || !configuredToken) {
-        res.status(503).json({
-          error: "Practice seat assignment is not configured yet.",
-          missing: environmentStatus.missingPracticeSeatAdminVariables,
-        });
-        return;
-      }
-
-      if (req.get("x-admin-token") !== configuredToken) {
-        res
-          .status(403)
-          .json({ error: "Practice seat assignment is protected." });
+      if (!authorization.authorized) {
+        res.status(authorization.status).json(authorization.payload);
         return;
       }
 
@@ -174,4 +195,20 @@ export function setupAuthRoutes(router: Router) {
       });
     }
   );
+
+  router.get("/practice-seat-packs", (req: Request, res: Response) => {
+    const authorization = authorizePracticeSeatAdminRequest(req);
+
+    if (!authorization.authorized) {
+      res.status(authorization.status).json(authorization.payload);
+      return;
+    }
+
+    const practiceSeatPackStore = getPracticeSeatPackStore();
+
+    res.json({
+      seatPacks: practiceSeatPackStore.listPracticeSeatPacks(),
+      assignments: practiceSeatPackStore.listPracticeSeatAssignments(),
+    });
+  });
 }
