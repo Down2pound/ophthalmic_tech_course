@@ -1,0 +1,9 @@
+{
+  "name": "OptiTech Academy",
+  "short_name": "OptiTech",
+  "description": "Ophthalmic technician foundations training for individual learners and practice onboarding.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a"
+}
