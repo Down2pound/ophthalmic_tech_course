@@ -208,6 +208,16 @@ Then verify:
 - Stripe test checkout creates a durable enrollment through the webhook.
 - A learner can sign in, open Module 1, and submit the protected quiz.
 
+You can also run the deployment smoke test from your local machine after the
+app is online:
+
+```bash
+LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
+```
+
+The smoke test checks `/api/health` and `/api/launch/readiness`. It exits with
+an error until the live app reports that paid launch readiness is complete.
+
 ## Database Contracts
 
 The first production release needs managed PostgreSQL before paid access can be

@@ -12,6 +12,7 @@
     "test": "vitest run --root .",
     "test:watch": "vitest --root .",
     "db:setup": "tsx server/src/db/runSetup.ts",
+    "launch:smoke": "tsx server/src/launch/runDeploymentSmokeTest.ts",
     "format": "prettier --write ."
   },
   "dependencies": {
