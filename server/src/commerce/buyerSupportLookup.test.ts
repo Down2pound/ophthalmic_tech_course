@@ -74,6 +74,9 @@ describe("lookupBuyerSupportProfile", () => {
         hasPracticeSeatAssignment: false,
         remainingPracticeSeats: 0,
       },
+      recommendedActions: [
+        "Active enrollment exists. Ask the learner to request a fresh passwordless sign-in link with this same email.",
+      ],
     });
   });
 
@@ -127,6 +130,9 @@ describe("lookupBuyerSupportProfile", () => {
         hasPracticeSeatAssignment: false,
         remainingPracticeSeats: 4,
       },
+      recommendedActions: [
+        "Practice seat pack has remaining seats. Collect learner emails and assign seats through the protected practice-seat admin workflow.",
+      ],
     });
 
     await expect(
@@ -147,6 +153,36 @@ describe("lookupBuyerSupportProfile", () => {
         hasPracticeSeatAssignment: true,
         remainingPracticeSeats: 0,
       },
+      recommendedActions: [
+        "Active enrollment exists. Ask the learner to request a fresh passwordless sign-in link with this same email.",
+      ],
+    });
+  });
+
+  it("recommends webhook triage when purchase access was not provisioned", async () => {
+    const purchaseStore = createInMemoryPurchaseStore();
+    const enrollmentStore = createInMemoryEnrollmentStore();
+    const practiceSeatPackStore = createInMemoryPracticeSeatPackStore();
+    const purchase = createVerifiedPurchaseRecord(
+      individualPurchaseEvent,
+      "2026-07-13T12:00:00.000Z"
+    );
+
+    await purchaseStore.recordPurchase(purchase);
+
+    await expect(
+      lookupBuyerSupportProfile({
+        email: "learner@example.com",
+        stores: { purchaseStore, enrollmentStore, practiceSeatPackStore },
+      })
+    ).resolves.toMatchObject({
+      summary: {
+        hasPurchase: true,
+        hasActiveEnrollment: false,
+      },
+      recommendedActions: [
+        "A purchase exists, but no enrollment or practice seat pack was found. Check Stripe webhook delivery and fulfillment logs before retrying.",
+      ],
     });
   });
 

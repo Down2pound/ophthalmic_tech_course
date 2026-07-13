@@ -289,6 +289,7 @@ describe("createLaunchEvidenceBundle", () => {
     expect(supportRunbook).toContain(
       "Payment Succeeded But Access Is Missing"
     );
+    expect(supportRunbook).toContain("recommended next support actions");
     expect(bootcampContentMigrationChecklist).toContain(
       "OptiTech Academy Bootcamp Content Migration Checklist"
     );
