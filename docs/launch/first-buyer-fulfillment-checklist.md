@@ -122,6 +122,25 @@ Save safe evidence only:
 Do not save card details, patient information, raw sign-in links, session
 cookies, passwords, database URLs, or secret keys.
 
+## First 24 Hours After A Real Purchase
+
+Use this after the first individual learner or practice pack purchase. The goal
+is to notice small problems before more buyers see them.
+
+- [ ] Check Stripe for payment, receipt, refund, or dispute warnings.
+- [ ] Check the buyer lookup endpoint for the buyer email.
+- [ ] Confirm the buyer can sign in without staff creating a manual workaround.
+- [ ] Confirm no repeated checkout, sign-in, webhook, or practice-seat support
+      issue appeared.
+- [ ] Check `/api/launch/readiness` still reports ready.
+- [ ] Save any non-private buyer confusion in the sales tracker.
+- [ ] Decide whether to continue outreach, pause outreach, or fix one issue
+      first.
+
+If the buyer needed manual help, do not treat the sale as fully proven yet.
+Fix the issue, document the fix, and run the related smoke or manual QA check
+again before broad outreach.
+
 ## If Something Goes Wrong
 
 Use `first-sale-support-runbook.md` if:

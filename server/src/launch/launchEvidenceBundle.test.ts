@@ -270,6 +270,12 @@ describe("createLaunchEvidenceBundle", () => {
     expect(firstBuyerFulfillmentChecklist).toContain(
       "Practice Pack Fulfillment"
     );
+    expect(firstBuyerFulfillmentChecklist).toContain(
+      "First 24 Hours After A Real Purchase"
+    );
+    expect(firstBuyerFulfillmentChecklist).toContain(
+      "Decide whether to continue outreach, pause outreach, or fix one issue"
+    );
     expect(revenueAndSalesTrackerTemplate).toContain(
       "OptiTech Academy Revenue And Sales Tracker Template"
     );
