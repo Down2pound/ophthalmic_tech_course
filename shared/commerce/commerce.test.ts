@@ -5,7 +5,7 @@ import {
   foundingLearnerOffer,
   practicePackOffers,
 } from "./offers";
-import { commercePolicies } from "./policies";
+import { buyerSupportContact, commercePolicies } from "./policies";
 
 describe("normalizeCheckoutEmail", () => {
   it("normalizes valid buyer emails for checkout and access records", () => {
@@ -124,5 +124,20 @@ describe("commercePolicies", () => {
     expect(combinedPolicies).toMatch(/should not be shared/i);
     expect(combinedPolicies).toMatch(/Support is intended/i);
     expect(combinedPolicies).toMatch(/does not replace clinical supervision/i);
+  });
+});
+
+describe("buyerSupportContact", () => {
+  it("gives buyers a safe support path without collecting sensitive data", () => {
+    expect(buyerSupportContact.email).toContain("@");
+    expect(buyerSupportContact.subject).toMatch(/support request/i);
+    expect(buyerSupportContact.safeDetails.join(" ")).toMatch(/checkout/i);
+    expect(buyerSupportContact.expectedUse).toMatch(/refund review/i);
+
+    const neverSend = buyerSupportContact.neverSend.join(" ");
+
+    expect(neverSend).toMatch(/protected health information/i);
+    expect(neverSend).toMatch(/Card numbers/i);
+    expect(neverSend).toMatch(/raw sign-in links/i);
   });
 });

@@ -8,13 +8,17 @@ import {
   Clock,
   CreditCard,
   GraduationCap,
+  Mail,
   ShieldCheck,
 } from "lucide-react";
 import {
   formatOfferPrice,
   foundingLearnerOffer,
 } from "@shared/commerce/offers";
-import { commercePolicies } from "@shared/commerce/policies";
+import {
+  buyerSupportContact,
+  commercePolicies,
+} from "@shared/commerce/policies";
 import {
   individualLearnerSalesPath,
   individualLearnerStartSteps,
@@ -24,6 +28,9 @@ import { createCheckoutSession } from "@/lib/checkoutClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 
 const policySummary = commercePolicies;
+const supportHref = `mailto:${buyerSupportContact.email}?subject=${encodeURIComponent(
+  buyerSupportContact.subject
+)}`;
 
 export default function Checkout() {
   const [email, setEmail] = useState("");
@@ -275,6 +282,13 @@ export default function Checkout() {
             >
               View practice packs
               <ArrowRight className="h-4 w-4" />
+            </a>
+            <a
+              href={supportHref}
+              className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900"
+            >
+              <Mail className="h-4 w-4" />
+              Need checkout help?
             </a>
           </Card>
         </aside>

@@ -1,7 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { commercePolicies } from "@shared/commerce/policies";
-import { ArrowLeft, ArrowRight, FileText } from "lucide-react";
+import {
+  buyerSupportContact,
+  commercePolicies,
+} from "@shared/commerce/policies";
+import {
+  ArrowLeft,
+  ArrowRight,
+  FileText,
+  Mail,
+  ShieldCheck,
+} from "lucide-react";
+
+const supportHref = `mailto:${buyerSupportContact.email}?subject=${encodeURIComponent(
+  buyerSupportContact.subject
+)}`;
 
 export default function Policies() {
   return (
@@ -47,6 +60,41 @@ export default function Policies() {
             <p className="mt-4 leading-7 text-slate-700">{policy.body}</p>
           </Card>
         ))}
+
+        <Card className="border-blue-100 bg-blue-50 p-6 text-blue-950 shadow-sm">
+          <div className="flex items-center gap-3">
+            <Mail className="h-6 w-6 text-blue-700" />
+            <h2 className="text-2xl font-bold">Support Contact</h2>
+          </div>
+          <p className="mt-3 leading-7">{buyerSupportContact.expectedUse}</p>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <section className="rounded-md border border-blue-100 bg-white p-4">
+              <h3 className="font-semibold">Helpful details to include</h3>
+              <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                {buyerSupportContact.safeDetails.map(detail => (
+                  <li key={detail}>- {detail}</li>
+                ))}
+              </ul>
+            </section>
+            <section className="rounded-md border border-amber-200 bg-amber-50 p-4">
+              <h3 className="flex items-center gap-2 font-semibold">
+                <ShieldCheck className="h-4 w-4 text-amber-700" />
+                Never send
+              </h3>
+              <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                {buyerSupportContact.neverSend.map(detail => (
+                  <li key={detail}>- {detail}</li>
+                ))}
+              </ul>
+            </section>
+          </div>
+          <a href={supportHref}>
+            <Button className="mt-5 bg-blue-700 text-white hover:bg-blue-800">
+              Email support
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </a>
+        </Card>
 
         <div className="flex flex-col gap-3 rounded-md border border-blue-100 bg-blue-50 p-5 md:flex-row md:items-center md:justify-between">
           <p className="text-sm font-semibold text-blue-950">

@@ -10,6 +10,32 @@ export interface CommercePolicy {
   body: string;
 }
 
+export interface BuyerSupportContact {
+  email: string;
+  subject: string;
+  safeDetails: string[];
+  neverSend: string[];
+  expectedUse: string;
+}
+
+export const buyerSupportContact: BuyerSupportContact = {
+  email: "jeff.chapin@spindeleye.com",
+  subject: "OptiTech Academy support request",
+  safeDetails: [
+    "Purchaser or learner email used at checkout.",
+    "Whether the request is about access, refund review, practice seats, or course navigation.",
+    "Approximate purchase date or Stripe receipt email date.",
+    "A short description of the public error message, if one appeared.",
+  ],
+  neverSend: [
+    "Patient information or protected health information.",
+    "Card numbers, Stripe secrets, passwords, raw sign-in links, or session cookies.",
+    "Private employee performance details or private employer policy documents.",
+  ],
+  expectedUse:
+    "Use support for account access, purchase questions, refund review, course navigation, and basic technical issues.",
+};
+
 export const commercePolicies: CommercePolicy[] = [
   {
     slug: "educational-limitations",

@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Building2,
   CheckCircle2,
+  Mail,
   ShieldCheck,
   Users,
 } from "lucide-react";
@@ -13,6 +14,7 @@ import {
   formatOfferPrice,
   practicePackOffers,
 } from "@shared/commerce/offers";
+import { buyerSupportContact } from "@shared/commerce/policies";
 import { practiceBuyerSalesPath } from "@shared/commerce/salesReadiness";
 import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
@@ -47,6 +49,9 @@ export default function PracticePacks() {
   };
   const customPracticeHref = `mailto:${customPracticeInquiryOffer.contactEmail}?subject=${encodeURIComponent(
     customPracticeInquiryOffer.subject
+  )}`;
+  const supportHref = `mailto:${buyerSupportContact.email}?subject=${encodeURIComponent(
+    buyerSupportContact.subject
   )}`;
 
   return (
@@ -230,6 +235,13 @@ export default function PracticePacks() {
               className="mt-4 block text-center text-sm font-semibold text-blue-700 hover:text-blue-900"
             >
               Review course policies
+            </a>
+            <a
+              href={supportHref}
+              className="mt-4 flex items-center justify-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900"
+            >
+              <Mail className="h-4 w-4" />
+              Need purchase help?
             </a>
           </Card>
         </aside>
