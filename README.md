@@ -87,7 +87,8 @@ Stripe key guide:
 - `PRACTICE_SEAT_ADMIN_TOKEN` is a server-only private token used to protect the
   temporary practice-seat assignment API until a full admin login exists.
 - `DATABASE_URL` points the server at managed PostgreSQL so purchases,
-  enrollments, practice seat packs, and assignments survive restarts.
+  enrollments, practice seat packs, assignments, sign-in sessions, and quiz
+  attempts survive restarts.
 
 Checkout routes:
 
@@ -113,12 +114,11 @@ Checkout routes:
 is sent, it uses the founding learner offer. Practice pack offer IDs are also
 accepted and sent to Stripe with seat-count metadata for fulfillment.
 
-When Stripe confirms payment, individual purchases provision one temporary
-learner enrollment. Practice pack purchases provision one temporary seat-pack
-record with the purchased seat count. Core practice-seat assignment logic can
-assign learner emails without exceeding purchased capacity. The next production
-step is connecting those records to durable PostgreSQL storage and a
-manager/admin workflow.
+When Stripe confirms payment, individual purchases provision one learner
+enrollment. Practice pack purchases provision one seat-pack record with the
+purchased seat count. Core practice-seat assignment logic can assign learner
+emails without exceeding purchased capacity. When `DATABASE_URL` is configured,
+those commerce records are stored in PostgreSQL.
 
 The temporary practice-seat assignment endpoint requires an `x-admin-token`
 header matching `PRACTICE_SEAT_ADMIN_TOKEN`. The protected list endpoint uses
@@ -137,8 +137,8 @@ Stripe key values.
 stores the hashed magic-link record server-side while returning only a generic
 safe message. It does not return raw tokens, token hashes, or callback URLs.
 It sends the sign-in link through the configured transactional email endpoint.
-Durable database storage still needs to be connected before real learner sign-in
-is production-ready.
+When `DATABASE_URL` is configured, magic links and sessions are stored in
+PostgreSQL.
 
 `GET /api/auth/callback?token=...` consumes a valid one-time magic link, stores
 a hashed session server-side, sets an HTTP-only session cookie, and redirects to
@@ -158,6 +158,16 @@ into the browser bundle.
 without the answer key. `POST /api/learn/module-one/quiz/submit` scores learner
 answers on the server after the same session and enrollment check, records the
 attempt server-side, and returns quiz progress.
+
+Run the launch database setup after `DATABASE_URL` points to the managed
+PostgreSQL database:
+
+```bash
+pnpm db:setup
+```
+
+The command creates the commerce, auth, and assessment tables with safe
+`CREATE TABLE IF NOT EXISTS` statements. It does not print secret values.
 
 ## Database Contracts
 
@@ -193,11 +203,13 @@ durable. Current schema contracts live in:
   PostgreSQL-backed quiz attempt and question-result repositories.
 - `server/src/assessments/assessmentSchema.ts` for the PostgreSQL-ready
   assessment attempt and question-result tables.
+- `server/src/db/setupLaunchDatabase.ts` for applying the commerce, auth, and
+  assessment schemas with one setup command.
 - `server/src/auth/passwordlessSignIn.ts` for building a sign-in request record
   and email payload without storing the raw email token.
 - `server/src/routes/auth.ts` for the safe passwordless sign-in request route.
 
-These files are blueprints plus repository wiring. They still need to be run
-through the production migration tool, pointed at managed PostgreSQL with
-`DATABASE_URL`, and verified in the deployed app before selling durable learner
-access.
+These files are schema contracts plus repository wiring. Run `pnpm db:setup`
+against managed PostgreSQL, configure the same `DATABASE_URL` in production,
+and verify the deployed purchase-to-sign-in-to-quiz flow before selling durable
+learner access.

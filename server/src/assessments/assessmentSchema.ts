@@ -38,7 +38,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS assessment_question_results_attempt_question_i
 
 export function getAssessmentSchemaChecklist(): string[] {
   return [
-    "Run the assessment schema against managed PostgreSQL.",
+    "Run pnpm db:setup against managed PostgreSQL.",
     "Configure DATABASE_URL so assessment attempts use the PostgreSQL repository.",
     "Use durable attempts for refund rules, completion rules, and learner progress reporting.",
     "Keep answer keys server-side and store only scored results.",

@@ -49,7 +49,7 @@ CREATE INDEX IF NOT EXISTS auth_sessions_user_id_idx
 
 export function getAuthSchemaChecklist(): string[] {
   return [
-    "Run the auth schema against managed PostgreSQL.",
+    "Run pnpm db:setup against managed PostgreSQL.",
     "Send passwordless sign-in links through a transactional email provider.",
     "Store only hashed magic-link tokens and secure HTTP-only session cookies.",
     "Attach durable enrollments to authenticated learner user records.",

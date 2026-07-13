@@ -56,8 +56,8 @@ describe("commerceSchemaSql", () => {
 describe("getCommerceSchemaChecklist", () => {
   it("summarizes the production database gates still required", () => {
     expect(getCommerceSchemaChecklist()).toEqual([
-      "Run the commerce schema against managed PostgreSQL.",
-      "Replace temporary in-memory purchase and enrollment stores with database repositories.",
+      "Run pnpm db:setup against managed PostgreSQL.",
+      "Configure DATABASE_URL so commerce records use PostgreSQL repositories.",
       "Wrap purchase recording and enrollment provisioning in one transaction.",
       "Keep Stripe webhook idempotency enforced by unique event and checkout session fields.",
       "Provision practice seat packs from checkout metadata before inviting individual learners.",
