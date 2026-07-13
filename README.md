@@ -269,6 +269,18 @@ Then verify:
 - Stripe test checkout creates a durable enrollment through the webhook.
 - A learner can sign in, open Module 1, and submit the protected quiz.
 
+GitHub Actions runs launch CI on pushes and pull requests:
+
+- `pnpm check`
+- `pnpm test`
+- `pnpm build`
+- `pnpm launch:doctor`
+- `pnpm launch:bundle`
+- `docker build`
+
+The workflow uploads the generated `launch-evidence/` folder as a short-lived
+artifact, so reviewers can download the launch packet without exposing secrets.
+
 You can also run the deployment smoke test from your local machine after the
 app is online:
 
