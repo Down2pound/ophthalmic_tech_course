@@ -13,6 +13,7 @@
     "test:watch": "vitest --root .",
     "db:setup": "tsx server/src/db/runSetup.ts",
     "launch:smoke": "tsx server/src/launch/runDeploymentSmokeTest.ts",
+    "launch:doctor": "tsx server/src/launch/runLaunchDoctor.ts",
     "launch:bundle": "tsx server/src/launch/runLaunchEvidenceBundle.ts",
     "format": "prettier --write ."
   },

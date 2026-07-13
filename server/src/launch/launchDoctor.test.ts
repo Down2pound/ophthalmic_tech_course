@@ -1,8 +1,5 @@
-import { mkdtemp, readFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { createLaunchEvidenceBundle } from "./launchEvidenceBundle";
+import { renderLaunchDoctorReport } from "./launchDoctor";
 import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 
 const readinessReport: RuntimeLaunchReadinessReport = {
@@ -37,9 +34,9 @@ const readinessReport: RuntimeLaunchReadinessReport = {
   },
   databaseReadiness: {
     schemaVerified: false,
-    requiredTables: ["commerce_purchases"],
-    checkedTableCount: 0,
-    missingTables: ["commerce_purchases"],
+    requiredTables: ["commerce_purchases", "auth_users"],
+    checkedTableCount: 1,
+    missingTables: ["auth_users"],
     checkFailed: false,
   },
   clinicalReview: {
@@ -51,7 +48,10 @@ const readinessReport: RuntimeLaunchReadinessReport = {
     reviewDate: "",
     approvedVersion: "",
   },
-  warnings: ["Stripe checkout setup is missing: STRIPE_SECRET_KEY."],
+  warnings: [
+    "Stripe checkout setup is missing: STRIPE_SECRET_KEY.",
+    "Database setup is missing: DATABASE_URL.",
+  ],
   launchActions: [
     {
       id: "clinical-review-signoff",
@@ -72,47 +72,19 @@ const readinessReport: RuntimeLaunchReadinessReport = {
   },
 };
 
-describe("createLaunchEvidenceBundle", () => {
-  it("writes the safe launch handoff files", async () => {
-    const projectRoot = process.cwd();
-    const outputParent = await mkdtemp(
-      path.join(tmpdir(), "optitech-launch-evidence-")
-    );
+describe("renderLaunchDoctorReport", () => {
+  it("renders a safe human-readable launch status report", () => {
+    const report = renderLaunchDoctorReport({ readinessReport });
 
-    const result = await createLaunchEvidenceBundle({
-      projectRoot,
-      outputDir: outputParent,
-      generatedAt: "2026-07-13T12:00:00.000Z",
-      readinessReport,
-    });
-
-    expect(result.files).toEqual([
-      "README.md",
-      "production-launch-package.md",
-      "launch-doctor-report.md",
-      "module-1-clinical-review-packet.md",
-      "runtime-readiness-snapshot.json",
-    ]);
-
-    const readme = await readFile(
-      path.join(result.outputDir, "README.md"),
-      "utf8"
+    expect(report).toContain("# OptiTech Academy Launch Doctor");
+    expect(report).toContain("- Paid launch ready: no");
+    expect(report).toContain("- Stripe checkout: NEEDS WORK");
+    expect(report).toContain("- STRIPE_SECRET_KEY");
+    expect(report).toContain("- auth_users");
+    expect(report).toContain(
+      "Get clinical review signoff: Have a reviewer approve Module 1."
     );
-    const readinessSnapshot = await readFile(
-      path.join(result.outputDir, "runtime-readiness-snapshot.json"),
-      "utf8"
-    );
-    const launchDoctorReport = await readFile(
-      path.join(result.outputDir, "launch-doctor-report.md"),
-      "utf8"
-    );
-
-    expect(readme).toContain("safe to save to Google Drive");
-    expect(readme).toContain("Ready for paid launch: no");
-    expect(launchDoctorReport).toContain("OptiTech Academy Launch Doctor");
-    expect(launchDoctorReport).toContain("Paid launch ready: no");
-    expect(readinessSnapshot).toContain("STRIPE_SECRET_KEY");
-    expect(readinessSnapshot).not.toContain("sk_test_");
-    expect(readinessSnapshot).not.toContain("whsec_");
+    expect(report).not.toContain("sk_test_");
+    expect(report).not.toContain("whsec_");
   });
 });

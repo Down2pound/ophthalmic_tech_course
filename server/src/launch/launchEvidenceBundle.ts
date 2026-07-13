@@ -1,6 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { renderModuleOneClinicalReviewPacketMarkdown } from "../../../shared/course/clinicalReviewPacket";
+import { renderLaunchDoctorReport } from "./launchDoctor";
 import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 import { getRuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 
@@ -33,6 +34,7 @@ function renderReadme({
     "## Included Files",
     "",
     "- `production-launch-package.md`: launch handoff checklist.",
+    "- `launch-doctor-report.md`: human-readable paid launch preflight report.",
     "- `module-1-clinical-review-packet.md`: clinical reviewer packet.",
     "- `runtime-readiness-snapshot.json`: safe readiness report with missing variable names, not secret values.",
     "",
@@ -65,6 +67,7 @@ export async function createLaunchEvidenceBundle({
   const files = [
     "README.md",
     "production-launch-package.md",
+    "launch-doctor-report.md",
     "module-1-clinical-review-packet.md",
     "runtime-readiness-snapshot.json",
   ];
@@ -81,6 +84,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "production-launch-package.md"),
     launchPackage
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "launch-doctor-report.md"),
+    renderLaunchDoctorReport({ readinessReport })
   );
   await writeFile(
     path.join(resolvedOutputDir, "module-1-clinical-review-packet.md"),
