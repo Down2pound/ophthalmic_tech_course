@@ -1,4 +1,5 @@
 import type { VerifiedPurchaseRecord } from "./purchaseStore";
+import type { PracticeSeatAssignmentRecord } from "./practiceSeatPackStore";
 
 export type EnrollmentStatus = "active" | "expired";
 
@@ -13,9 +14,10 @@ export interface EnrollmentRecord {
 }
 
 export interface EnrollmentStore {
-  provisionEnrollment(
-    enrollment: EnrollmentRecord
-  ): { created: boolean; enrollment: EnrollmentRecord };
+  provisionEnrollment(enrollment: EnrollmentRecord): {
+    created: boolean;
+    enrollment: EnrollmentRecord;
+  };
   listEnrollments(): EnrollmentRecord[];
   findEnrollmentsByEmail(email: string): EnrollmentRecord[];
 }
@@ -43,34 +45,43 @@ export function createEnrollmentFromPurchase(
   };
 }
 
+export function createEnrollmentFromPracticeSeatAssignment(
+  assignment: PracticeSeatAssignmentRecord
+): EnrollmentRecord {
+  return {
+    enrollmentId: `enrollment_${assignment.assignmentId}`,
+    checkoutSessionId: assignment.checkoutSessionId,
+    offerId: assignment.offerId,
+    learnerEmail: assignment.learnerEmail.trim().toLowerCase(),
+    status: "active",
+    accessStartedAt: assignment.accessStartedAt,
+    accessExpiresAt: assignment.accessExpiresAt,
+  };
+}
+
 export function createInMemoryEnrollmentStore(): EnrollmentStore {
-  const enrollmentsByCheckoutSessionId = new Map<string, EnrollmentRecord>();
+  const enrollmentsById = new Map<string, EnrollmentRecord>();
 
   return {
     provisionEnrollment(enrollment) {
-      const existing = enrollmentsByCheckoutSessionId.get(
-        enrollment.checkoutSessionId
-      );
+      const existing = enrollmentsById.get(enrollment.enrollmentId);
 
       if (existing) {
         return { created: false, enrollment: existing };
       }
 
-      enrollmentsByCheckoutSessionId.set(
-        enrollment.checkoutSessionId,
-        enrollment
-      );
+      enrollmentsById.set(enrollment.enrollmentId, enrollment);
 
       return { created: true, enrollment };
     },
     listEnrollments() {
-      return Array.from(enrollmentsByCheckoutSessionId.values());
+      return Array.from(enrollmentsById.values());
     },
     findEnrollmentsByEmail(email) {
       const normalizedEmail = email.trim().toLowerCase();
 
-      return Array.from(enrollmentsByCheckoutSessionId.values()).filter(
-        (enrollment) => enrollment.learnerEmail === normalizedEmail
+      return Array.from(enrollmentsById.values()).filter(
+        enrollment => enrollment.learnerEmail === normalizedEmail
       );
     },
   };

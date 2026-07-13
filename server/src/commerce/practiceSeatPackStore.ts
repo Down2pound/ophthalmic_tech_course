@@ -1,6 +1,7 @@
 import type { VerifiedPurchaseRecord } from "./purchaseStore";
 
 export type PracticeSeatPackStatus = "active" | "expired";
+export type PracticeSeatAssignmentStatus = "active" | "revoked";
 
 export interface PracticeSeatPackRecord {
   seatPackId: string;
@@ -14,6 +15,35 @@ export interface PracticeSeatPackRecord {
   accessExpiresAt: string;
 }
 
+export interface PracticeSeatAssignmentRecord {
+  assignmentId: string;
+  seatPackId: string;
+  checkoutSessionId: string;
+  offerId: string;
+  learnerEmail: string;
+  status: PracticeSeatAssignmentStatus;
+  assignedAt: string;
+  accessStartedAt: string;
+  accessExpiresAt: string;
+}
+
+export interface PracticeSeatAssignmentInput {
+  seatPackId: string;
+  learnerEmail: string;
+  assignedAt?: string;
+}
+
+export type PracticeSeatAssignmentResult =
+  | {
+      assigned: true;
+      assignment: PracticeSeatAssignmentRecord;
+      seatPack: PracticeSeatPackRecord;
+    }
+  | {
+      assigned: false;
+      reason: string;
+    };
+
 export interface PracticeSeatPackStore {
   provisionPracticeSeatPack(seatPack: PracticeSeatPackRecord): {
     created: boolean;
@@ -23,6 +53,10 @@ export interface PracticeSeatPackStore {
   findPracticeSeatPacksByPurchaserEmail(
     email: string
   ): PracticeSeatPackRecord[];
+  assignPracticeSeat(
+    input: PracticeSeatAssignmentInput
+  ): PracticeSeatAssignmentResult;
+  listPracticeSeatAssignments(): PracticeSeatAssignmentRecord[];
 }
 
 function addMonths(date: Date, months: number): Date {
@@ -57,6 +91,13 @@ export function createInMemoryPracticeSeatPackStore(): PracticeSeatPackStore {
     string,
     PracticeSeatPackRecord
   >();
+  const seatPacksById = new Map<string, PracticeSeatPackRecord>();
+  const assignmentsById = new Map<string, PracticeSeatAssignmentRecord>();
+
+  function getAssignmentId(seatPackId: string, learnerEmail: string): string {
+    const safeEmail = learnerEmail.replace(/[^a-z0-9]/g, "_");
+    return `seat_${seatPackId}_${safeEmail}`;
+  }
 
   return {
     provisionPracticeSeatPack(seatPack) {
@@ -69,6 +110,7 @@ export function createInMemoryPracticeSeatPackStore(): PracticeSeatPackStore {
       }
 
       seatPacksByCheckoutSessionId.set(seatPack.checkoutSessionId, seatPack);
+      seatPacksById.set(seatPack.seatPackId, seatPack);
       return { created: true, seatPack };
     },
     listPracticeSeatPacks() {
@@ -80,6 +122,65 @@ export function createInMemoryPracticeSeatPackStore(): PracticeSeatPackStore {
       return Array.from(seatPacksByCheckoutSessionId.values()).filter(
         seatPack => seatPack.purchaserEmail === normalizedEmail
       );
+    },
+    assignPracticeSeat({
+      seatPackId,
+      learnerEmail,
+      assignedAt = new Date().toISOString(),
+    }) {
+      const normalizedEmail = learnerEmail.trim().toLowerCase();
+      const seatPack = seatPacksById.get(seatPackId);
+
+      if (!seatPack) {
+        return {
+          assigned: false,
+          reason: "Practice seat pack was not found.",
+        };
+      }
+
+      if (seatPack.status !== "active") {
+        return {
+          assigned: false,
+          reason: "Practice seat pack is not active.",
+        };
+      }
+
+      const assignmentId = getAssignmentId(
+        seatPack.seatPackId,
+        normalizedEmail
+      );
+      const existing = assignmentsById.get(assignmentId);
+
+      if (existing) {
+        return { assigned: true, assignment: existing, seatPack };
+      }
+
+      if (seatPack.assignedSeats >= seatPack.totalSeats) {
+        return {
+          assigned: false,
+          reason: "Practice seat pack has no seats remaining.",
+        };
+      }
+
+      const assignment: PracticeSeatAssignmentRecord = {
+        assignmentId,
+        seatPackId: seatPack.seatPackId,
+        checkoutSessionId: seatPack.checkoutSessionId,
+        offerId: seatPack.offerId,
+        learnerEmail: normalizedEmail,
+        status: "active",
+        assignedAt,
+        accessStartedAt: seatPack.accessStartedAt,
+        accessExpiresAt: seatPack.accessExpiresAt,
+      };
+
+      seatPack.assignedSeats += 1;
+      assignmentsById.set(assignment.assignmentId, assignment);
+
+      return { assigned: true, assignment, seatPack };
+    },
+    listPracticeSeatAssignments() {
+      return Array.from(assignmentsById.values());
     },
   };
 }
