@@ -25,7 +25,7 @@ describe("foundingLearnerOffer", () => {
 
 describe("practicePackOffers", () => {
   it("defines the approved employer seat packs", () => {
-    expect(practicePackOffers.map((offer) => offer.id)).toEqual([
+    expect(practicePackOffers.map(offer => offer.id)).toEqual([
       "practice-five-seat-pack",
       "practice-fifteen-seat-pack",
     ]);
@@ -37,7 +37,7 @@ describe("practicePackOffers", () => {
 
   it("keeps employer offers honest about supervision and competency", () => {
     const combined = practicePackOffers
-      .flatMap((offer) => [
+      .flatMap(offer => [
         offer.description,
         ...offer.includes,
         ...offer.limitations,
@@ -52,11 +52,13 @@ describe("practicePackOffers", () => {
 
 describe("commercePolicies", () => {
   it("contains all public policy sections required before purchase", () => {
-    expect(commercePolicies.map((policy) => policy.slug)).toEqual([
+    expect(commercePolicies.map(policy => policy.slug)).toEqual([
       "educational-limitations",
       "refund-policy",
       "privacy-summary",
       "terms-summary",
+      "practice-pack-terms",
+      "support-expectations",
     ]);
   });
 
@@ -66,5 +68,16 @@ describe("commercePolicies", () => {
       expect(policy.body.length).toBeGreaterThan(120);
       expect(policy.body).not.toMatch(/legal advice/i);
     }
+  });
+
+  it("sets buyer expectations for privacy, practice packs, and support", () => {
+    const combinedPolicies = commercePolicies
+      .map(policy => policy.body)
+      .join(" ");
+
+    expect(combinedPolicies).toMatch(/protected health information/i);
+    expect(combinedPolicies).toMatch(/should not be shared/i);
+    expect(combinedPolicies).toMatch(/Support is intended/i);
+    expect(combinedPolicies).toMatch(/does not replace clinical supervision/i);
   });
 });
