@@ -76,9 +76,9 @@ export const launchReadinessChecklist: LaunchReadinessItem[] = [
     title: "Browser, mobile, and accessibility QA",
     status: "in-progress",
     evidence:
-      "TypeScript checks pass locally, but Vitest/build/browser verification are blocked by the current Windows sandbox spawn permissions.",
+      "TypeScript checks, the full Vitest suite, and the production build pass locally with elevated Windows test/build permissions, but desktop/mobile browser QA, keyboard checks, labels, contrast, and no-overflow checks still need to be completed before paid launch.",
     nextAction:
-      "Run full tests, production build, desktop/mobile browser QA, keyboard checks, labels, contrast, and no-overflow checks once tool permissions are available.",
+      "Run desktop/mobile browser QA, keyboard checks, labels, contrast, and no-overflow checks against the deployed app before paid launch.",
   },
 ];
 

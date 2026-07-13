@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+.git
+.env
+.env.*
+.manus-logs
+logs
+*.log
+coverage
+tmp
+temp
+data

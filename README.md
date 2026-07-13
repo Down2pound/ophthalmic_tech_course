@@ -106,6 +106,7 @@ Checkout routes:
 - Protected practice seat assignment endpoint:
   `POST /api/practice-seat-packs/:seatPackId/assignments`
 - Protected practice seat pack list endpoint: `GET /api/practice-seat-packs`
+- Health check endpoint: `GET /api/health`
 - Runtime launch check: `GET /api/launch/readiness`
 - Success return: `/learn?checkout=success&offer=...`
 - Cancel return: `/checkout?checkout=cancelled`
@@ -132,6 +133,9 @@ does not collect payment.
 `GET /api/launch/readiness` returns a safe setup report with launch blocker
 counts and missing environment variable names. It must never return actual
 Stripe key values.
+
+`GET /api/health` returns a small safe uptime report for deployment health
+checks. It does not return secret values.
 
 `POST /api/auth/passwordless/start` prepares a magic-link sign-in request and
 stores the hashed magic-link record server-side while returning only a generic
@@ -168,6 +172,41 @@ pnpm db:setup
 
 The command creates the commerce, auth, and assessment tables with safe
 `CREATE TABLE IF NOT EXISTS` statements. It does not print secret values.
+
+## Deployment
+
+The app can be deployed as one Node/Express service that serves both the React
+frontend and the API. The production build command is:
+
+```bash
+pnpm build
+```
+
+The production start command is:
+
+```bash
+node dist/index.js
+```
+
+For container hosts, use the included `Dockerfile`. Configure these environment
+variables in the host dashboard, not in Git: `DATABASE_URL`,
+`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PUBLIC_APP_URL`,
+`AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
+`TRANSACTIONAL_EMAIL_API_KEY`, `SIGN_IN_FROM_EMAIL`, and
+`PRACTICE_SEAT_ADMIN_TOKEN`.
+
+After the managed PostgreSQL database is created and `DATABASE_URL` is set, run:
+
+```bash
+pnpm db:setup
+```
+
+Then verify:
+
+- `GET /api/health` returns `ok: true`.
+- `GET /api/launch/readiness` shows no missing environment variables.
+- Stripe test checkout creates a durable enrollment through the webhook.
+- A learner can sign in, open Module 1, and submit the protected quiz.
 
 ## Database Contracts
 
