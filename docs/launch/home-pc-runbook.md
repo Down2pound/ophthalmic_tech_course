@@ -113,7 +113,9 @@ PUBLIC_APP_URL=https://your-real-domain.example pnpm launch:sitemap
 ```
 
 Use the smoke command without `LAUNCH_SMOKE_ALLOW_NOT_READY=true` only for the
-final go-live check after paid enrollment is supposed to be ready.
+final go-live check after paid enrollment is supposed to be ready. The smoke
+test also checks browser safety headers and `/robots.txt`, so it catches more
+than just a blank or broken page.
 
 Save the smoke test output and hosted sitemap URL with the launch evidence.
 

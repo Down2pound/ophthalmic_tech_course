@@ -60,14 +60,14 @@ Run this after the app is online:
 LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
 
-The smoke test checks the health endpoint, launch readiness endpoint, and the
-public buyer pages for home, checkout, individual checkout return states,
-practice packs, practice checkout return states, policies, curriculum, and
-onboarding.
+The smoke test checks the health endpoint, launch readiness endpoint, browser
+safety headers, `/robots.txt`, and the public buyer pages for home, checkout,
+individual checkout return states, practice packs, practice checkout return
+states, policies, curriculum, and onboarding.
 
 Before the paid launch switch is enabled, the same smoke test can confirm the
-deployed health endpoint and buyer pages while allowing `readyForPaidLaunch` to
-remain `false`:
+deployed health endpoint, buyer pages, safety headers, and robots rules while
+allowing `readyForPaidLaunch` to remain `false`:
 
 ```bash
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke

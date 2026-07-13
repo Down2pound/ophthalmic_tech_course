@@ -72,7 +72,8 @@ PUBLIC_APP_URL=https://your-real-domain.example pnpm launch:sitemap
 
 This early smoke test is allowed to pass while paid launch readiness is still
 `false`. That is useful before Stripe live mode, email, database, and clinical
-signoff are all finished.
+signoff are all finished. It still checks that the live pages load, browser
+safety headers are present, and `/robots.txt` blocks private/admin-style paths.
 
 ## 7. Run The Final Go-Live Smoke Test
 

@@ -76,8 +76,10 @@ LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-real-domain.examp
 
 Save the output with the rest of the launch evidence. This pre-launch command
 can pass before `readyForPaidLaunch` is true, as long as health and public buyer
-pages load. For the final go-live check after every paid launch gate is
-complete, run the same command without `LAUNCH_SMOKE_ALLOW_NOT_READY=true`.
+pages load, browser safety headers are present, and `/robots.txt` has the
+expected public/private rules. For the final go-live check after every paid
+launch gate is complete, run the same command without
+`LAUNCH_SMOKE_ALLOW_NOT_READY=true`.
 
 To also prove custom-practice lead capture after deployment, run one smoke test
 with:
@@ -116,7 +118,8 @@ Also confirm this opens:
 https://your-real-domain.example/robots.txt
 ```
 
-`robots.txt` should allow public pages and block private/admin-style areas.
+`robots.txt` should allow public pages and block private/admin-style areas. The
+deployment smoke test checks those same rules automatically.
 
 ## Check Shared Link Previews
 

@@ -5,6 +5,10 @@ export interface DeploymentSmokeTestReport {
   baseUrl: string;
   healthOk: boolean;
   publicPagesOk: boolean;
+  securityHeadersOk: boolean;
+  securityHeaders: DeploymentSmokeSecurityHeaderResult[];
+  robotsTxtOk: boolean;
+  robotsTxt: DeploymentSmokeRobotsTxtResult;
   publicPages: DeploymentSmokePublicPageResult[];
   practiceInquiry: DeploymentSmokePracticeInquiryResult;
   readyForPaidLaunch: boolean;
@@ -27,6 +31,24 @@ export interface DeploymentSmokePublicPageResult {
   status: number;
 }
 
+export interface DeploymentSmokeSecurityHeaderResult {
+  header: string;
+  ok: boolean;
+  actual: string | null;
+  expected: string;
+}
+
+export interface DeploymentSmokeRobotsTxtResult {
+  ok: boolean;
+  status: number;
+  requiredRules: DeploymentSmokeRobotsTxtRuleResult[];
+}
+
+export interface DeploymentSmokeRobotsTxtRuleResult {
+  rule: string;
+  ok: boolean;
+}
+
 export interface DeploymentSmokePracticeInquiryResult {
   tested: boolean;
   ok: boolean;
@@ -43,6 +65,26 @@ export interface DeploymentSmokeExitOptions {
 interface HealthResponse {
   ok?: boolean;
 }
+
+const requiredSecurityHeaders: Array<{ header: string; expected: string }> = [
+  { header: "X-Content-Type-Options", expected: "nosniff" },
+  { header: "X-Frame-Options", expected: "DENY" },
+  { header: "Referrer-Policy", expected: "strict-origin-when-cross-origin" },
+  {
+    header: "Permissions-Policy",
+    expected: "camera=(), microphone=(), geolocation=(), payment=(self)",
+  },
+  { header: "Cross-Origin-Opener-Policy", expected: "same-origin" },
+];
+
+const requiredRobotsTxtRules = [
+  "Allow: /",
+  "Disallow: /api/",
+  "Disallow: /admin",
+  "Disallow: /send",
+  "Disallow: /practice-seat-admin",
+  "Disallow: /launch-readiness",
+] as const;
 
 export const deploymentSmokePublicPaths = [
   "/",
@@ -92,6 +134,48 @@ async function fetchPublicPage({
     path,
     ok: response.ok,
     status: response.status,
+  };
+}
+
+async function checkSecurityHeaders({
+  fetcher,
+  baseUrl,
+}: {
+  fetcher: typeof fetch;
+  baseUrl: string;
+}): Promise<DeploymentSmokeSecurityHeaderResult[]> {
+  const response = await fetcher(`${baseUrl}/`);
+
+  return requiredSecurityHeaders.map(({ header, expected }) => {
+    const actual = response.headers.get(header);
+
+    return {
+      header,
+      ok: actual === expected,
+      actual,
+      expected,
+    };
+  });
+}
+
+async function checkRobotsTxt({
+  fetcher,
+  baseUrl,
+}: {
+  fetcher: typeof fetch;
+  baseUrl: string;
+}): Promise<DeploymentSmokeRobotsTxtResult> {
+  const response = await fetcher(`${baseUrl}/robots.txt`);
+  const text = await response.text().catch(() => "");
+  const requiredRules = requiredRobotsTxtRules.map(rule => ({
+    rule,
+    ok: text.includes(rule),
+  }));
+
+  return {
+    ok: response.ok && requiredRules.every(rule => rule.ok),
+    status: response.status,
+    requiredRules,
   };
 }
 
@@ -160,6 +244,14 @@ export async function runDeploymentSmokeTest({
       fetchPublicPage({ fetcher, baseUrl: normalizedBaseUrl, path })
     )
   );
+  const securityHeaders = await checkSecurityHeaders({
+    fetcher,
+    baseUrl: normalizedBaseUrl,
+  });
+  const robotsTxt = await checkRobotsTxt({
+    fetcher,
+    baseUrl: normalizedBaseUrl,
+  });
   const practiceInquiry = testPracticeInquiry
     ? await submitPracticeInquirySmoke({
         fetcher,
@@ -176,6 +268,10 @@ export async function runDeploymentSmokeTest({
     baseUrl: normalizedBaseUrl,
     healthOk: health.ok === true,
     publicPagesOk: publicPages.every(page => page.ok),
+    securityHeadersOk: securityHeaders.every(header => header.ok),
+    securityHeaders,
+    robotsTxtOk: robotsTxt.ok,
+    robotsTxt,
     publicPages,
     practiceInquiry,
     readyForPaidLaunch: readiness.readyForPaidLaunch,
@@ -190,7 +286,14 @@ export function getDeploymentSmokeExitCode(
   report: DeploymentSmokeTestReport,
   { allowNotReady = false }: DeploymentSmokeExitOptions = {}
 ): number {
-  if (!report.healthOk || !report.publicPagesOk) return 1;
+  if (
+    !report.healthOk ||
+    !report.publicPagesOk ||
+    !report.securityHeadersOk ||
+    !report.robotsTxtOk
+  ) {
+    return 1;
+  }
   if (report.practiceInquiry.tested && !report.practiceInquiry.ok) return 1;
   if (!allowNotReady && !report.readyForPaidLaunch) return 1;
 
@@ -216,6 +319,8 @@ export function renderDeploymentSmokeReport(
     "",
     `- Health endpoint: ${report.healthOk ? "ok" : "failed"}`,
     `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
+    `- Security headers: ${report.securityHeadersOk ? "ok" : "failed"}`,
+    `- Robots.txt rules: ${report.robotsTxtOk ? "ok" : "failed"}`,
     `- Practice inquiry capture: ${
       report.practiceInquiry.tested
         ? report.practiceInquiry.ok
@@ -230,6 +335,20 @@ export function renderDeploymentSmokeReport(
     ...report.publicPages.map(
       page =>
         `- ${page.path}: ${page.ok ? "ok" : "failed"} (HTTP ${page.status})`
+    ),
+    "",
+    "## Security Header Checks",
+    "",
+    ...report.securityHeaders.map(
+      header =>
+        `- ${header.header}: ${header.ok ? "ok" : `failed (expected ${header.expected}, got ${header.actual ?? "missing"})`}`
+    ),
+    "",
+    "## Robots.txt Checks",
+    "",
+    `- /robots.txt: ${report.robotsTxt.ok ? "ok" : "failed"} (HTTP ${report.robotsTxt.status})`,
+    ...report.robotsTxt.requiredRules.map(
+      rule => `- ${rule.rule}: ${rule.ok ? "ok" : "missing"}`
     ),
     "",
     "## Practice Inquiry Check",

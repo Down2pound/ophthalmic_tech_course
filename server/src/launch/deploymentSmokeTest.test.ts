@@ -22,8 +22,34 @@ function createTextResponse(options: { ok?: boolean; status?: number } = {}) {
   return {
     ok: options.ok ?? true,
     status: options.status ?? 200,
+    headers: new Headers({
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "Permissions-Policy":
+        "camera=(), microphone=(), geolocation=(), payment=(self)",
+      "Cross-Origin-Opener-Policy": "same-origin",
+    }),
     async text() {
       return "<!doctype html><title>OptiTech Academy</title>";
+    },
+  } as Response;
+}
+
+function createRobotsResponse(options: { ok?: boolean; status?: number } = {}) {
+  return {
+    ok: options.ok ?? true,
+    status: options.status ?? 200,
+    async text() {
+      return [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /api/",
+        "Disallow: /admin",
+        "Disallow: /send",
+        "Disallow: /practice-seat-admin",
+        "Disallow: /launch-readiness",
+      ].join("\n");
     },
   } as Response;
 }
@@ -59,6 +85,10 @@ describe("runDeploymentSmokeTest", () => {
         });
       }
 
+      if (requestedUrl.endsWith("/robots.txt")) {
+        return createRobotsResponse();
+      }
+
       return createTextResponse();
     };
 
@@ -72,6 +102,52 @@ describe("runDeploymentSmokeTest", () => {
       baseUrl: "https://example.com",
       healthOk: true,
       publicPagesOk: true,
+      securityHeadersOk: true,
+      securityHeaders: [
+        {
+          header: "X-Content-Type-Options",
+          ok: true,
+          actual: "nosniff",
+          expected: "nosniff",
+        },
+        {
+          header: "X-Frame-Options",
+          ok: true,
+          actual: "DENY",
+          expected: "DENY",
+        },
+        {
+          header: "Referrer-Policy",
+          ok: true,
+          actual: "strict-origin-when-cross-origin",
+          expected: "strict-origin-when-cross-origin",
+        },
+        {
+          header: "Permissions-Policy",
+          ok: true,
+          actual: "camera=(), microphone=(), geolocation=(), payment=(self)",
+          expected: "camera=(), microphone=(), geolocation=(), payment=(self)",
+        },
+        {
+          header: "Cross-Origin-Opener-Policy",
+          ok: true,
+          actual: "same-origin",
+          expected: "same-origin",
+        },
+      ],
+      robotsTxtOk: true,
+      robotsTxt: {
+        ok: true,
+        status: 200,
+        requiredRules: [
+          { rule: "Allow: /", ok: true },
+          { rule: "Disallow: /api/", ok: true },
+          { rule: "Disallow: /admin", ok: true },
+          { rule: "Disallow: /send", ok: true },
+          { rule: "Disallow: /practice-seat-admin", ok: true },
+          { rule: "Disallow: /launch-readiness", ok: true },
+        ],
+      },
       publicPages: [
         { path: "/", ok: true, status: 200 },
         { path: "/checkout", ok: true, status: 200 },
@@ -134,6 +210,8 @@ describe("runDeploymentSmokeTest", () => {
       "https://example.com/policies",
       "https://example.com/curriculum",
       "https://example.com/onboarding",
+      "https://example.com/",
+      "https://example.com/robots.txt",
     ]);
   });
 
@@ -143,10 +221,7 @@ describe("runDeploymentSmokeTest", () => {
       method?: string;
       body?: unknown;
     }> = [];
-    const fetcher = async (
-      url: string | URL | Request,
-      init?: RequestInit
-    ) => {
+    const fetcher = async (url: string | URL | Request, init?: RequestInit) => {
       const requestedUrl = String(url);
       requestedRequests.push({
         url: requestedUrl,
@@ -182,6 +257,10 @@ describe("runDeploymentSmokeTest", () => {
           },
           { status: 201 }
         );
+      }
+
+      if (requestedUrl.endsWith("/robots.txt")) {
+        return createRobotsResponse();
       }
 
       return createTextResponse();
@@ -234,6 +313,10 @@ describe("runDeploymentSmokeTest", () => {
         return createTextResponse({ ok: false, status: 500 });
       }
 
+      if (requestedUrl.endsWith("/robots.txt")) {
+        return createRobotsResponse();
+      }
+
       return createTextResponse();
     };
 
@@ -250,11 +333,125 @@ describe("runDeploymentSmokeTest", () => {
     });
   });
 
+  it("reports missing deployment security headers", async () => {
+    const fetcher = async (url: string | URL | Request) => {
+      const requestedUrl = String(url);
+
+      if (requestedUrl.endsWith("/api/health")) {
+        return createResponse({ ok: true });
+      }
+
+      if (requestedUrl.endsWith("/api/launch/readiness")) {
+        return createResponse({
+          readyForPaidLaunch: true,
+          staticSummary: {
+            blockers: [],
+          },
+          warnings: [],
+          launchActions: [],
+        });
+      }
+
+      if (requestedUrl.endsWith("/robots.txt")) {
+        return createRobotsResponse();
+      }
+
+      if (requestedUrl === "https://example.com/") {
+        return {
+          ok: true,
+          status: 200,
+          headers: new Headers({
+            "X-Content-Type-Options": "nosniff",
+          }),
+          async text() {
+            return "<!doctype html>";
+          },
+        } as Response;
+      }
+
+      return createTextResponse();
+    };
+
+    const report = await runDeploymentSmokeTest({
+      baseUrl: "https://example.com",
+      fetcher: fetcher as typeof fetch,
+    });
+
+    expect(report.securityHeadersOk).toBe(false);
+    expect(report.securityHeaders).toContainEqual({
+      header: "X-Frame-Options",
+      ok: false,
+      actual: null,
+      expected: "DENY",
+    });
+    expect(getDeploymentSmokeExitCode(report, { allowNotReady: true })).toBe(1);
+  });
+
+  it("reports missing robots.txt launch rules", async () => {
+    const fetcher = async (url: string | URL | Request) => {
+      const requestedUrl = String(url);
+
+      if (requestedUrl.endsWith("/api/health")) {
+        return createResponse({ ok: true });
+      }
+
+      if (requestedUrl.endsWith("/api/launch/readiness")) {
+        return createResponse({
+          readyForPaidLaunch: true,
+          staticSummary: {
+            blockers: [],
+          },
+          warnings: [],
+          launchActions: [],
+        });
+      }
+
+      if (requestedUrl.endsWith("/robots.txt")) {
+        return {
+          ok: true,
+          status: 200,
+          async text() {
+            return ["User-agent: *", "Allow: /"].join("\n");
+          },
+        } as Response;
+      }
+
+      return createTextResponse();
+    };
+
+    const report = await runDeploymentSmokeTest({
+      baseUrl: "https://example.com",
+      fetcher: fetcher as typeof fetch,
+    });
+
+    expect(report.robotsTxtOk).toBe(false);
+    expect(report.robotsTxt.requiredRules).toContainEqual({
+      rule: "Disallow: /api/",
+      ok: false,
+    });
+    expect(getDeploymentSmokeExitCode(report, { allowNotReady: true })).toBe(1);
+  });
+
   it("renders a safe markdown smoke report", () => {
     const report = renderDeploymentSmokeReport({
       baseUrl: "https://academy.spindeleye.com",
       healthOk: true,
       publicPagesOk: true,
+      securityHeadersOk: true,
+      securityHeaders: [
+        {
+          header: "X-Frame-Options",
+          ok: true,
+          actual: "DENY",
+          expected: "DENY",
+        },
+      ],
+      robotsTxtOk: true,
+      robotsTxt: {
+        ok: true,
+        status: 200,
+        requiredRules: [{ rule: "Disallow: /api/", ok: true }],
+      },
       publicPages: [
         { path: "/", ok: true, status: 200 },
         { path: "/checkout", ok: true, status: 200 },
@@ -286,8 +483,13 @@ describe("runDeploymentSmokeTest", () => {
     expect(report).toContain("Deployment URL: https://academy.spindeleye.com");
     expect(report).toContain("- Health endpoint: ok");
     expect(report).toContain("- Public buyer pages: ok");
+    expect(report).toContain("- Security headers: ok");
+    expect(report).toContain("- Robots.txt rules: ok");
     expect(report).toContain("- Practice inquiry capture: ok");
     expect(report).toContain("/checkout: ok (HTTP 200)");
+    expect(report).toContain("X-Frame-Options: ok");
+    expect(report).toContain("/robots.txt: ok (HTTP 200)");
+    expect(report).toContain("Disallow: /api/: ok");
     expect(report).toContain("Inquiry ID: practice_inquiry_smoke");
     expect(report).toContain("- Paid launch readiness: not ready");
     expect(report).toContain("Create and initialize hosted PostgreSQL");
@@ -300,6 +502,14 @@ describe("runDeploymentSmokeTest", () => {
       baseUrl: "https://academy.spindeleye.com",
       healthOk: true,
       publicPagesOk: true,
+      securityHeadersOk: true,
+      securityHeaders: [],
+      robotsTxtOk: true,
+      robotsTxt: {
+        ok: true,
+        status: 200,
+        requiredRules: [],
+      },
       publicPages: [],
       practiceInquiry: {
         tested: false,
@@ -324,6 +534,14 @@ describe("runDeploymentSmokeTest", () => {
           baseUrl: "https://academy.spindeleye.com",
           healthOk: true,
           publicPagesOk: false,
+          securityHeadersOk: true,
+          securityHeaders: [],
+          robotsTxtOk: true,
+          robotsTxt: {
+            ok: true,
+            status: 200,
+            requiredRules: [],
+          },
           publicPages: [
             {
               path: "/checkout",
@@ -354,6 +572,14 @@ describe("runDeploymentSmokeTest", () => {
           baseUrl: "https://academy.spindeleye.com",
           healthOk: true,
           publicPagesOk: true,
+          securityHeadersOk: true,
+          securityHeaders: [],
+          robotsTxtOk: true,
+          robotsTxt: {
+            ok: true,
+            status: 200,
+            requiredRules: [],
+          },
           publicPages: [],
           practiceInquiry: {
             tested: true,
