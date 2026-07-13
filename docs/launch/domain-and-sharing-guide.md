@@ -71,11 +71,16 @@ page should stay protected.
 From your computer, run:
 
 ```bash
-LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
 ```
 
-Save the output with the rest of the launch evidence. If the command is blocked
-on a work computer, run it later from your home PC and keep the output.
+Save the output with the rest of the launch evidence. This pre-launch command
+can pass before `readyForPaidLaunch` is true, as long as health and public buyer
+pages load. For the final go-live check after every paid launch gate is
+complete, run the same command without `LAUNCH_SMOKE_ALLOW_NOT_READY=true`.
+
+If the command is blocked on a work computer, run it later from your home PC and
+keep the output.
 
 ## Generate The Sitemap
 

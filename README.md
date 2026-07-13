@@ -321,23 +321,28 @@ The workflow uploads the generated `launch-evidence/` folder as a short-lived
 artifact, so reviewers can download the launch packet without exposing secrets.
 
 You can also run the deployment smoke test from your local machine after the
-app is online:
+app is online but before paid launch is fully ready:
 
 ```bash
-LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
 
 To save a Markdown smoke-test report with your launch records:
 
 ```bash
-LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_SMOKE_REPORT_PATH=launch-evidence/deployment-smoke-report.md pnpm launch:smoke
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_SMOKE_REPORT_PATH=launch-evidence/deployment-smoke-report.md pnpm launch:smoke
 ```
 
 The smoke test checks `/api/health`, `/api/launch/readiness`, and the public
-buyer pages for home, checkout, practice packs, policies, curriculum, and
-onboarding. It exits with an error until the live app reports that paid launch
-readiness is complete and those public pages respond successfully. When it
-fails, it prints the first launch actions to handle next.
+buyer pages for home, checkout, individual checkout return states, practice
+packs, practice checkout return states, policies, curriculum, and onboarding.
+With `LAUNCH_SMOKE_ALLOW_NOT_READY=true`, it can pass while
+`readyForPaidLaunch` is still `false`, as long as health and public pages load.
+For the final go-live check, run the command without
+`LAUNCH_SMOKE_ALLOW_NOT_READY=true`; then it exits with an error until the live
+app reports that paid launch readiness is complete and those public pages
+respond successfully. When it fails, it prints the first launch actions to
+handle next.
 
 Run the launch doctor before and after production setup:
 
