@@ -22,6 +22,7 @@ import {
   commercePolicies,
 } from "@shared/commerce/policies";
 import {
+  foundingReleaseStatus,
   individualLearnerSalesPath,
   individualLearnerStartSteps,
   learnerValueProofPoints,
@@ -144,6 +145,23 @@ export default function Checkout() {
                 </li>
               ))}
             </ul>
+          </Card>
+
+          <Card className="border-blue-100 bg-blue-50 p-6 text-blue-950 shadow-sm">
+            <h2 className="text-2xl font-bold">Founding release status</h2>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {foundingReleaseStatus.map(item => (
+                <section
+                  key={item.title}
+                  className="rounded-md border border-blue-100 bg-white p-4"
+                >
+                  <h3 className="font-semibold">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {item.description}
+                  </p>
+                </section>
+              ))}
+            </div>
           </Card>
 
           <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">

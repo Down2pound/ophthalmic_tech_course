@@ -18,6 +18,11 @@ export interface PurchaseAssurance {
   description: string;
 }
 
+export interface FoundingReleaseStatus {
+  title: string;
+  description: string;
+}
+
 export interface PracticeValueProofPoint {
   title: string;
   description: string;
@@ -153,6 +158,29 @@ export const purchaseAssurances: PurchaseAssurance[] = [
     title: "Expectations stay honest",
     description:
       "The course supports foundational learning and supervised practice preparation; it does not promise certification, employment, or independent competency.",
+  },
+];
+
+export const foundingReleaseStatus: FoundingReleaseStatus[] = [
+  {
+    title: "Published first",
+    description:
+      "Founding access starts with the published Module 1 foundations lessons, knowledge checks, and protected learner flow.",
+  },
+  {
+    title: "Planned next",
+    description:
+      "The 10-day Bootcamp source path guides future releases after content review, asset migration, and accessibility checks.",
+  },
+  {
+    title: "Reviewed before release",
+    description:
+      "Clinical education claims and course assets must pass review before they are presented as published learner content.",
+  },
+  {
+    title: "Supervised skills stay local",
+    description:
+      "Hands-on practice, employer protocols, competency observation, and job decisions remain with the learner's practice or supervisor.",
   },
 ];
 

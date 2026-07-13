@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buyerConfidenceAnswers,
+  foundingReleaseStatus,
   getSalesPathItemCount,
   individualLearnerSalesPath,
   individualLearnerStartSteps,
@@ -102,6 +103,27 @@ describe("sales readiness copy", () => {
     expect(combined).toMatch(/refund review/i);
     expect(combined).toMatch(/does not promise certification/i);
     expect(combined).not.toMatch(/guarantee/i);
+  });
+
+  it("states founding release status without selling planned content as complete", () => {
+    expect(foundingReleaseStatus.map(item => item.title)).toEqual([
+      "Published first",
+      "Planned next",
+      "Reviewed before release",
+      "Supervised skills stay local",
+    ]);
+
+    const combined = foundingReleaseStatus
+      .map(item => `${item.title} ${item.description}`)
+      .join(" ");
+
+    expect(combined).toMatch(/published Module 1/i);
+    expect(combined).toMatch(/10-day Bootcamp source path/i);
+    expect(combined).toMatch(/pass review before/i);
+    expect(combined).toMatch(/remain with the learner's practice or supervisor/i);
+    expect(combined).not.toMatch(/guarantee/i);
+    expect(combined).not.toMatch(/certified technician/i);
+    expect(combined).not.toMatch(/all modules are complete/i);
   });
 
   it("helps practice managers justify a pack without promising staffing outcomes", () => {
