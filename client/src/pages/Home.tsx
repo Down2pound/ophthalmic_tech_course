@@ -86,10 +86,10 @@ export default function Home() {
               Practice Packs
             </a>
             <a
-              href="/launch-readiness"
+              href="/policies"
               className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
             >
-              Launch Readiness
+              Policies
             </a>
             <a
               href="#why"

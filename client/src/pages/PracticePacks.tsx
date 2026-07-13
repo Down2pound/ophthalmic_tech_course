@@ -224,12 +224,10 @@ export default function PracticePacks() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </a>
-            <a
-              href="/practice-seat-admin"
-              className="mt-4 block text-center text-sm font-semibold text-blue-700 hover:text-blue-900"
-            >
-              Manage purchased seats
-            </a>
+            <p className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-3 text-center text-sm leading-6 text-slate-600">
+              Seat management is available after purchase through the protected
+              practice setup process.
+            </p>
             <a
               href="/policies"
               className="mt-4 block text-center text-sm font-semibold text-blue-700 hover:text-blue-900"
