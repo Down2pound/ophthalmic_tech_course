@@ -119,10 +119,10 @@ export default function Home() {
               </div>
               <h1 className="text-6xl md:text-7xl font-bold leading-tight">
                 <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-300 bg-clip-text text-transparent">
-                  Become a Clinic-Ready
+                  Build Eye-Care
                 </span>
                 <br />
-                <span className="text-white">Ophthalmic Technician</span>
+                <span className="text-white">Foundations</span>
               </h1>
               <p className="text-xl text-gray-300 leading-relaxed">
                 Build the vocabulary, habits, and supervised practice plan
@@ -191,7 +191,7 @@ export default function Home() {
                   <p className="mt-4 text-gray-300">
                     Self-paced access for career changers, medical assistants,
                     and new technicians who want practical clinic vocabulary and
-                    safer onboarding confidence.
+                    more confident onboarding conversations.
                   </p>
                   <div className="mt-5 flex items-end gap-2">
                     <span className="text-4xl font-bold text-white">
@@ -258,12 +258,12 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                10-Day Comprehensive Curriculum
+                10-Day Foundations Path
               </span>
             </h2>
             <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-              Structured learning path covering everything from fundamentals to
-              advanced clinical techniques
+              A planned foundations path built from Bootcamp source materials,
+              with published content released as review gates are completed
             </p>
           </div>
 
@@ -305,7 +305,8 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-gray-300 text-lg">
-              One comprehensive package with everything you need
+              Founding access to the published course content and planned
+              future releases
             </p>
           </div>
 
@@ -316,7 +317,7 @@ export default function Home() {
                 className="relative p-8 border-2 transition-all w-full max-w-md glass-card border-blue-500/50 hover:border-blue-400"
               >
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                  Most Popular
+                  Founding Access
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">
                   {tier.name}
@@ -372,8 +373,8 @@ export default function Home() {
               },
               {
                 icon: Users,
-                title: "Expert Instruction",
-                desc: "Learn from experienced ophthalmic professionals with 40+ years in the field",
+                title: "Practice-Informed Content",
+                desc: "Built from ophthalmic bootcamp materials and reviewed before release",
               },
             ].map((item, idx) => (
               <div key={idx} className="glass-card p-8">
@@ -423,7 +424,7 @@ export default function Home() {
         <div className="container">
           <div className="glass-card p-12 text-center">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Ready to Transform Your Career?
+              Ready to Start Building Ophthalmic Foundations?
             </h2>
             <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
               Join the founding learner group and help shape a practical, honest
