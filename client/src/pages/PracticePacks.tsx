@@ -190,6 +190,12 @@ export default function PracticePacks() {
               </Button>
             </a>
             <a
+              href="/practice-seat-admin"
+              className="mt-4 block text-center text-sm font-semibold text-blue-700 hover:text-blue-900"
+            >
+              Manage purchased seats
+            </a>
+            <a
               href="/policies"
               className="mt-4 block text-center text-sm font-semibold text-blue-700 hover:text-blue-900"
             >

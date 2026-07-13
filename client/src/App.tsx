@@ -13,6 +13,7 @@ import SkillsPassport from "./pages/SkillsPassport";
 import CareerToolkit from "./pages/CareerToolkit";
 import OnboardingAssessment from "./pages/OnboardingAssessment";
 import PracticePacks from "./pages/PracticePacks";
+import PracticeSeatAdmin from "./pages/PracticeSeatAdmin";
 import CertificatePreview from "./pages/CertificatePreview";
 import LaunchReadiness from "./pages/LaunchReadiness";
 
@@ -29,6 +30,7 @@ function Router() {
       <Route path={"/career-toolkit"} component={CareerToolkit} />
       <Route path={"/onboarding"} component={OnboardingAssessment} />
       <Route path={"/practice-packs"} component={PracticePacks} />
+      <Route path={"/practice-seat-admin"} component={PracticeSeatAdmin} />
       <Route path={"/certificate-preview"} component={CertificatePreview} />
       <Route path={"/launch-readiness"} component={LaunchReadiness} />
       <Route path={"/404"} component={NotFound} />

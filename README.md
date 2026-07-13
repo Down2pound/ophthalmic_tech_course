@@ -89,6 +89,7 @@ Checkout routes:
 
 - Frontend page: `/checkout`
 - Practice packs page: `/practice-packs`
+- Practice seat manager page: `/practice-seat-admin`
 - Policies page: `/policies`
 - Server endpoint: `POST /api/checkout/sessions`
 - Passwordless sign-in request endpoint: `POST /api/auth/passwordless/start`
@@ -118,7 +119,8 @@ manager/admin workflow.
 The temporary practice-seat assignment endpoint requires an `x-admin-token`
 header matching `PRACTICE_SEAT_ADMIN_TOKEN`. The protected list endpoint uses
 the same header and returns current temporary seat packs plus assignments. These
-endpoints should only be used by a trusted manager/admin workflow.
+endpoints are used by the protected practice seat manager page and should only
+be used by a trusted manager/admin workflow.
 
 If `STRIPE_SECRET_KEY` is missing, checkout fails closed with a setup message and
 does not collect payment.
