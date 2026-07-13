@@ -89,6 +89,7 @@ describe("createLaunchEvidenceBundle", () => {
     expect(result.files).toEqual([
       "README.md",
       "production-launch-package.md",
+      "production-env-checklist.md",
       "launch-doctor-report.md",
       "manual-launch-qa-evidence.md",
       "module-1-clinical-review-packet.md",
@@ -103,6 +104,10 @@ describe("createLaunchEvidenceBundle", () => {
       path.join(result.outputDir, "runtime-readiness-snapshot.json"),
       "utf8"
     );
+    const productionEnvChecklist = await readFile(
+      path.join(result.outputDir, "production-env-checklist.md"),
+      "utf8"
+    );
     const launchDoctorReport = await readFile(
       path.join(result.outputDir, "launch-doctor-report.md"),
       "utf8"
@@ -114,6 +119,10 @@ describe("createLaunchEvidenceBundle", () => {
 
     expect(readme).toContain("safe to save to Google Drive");
     expect(readme).toContain("Ready for paid launch: no");
+    expect(productionEnvChecklist).toContain(
+      "OptiTech Academy Production Environment Checklist"
+    );
+    expect(productionEnvChecklist).toContain("`STRIPE_SECRET_KEY`");
     expect(launchDoctorReport).toContain("OptiTech Academy Launch Doctor");
     expect(launchDoctorReport).toContain("Paid launch ready: no");
     expect(manualQaEvidence).toContain(

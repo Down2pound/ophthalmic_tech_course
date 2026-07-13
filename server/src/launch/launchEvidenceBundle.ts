@@ -3,6 +3,7 @@ import path from "node:path";
 import { renderModuleOneClinicalReviewPacketMarkdown } from "../../../shared/course/clinicalReviewPacket";
 import { renderLaunchDoctorReport } from "./launchDoctor";
 import { renderManualQaTemplate } from "./manualQaTemplate";
+import { renderProductionEnvChecklist } from "./productionEnvChecklist";
 import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 import { getRuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 
@@ -35,6 +36,7 @@ function renderReadme({
     "## Included Files",
     "",
     "- `production-launch-package.md`: launch handoff checklist.",
+    "- `production-env-checklist.md`: safe fill-in checklist for host dashboard settings.",
     "- `launch-doctor-report.md`: human-readable paid launch preflight report.",
     "- `manual-launch-qa-evidence.md`: safe template for Stripe, learner-flow, practice-pack, browser, and accessibility QA notes.",
     "- `module-1-clinical-review-packet.md`: clinical reviewer packet.",
@@ -69,6 +71,7 @@ export async function createLaunchEvidenceBundle({
   const files = [
     "README.md",
     "production-launch-package.md",
+    "production-env-checklist.md",
     "launch-doctor-report.md",
     "manual-launch-qa-evidence.md",
     "module-1-clinical-review-packet.md",
@@ -87,6 +90,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "production-launch-package.md"),
     launchPackage
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "production-env-checklist.md"),
+    renderProductionEnvChecklist({ generatedAt })
   );
   await writeFile(
     path.join(resolvedOutputDir, "launch-doctor-report.md"),
