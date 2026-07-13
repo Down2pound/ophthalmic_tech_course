@@ -92,6 +92,7 @@ describe("createLaunchEvidenceBundle", () => {
       "deployment-guide.md",
       "stripe-setup-guide.md",
       "email-setup-guide.md",
+      "database-setup-guide.md",
       "production-env-checklist.md",
       "launch-doctor-report.md",
       "manual-launch-qa-evidence.md",
@@ -124,6 +125,10 @@ describe("createLaunchEvidenceBundle", () => {
       path.join(result.outputDir, "email-setup-guide.md"),
       "utf8"
     );
+    const databaseSetupGuide = await readFile(
+      path.join(result.outputDir, "database-setup-guide.md"),
+      "utf8"
+    );
     const launchDoctorReport = await readFile(
       path.join(result.outputDir, "launch-doctor-report.md"),
       "utf8"
@@ -148,6 +153,10 @@ describe("createLaunchEvidenceBundle", () => {
     expect(stripeSetupGuide).toContain("checkout.session.completed");
     expect(emailSetupGuide).toContain("OptiTech Academy Email Setup Guide");
     expect(emailSetupGuide).toContain("TRANSACTIONAL_EMAIL_API_URL");
+    expect(databaseSetupGuide).toContain(
+      "OptiTech Academy Database Setup Guide"
+    );
+    expect(databaseSetupGuide).toContain("pnpm db:setup");
     expect(productionEnvChecklist).toContain("`STRIPE_SECRET_KEY`");
     expect(launchDoctorReport).toContain("OptiTech Academy Launch Doctor");
     expect(launchDoctorReport).toContain("Paid launch ready: no");

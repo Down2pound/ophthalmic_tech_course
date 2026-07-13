@@ -86,6 +86,9 @@ safety switch. It prevents the app from accepting payment too early.
 
 ## Database Setup
 
+Use `docs/launch/database-setup-guide.md` as the detailed managed PostgreSQL
+recipe.
+
 After the managed PostgreSQL database exists and `DATABASE_URL` is set, run:
 
 ```bash

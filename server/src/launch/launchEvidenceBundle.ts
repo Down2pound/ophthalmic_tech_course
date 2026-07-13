@@ -40,6 +40,7 @@ function renderReadme({
     "- `deployment-guide.md`: beginner-friendly production setup recipe.",
     "- `stripe-setup-guide.md`: Stripe checkout and webhook setup recipe.",
     "- `email-setup-guide.md`: passwordless sign-in email setup recipe.",
+    "- `database-setup-guide.md`: managed PostgreSQL setup recipe.",
     "- `production-env-checklist.md`: safe fill-in checklist for host dashboard settings.",
     "- `launch-doctor-report.md`: human-readable paid launch preflight report.",
     "- `manual-launch-qa-evidence.md`: safe template for Stripe, learner-flow, practice-pack, browser, and accessibility QA notes.",
@@ -79,6 +80,7 @@ export async function createLaunchEvidenceBundle({
     "deployment-guide.md",
     "stripe-setup-guide.md",
     "email-setup-guide.md",
+    "database-setup-guide.md",
     "production-env-checklist.md",
     "launch-doctor-report.md",
     "manual-launch-qa-evidence.md",
@@ -103,6 +105,10 @@ export async function createLaunchEvidenceBundle({
     path.resolve(projectRoot, "docs/launch/email-setup-guide.md"),
     "utf8"
   );
+  const databaseSetupGuide = await readFile(
+    path.resolve(projectRoot, "docs/launch/database-setup-guide.md"),
+    "utf8"
+  );
 
   await writeFile(
     path.join(resolvedOutputDir, "README.md"),
@@ -123,6 +129,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "email-setup-guide.md"),
     emailSetupGuide
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "database-setup-guide.md"),
+    databaseSetupGuide
   );
   await writeFile(
     path.join(resolvedOutputDir, "production-env-checklist.md"),

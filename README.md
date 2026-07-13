@@ -252,6 +252,7 @@ checklist before opening paid enrollment.
 Use `docs/launch/stripe-setup-guide.md` for the Stripe checkout and webhook
 setup steps.
 Use `docs/launch/email-setup-guide.md` for passwordless sign-in email setup.
+Use `docs/launch/database-setup-guide.md` for managed PostgreSQL setup.
 
 ```bash
 pnpm build
