@@ -22,6 +22,19 @@ describe("deployment files", () => {
     expect(dockerfile).toContain("/api/health");
   });
 
+  it("keeps local backups and evidence out of Docker build context", async () => {
+    const dockerignore = await readFile(
+      path.resolve(process.cwd(), ".dockerignore"),
+      "utf8"
+    );
+
+    expect(dockerignore).toContain(".env");
+    expect(dockerignore).toContain("launch-evidence");
+    expect(dockerignore).toContain("*.zip");
+    expect(dockerignore).toContain("*.bundle");
+    expect(dockerignore).toContain("node_modules");
+  });
+
   it("keeps the Render Blueprint aligned with the launch service", async () => {
     const renderBlueprint = await readFile(
       path.resolve(process.cwd(), "render.yaml"),

@@ -12,6 +12,10 @@ launch-evidence
 .manus-logs
 logs
 *.log
+*.zip
+*.bundle
+*.tar
+*.tar.gz
 *.db
 *.sqlite
 *.sqlite3
