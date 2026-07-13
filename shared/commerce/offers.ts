@@ -15,6 +15,18 @@ export interface PracticePackOffer extends CourseOffer {
   idealFor: string;
 }
 
+export interface PracticeInquiryOffer {
+  id: "custom-practice-onboarding";
+  name: string;
+  description: string;
+  idealFor: string;
+  contactEmail: string;
+  subject: string;
+  includes: string[];
+  nextSteps: string[];
+  limitations: string[];
+}
+
 export const foundingLearnerOffer: CourseOffer = {
   id: "founding-learner",
   name: "Founding Learner Access",
@@ -90,6 +102,32 @@ export const practicePackOffers: PracticePackOffer[] = [
     ],
   },
 ];
+
+export const customPracticeInquiryOffer: PracticeInquiryOffer = {
+  id: "custom-practice-onboarding",
+  name: "Custom Practice Onboarding Conversation",
+  description:
+    "For larger teams, multi-location onboarding, Spindel pilot training, or practices that need help deciding which seat pack fits.",
+  idealFor:
+    "Practices that need more than 15 seats, want a rollout plan, or need to coordinate supervisors before purchase.",
+  contactEmail: "jeff.chapin@spindeleye.com",
+  subject: "OptiTech custom practice onboarding inquiry",
+  includes: [
+    "Seat-count planning before purchase.",
+    "Discussion of supervisor roles and Skills Passport use.",
+    "Review of what belongs in the national course versus local practice policy.",
+  ],
+  nextSteps: [
+    "Share practice name, approximate learner count, and target onboarding timeline.",
+    "Confirm whether the practice wants five seats, fifteen seats, or a larger custom quote.",
+    "Keep clinical protocols, job duties, and hands-on signoff under local practice supervision.",
+  ],
+  limitations: [
+    "A conversation is not a purchase agreement.",
+    "Custom work, live training, and private practice-specific content require a separate written agreement.",
+    "OptiTech Academy does not replace employer supervision, clinical policy, or hands-on competency signoff.",
+  ],
+};
 
 export type CheckoutOffer = CourseOffer | PracticePackOffer;
 

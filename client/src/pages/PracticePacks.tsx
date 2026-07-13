@@ -8,7 +8,11 @@ import {
   ShieldCheck,
   Users,
 } from "lucide-react";
-import { formatOfferPrice, practicePackOffers } from "@shared/commerce/offers";
+import {
+  customPracticeInquiryOffer,
+  formatOfferPrice,
+  practicePackOffers,
+} from "@shared/commerce/offers";
 import { practiceBuyerSalesPath } from "@shared/commerce/salesReadiness";
 import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
@@ -41,6 +45,9 @@ export default function PracticePacks() {
       setActiveOfferId(null);
     }
   };
+  const customPracticeHref = `mailto:${customPracticeInquiryOffer.contactEmail}?subject=${encodeURIComponent(
+    customPracticeInquiryOffer.subject
+  )}`;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -206,7 +213,7 @@ export default function PracticePacks() {
                 - Keep practice-specific workflows out of the national core.
               </p>
             </div>
-            <a href="mailto:jeff.chapin@spindeleye.com?subject=OptiTech%20practice%20pack%20interest">
+            <a href={customPracticeHref}>
               <Button className="mt-6 w-full bg-blue-700 text-white hover:bg-blue-800">
                 Ask about custom setup
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -227,6 +234,64 @@ export default function PracticePacks() {
           </Card>
         </aside>
       </div>
+
+      <section className="border-t border-slate-200 bg-white">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1fr_320px]">
+          <div>
+            <p className="text-sm font-semibold text-blue-700">
+              Larger practice or Spindel pilot rollout
+            </p>
+            <h2 className="mt-2 text-2xl font-bold">
+              {customPracticeInquiryOffer.name}
+            </h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              {customPracticeInquiryOffer.description}
+            </p>
+            <p className="mt-4 rounded-md border border-blue-100 bg-blue-50 p-3 text-sm font-semibold text-blue-950">
+              {customPracticeInquiryOffer.idealFor}
+            </p>
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              <section>
+                <h3 className="font-semibold">Good topics</h3>
+                <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                  {customPracticeInquiryOffer.includes.map(item => (
+                    <li key={item}>- {item}</li>
+                  ))}
+                </ul>
+              </section>
+              <section>
+                <h3 className="font-semibold">Next steps</h3>
+                <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                  {customPracticeInquiryOffer.nextSteps.map(item => (
+                    <li key={item}>- {item}</li>
+                  ))}
+                </ul>
+              </section>
+              <section>
+                <h3 className="font-semibold">Clear limits</h3>
+                <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                  {customPracticeInquiryOffer.limitations.map(item => (
+                    <li key={item}>- {item}</li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+          </div>
+          <Card className="border-slate-200 bg-slate-50 p-6 shadow-sm">
+            <h3 className="text-xl font-bold">Need more than 15 seats?</h3>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              Send a short inquiry before buying. Include the practice name,
+              estimated learner count, and when onboarding should start.
+            </p>
+            <a href={customPracticeHref}>
+              <Button className="mt-5 w-full bg-blue-700 text-white hover:bg-blue-800">
+                Start practice conversation
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
+          </Card>
+        </div>
+      </section>
     </main>
   );
 }

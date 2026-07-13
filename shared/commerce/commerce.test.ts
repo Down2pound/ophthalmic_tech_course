@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { normalizeCheckoutEmail } from "./checkoutEmail";
-import { foundingLearnerOffer, practicePackOffers } from "./offers";
+import {
+  customPracticeInquiryOffer,
+  foundingLearnerOffer,
+  practicePackOffers,
+} from "./offers";
 import { commercePolicies } from "./policies";
 
 describe("normalizeCheckoutEmail", () => {
@@ -63,6 +67,31 @@ describe("practicePackOffers", () => {
     expect(combined).toMatch(/supervisor/i);
     expect(combined).toMatch(/does not independently verify/i);
     expect(combined).not.toMatch(/guaranteed competency/i);
+  });
+});
+
+describe("customPracticeInquiryOffer", () => {
+  it("gives larger practices a clear next step without bypassing checkout terms", () => {
+    expect(customPracticeInquiryOffer.id).toBe("custom-practice-onboarding");
+    expect(customPracticeInquiryOffer.contactEmail).toContain("@");
+    expect(customPracticeInquiryOffer.subject).toMatch(/custom practice/i);
+    expect(customPracticeInquiryOffer.nextSteps.join(" ")).toMatch(
+      /larger custom quote/i
+    );
+  });
+
+  it("keeps custom practice language honest about supervision and agreements", () => {
+    const combined = [
+      customPracticeInquiryOffer.description,
+      customPracticeInquiryOffer.idealFor,
+      ...customPracticeInquiryOffer.includes,
+      ...customPracticeInquiryOffer.nextSteps,
+      ...customPracticeInquiryOffer.limitations,
+    ].join(" ");
+
+    expect(combined).toMatch(/separate written agreement/i);
+    expect(combined).toMatch(/employer supervision/i);
+    expect(combined).not.toMatch(/guarantee/i);
   });
 });
 
