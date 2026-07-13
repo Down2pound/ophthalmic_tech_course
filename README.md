@@ -137,7 +137,8 @@ does not collect payment.
 
 `GET /api/launch/readiness` returns a safe setup report with launch blocker
 counts and missing environment variable names. It must never return actual
-Stripe key values.
+Stripe key values. It also includes the ordered launch action plan and Module 1
+clinical review packet so reviewers can see exactly what still needs signoff.
 
 `GET /api/health` returns a small safe uptime report for deployment health
 checks. It does not return secret values.

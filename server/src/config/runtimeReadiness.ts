@@ -8,6 +8,10 @@ import {
   type LaunchActionItem,
 } from "../../../shared/launch/launchActionPlan";
 import {
+  getModuleOneClinicalReviewPacket,
+  type ClinicalReviewPacket,
+} from "../../../shared/course/clinicalReviewPacket";
+import {
   getAuthEnvironmentStatus,
   getCommerceEnvironmentStatus,
   getDatabaseEnvironmentStatus,
@@ -34,6 +38,7 @@ export interface RuntimeLaunchReadinessReport {
   database: DatabaseEnvironmentStatus;
   warnings: string[];
   launchActions: LaunchActionItem[];
+  clinicalReviewPacket: ClinicalReviewPacket;
 }
 
 function formatMissingWarning(label: string, missingVariables: string[]) {
@@ -83,5 +88,6 @@ export function getRuntimeLaunchReadinessReport({
     database,
     warnings,
     launchActions: getRemainingLaunchActions(),
+    clinicalReviewPacket: getModuleOneClinicalReviewPacket(),
   };
 }

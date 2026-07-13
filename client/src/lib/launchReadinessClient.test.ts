@@ -40,6 +40,25 @@ const runtimeReport = {
       evidenceNeeded: "Database setup succeeds.",
     },
   ],
+  clinicalReviewPacket: {
+    moduleId: "entering-ophthalmic-care",
+    moduleTitle: "Module 1: Entering Ophthalmic Care",
+    purpose: "Support clinical review.",
+    reviewerInstructions: ["Read every lesson."],
+    signoffFields: ["Clinical reviewer name"],
+    lessons: [
+      {
+        lessonId: "m1-l1-what-techs-do",
+        title: "What Ophthalmic Technicians Do",
+        outcome: "Describe the technician role.",
+        scopeNote: "No diagnosis.",
+        reviewStatus: "draft-reviewed-for-structure",
+        clinicalReviewer: "Clinical review required before production sale",
+        sourceTitles: ["Source"],
+        reviewQuestions: ["Is the lesson clinically accurate?"],
+      },
+    ],
+  },
 };
 
 describe("fetchRuntimeLaunchReadiness", () => {

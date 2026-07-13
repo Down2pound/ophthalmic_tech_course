@@ -44,6 +44,10 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(report.launchActions.map(action => action.id)).toContain(
       "production-database"
     );
+    expect(report.clinicalReviewPacket.lessons.length).toBeGreaterThan(0);
+    expect(report.clinicalReviewPacket.signoffFields).toContain(
+      "Clinical reviewer name"
+    );
     expect(report.warnings).toContain(
       "Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."
     );

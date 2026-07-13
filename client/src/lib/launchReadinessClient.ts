@@ -1,5 +1,6 @@
 import type { LaunchReadinessSummary } from "@shared/launch/launchReadiness";
 import type { LaunchActionItem } from "@shared/launch/launchActionPlan";
+import type { ClinicalReviewPacket } from "@shared/course/clinicalReviewPacket";
 
 type Fetcher = typeof fetch;
 
@@ -29,6 +30,7 @@ export interface RuntimeLaunchReadinessReport {
   };
   warnings: string[];
   launchActions: LaunchActionItem[];
+  clinicalReviewPacket: ClinicalReviewPacket;
 }
 
 interface RuntimeReadinessErrorResponse {
