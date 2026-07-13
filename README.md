@@ -141,8 +141,9 @@ accepted and sent to Stripe with seat-count metadata for fulfillment.
 When Stripe confirms payment, individual purchases provision one learner
 enrollment. Practice pack purchases provision one seat-pack record with the
 purchased seat count. Core practice-seat assignment logic can assign learner
-emails without exceeding purchased capacity. When `DATABASE_URL` is configured,
-those commerce records are stored in PostgreSQL.
+emails without exceeding purchased capacity. The webhook fails closed unless
+`DATABASE_URL` is configured and the launch database schema is verified, so paid
+access is not acknowledged into temporary in-memory storage.
 
 The temporary practice-seat assignment endpoint requires an `x-admin-token`
 header matching `PRACTICE_SEAT_ADMIN_TOKEN`. The protected list endpoint uses

@@ -18,12 +18,14 @@ import {
   createPostgresPurchaseStore,
 } from "../commerce/postgresCommerceStore";
 import { getPostgresPool } from "../db/postgres";
+import { getLaunchDatabaseReadiness } from "../db/launchDatabaseReadiness";
 import {
   createPurchaseEventFromStripeEvent,
   verifyStripeWebhookSignature,
   type StripeCheckoutCompletedEvent,
 } from "../commerce/stripeWebhook";
 import { getCommerceEnvironmentStatus } from "../config/environment";
+import { getWebhookFulfillmentGateStatus } from "../config/webhookFulfillmentGate";
 
 function createCommerceStores(): {
   purchaseStore: PurchaseStore;
@@ -87,6 +89,22 @@ export function setupStripeWebhookRoute(app: Express) {
         res.status(503).json({
           error: "Stripe webhook is not configured.",
           missing: environmentStatus.missingWebhookVariables,
+        });
+        return;
+      }
+
+      const databaseReadiness = await getLaunchDatabaseReadiness({
+        db: getPostgresPool(),
+      });
+      const fulfillmentGate = getWebhookFulfillmentGateStatus({
+        databaseReadiness,
+      });
+
+      if (!fulfillmentGate.ready) {
+        res.status(503).json({
+          error: "Stripe webhook fulfillment is not ready for durable access.",
+          missing: fulfillmentGate.missingVariables,
+          warnings: fulfillmentGate.warnings,
         });
         return;
       }

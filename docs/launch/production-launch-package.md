@@ -105,7 +105,10 @@ database schema as verified.
    - Fifteen-seat practice pack.
 6. Confirm the webhook creates durable access records in PostgreSQL.
 
-Checkout must remain closed until webhook fulfillment has been tested.
+Checkout must remain closed until webhook fulfillment has been tested. The
+webhook also fails closed unless `DATABASE_URL` is configured and the launch
+database schema is verified, so Stripe events are not acknowledged into
+temporary in-memory storage.
 
 ## Learner Flow Gate
 
