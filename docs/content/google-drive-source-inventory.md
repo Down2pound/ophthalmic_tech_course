@@ -21,6 +21,71 @@ Do not publish patient information, staff personal details, provider credentials
 
 ## Canonical Curriculum Sources
 
+### NotebookLM Bootcamp Course Materials
+
+- Type: NotebookLM notebook
+- ID: `a4bc6fed-4059-4597-a60f-a43aa78ff3e1`
+- URL: https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1
+- Classification: Public-course candidate source workspace, pending export and review
+- User note: All course materials can also be found here.
+- Access note: NotebookLM may require the owner's logged-in Google session; external fetch may not expose the notebook contents.
+- Value:
+  - Central place to review and reason over the bootcamp course materials.
+  - Useful for creating summaries, lesson outlines, study guides, and quiz drafts from the same source set.
+- Action:
+  - Export or copy source lists, summaries, and any NotebookLM-generated study material before treating it as repository content.
+  - Preserve original Drive file IDs alongside any NotebookLM-derived summaries.
+  - Do not publish NotebookLM summaries without checking them against the original source files and clinical review.
+
+### Bootcamp Google Drive Folder
+
+- Type: Google Drive folder
+- ID: `1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q`
+- URL: https://drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q
+- Classification: Public-course candidate, pending rights and clinical review
+- Found during follow-up audit: July 13, 2026
+- Value:
+  - Contains the practical bootcamp media library: videos, PDFs, audio, infographics, and reference images.
+  - Includes the nested `ophthalmic-tech-bootcamp-site` folder with an older structured course app.
+  - Contains exact assets that match the 10-day bootcamp sequence.
+- Action:
+  - Treat this folder as the current media source bucket for bootcamp assets.
+  - Do not copy raw files into the public app until rights, clinical review, accessibility, and storage location are approved.
+  - Prefer linking each asset to a module through repository metadata before publishing it.
+
+### Ophthalmic Tech Bootcamp Site Course Data
+
+- Type: Source-code file from nested Drive folder
+- Parent folder: `ophthalmic-tech-bootcamp-site`
+- File: `src/lib/course-data.ts`
+- ID: `1TudG-Dq6Fgdl3-TFTQSeMKHahAe5leuI`
+- URL: https://drive.google.com/file/d/1TudG-Dq6Fgdl3-TFTQSeMKHahAe5leuI
+- Classification: Public-course candidate, pending reconciliation
+- Found during follow-up audit: July 13, 2026
+- Value:
+  - Defines a 10-day course map with titles, slugs, subtitles, outcomes, clinic tasks, assets, notebook pearls, and review prompts.
+  - Maps videos, PDFs, audio, and images to module-like days.
+  - Marks Day 1 assets as free-preview candidates.
+- Action:
+  - Use this as the strongest Drive-folder map for matching raw Bootcamp files to the current repository catalog.
+  - Reconcile duplicate or older media filenames before copying anything into production storage.
+  - Keep clinical review and public/practice-only classification gates before publishing.
+
+#### Course Data Day Map
+
+| Day | Slug | Title | Main Asset Types |
+| ---: | --- | --- | --- |
+| 1 | `foundations-first-patient-encounter` | Foundations and the First Patient Encounter | Videos, anatomy PDF, duties infographic |
+| 2 | `anatomy-biological-camera` | Anatomy and the Biological Camera | Anatomy video, audio overview, technician blueprint PDF |
+| 3 | `diagnostic-testing-map` | Essential Diagnostic Testing | Diagnostics video, slide deck PDFs, diagnostics infographic |
+| 4 | `common-eye-diseases` | Common Eye Diseases and Red Flags | Disease videos, HPI cheat sheet PDF, keratoconus image |
+| 5 | `lensometry-practical-guide` | Manual Lensometry | Lensometry video, lensometry PDFs, topography PDF |
+| 6 | `tonometry-goldmann-and-alternatives` | Tonometry and Eye Pressure Methods | Tonometry video, tonometry infographic, Goldmann reference image |
+| 7 | `refraction-troubleshooting` | Refraction Support and Troubleshooting | Refraction video, ocular diagnostic mapping PDFs |
+| 8 | `exam-room-skills-pharma` | Exam Room Skills and Pharmacology | Exam-room video, soft-skills PDF |
+| 9 | `professional-skills-emr` | Professional Skills and EMR Documentation | Professional-skills video, soft-skills PDF, scheduling image |
+| 10 | `capstone-certification-roadmap` | Simulation Capstone and Certification Roadmap | Capstone PDF, final-test video, COA videos, career infographic |
+
 ### Practical Ophthalmic Technician Foundations Bootcamp Curriculum
 
 - Type: Google Doc
@@ -267,4 +332,3 @@ When both Google Doc and PDF versions exist:
 6. Copy only approved public assets into managed course storage.
 7. Preserve Drive IDs and attribution in content metadata.
 8. Keep Spindel-only onboarding content in a separate private namespace.
-

@@ -2,6 +2,27 @@ import type { CourseSource } from "./types";
 
 export const courseSources: CourseSource[] = [
   {
+    id: "drive-bootcamp-folder",
+    title: "Bootcamp Google Drive Folder",
+    sourceType: "drive-folder",
+    url: "https://drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q",
+    classification: "public-course-candidate",
+  },
+  {
+    id: "drive-bootcamp-site-course-data",
+    title: "Ophthalmic Tech Bootcamp Site Course Data",
+    sourceType: "source-code",
+    url: "https://drive.google.com/file/d/1TudG-Dq6Fgdl3-TFTQSeMKHahAe5leuI",
+    classification: "public-course-candidate",
+  },
+  {
+    id: "notebooklm-bootcamp-course-materials",
+    title: "NotebookLM Bootcamp Course Materials",
+    sourceType: "notebooklm",
+    url: "https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1",
+    classification: "public-course-candidate",
+  },
+  {
     id: "drive-bootcamp-curriculum",
     title: "Practical Ophthalmic Technician Foundations Bootcamp Curriculum",
     sourceType: "google-doc",

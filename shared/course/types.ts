@@ -10,7 +10,14 @@ export type VerificationType = "knowledge-check" | "supervisor-observed";
 export interface CourseSource {
   id: string;
   title: string;
-  sourceType: "google-doc" | "pdf" | "official-website" | "repo";
+  sourceType:
+    | "google-doc"
+    | "pdf"
+    | "drive-folder"
+    | "notebooklm"
+    | "source-code"
+    | "official-website"
+    | "repo";
   url: string;
   classification:
     | "public-course-candidate"
