@@ -107,6 +107,25 @@ export const productionEnvironmentChecklist: ProductionEnvironmentChecklistItem[
       validationRule: "Keep false until every launch gate passes.",
       launchNote: "Turns paid checkout on only after readiness is proven.",
     },
+    {
+      variableName: "VITE_ANALYTICS_ENDPOINT",
+      source: "Optional analytics provider.",
+      validationRule: "Leave blank to disable analytics.",
+      launchNote: "Only needed if you want browser analytics at launch.",
+    },
+    {
+      variableName: "VITE_ANALYTICS_WEBSITE_ID",
+      source: "Optional analytics provider.",
+      validationRule: "Leave blank to disable analytics.",
+      launchNote: "Pairs with VITE_ANALYTICS_ENDPOINT when analytics is used.",
+    },
+    {
+      variableName: "LAUNCH_SITEMAP_PATH",
+      source: "Local launch command setting.",
+      validationRule: "Optional; defaults to dist/public/sitemap.xml.",
+      launchNote:
+        "Used by pnpm launch:sitemap when saving a generated sitemap file.",
+    },
   ];
 
 export function renderProductionEnvChecklist({
