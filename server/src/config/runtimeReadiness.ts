@@ -17,11 +17,13 @@ import {
   type LaunchDatabaseReadinessStatus,
 } from "../db/launchDatabaseReadiness";
 import {
+  getAlertAdminEnvironmentStatus,
   getAuthEnvironmentStatus,
   getClinicalReviewEnvironmentStatus,
   getCommerceEnvironmentStatus,
   getDatabaseEnvironmentStatus,
   getPracticeSeatEnvironmentStatus,
+  type AlertAdminEnvironmentStatus,
   type AuthEnvironmentStatus,
   type ClinicalReviewEnvironmentStatus,
   type CommerceEnvironmentStatus,
@@ -44,6 +46,7 @@ export interface RuntimeLaunchReadinessReport {
   commerce: CommerceEnvironmentStatus;
   auth: AuthEnvironmentStatus;
   practiceSeatAdmin: PracticeSeatEnvironmentStatus;
+  alertAdmin: AlertAdminEnvironmentStatus;
   database: DatabaseEnvironmentStatus;
   databaseReadiness: LaunchDatabaseReadinessStatus;
   clinicalReview: ClinicalReviewEnvironmentStatus;
@@ -86,6 +89,7 @@ function getRuntimeLaunchNextSteps({
   commerce,
   auth,
   practiceSeatAdmin,
+  alertAdmin,
   database,
   databaseReadiness,
   clinicalReview,
@@ -93,6 +97,7 @@ function getRuntimeLaunchNextSteps({
   commerce: CommerceEnvironmentStatus;
   auth: AuthEnvironmentStatus;
   practiceSeatAdmin: PracticeSeatEnvironmentStatus;
+  alertAdmin: AlertAdminEnvironmentStatus;
   database: DatabaseEnvironmentStatus;
   databaseReadiness: LaunchDatabaseReadinessStatus;
   clinicalReview: ClinicalReviewEnvironmentStatus;
@@ -161,6 +166,15 @@ function getRuntimeLaunchNextSteps({
     });
   }
 
+  if (!alertAdmin.alertAdminConfigured) {
+    steps.push({
+      title: "Protect alert-button administration",
+      detail:
+        "Set a strong alert admin token before deploying the alert-button editor with the public app.",
+      command: "ALERT_ADMIN_TOKEN=...",
+    });
+  }
+
   if (!commerce.paidEnrollmentEnabled) {
     steps.push({
       title: "Keep paid enrollment disabled until final proof",
@@ -193,11 +207,13 @@ export function getRuntimeLaunchReadinessReport({
   const commerce = getCommerceEnvironmentStatus(env);
   const auth = getAuthEnvironmentStatus(env);
   const practiceSeatAdmin = getPracticeSeatEnvironmentStatus(env);
+  const alertAdmin = getAlertAdminEnvironmentStatus(env);
   const database = getDatabaseEnvironmentStatus(env);
   const nextSetupSteps = getRuntimeLaunchNextSteps({
     commerce,
     auth,
     practiceSeatAdmin,
+    alertAdmin,
     database,
     databaseReadiness,
     clinicalReview,
@@ -221,6 +237,10 @@ export function getRuntimeLaunchReadinessReport({
     formatMissingWarning(
       "Practice seat assignment",
       practiceSeatAdmin.missingPracticeSeatAdminVariables
+    ),
+    formatMissingWarning(
+      "Alert administration",
+      alertAdmin.missingAlertAdminVariables
     ),
     formatMissingWarning("Database", database.missingDatabaseVariables),
     database.databaseConfigured && databaseReadiness.checkFailed
@@ -251,6 +271,7 @@ export function getRuntimeLaunchReadinessReport({
       commerce.webhookConfigured &&
       auth.passwordlessConfigured &&
       practiceSeatAdmin.practiceSeatAdminConfigured &&
+      alertAdmin.alertAdminConfigured &&
       database.databaseConfigured &&
       databaseReadiness.schemaVerified,
     staticSummary,
@@ -258,6 +279,7 @@ export function getRuntimeLaunchReadinessReport({
     commerce,
     auth,
     practiceSeatAdmin,
+    alertAdmin,
     database,
     databaseReadiness,
     clinicalReview,

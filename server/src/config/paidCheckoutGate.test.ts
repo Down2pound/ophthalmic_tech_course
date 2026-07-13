@@ -19,6 +19,7 @@ const launchReadyEnv = {
   TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value-123456",
   SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
   PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token-with-at-least-32-chars",
+  ALERT_ADMIN_TOKEN: "alert-admin-token-with-at-least-32-chars",
   DATABASE_URL: "postgres://optitech_user:credential@db.internal:5432/optitech",
   MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
   MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
@@ -70,6 +71,7 @@ describe("getPaidCheckoutGateStatus", () => {
         STRIPE_WEBHOOK_SECRET: "whsec_replace_with_your_webhook_signing_secret",
         AUTH_SESSION_SECRET: "replace_with_a_long_random_session_secret",
         PRACTICE_SEAT_ADMIN_TOKEN: "replace_with_a_long_random_admin_token",
+        ALERT_ADMIN_TOKEN: "replace_with_a_long_random_alert_admin_token",
       },
       databaseReadiness: verifiedDatabaseReadiness,
     });
@@ -84,6 +86,7 @@ describe("getPaidCheckoutGateStatus", () => {
         "TRANSACTIONAL_EMAIL_API_URL",
         "SIGN_IN_FROM_EMAIL",
         "PRACTICE_SEAT_ADMIN_TOKEN",
+        "ALERT_ADMIN_TOKEN",
         "DATABASE_URL",
       ])
     );

@@ -51,6 +51,8 @@ Detailed guides:
 - [ ] Transactional email endpoint and API key are configured.
 - [ ] Sign-in sender address is verified.
 - [ ] Test sign-in email arrives and opens the deployed app.
+- [ ] `ALERT_ADMIN_TOKEN` is configured so the alert-button admin page is
+      locked before public launch.
 
 ## 5. Run Paid Flow Tests
 

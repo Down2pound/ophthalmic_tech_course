@@ -29,6 +29,10 @@ const readinessReport: RuntimeLaunchReadinessReport = {
     practiceSeatAdminConfigured: false,
     missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
   },
+  alertAdmin: {
+    alertAdminConfigured: false,
+    missingAlertAdminVariables: ["ALERT_ADMIN_TOKEN"],
+  },
   database: {
     databaseConfigured: false,
     missingDatabaseVariables: ["DATABASE_URL"],
@@ -87,6 +91,8 @@ describe("renderLaunchDoctorReport", () => {
     expect(report).toContain("# OptiTech Academy Launch Doctor");
     expect(report).toContain("- Paid launch ready: no");
     expect(report).toContain("- Stripe checkout: NEEDS WORK");
+    expect(report).toContain("- Alert admin: NEEDS WORK");
+    expect(report).toContain("- ALERT_ADMIN_TOKEN");
     expect(report).toContain("- STRIPE_SECRET_KEY");
     expect(report).toContain("- auth_users");
     expect(report).toContain("## Recommended Next Setup Steps");

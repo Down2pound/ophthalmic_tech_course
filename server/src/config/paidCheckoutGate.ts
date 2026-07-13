@@ -1,5 +1,6 @@
 import type { LaunchDatabaseReadinessStatus } from "../db/launchDatabaseReadiness";
 import {
+  getAlertAdminEnvironmentStatus,
   getAuthEnvironmentStatus,
   getClinicalReviewEnvironmentStatus,
   getCommerceEnvironmentStatus,
@@ -34,6 +35,7 @@ export function getPaidCheckoutGateStatus({
   const commerce = getCommerceEnvironmentStatus(env);
   const auth = getAuthEnvironmentStatus(env);
   const practiceSeatAdmin = getPracticeSeatEnvironmentStatus(env);
+  const alertAdmin = getAlertAdminEnvironmentStatus(env);
   const database = getDatabaseEnvironmentStatus(env);
   const clinicalReview = getClinicalReviewEnvironmentStatus(env);
 
@@ -42,6 +44,7 @@ export function getPaidCheckoutGateStatus({
     ...commerce.missingWebhookVariables,
     ...auth.missingPasswordlessVariables,
     ...practiceSeatAdmin.missingPracticeSeatAdminVariables,
+    ...alertAdmin.missingAlertAdminVariables,
     ...database.missingDatabaseVariables,
     ...clinicalReview.missingModuleOneReviewVariables,
   ];
@@ -53,6 +56,7 @@ export function getPaidCheckoutGateStatus({
       "Practice seat assignment",
       practiceSeatAdmin.missingPracticeSeatAdminVariables
     ),
+    missingWarning("Alert administration", alertAdmin.missingAlertAdminVariables),
     missingWarning("Database", database.missingDatabaseVariables),
     missingWarning(
       "Module 1 clinical review",
@@ -79,6 +83,7 @@ export function getPaidCheckoutGateStatus({
       commerce.webhookConfigured &&
       auth.passwordlessConfigured &&
       practiceSeatAdmin.practiceSeatAdminConfigured &&
+      alertAdmin.alertAdminConfigured &&
       database.databaseConfigured &&
       databaseReadiness.schemaVerified &&
       clinicalReview.moduleOneReviewApproved,

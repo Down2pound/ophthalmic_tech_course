@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  getAlertAdminEnvironmentStatus,
   getAuthEnvironmentStatus,
   getClinicalReviewEnvironmentStatus,
   getCommerceEnvironmentStatus,
@@ -365,6 +366,24 @@ describe("getPracticeSeatEnvironmentStatus", () => {
     expect(getPracticeSeatEnvironmentStatus({})).toEqual({
       practiceSeatAdminConfigured: false,
       missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
+    });
+  });
+});
+
+describe("getAlertAdminEnvironmentStatus", () => {
+  it("requires a strong alert admin token", () => {
+    expect(
+      getAlertAdminEnvironmentStatus({
+        ALERT_ADMIN_TOKEN: "alert-admin-secret-with-at-least-32-chars",
+      })
+    ).toEqual({
+      alertAdminConfigured: true,
+      missingAlertAdminVariables: [],
+    });
+
+    expect(getAlertAdminEnvironmentStatus({})).toEqual({
+      alertAdminConfigured: false,
+      missingAlertAdminVariables: ["ALERT_ADMIN_TOKEN"],
     });
   });
 });

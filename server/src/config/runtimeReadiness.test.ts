@@ -14,6 +14,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         TRANSACTIONAL_EMAIL_API_KEY: "",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
         PRACTICE_SEAT_ADMIN_TOKEN: "",
+        ALERT_ADMIN_TOKEN: "",
         DATABASE_URL: "",
         MODULE_ONE_CLINICAL_REVIEWER_NAME: "",
         MODULE_ONE_CLINICAL_REVIEWER_ROLE: "",
@@ -43,6 +44,10 @@ describe("getRuntimeLaunchReadinessReport", () => {
         practiceSeatAdminConfigured: false,
         missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
       },
+      alertAdmin: {
+        alertAdminConfigured: false,
+        missingAlertAdminVariables: ["ALERT_ADMIN_TOKEN"],
+      },
       database: {
         databaseConfigured: false,
         missingDatabaseVariables: ["DATABASE_URL"],
@@ -67,6 +72,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
       "Switch Stripe to live mode before real sales",
       "Configure passwordless sign-in email",
       "Protect practice seat assignment",
+      "Protect alert-button administration",
       "Keep paid enrollment disabled until final proof",
     ]);
     expect(
@@ -92,6 +98,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
     );
     expect(report.warnings).toContain(
       "Practice seat assignment setup is missing: PRACTICE_SEAT_ADMIN_TOKEN."
+    );
+    expect(report.warnings).toContain(
+      "Alert administration setup is missing: ALERT_ADMIN_TOKEN."
     );
     expect(report.warnings).toContain(
       "Database setup is missing: DATABASE_URL."
@@ -154,6 +163,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value-123456",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
         PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token-with-at-least-32-chars",
+        ALERT_ADMIN_TOKEN: "alert-admin-token-with-at-least-32-chars",
         DATABASE_URL:
           "postgres://optitech_user:credential@db.internal:5432/optitech",
         MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
@@ -195,6 +205,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         TRANSACTIONAL_EMAIL_API_KEY: "email-secret-value-123456",
         SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
         PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token-with-at-least-32-chars",
+        ALERT_ADMIN_TOKEN: "alert-admin-token-with-at-least-32-chars",
         DATABASE_URL:
           "postgres://optitech_user:credential@db.internal:5432/optitech",
         MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
@@ -222,6 +233,9 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(serializedReport).not.toContain("email-secret-value-123456");
     expect(serializedReport).not.toContain(
       "practice-seat-token-with-at-least-32-chars"
+    );
+    expect(serializedReport).not.toContain(
+      "alert-admin-token-with-at-least-32-chars"
     );
     expect(serializedReport).not.toContain(
       "postgres://optitech_user:credential@db.internal:5432/optitech"

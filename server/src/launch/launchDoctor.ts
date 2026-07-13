@@ -49,6 +49,11 @@ export function renderLaunchDoctorReport({
       missing: readiness.practiceSeatAdmin.missingPracticeSeatAdminVariables,
     },
     {
+      label: "Alert admin",
+      ready: readiness.alertAdmin.alertAdminConfigured,
+      missing: readiness.alertAdmin.missingAlertAdminVariables,
+    },
+    {
       label: "Database connection",
       ready: readiness.database.databaseConfigured,
       missing: readiness.database.missingDatabaseVariables,

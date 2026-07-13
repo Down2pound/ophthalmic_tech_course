@@ -21,6 +21,11 @@ export interface PracticeSeatEnvironmentStatus {
   missingPracticeSeatAdminVariables: string[];
 }
 
+export interface AlertAdminEnvironmentStatus {
+  alertAdminConfigured: boolean;
+  missingAlertAdminVariables: string[];
+}
+
 export interface DatabaseEnvironmentStatus {
   databaseConfigured: boolean;
   missingDatabaseVariables: string[];
@@ -55,6 +60,8 @@ export const passwordlessEnvironmentVariables = [
 export const practiceSeatAdminEnvironmentVariables = [
   "PRACTICE_SEAT_ADMIN_TOKEN",
 ] as const;
+
+export const alertAdminEnvironmentVariables = ["ALERT_ADMIN_TOKEN"] as const;
 
 export const databaseEnvironmentVariables = ["DATABASE_URL"] as const;
 
@@ -264,6 +271,20 @@ export function getPracticeSeatEnvironmentStatus(
   return {
     practiceSeatAdminConfigured: missingPracticeSeatAdminVariables.length === 0,
     missingPracticeSeatAdminVariables,
+  };
+}
+
+export function getAlertAdminEnvironmentStatus(
+  env: EnvironmentMap = process.env
+): AlertAdminEnvironmentStatus {
+  const missingAlertAdminVariables = getMissingEnvironmentVariables(
+    env,
+    alertAdminEnvironmentVariables
+  );
+
+  return {
+    alertAdminConfigured: missingAlertAdminVariables.length === 0,
+    missingAlertAdminVariables,
   };
 }
 

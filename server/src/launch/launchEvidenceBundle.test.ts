@@ -32,6 +32,10 @@ const readinessReport: RuntimeLaunchReadinessReport = {
     practiceSeatAdminConfigured: false,
     missingPracticeSeatAdminVariables: ["PRACTICE_SEAT_ADMIN_TOKEN"],
   },
+  alertAdmin: {
+    alertAdminConfigured: false,
+    missingAlertAdminVariables: ["ALERT_ADMIN_TOKEN"],
+  },
   database: {
     databaseConfigured: false,
     missingDatabaseVariables: ["DATABASE_URL"],
@@ -268,6 +272,7 @@ describe("createLaunchEvidenceBundle", () => {
     expect(productionEnvChecklist).toContain("`STRIPE_SECRET_KEY`");
     expect(launchDoctorReport).toContain("OptiTech Academy Launch Doctor");
     expect(launchDoctorReport).toContain("Paid launch ready: no");
+    expect(launchDoctorReport).toContain("Alert admin");
     expect(manualQaEvidence).toContain(
       "OptiTech Academy Manual Launch QA Evidence"
     );

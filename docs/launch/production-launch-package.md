@@ -16,6 +16,7 @@ Paid checkout now fails closed unless all launch-critical gates are ready:
 - Stripe webhook fulfillment is configured.
 - Passwordless sign-in email is configured.
 - Practice-seat administration is configured.
+- Alert-button administration is configured.
 - Managed PostgreSQL is configured.
 - Launch database tables are verified.
 - `ENABLE_PAID_ENROLLMENT=true`.
