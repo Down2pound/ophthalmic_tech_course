@@ -33,14 +33,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Type-check
-        run: pnpm check
-
-      - name: Run tests
-        run: pnpm test
-
-      - name: Build production app
-        run: pnpm build
+      - name: Run launch preflight
+        run: pnpm launch:preflight
 
       - name: Verify launch secret generator
         run: pnpm launch:secrets
@@ -52,9 +46,6 @@ jobs:
         run: pnpm launch:sitemap
         env:
           PUBLIC_APP_URL: https://academy.spindeleye.test
-
-      - name: Generate launch evidence bundle
-        run: pnpm launch:bundle
 
       - name: Upload launch evidence bundle
         uses: actions/upload-artifact@v4

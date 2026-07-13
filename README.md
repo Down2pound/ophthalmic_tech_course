@@ -297,13 +297,11 @@ Then verify:
 
 GitHub Actions runs launch CI on pushes and pull requests:
 
-- `pnpm check`
-- `pnpm test`
-- `pnpm build`
+- `pnpm launch:preflight`, which runs type-checking, tests, production build,
+  and launch bundle generation.
 - `pnpm launch:secrets`
 - `pnpm launch:doctor`
 - `PUBLIC_APP_URL=https://academy.spindeleye.test pnpm launch:sitemap`
-- `pnpm launch:bundle`
 - `docker build`
 
 The workflow uploads the generated `launch-evidence/` folder as a short-lived
@@ -352,6 +350,12 @@ Create a local handoff folder for Google Drive with safe launch artifacts:
 
 ```bash
 pnpm launch:bundle
+```
+
+Or run the full local preflight before a launch candidate:
+
+```bash
+pnpm launch:preflight
 ```
 
 The generated `launch-evidence/` folder is ignored by Git and should not

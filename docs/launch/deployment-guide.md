@@ -127,9 +127,7 @@ link, receive an email, click the link, and land on `/learn`.
 
 Before changing `ENABLE_PAID_ENROLLMENT` to `true`, verify:
 
-- `pnpm check` passes locally.
-- `pnpm test` passes locally or in CI.
-- `pnpm build` passes.
+- `pnpm launch:preflight` passes locally or in CI.
 - `pnpm db:setup` has run against the production database.
 - `/api/health` returns `ok: true`.
 - `/api/launch/readiness` has no missing launch-critical setup.

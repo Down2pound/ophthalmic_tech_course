@@ -17,6 +17,7 @@
     "launch:secrets": "tsx server/src/launch/runLaunchSecrets.ts",
     "launch:sitemap": "tsx server/src/launch/runSitemap.ts",
     "launch:bundle": "tsx server/src/launch/runLaunchEvidenceBundle.ts",
+    "launch:preflight": "pnpm check && pnpm test && pnpm build && pnpm launch:bundle",
     "format": "prettier --write ."
   },
   "dependencies": {

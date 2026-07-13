@@ -25,9 +25,7 @@ Paid checkout now fails closed unless all launch-critical gates are ready:
 Run these locally before deploying a release candidate:
 
 ```bash
-pnpm check
-pnpm test
-pnpm build
+pnpm launch:preflight
 ```
 
 For a step-by-step beginner deployment recipe, use
