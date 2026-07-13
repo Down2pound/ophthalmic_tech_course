@@ -6,6 +6,7 @@ import {
   getDatabaseEnvironmentStatus,
   getMissingEnvironmentVariables,
   getPracticeSeatEnvironmentStatus,
+  isPlaceholderEnvironmentValue,
 } from "./environment";
 
 describe("getMissingEnvironmentVariables", () => {
@@ -18,7 +19,74 @@ describe("getMissingEnvironmentVariables", () => {
         },
         ["STRIPE_SECRET_KEY", "PUBLIC_APP_URL", "STRIPE_WEBHOOK_SECRET"]
       )
-    ).toEqual(["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"]);
+    ).toEqual([
+      "STRIPE_SECRET_KEY",
+      "PUBLIC_APP_URL",
+      "STRIPE_WEBHOOK_SECRET",
+    ]);
+  });
+
+  it("reports placeholder values as missing", () => {
+    expect(
+      getMissingEnvironmentVariables(
+        {
+          STRIPE_SECRET_KEY: "sk_test_replace_with_your_secret_key",
+          PUBLIC_APP_URL: "http://localhost:3000",
+          TRANSACTIONAL_EMAIL_API_URL:
+            "https://email-provider.example.com/send",
+          AUTH_SESSION_SECRET: "replace_with_a_long_random_session_secret",
+          SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
+        },
+        [
+          "STRIPE_SECRET_KEY",
+          "PUBLIC_APP_URL",
+          "TRANSACTIONAL_EMAIL_API_URL",
+          "AUTH_SESSION_SECRET",
+          "SIGN_IN_FROM_EMAIL",
+        ]
+      )
+    ).toEqual([
+      "STRIPE_SECRET_KEY",
+      "PUBLIC_APP_URL",
+      "TRANSACTIONAL_EMAIL_API_URL",
+      "AUTH_SESSION_SECRET",
+      "SIGN_IN_FROM_EMAIL",
+    ]);
+  });
+});
+
+describe("isPlaceholderEnvironmentValue", () => {
+  it("detects common copied example values", () => {
+    expect(
+      isPlaceholderEnvironmentValue(
+        "DATABASE_URL",
+        "replace_with_managed_postgres_connection_string"
+      )
+    ).toBe(true);
+    expect(
+      isPlaceholderEnvironmentValue(
+        "TRANSACTIONAL_EMAIL_API_URL",
+        "https://email-provider.example.com/send"
+      )
+    ).toBe(true);
+    expect(
+      isPlaceholderEnvironmentValue("PUBLIC_APP_URL", "http://localhost:3000")
+    ).toBe(true);
+  });
+
+  it("allows realistic production-looking values", () => {
+    expect(
+      isPlaceholderEnvironmentValue(
+        "PUBLIC_APP_URL",
+        "https://academy.spindeleye.com"
+      )
+    ).toBe(false);
+    expect(
+      isPlaceholderEnvironmentValue(
+        "DATABASE_URL",
+        "postgres://optitech_user:secret@db.internal:5432/optitech"
+      )
+    ).toBe(false);
   });
 });
 
@@ -27,7 +95,7 @@ describe("getCommerceEnvironmentStatus", () => {
     expect(
       getCommerceEnvironmentStatus({
         STRIPE_SECRET_KEY: "sk_test_123",
-        PUBLIC_APP_URL: "http://localhost:3000",
+        PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "true",
         STRIPE_WEBHOOK_SECRET: "whsec_123",
       })
@@ -58,7 +126,7 @@ describe("getCommerceEnvironmentStatus", () => {
     expect(
       getCommerceEnvironmentStatus({
         STRIPE_SECRET_KEY: "sk_test_123",
-        PUBLIC_APP_URL: "http://localhost:3000",
+        PUBLIC_APP_URL: "https://academy.spindeleye.com",
         ENABLE_PAID_ENROLLMENT: "false",
         STRIPE_WEBHOOK_SECRET: "whsec_123",
       })
@@ -77,10 +145,10 @@ describe("getAuthEnvironmentStatus", () => {
     expect(
       getAuthEnvironmentStatus({
         AUTH_SESSION_SECRET: "session-secret",
-        TRANSACTIONAL_EMAIL_API_URL: "https://email-provider.example.com/send",
+        TRANSACTIONAL_EMAIL_API_URL: "https://email.spindeleye.com/send",
         TRANSACTIONAL_EMAIL_API_KEY: "email-api-key",
-        SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
-        PUBLIC_APP_URL: "http://localhost:3000",
+        SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
+        PUBLIC_APP_URL: "https://academy.spindeleye.com",
       })
     ).toEqual({
       passwordlessConfigured: true,
@@ -92,7 +160,7 @@ describe("getAuthEnvironmentStatus", () => {
     expect(
       getAuthEnvironmentStatus({
         AUTH_SESSION_SECRET: "",
-        PUBLIC_APP_URL: "http://localhost:3000",
+        PUBLIC_APP_URL: "https://academy.spindeleye.com",
       })
     ).toEqual({
       passwordlessConfigured: false,
@@ -130,7 +198,8 @@ describe("getDatabaseEnvironmentStatus", () => {
   it("marks database storage as configured when DATABASE_URL exists", () => {
     expect(
       getDatabaseEnvironmentStatus({
-        DATABASE_URL: "postgres://example",
+        DATABASE_URL:
+          "postgres://optitech_user:secret@db.internal:5432/optitech",
       })
     ).toEqual({
       databaseConfigured: true,

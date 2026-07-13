@@ -70,13 +70,45 @@ export function isEnvironmentFlagEnabled(
   return env[variableName]?.trim().toLowerCase() === "true";
 }
 
+export function isPlaceholderEnvironmentValue(
+  variableName: string,
+  value: string
+): boolean {
+  const trimmedValue = value.trim();
+  const normalizedValue = trimmedValue.toLowerCase();
+
+  if (
+    normalizedValue.includes("replace_with") ||
+    normalizedValue.includes("_replace_") ||
+    normalizedValue.includes("your_") ||
+    normalizedValue.includes("example.com")
+  ) {
+    return true;
+  }
+
+  if (
+    variableName === "PUBLIC_APP_URL" &&
+    /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?(?:\/|$)/i.test(
+      trimmedValue
+    )
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 export function getMissingEnvironmentVariables(
   env: EnvironmentMap,
   requiredVariables: readonly string[]
 ): string[] {
   return requiredVariables.filter(variableName => {
     const value = env[variableName];
-    return !value || value.trim().length === 0;
+    return (
+      !value ||
+      value.trim().length === 0 ||
+      isPlaceholderEnvironmentValue(variableName, value)
+    );
   });
 }
 

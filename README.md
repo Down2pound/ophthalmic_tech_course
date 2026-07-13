@@ -108,6 +108,9 @@ Stripe key guide:
 - `VITE_ANALYTICS_ENDPOINT` and `VITE_ANALYTICS_WEBSITE_ID` are optional
   browser analytics values. If either is missing, the app does not inject the
   analytics script.
+- The launch readiness check treats copied placeholders as missing. Values such
+  as `replace_with...`, `...example.com`, and `PUBLIC_APP_URL=http://localhost`
+  are fine in examples, but they will not unlock paid checkout.
 
 Checkout routes:
 
@@ -253,7 +256,8 @@ in the host dashboard, not in Git: `DATABASE_URL`,
 `PRACTICE_SEAT_ADMIN_TOKEN`. Add the `MODULE_ONE_CLINICAL_*` signoff values
 after the review packet is approved. Keep `ENABLE_PAID_ENROLLMENT=false` until
 the live checklist passes, then set `ENABLE_PAID_ENROLLMENT=true` to open paid
-checkout.
+checkout. Do not leave copied `.env.example` placeholders in production; the
+launch doctor will count those values as missing.
 
 After the managed PostgreSQL database is created and `DATABASE_URL` is set, run:
 
