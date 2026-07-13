@@ -49,8 +49,9 @@ See individual README files in `client/`, `server/`, and `shared/` directories f
 
 ## Stripe Checkout Setup
 
-The app uses Stripe-hosted Checkout for founding learner purchases. That means
-learners enter card details on Stripe's secure page, not inside this app.
+The app uses Stripe-hosted Checkout for founding learner and practice-pack
+purchases. That means learners and managers enter card details on Stripe's
+secure page, not inside this app.
 
 Required environment variables:
 
@@ -84,6 +85,7 @@ Stripe key guide:
 Checkout routes:
 
 - Frontend page: `/checkout`
+- Practice packs page: `/practice-packs`
 - Policies page: `/policies`
 - Server endpoint: `POST /api/checkout/sessions`
 - Passwordless sign-in request endpoint: `POST /api/auth/passwordless/start`
@@ -93,8 +95,12 @@ Checkout routes:
 - Protected quiz endpoint: `GET /api/learn/module-one/quiz`
 - Protected quiz submission endpoint: `POST /api/learn/module-one/quiz/submit`
 - Runtime launch check: `GET /api/launch/readiness`
-- Success return: `/learn?checkout=success`
+- Success return: `/learn?checkout=success&offer=...`
 - Cancel return: `/checkout?checkout=cancelled`
+
+`POST /api/checkout/sessions` accepts an optional `offerId`. If no `offerId`
+is sent, it uses the founding learner offer. Practice pack offer IDs are also
+accepted and sent to Stripe with seat-count metadata for fulfillment.
 
 If `STRIPE_SECRET_KEY` is missing, checkout fails closed with a setup message and
 does not collect payment.

@@ -7,15 +7,17 @@ type Fetcher = typeof fetch;
 
 export async function createCheckoutSession({
   email,
+  offerId,
   fetcher = fetch,
 }: {
   email?: string;
+  offerId?: string;
   fetcher?: Fetcher;
 }): Promise<{ url: string }> {
   const response = await fetcher("/api/checkout/sessions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, offerId }),
   });
 
   const payload = (await response.json()) as CheckoutResponse;

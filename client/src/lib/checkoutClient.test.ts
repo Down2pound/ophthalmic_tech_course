@@ -23,6 +23,30 @@ describe("createCheckoutSession", () => {
     });
   });
 
+  it("sends an offer id when buying a practice pack", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        url: "https://checkout.stripe.com/c/pay/cs_test_practice",
+      }),
+    });
+
+    await createCheckoutSession({
+      email: "manager@example.com",
+      offerId: "practice-five-seat-pack",
+      fetcher,
+    });
+
+    expect(fetcher).toHaveBeenCalledWith("/api/checkout/sessions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: "manager@example.com",
+        offerId: "practice-five-seat-pack",
+      }),
+    });
+  });
+
   it("surfaces server errors", async () => {
     const fetcher = vi.fn().mockResolvedValue({
       ok: false,

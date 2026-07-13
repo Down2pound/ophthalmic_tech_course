@@ -1,4 +1,7 @@
-import { foundingLearnerOffer } from "../../../shared/commerce/offers";
+import {
+  getCheckoutOfferById,
+  isPracticePackOffer,
+} from "../../../shared/commerce/offers";
 
 export interface StripeCheckoutUrls {
   successUrl: string;
@@ -7,30 +10,33 @@ export interface StripeCheckoutUrls {
 
 export function buildStripeCheckoutParams(
   urls: StripeCheckoutUrls,
-  customerEmail?: string
+  customerEmail?: string,
+  offerId?: string
 ): URLSearchParams {
+  const offer = getCheckoutOfferById(offerId);
   const params = new URLSearchParams();
 
   params.set("mode", "payment");
   params.set("success_url", urls.successUrl);
   params.set("cancel_url", urls.cancelUrl);
-  params.set("client_reference_id", foundingLearnerOffer.id);
-  params.set("metadata[offer_id]", foundingLearnerOffer.id);
-  params.set("metadata[access_months]", String(foundingLearnerOffer.accessMonths));
+  params.set("client_reference_id", offer.id);
+  params.set("metadata[offer_id]", offer.id);
+  params.set("metadata[access_months]", String(offer.accessMonths));
   params.set("line_items[0][quantity]", "1");
-  params.set("line_items[0][price_data][currency]", foundingLearnerOffer.currency);
+  params.set("line_items[0][price_data][currency]", offer.currency);
   params.set(
     "line_items[0][price_data][unit_amount]",
-    String(foundingLearnerOffer.priceCents)
+    String(offer.priceCents)
   );
-  params.set(
-    "line_items[0][price_data][product_data][name]",
-    foundingLearnerOffer.name
-  );
+  params.set("line_items[0][price_data][product_data][name]", offer.name);
   params.set(
     "line_items[0][price_data][product_data][description]",
-    foundingLearnerOffer.description
+    offer.description
   );
+
+  if (isPracticePackOffer(offer)) {
+    params.set("metadata[seat_count]", String(offer.seatCount));
+  }
 
   if (customerEmail) {
     params.set("customer_email", customerEmail);

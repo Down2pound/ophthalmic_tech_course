@@ -1,3 +1,7 @@
+import {
+  getCheckoutOfferById,
+  isPracticePackOffer,
+} from "@shared/commerce/offers";
 import type { Request, Response, Router } from "express";
 import {
   buildStripeCheckoutParams,
@@ -11,6 +15,7 @@ const STRIPE_API_VERSION = "2026-02-25.clover";
 
 interface CheckoutRequestBody {
   email?: string;
+  offerId?: string;
 }
 
 export function setupCheckoutRoutes(router: Router) {
@@ -27,14 +32,21 @@ export function setupCheckoutRoutes(router: Router) {
     }
 
     try {
-      const { email } = (req.body ?? {}) as CheckoutRequestBody;
+      const { email, offerId } = (req.body ?? {}) as CheckoutRequestBody;
+      const offer = getCheckoutOfferById(offerId);
       const baseUrl = getCheckoutBaseUrl(req.get("origin"));
+      const cancelPath = isPracticePackOffer(offer)
+        ? "/practice-packs"
+        : "/checkout";
       const params = buildStripeCheckoutParams(
         {
-          successUrl: `${baseUrl}/learn?checkout=success`,
-          cancelUrl: `${baseUrl}/checkout?checkout=cancelled`,
+          successUrl: `${baseUrl}/learn?checkout=success&offer=${encodeURIComponent(
+            offer.id
+          )}`,
+          cancelUrl: `${baseUrl}${cancelPath}?checkout=cancelled`,
         },
-        email
+        email,
+        offer.id
       );
 
       const stripeResponse = await fetch(STRIPE_CHECKOUT_SESSIONS_URL, {
@@ -61,6 +73,14 @@ export function setupCheckoutRoutes(router: Router) {
 
       res.json({ url: payload.url });
     } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message === "Unknown checkout offer."
+      ) {
+        res.status(400).json({ error: error.message });
+        return;
+      }
+
       res.status(500).json({
         error: "Checkout session failed to start.",
       });

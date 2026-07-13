@@ -8,12 +8,39 @@ import {
   ShieldCheck,
   Users,
 } from "lucide-react";
-import {
-  formatOfferPrice,
-  practicePackOffers,
-} from "@shared/commerce/offers";
+import { formatOfferPrice, practicePackOffers } from "@shared/commerce/offers";
+import { useState } from "react";
+import { createCheckoutSession } from "@/lib/checkoutClient";
 
 export default function PracticePacks() {
+  const [emailByOfferId, setEmailByOfferId] = useState<Record<string, string>>(
+    {}
+  );
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+
+  const startCheckout = async (offerId: string) => {
+    setActiveOfferId(offerId);
+    setCheckoutError(null);
+
+    try {
+      const { url } = await createCheckoutSession({
+        email: emailByOfferId[offerId]?.trim() || undefined,
+        offerId,
+      });
+
+      window.location.href = url;
+    } catch (error) {
+      setCheckoutError(
+        error instanceof Error
+          ? error.message
+          : "Practice checkout could not start. Please try again."
+      );
+    } finally {
+      setActiveOfferId(null);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="border-b bg-white">
@@ -46,7 +73,7 @@ export default function PracticePacks() {
 
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1fr_340px]">
         <section className="grid gap-5 md:grid-cols-2">
-          {practicePackOffers.map((offer) => (
+          {practicePackOffers.map(offer => (
             <Card
               key={offer.id}
               className="flex flex-col border-slate-200 bg-white p-6 text-slate-950 shadow-sm"
@@ -78,8 +105,11 @@ export default function PracticePacks() {
               <section className="mt-6">
                 <h3 className="font-semibold">Included</h3>
                 <ul className="mt-3 space-y-2">
-                  {offer.includes.map((item) => (
-                    <li key={item} className="flex gap-2 text-sm text-slate-700">
+                  {offer.includes.map(item => (
+                    <li
+                      key={item}
+                      className="flex gap-2 text-sm text-slate-700"
+                    >
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
                       <span>{item}</span>
                     </li>
@@ -93,13 +123,41 @@ export default function PracticePacks() {
                   Clear limits
                 </h3>
                 <ul className="mt-3 space-y-2">
-                  {offer.limitations.map((item) => (
+                  {offer.limitations.map(item => (
                     <li key={item} className="text-sm leading-6 text-slate-700">
                       - {item}
                     </li>
                   ))}
                 </ul>
               </section>
+
+              <div className="mt-6 border-t border-slate-200 pt-5">
+                <label className="block text-sm font-semibold text-slate-700">
+                  Billing email
+                </label>
+                <input
+                  type="email"
+                  value={emailByOfferId[offer.id] ?? ""}
+                  onChange={event =>
+                    setEmailByOfferId(current => ({
+                      ...current,
+                      [offer.id]: event.target.value,
+                    }))
+                  }
+                  placeholder="manager@example.com"
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+                <Button
+                  className="mt-4 w-full bg-blue-700 text-white hover:bg-blue-800"
+                  disabled={activeOfferId === offer.id}
+                  onClick={() => startCheckout(offer.id)}
+                >
+                  {activeOfferId === offer.id
+                    ? "Starting checkout..."
+                    : "Buy with Stripe"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
             </Card>
           ))}
         </section>
@@ -107,20 +165,27 @@ export default function PracticePacks() {
         <aside>
           <Card className="sticky top-6 border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
             <h2 className="text-2xl font-bold">Employer purchase path</h2>
+            {checkoutError && (
+              <p className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                {checkoutError}
+              </p>
+            )}
             <p className="mt-3 leading-7 text-slate-600">
-              Practice packs should launch with a short consultation or invoice
-              workflow so seat setup, supervisor expectations, and refund terms
-              are confirmed before payment.
+              Teams can purchase a pack directly through Stripe, then use a
+              short setup conversation to confirm learner seats, supervisor
+              expectations, and practice-specific onboarding needs.
             </p>
             <div className="mt-5 space-y-3 text-sm leading-6 text-slate-700">
               <p>- Confirm number of learner seats.</p>
               <p>- Identify the practice lead or supervisor.</p>
               <p>- Align Skills Passport use with local policy.</p>
-              <p>- Keep practice-specific workflows out of the national core.</p>
+              <p>
+                - Keep practice-specific workflows out of the national core.
+              </p>
             </div>
             <a href="mailto:jeff.chapin@spindeleye.com?subject=OptiTech%20practice%20pack%20interest">
               <Button className="mt-6 w-full bg-blue-700 text-white hover:bg-blue-800">
-                Start employer conversation
+                Ask about custom setup
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </a>

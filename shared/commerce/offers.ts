@@ -47,7 +47,8 @@ export const practicePackOffers: PracticePackOffer[] = [
     currency: "usd",
     accessMonths: 12,
     seatCount: 5,
-    idealFor: "Small practices training one hiring class or a few new team members.",
+    idealFor:
+      "Small practices training one hiring class or a few new team members.",
     description:
       "Practice onboarding access for up to five learners using the shared OptiTech Academy foundations course, Skills Passport, and career-readiness tools.",
     includes: [
@@ -89,6 +90,32 @@ export const practicePackOffers: PracticePackOffer[] = [
     ],
   },
 ];
+
+export type CheckoutOffer = CourseOffer | PracticePackOffer;
+
+export const checkoutOffers: CheckoutOffer[] = [
+  foundingLearnerOffer,
+  ...practicePackOffers,
+];
+
+export function getCheckoutOfferById(offerId?: string): CheckoutOffer {
+  const selectedOfferId = offerId ?? foundingLearnerOffer.id;
+  const offer = checkoutOffers.find(checkoutOffer => {
+    return checkoutOffer.id === selectedOfferId;
+  });
+
+  if (!offer) {
+    throw new Error("Unknown checkout offer.");
+  }
+
+  return offer;
+}
+
+export function isPracticePackOffer(
+  offer: CheckoutOffer
+): offer is PracticePackOffer {
+  return "seatCount" in offer;
+}
 
 export function formatOfferPrice(offer: CourseOffer): string {
   return new Intl.NumberFormat("en-US", {
