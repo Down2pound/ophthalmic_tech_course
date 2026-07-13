@@ -105,6 +105,7 @@ describe("createLaunchEvidenceBundle", () => {
       "launch-doctor-report.md",
       "manual-launch-qa-evidence.md",
       "first-sale-support-runbook.md",
+      "bootcamp-content-migration-checklist.md",
       "module-1-clinical-review-packet.md",
       "runtime-readiness-snapshot.json",
     ]);
@@ -179,6 +180,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const supportRunbook = await readFile(
       path.join(result.outputDir, "first-sale-support-runbook.md"),
+      "utf8"
+    );
+    const bootcampContentMigrationChecklist = await readFile(
+      path.join(result.outputDir, "bootcamp-content-migration-checklist.md"),
       "utf8"
     );
 
@@ -264,8 +269,19 @@ describe("createLaunchEvidenceBundle", () => {
     expect(supportRunbook).toContain(
       "Payment Succeeded But Access Is Missing"
     );
+    expect(bootcampContentMigrationChecklist).toContain(
+      "OptiTech Academy Bootcamp Content Migration Checklist"
+    );
+    expect(bootcampContentMigrationChecklist).toContain(
+      "Bootcamp days mapped: 10"
+    );
+    expect(bootcampContentMigrationChecklist).toContain(
+      "NotebookLM source workspace"
+    );
     expect(supportRunbook).not.toContain("sk_test_");
     expect(supportRunbook).not.toContain("whsec_");
+    expect(bootcampContentMigrationChecklist).not.toContain("sk_test_");
+    expect(bootcampContentMigrationChecklist).not.toContain("whsec_");
     expect(readinessSnapshot).toContain("STRIPE_SECRET_KEY");
     expect(readinessSnapshot).not.toContain("sk_test_");
     expect(readinessSnapshot).not.toContain("whsec_");

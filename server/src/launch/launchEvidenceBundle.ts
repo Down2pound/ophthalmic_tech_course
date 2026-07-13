@@ -1,6 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { renderModuleOneClinicalReviewPacketMarkdown } from "../../../shared/course/clinicalReviewPacket";
+import { renderBootcampContentMigrationChecklist } from "./bootcampContentMigrationChecklist";
 import { renderFirstSaleSupportRunbook } from "./firstSaleSupportRunbook";
 import { renderLaunchDoctorReport } from "./launchDoctor";
 import { renderManualQaTemplate } from "./manualQaTemplate";
@@ -53,6 +54,7 @@ function renderReadme({
     "- `launch-doctor-report.md`: human-readable paid launch preflight report.",
     "- `manual-launch-qa-evidence.md`: safe template for Stripe, learner-flow, practice-pack, browser, and accessibility QA notes.",
     "- `first-sale-support-runbook.md`: safe support checklist for buyer, learner, practice-seat, and refund issues.",
+    "- `bootcamp-content-migration-checklist.md`: source-to-course checklist for Drive and NotebookLM Bootcamp assets.",
     "- `module-1-clinical-review-packet.md`: clinical reviewer packet.",
     "- `runtime-readiness-snapshot.json`: safe readiness report with missing variable names, not secret values.",
     "",
@@ -101,6 +103,7 @@ export async function createLaunchEvidenceBundle({
     "launch-doctor-report.md",
     "manual-launch-qa-evidence.md",
     "first-sale-support-runbook.md",
+    "bootcamp-content-migration-checklist.md",
     "module-1-clinical-review-packet.md",
     "runtime-readiness-snapshot.json",
   ];
@@ -235,6 +238,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "first-sale-support-runbook.md"),
     renderFirstSaleSupportRunbook({ generatedAt })
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "bootcamp-content-migration-checklist.md"),
+    renderBootcampContentMigrationChecklist()
   );
   await writeFile(
     path.join(resolvedOutputDir, "module-1-clinical-review-packet.md"),
