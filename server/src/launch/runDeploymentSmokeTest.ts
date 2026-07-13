@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   getDeploymentSmokeExitCode,
+  renderDeploymentSmokeConsoleSummary,
   runDeploymentSmokeTest,
 } from "./deploymentSmokeTest";
 import { renderDeploymentSmokeReport } from "./deploymentSmokeTest";
@@ -15,56 +16,7 @@ async function main() {
   const report = await runDeploymentSmokeTest({ baseUrl, testPracticeInquiry });
   const renderedReport = renderDeploymentSmokeReport(report);
 
-  console.log(`Deployment smoke test for ${report.baseUrl}`);
-  console.log(`- Health: ${report.healthOk ? "ok" : "failed"}`);
-  console.log(
-    `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`
-  );
-  for (const page of report.publicPages) {
-    console.log(
-      `  - ${page.path}: ${page.ok ? "ok" : "failed"} (HTTP ${page.status})`
-    );
-  }
-  console.log(
-    `- Paid launch readiness: ${
-      report.readyForPaidLaunch ? "ready" : "not ready"
-    }`
-  );
-  console.log(
-    `- Practice inquiry capture: ${
-      report.practiceInquiry.tested
-        ? report.practiceInquiry.ok
-          ? "ok"
-          : "failed"
-        : "not tested"
-    }`
-  );
-  if (report.practiceInquiry.inquiryId) {
-    console.log(`  - Inquiry ID: ${report.practiceInquiry.inquiryId}`);
-  }
-  if (allowNotReady && !report.readyForPaidLaunch) {
-    console.log(
-      "- Not-ready launch status allowed for this pre-launch smoke run."
-    );
-  }
-
-  if (report.blockers.length > 0) {
-    console.log(`- Blockers: ${report.blockers.join(", ")}`);
-  }
-
-  if (report.warnings.length > 0) {
-    console.log("- Warnings:");
-    for (const warning of report.warnings) {
-      console.log(`  - ${warning}`);
-    }
-  }
-
-  if (!report.readyForPaidLaunch && report.launchActions.length > 0) {
-    console.log("- Next launch actions:");
-    for (const action of report.launchActions.slice(0, 3)) {
-      console.log(`  - ${action.title}: ${action.action}`);
-    }
-  }
+  console.log(renderDeploymentSmokeConsoleSummary({ report, allowNotReady }));
 
   if (process.env.LAUNCH_SMOKE_REPORT_PATH) {
     const reportPath = path.resolve(process.env.LAUNCH_SMOKE_REPORT_PATH);

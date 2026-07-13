@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   getDeploymentSmokeExitCode,
+  renderDeploymentSmokeConsoleSummary,
   renderDeploymentSmokeReport,
   runDeploymentSmokeTest,
 } from "./deploymentSmokeTest";
@@ -495,6 +496,79 @@ describe("runDeploymentSmokeTest", () => {
     expect(report).toContain("Create and initialize hosted PostgreSQL");
     expect(report).not.toContain("sk_test_");
     expect(report).not.toContain("whsec_123");
+  });
+
+  it("renders a console summary with safety checks", () => {
+    const summary = renderDeploymentSmokeConsoleSummary({
+      allowNotReady: true,
+      report: {
+        baseUrl: "https://academy.spindeleye.com",
+        healthOk: true,
+        publicPagesOk: true,
+        securityHeadersOk: false,
+        securityHeaders: [
+          {
+            header: "X-Content-Type-Options",
+            ok: true,
+            actual: "nosniff",
+            expected: "nosniff",
+          },
+          {
+            header: "X-Frame-Options",
+            ok: false,
+            actual: null,
+            expected: "DENY",
+          },
+        ],
+        robotsTxtOk: false,
+        robotsTxt: {
+          ok: false,
+          status: 200,
+          requiredRules: [
+            { rule: "Allow: /", ok: true },
+            { rule: "Disallow: /api/", ok: false },
+          ],
+        },
+        publicPages: [
+          { path: "/", ok: true, status: 200 },
+          { path: "/checkout", ok: true, status: 200 },
+        ],
+        practiceInquiry: {
+          tested: false,
+          ok: false,
+          skippedReason: "not requested",
+        },
+        readyForPaidLaunch: false,
+        generatedAt: "2026-07-13T12:00:00.000Z",
+        blockers: ["Clinical content review"],
+        warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
+        launchActions: [
+          {
+            id: "production-database",
+            title: "Create and initialize hosted PostgreSQL",
+            status: "app-command",
+            whyItMatters: "Durable records are required.",
+            action: "Run pnpm db:setup.",
+            evidenceNeeded: "Database setup succeeds.",
+          },
+        ],
+      },
+    });
+
+    expect(summary).toContain("Deployment smoke test for");
+    expect(summary).toContain("- Public buyer pages: ok");
+    expect(summary).toContain("- Security headers: failed");
+    expect(summary).toContain(
+      "X-Frame-Options: failed (expected DENY, got missing)"
+    );
+    expect(summary).toContain("- Robots.txt rules: failed (HTTP 200)");
+    expect(summary).toContain("Disallow: /api/: missing");
+    expect(summary).toContain(
+      "- Not-ready launch status allowed for this pre-launch smoke run."
+    );
+    expect(summary).toContain("- Next launch actions:");
+    expect(summary).not.toContain("sk_test_");
+    expect(summary).not.toContain("whsec_123");
   });
 
   it("can allow not-ready launch status for pre-launch deployment checks", () => {

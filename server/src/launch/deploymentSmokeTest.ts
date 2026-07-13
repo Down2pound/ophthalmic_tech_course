@@ -385,3 +385,70 @@ export function renderDeploymentSmokeReport(
     "",
   ].join("\n");
 }
+
+export function renderDeploymentSmokeConsoleSummary({
+  report,
+  allowNotReady = false,
+}: {
+  report: DeploymentSmokeTestReport;
+  allowNotReady?: boolean;
+}): string {
+  const lines = [
+    `Deployment smoke test for ${report.baseUrl}`,
+    `- Health: ${report.healthOk ? "ok" : "failed"}`,
+    `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
+    ...report.publicPages.map(
+      page =>
+        `  - ${page.path}: ${page.ok ? "ok" : "failed"} (HTTP ${page.status})`
+    ),
+    `- Security headers: ${report.securityHeadersOk ? "ok" : "failed"}`,
+    ...report.securityHeaders.map(
+      header =>
+        `  - ${header.header}: ${header.ok ? "ok" : `failed (expected ${header.expected}, got ${header.actual ?? "missing"})`}`
+    ),
+    `- Robots.txt rules: ${report.robotsTxtOk ? "ok" : "failed"} (HTTP ${report.robotsTxt.status})`,
+    ...report.robotsTxt.requiredRules.map(
+      rule => `  - ${rule.rule}: ${rule.ok ? "ok" : "missing"}`
+    ),
+    `- Paid launch readiness: ${
+      report.readyForPaidLaunch ? "ready" : "not ready"
+    }`,
+    `- Practice inquiry capture: ${
+      report.practiceInquiry.tested
+        ? report.practiceInquiry.ok
+          ? "ok"
+          : "failed"
+        : "not tested"
+    }`,
+  ];
+
+  if (report.practiceInquiry.inquiryId) {
+    lines.push(`  - Inquiry ID: ${report.practiceInquiry.inquiryId}`);
+  }
+
+  if (allowNotReady && !report.readyForPaidLaunch) {
+    lines.push(
+      "- Not-ready launch status allowed for this pre-launch smoke run."
+    );
+  }
+
+  if (report.blockers.length > 0) {
+    lines.push(`- Blockers: ${report.blockers.join(", ")}`);
+  }
+
+  if (report.warnings.length > 0) {
+    lines.push("- Warnings:");
+    lines.push(...report.warnings.map(warning => `  - ${warning}`));
+  }
+
+  if (!report.readyForPaidLaunch && report.launchActions.length > 0) {
+    lines.push("- Next launch actions:");
+    lines.push(
+      ...report.launchActions
+        .slice(0, 3)
+        .map(action => `  - ${action.title}: ${action.action}`)
+    );
+  }
+
+  return lines.join("\n");
+}
