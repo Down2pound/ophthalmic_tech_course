@@ -10,10 +10,13 @@ import {
 
 describe("buildStripeCheckoutParams", () => {
   it("uses the canonical founding learner offer", () => {
-    const params = buildStripeCheckoutParams({
-      successUrl: "https://example.com/checkout/success",
-      cancelUrl: "https://example.com/checkout",
-    });
+    const params = buildStripeCheckoutParams(
+      {
+        successUrl: "https://example.com/checkout/success",
+        cancelUrl: "https://example.com/checkout",
+      },
+      "learner@example.com"
+    );
 
     expect(params.get("mode")).toBe("payment");
     expect(params.get("client_reference_id")).toBe(foundingLearnerOffer.id);
@@ -27,12 +30,8 @@ describe("buildStripeCheckoutParams", () => {
     );
   });
 
-  it("adds customer email only when supplied", () => {
-    const withoutEmail = buildStripeCheckoutParams({
-      successUrl: "https://example.com/checkout/success",
-      cancelUrl: "https://example.com/checkout",
-    });
-    const withEmail = buildStripeCheckoutParams(
+  it("adds the required customer email for fulfillment", () => {
+    const params = buildStripeCheckoutParams(
       {
         successUrl: "https://example.com/checkout/success",
         cancelUrl: "https://example.com/checkout",
@@ -40,8 +39,7 @@ describe("buildStripeCheckoutParams", () => {
       "learner@example.com"
     );
 
-    expect(withoutEmail.has("customer_email")).toBe(false);
-    expect(withEmail.get("customer_email")).toBe("learner@example.com");
+    expect(params.get("customer_email")).toBe("learner@example.com");
   });
 
   it("can build checkout params for a practice pack offer", () => {
@@ -51,7 +49,7 @@ describe("buildStripeCheckoutParams", () => {
         successUrl: "https://example.com/checkout/success",
         cancelUrl: "https://example.com/practice-packs",
       },
-      undefined,
+      "manager@example.com",
       practiceOffer.id
     );
 
@@ -73,7 +71,7 @@ describe("buildStripeCheckoutParams", () => {
           successUrl: "https://example.com/checkout/success",
           cancelUrl: "https://example.com/checkout",
         },
-        undefined,
+        "learner@example.com",
         "not-a-real-offer"
       )
     ).toThrow("Unknown checkout offer.");

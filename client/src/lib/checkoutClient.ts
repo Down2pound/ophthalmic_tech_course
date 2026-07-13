@@ -1,3 +1,5 @@
+import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
+
 interface CheckoutResponse {
   url?: string;
   error?: string;
@@ -10,14 +12,22 @@ export async function createCheckoutSession({
   offerId,
   fetcher = fetch,
 }: {
-  email?: string;
+  email: string;
   offerId?: string;
   fetcher?: Fetcher;
 }): Promise<{ url: string }> {
+  const normalizedEmail = normalizeCheckoutEmail(email);
+
+  if (!normalizedEmail) {
+    throw new Error(
+      "Enter a valid email so we can send your receipt and course access."
+    );
+  }
+
   const response = await fetcher("/api/checkout/sessions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, offerId }),
+    body: JSON.stringify({ email: normalizedEmail, offerId }),
   });
 
   const payload = (await response.json()) as CheckoutResponse;

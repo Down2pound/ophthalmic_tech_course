@@ -2,6 +2,7 @@ import {
   getCheckoutOfferById,
   isPracticePackOffer,
 } from "@shared/commerce/offers";
+import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
 import type { Request, Response, Router } from "express";
 import {
   buildStripeCheckoutParams,
@@ -49,6 +50,16 @@ export function setupCheckoutRoutes(router: Router) {
 
     try {
       const { email, offerId } = (req.body ?? {}) as CheckoutRequestBody;
+      const normalizedEmail = normalizeCheckoutEmail(email);
+
+      if (!normalizedEmail) {
+        res.status(400).json({
+          error:
+            "A valid email is required so access and receipts can be delivered after payment.",
+        });
+        return;
+      }
+
       const offer = getCheckoutOfferById(offerId);
       const baseUrl = getCheckoutBaseUrl(req.get("origin"));
       const cancelPath = isPracticePackOffer(offer)
@@ -61,7 +72,7 @@ export function setupCheckoutRoutes(router: Router) {
           )}`,
           cancelUrl: `${baseUrl}${cancelPath}?checkout=cancelled`,
         },
-        email,
+        normalizedEmail,
         offer.id
       );
 

@@ -1,6 +1,22 @@
 import { describe, expect, it } from "vitest";
+import { normalizeCheckoutEmail } from "./checkoutEmail";
 import { foundingLearnerOffer, practicePackOffers } from "./offers";
 import { commercePolicies } from "./policies";
+
+describe("normalizeCheckoutEmail", () => {
+  it("normalizes valid buyer emails for checkout and access records", () => {
+    expect(normalizeCheckoutEmail(" Learner@Example.COM ")).toBe(
+      "learner@example.com"
+    );
+  });
+
+  it("rejects missing or invalid buyer emails", () => {
+    expect(normalizeCheckoutEmail(undefined)).toBeNull();
+    expect(normalizeCheckoutEmail("")).toBeNull();
+    expect(normalizeCheckoutEmail("not-an-email")).toBeNull();
+    expect(normalizeCheckoutEmail("learner@example")).toBeNull();
+  });
+});
 
 describe("foundingLearnerOffer", () => {
   it("uses the approved founding learner price and access period", () => {

@@ -36,7 +36,7 @@ export default function Checkout() {
 
     try {
       const { url } = await createCheckoutSession({
-        email: email.trim() || undefined,
+        email,
       });
 
       window.location.href = url;
@@ -186,6 +186,7 @@ export default function Checkout() {
             </label>
             <input
               type="email"
+              required
               value={email}
               onChange={event => setEmail(event.target.value)}
               placeholder="learner@example.com"

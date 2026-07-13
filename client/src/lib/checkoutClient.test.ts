@@ -11,7 +11,7 @@ describe("createCheckoutSession", () => {
     });
 
     await expect(
-      createCheckoutSession({ email: "learner@example.com", fetcher })
+      createCheckoutSession({ email: " Learner@Example.COM ", fetcher })
     ).resolves.toEqual({
       url: "https://checkout.stripe.com/c/pay/cs_test_123",
     });
@@ -53,8 +53,28 @@ describe("createCheckoutSession", () => {
       json: async () => ({ error: "Checkout unavailable" }),
     });
 
-    await expect(createCheckoutSession({ fetcher })).rejects.toThrow(
-      "Checkout unavailable"
+    await expect(
+      createCheckoutSession({ email: "learner@example.com", fetcher })
+    ).rejects.toThrow("Checkout unavailable");
+  });
+
+  it("requires a valid email before contacting checkout", async () => {
+    const fetcher = vi.fn();
+
+    await expect(
+      createCheckoutSession({ email: "not-an-email", fetcher })
+    ).rejects.toThrow(
+      "Enter a valid email so we can send your receipt and course access."
     );
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
+  it("requires an email before contacting checkout", async () => {
+    const fetcher = vi.fn();
+
+    await expect(createCheckoutSession({ email: "", fetcher })).rejects.toThrow(
+      "Enter a valid email so we can send your receipt and course access."
+    );
+    expect(fetcher).not.toHaveBeenCalled();
   });
 });

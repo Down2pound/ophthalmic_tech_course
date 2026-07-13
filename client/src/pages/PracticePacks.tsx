@@ -25,7 +25,7 @@ export default function PracticePacks() {
 
     try {
       const { url } = await createCheckoutSession({
-        email: emailByOfferId[offerId]?.trim() || undefined,
+        email: emailByOfferId[offerId] ?? "",
         offerId,
       });
 
@@ -137,6 +137,7 @@ export default function PracticePacks() {
                 </label>
                 <input
                   type="email"
+                  required
                   value={emailByOfferId[offer.id] ?? ""}
                   onChange={event =>
                     setEmailByOfferId(current => ({

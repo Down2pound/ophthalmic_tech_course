@@ -10,7 +10,7 @@ export interface StripeCheckoutUrls {
 
 export function buildStripeCheckoutParams(
   urls: StripeCheckoutUrls,
-  customerEmail?: string,
+  customerEmail: string,
   offerId?: string
 ): URLSearchParams {
   const offer = getCheckoutOfferById(offerId);
@@ -38,9 +38,7 @@ export function buildStripeCheckoutParams(
     params.set("metadata[seat_count]", String(offer.seatCount));
   }
 
-  if (customerEmail) {
-    params.set("customer_email", customerEmail);
-  }
+  params.set("customer_email", customerEmail);
 
   return params;
 }
