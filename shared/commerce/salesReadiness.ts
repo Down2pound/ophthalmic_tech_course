@@ -8,6 +8,11 @@ export interface LearnerStartStep {
   description: string;
 }
 
+export interface BuyerConfidenceAnswer {
+  question: string;
+  answer: string;
+}
+
 export const individualLearnerSalesPath: BuyerPathSection[] = [
   {
     title: "Best fit",
@@ -82,6 +87,34 @@ export const individualLearnerStartSteps: LearnerStartStep[] = [
     title: "Keep hands-on skills supervised",
     description:
       "Use Skills Passport language with a supervisor, trainer, or future employer for observed practice.",
+  },
+];
+
+export const buyerConfidenceAnswers: BuyerConfidenceAnswer[] = [
+  {
+    question: "Is this a certification course?",
+    answer:
+      "No. OptiTech Academy is foundational education. It can help a learner understand ophthalmic vocabulary, clinic flow, and supervised practice expectations, but it does not replace certification, employer training, or hands-on competency signoff.",
+  },
+  {
+    question: "Who is this best for?",
+    answer:
+      "It is best for career changers, medical assistants moving toward eye care, new ophthalmic technicians, and practices that want a consistent first layer of onboarding before local hands-on training.",
+  },
+  {
+    question: "What happens after payment?",
+    answer:
+      "Stripe confirms the purchase, the app creates access for the buyer email, and the learner signs in with that same email to start the published course content.",
+  },
+  {
+    question: "How do practice packs work?",
+    answer:
+      "A practice buys a seat pack, then assigns individual learner emails through the protected practice-seat tool. Supervisors still handle local protocols, observation, and job-specific signoff.",
+  },
+  {
+    question: "Why buy while it is still a founding course?",
+    answer:
+      "Founding access gives early learners and practices the published foundations now, plus future modules released during the access period. Early feedback helps shape what gets improved next.",
   },
 ];
 

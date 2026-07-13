@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  buyerConfidenceAnswers,
   getSalesPathItemCount,
   individualLearnerSalesPath,
   individualLearnerStartSteps,
@@ -62,5 +63,22 @@ describe("sales readiness copy", () => {
     expect(combined).toMatch(/same email/i);
     expect(combined).toMatch(/supervisor/i);
     expect(combined).not.toMatch(/guarantee/i);
+  });
+
+  it("answers common buyer objections without overpromising", () => {
+    expect(buyerConfidenceAnswers).toHaveLength(5);
+
+    const combined = buyerConfidenceAnswers
+      .map(answer => `${answer.question} ${answer.answer}`)
+      .join(" ");
+
+    expect(combined).toMatch(/certification course/i);
+    expect(combined).toMatch(/career changers/i);
+    expect(combined).toMatch(/same email/i);
+    expect(combined).toMatch(/practice-seat tool/i);
+    expect(combined).toMatch(/future modules/i);
+    expect(combined).not.toMatch(/guarantee/i);
+    expect(combined).not.toMatch(/certified technician/i);
+    expect(combined).not.toMatch(/proves competency/i);
   });
 });

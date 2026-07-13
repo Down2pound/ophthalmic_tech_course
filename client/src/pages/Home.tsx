@@ -16,6 +16,7 @@ import {
   foundingLearnerOffer,
   practicePackOffers,
 } from "@shared/commerce/offers";
+import { buyerConfidenceAnswers } from "@shared/commerce/salesReadiness";
 
 export default function Home() {
   const curriculumDays = curriculumModules.map(module => ({
@@ -382,6 +383,36 @@ export default function Home() {
                 </h3>
                 <p className="text-gray-300">{item.desc}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Buyer Confidence Section */}
+      <section className="relative z-10 py-20 px-4">
+        <div className="container">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Questions Buyers Ask First
+              </span>
+            </h2>
+            <p className="text-gray-300 text-lg">
+              Clear answers for learners, managers, and supervisors before
+              checkout.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {buyerConfidenceAnswers.map(answer => (
+              <Card key={answer.question} className="glass-card p-6">
+                <h3 className="text-xl font-semibold text-white">
+                  {answer.question}
+                </h3>
+                <p className="mt-3 leading-7 text-gray-300">
+                  {answer.answer}
+                </p>
+              </Card>
             ))}
           </div>
         </div>
