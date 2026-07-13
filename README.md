@@ -321,9 +321,11 @@ To save a Markdown smoke-test report with your launch records:
 LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_SMOKE_REPORT_PATH=launch-evidence/deployment-smoke-report.md pnpm launch:smoke
 ```
 
-The smoke test checks `/api/health` and `/api/launch/readiness`. It exits with
-an error until the live app reports that paid launch readiness is complete.
-When it fails, it prints the first launch actions to handle next.
+The smoke test checks `/api/health`, `/api/launch/readiness`, and the public
+buyer pages for home, checkout, practice packs, policies, curriculum, and
+onboarding. It exits with an error until the live app reports that paid launch
+readiness is complete and those public pages respond successfully. When it
+fails, it prints the first launch actions to handle next.
 
 Run the launch doctor before and after production setup:
 

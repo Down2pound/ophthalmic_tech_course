@@ -4,6 +4,8 @@ import type { LaunchActionItem } from "../../../shared/launch/launchActionPlan";
 export interface DeploymentSmokeTestReport {
   baseUrl: string;
   healthOk: boolean;
+  publicPagesOk: boolean;
+  publicPages: DeploymentSmokePublicPageResult[];
   readyForPaidLaunch: boolean;
   generatedAt: string;
   blockers: string[];
@@ -17,9 +19,24 @@ export interface DeploymentSmokeTestInput {
   now?: () => string;
 }
 
+export interface DeploymentSmokePublicPageResult {
+  path: string;
+  ok: boolean;
+  status: number;
+}
+
 interface HealthResponse {
   ok?: boolean;
 }
+
+export const deploymentSmokePublicPaths = [
+  "/",
+  "/checkout",
+  "/practice-packs",
+  "/policies",
+  "/curriculum",
+  "/onboarding",
+] as const;
 
 function trimBaseUrl(baseUrl: string): string {
   return baseUrl.trim().replace(/\/+$/, "");
@@ -41,6 +58,24 @@ async function fetchJson<T>({
   return (await response.json()) as T;
 }
 
+async function fetchPublicPage({
+  fetcher,
+  baseUrl,
+  path,
+}: {
+  fetcher: typeof fetch;
+  baseUrl: string;
+  path: string;
+}): Promise<DeploymentSmokePublicPageResult> {
+  const response = await fetcher(`${baseUrl}${path}`);
+
+  return {
+    path,
+    ok: response.ok,
+    status: response.status,
+  };
+}
+
 export async function runDeploymentSmokeTest({
   baseUrl,
   fetcher = fetch,
@@ -60,10 +95,17 @@ export async function runDeploymentSmokeTest({
     fetcher,
     url: `${normalizedBaseUrl}/api/launch/readiness`,
   });
+  const publicPages = await Promise.all(
+    deploymentSmokePublicPaths.map(path =>
+      fetchPublicPage({ fetcher, baseUrl: normalizedBaseUrl, path })
+    )
+  );
 
   return {
     baseUrl: normalizedBaseUrl,
     healthOk: health.ok === true,
+    publicPagesOk: publicPages.every(page => page.ok),
+    publicPages,
     readyForPaidLaunch: readiness.readyForPaidLaunch,
     generatedAt: now(),
     blockers: readiness.staticSummary.blockers,
@@ -90,7 +132,15 @@ export function renderDeploymentSmokeReport(
     "## Result",
     "",
     `- Health endpoint: ${report.healthOk ? "ok" : "failed"}`,
+    `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
     `- Paid launch readiness: ${report.readyForPaidLaunch ? "ready" : "not ready"}`,
+    "",
+    "## Public Page Checks",
+    "",
+    ...report.publicPages.map(
+      page =>
+        `- ${page.path}: ${page.ok ? "ok" : "failed"} (HTTP ${page.status})`
+    ),
     "",
     "## Blockers",
     "",

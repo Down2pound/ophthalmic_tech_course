@@ -36,6 +36,10 @@ Run this after the app is online:
 LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
 
+The smoke test checks the health endpoint, launch readiness endpoint, and the
+public buyer pages for home, checkout, practice packs, policies, curriculum, and
+onboarding.
+
 Generate the production sitemap after `PUBLIC_APP_URL` is set to the real
 deployed `https` domain:
 

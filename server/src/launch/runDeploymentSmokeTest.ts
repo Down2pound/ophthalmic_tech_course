@@ -12,6 +12,14 @@ async function main() {
   console.log(`Deployment smoke test for ${report.baseUrl}`);
   console.log(`- Health: ${report.healthOk ? "ok" : "failed"}`);
   console.log(
+    `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`
+  );
+  for (const page of report.publicPages) {
+    console.log(
+      `  - ${page.path}: ${page.ok ? "ok" : "failed"} (HTTP ${page.status})`
+    );
+  }
+  console.log(
     `- Paid launch readiness: ${
       report.readyForPaidLaunch ? "ready" : "not ready"
     }`
@@ -42,7 +50,7 @@ async function main() {
     console.log(`- Report written: ${reportPath}`);
   }
 
-  if (!report.healthOk || !report.readyForPaidLaunch) {
+  if (!report.healthOk || !report.publicPagesOk || !report.readyForPaidLaunch) {
     process.exitCode = 1;
   }
 }
