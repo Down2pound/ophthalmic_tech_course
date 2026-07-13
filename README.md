@@ -116,6 +116,16 @@ Stripe key guide:
   must use the expected `sk_` and `whsec_` prefixes, and private session/admin
   secrets must be at least 32 characters long.
 
+Generate strong local values for the private session/admin secrets with:
+
+```bash
+pnpm launch:secrets
+```
+
+Paste the generated `AUTH_SESSION_SECRET` and `PRACTICE_SEAT_ADMIN_TOKEN` into
+the production host dashboard. Do not commit them, save them in Google Drive, or
+send them in chat.
+
 Checkout routes:
 
 - Frontend page: `/checkout`
@@ -282,6 +292,7 @@ GitHub Actions runs launch CI on pushes and pull requests:
 - `pnpm check`
 - `pnpm test`
 - `pnpm build`
+- `pnpm launch:secrets`
 - `pnpm launch:doctor`
 - `pnpm launch:bundle`
 - `docker build`

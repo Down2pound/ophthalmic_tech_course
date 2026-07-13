@@ -42,6 +42,9 @@ jobs:
       - name: Build production app
         run: pnpm build
 
+      - name: Verify launch secret generator
+        run: pnpm launch:secrets
+
       - name: Print launch doctor report
         run: pnpm launch:doctor
 
