@@ -90,6 +90,7 @@ describe("createLaunchEvidenceBundle", () => {
       "README.md",
       "production-launch-package.md",
       "deployment-guide.md",
+      "domain-and-sharing-guide.md",
       "stripe-setup-guide.md",
       "email-setup-guide.md",
       "database-setup-guide.md",
@@ -117,6 +118,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const deploymentGuide = await readFile(
       path.join(result.outputDir, "deployment-guide.md"),
+      "utf8"
+    );
+    const domainAndSharingGuide = await readFile(
+      path.join(result.outputDir, "domain-and-sharing-guide.md"),
       "utf8"
     );
     const stripeSetupGuide = await readFile(
@@ -159,6 +164,11 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(deploymentGuide).toContain("OptiTech Academy Deployment Guide");
     expect(deploymentGuide).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(domainAndSharingGuide).toContain(
+      "OptiTech Academy Domain And Sharing Guide"
+    );
+    expect(domainAndSharingGuide).toContain("PUBLIC_APP_URL");
+    expect(domainAndSharingGuide).toContain("pnpm launch:sitemap");
     expect(stripeSetupGuide).toContain("OptiTech Academy Stripe Setup Guide");
     expect(stripeSetupGuide).toContain("checkout.session.completed");
     expect(emailSetupGuide).toContain("OptiTech Academy Email Setup Guide");
