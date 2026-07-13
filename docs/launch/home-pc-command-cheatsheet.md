@@ -8,6 +8,8 @@ each step matters.
 
 ## 1. Get The Latest Code
 
+If the latest work was pushed to GitHub, use:
+
 ```bash
 git clone https://github.com/Down2pound/ophthalmic_tech_course.git
 cd ophthalmic_tech_course
@@ -18,6 +20,17 @@ If the repo is already on the home PC:
 ```bash
 git pull
 ```
+
+If the latest work is only saved as a Google Drive source-code ZIP, download the
+ZIP, extract it to a simple folder like this, then open PowerShell in that
+folder:
+
+```text
+C:\dev\ophthalmic_tech_course
+```
+
+Beginner translation: GitHub is best once everything has been pushed. The Drive
+ZIP is the backup copy you can use right away from home.
 
 ## 2. Install The App Helpers
 

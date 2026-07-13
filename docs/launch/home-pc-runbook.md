@@ -13,11 +13,17 @@ so you can finish the checks there.
 You need one of these:
 
 - The GitHub repo URL.
-- Or a zip copy of the project folder.
+- Or the Google Drive source-code ZIP backup.
+- Or another zip copy of the project folder.
 - Or a Google Drive copy of the generated launch evidence folder.
 
 Do not bring home `.env` files, live Stripe secret keys, email API keys,
 database passwords, session cookies, raw sign-in links, or private learner data.
+
+Important: if the newest work has not been pushed to GitHub yet, the Google
+Drive source-code ZIP is the safest way to continue from home. Think of GitHub
+as the shared bookshelf and the Drive ZIP as the backpack copy you can carry
+home today.
 
 ## Install The Basics
 
@@ -43,6 +49,21 @@ If you already have the repo, update it:
 ```bash
 git pull
 ```
+
+If you are using the Google Drive source-code ZIP instead:
+
+1. Download the ZIP from Google Drive.
+2. Extract it to a simple folder, such as:
+
+```text
+C:\dev\ophthalmic_tech_course
+```
+
+3. Open PowerShell in that extracted folder.
+4. Continue with `pnpm install`.
+
+Do not extract the project inside Downloads if Windows security keeps blocking
+commands. A simple folder like `C:\dev` is usually easier.
 
 ## Install Project Packages
 
