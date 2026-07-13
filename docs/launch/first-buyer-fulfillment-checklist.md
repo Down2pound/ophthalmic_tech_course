@@ -116,6 +116,7 @@ Save safe evidence only:
 - Buyer lookup summary.
 - Whether sign-in email worked.
 - Whether support follow-up was needed.
+- Any access revocation target used after refund or support correction.
 - Any non-private feedback about what confused the buyer.
 
 Do not save card details, patient information, raw sign-in links, session
@@ -132,3 +133,6 @@ Use `first-sale-support-runbook.md` if:
 - Multiple buyers report the same issue.
 
 Pause broader sales outreach until the issue is understood and documented.
+If a refund or mistaken assignment requires removing app access, confirm the
+exact target with the protected buyer lookup endpoint first, then use the
+protected access revocation endpoint with one target only.

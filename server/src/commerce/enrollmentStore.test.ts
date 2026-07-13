@@ -99,4 +99,22 @@ describe("createInMemoryEnrollmentStore", () => {
     expect(store.provisionEnrollment(secondEnrollment).created).toBe(true);
     expect(await store.listEnrollments()).toHaveLength(2);
   });
+
+  it("expires one enrollment for refund or support revocation", async () => {
+    const store = createInMemoryEnrollmentStore();
+    const enrollment = createEnrollmentFromPurchase(purchase);
+
+    store.provisionEnrollment(enrollment);
+
+    expect(store.expireEnrollment(enrollment.enrollmentId)).toMatchObject({
+      expired: true,
+      enrollment: {
+        enrollmentId: "enrollment_cs_test_123",
+        status: "expired",
+      },
+    });
+    expect(store.expireEnrollment("enrollment_missing")).toEqual({
+      expired: false,
+    });
+  });
 });

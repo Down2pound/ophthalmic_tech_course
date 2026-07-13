@@ -16,6 +16,10 @@ import {
   createInMemoryAuthSessionStore,
   type AuthSessionStore,
 } from "../auth/sessionStore";
+import {
+  revokeAccess,
+  type AccessRevocationTarget,
+} from "../commerce/accessRevocation";
 import { lookupBuyerSupportProfile } from "../commerce/buyerSupportLookup";
 import { assignPracticeSeatToLearner } from "../commerce/practiceSeatAssignment";
 import { getCheckoutBaseUrl } from "../commerce/stripeCheckout";
@@ -38,9 +42,43 @@ interface PracticeSeatAssignmentRequestBody {
   learnerEmail?: string;
 }
 
+interface AccessRevocationRequestBody {
+  targetType?: string;
+  enrollmentId?: string;
+  assignmentId?: string;
+  seatPackId?: string;
+}
+
 type PracticeSeatAdminAuthorization =
   | { authorized: true }
   | { authorized: false; status: number; payload: Record<string, unknown> };
+
+function getAccessRevocationTarget(
+  body: AccessRevocationRequestBody
+): AccessRevocationTarget | null {
+  if (body.targetType === "enrollment" && body.enrollmentId) {
+    return { type: "enrollment", enrollmentId: body.enrollmentId };
+  }
+
+  if (
+    body.targetType === "practice-seat-assignment" &&
+    body.assignmentId
+  ) {
+    return {
+      type: "practice-seat-assignment",
+      assignmentId: body.assignmentId,
+    };
+  }
+
+  if (body.targetType === "practice-seat-pack" && body.seatPackId) {
+    return {
+      type: "practice-seat-pack",
+      seatPackId: body.seatPackId,
+    };
+  }
+
+  return null;
+}
 
 function createAuthStores(): {
   magicLinkStore: MagicLinkStore;
@@ -278,4 +316,38 @@ export function setupAuthRoutes(router: Router) {
       res.status(400).json({ error: message });
     }
   });
+
+  router.post(
+    "/support/access-revocations",
+    async (req: Request, res: Response) => {
+      const authorization = authorizePracticeSeatAdminRequest(req);
+
+      if (!authorization.authorized) {
+        res.status(authorization.status).json(authorization.payload);
+        return;
+      }
+
+      const target = getAccessRevocationTarget(
+        (req.body ?? {}) as AccessRevocationRequestBody
+      );
+
+      if (!target) {
+        res.status(400).json({
+          error:
+            "Choose one revocation target: enrollment, practice-seat-assignment, or practice-seat-pack.",
+        });
+        return;
+      }
+
+      const result = await revokeAccess({
+        target,
+        stores: {
+          enrollmentStore: getEnrollmentStore(),
+          practiceSeatPackStore: getPracticeSeatPackStore(),
+        },
+      });
+
+      res.status(result.revoked ? 200 : 404).json(result);
+    }
+  );
 }

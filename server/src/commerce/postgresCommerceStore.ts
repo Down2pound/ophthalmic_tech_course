@@ -233,6 +233,24 @@ export function createPostgresEnrollmentStore(db: Queryable): EnrollmentStore {
 
       return result.rows.map(mapEnrollment);
     },
+    async expireEnrollment(enrollmentId) {
+      const result = await db.query<EnrollmentRow>(
+        `
+        UPDATE commerce_enrollments
+        SET status = 'expired', access_expires_at = NOW(), updated_at = NOW()
+        WHERE id = $1
+        RETURNING *
+        `,
+        [enrollmentId]
+      );
+      const enrollment = result.rows[0];
+
+      if (!enrollment) {
+        return { expired: false };
+      }
+
+      return { expired: true, enrollment: mapEnrollment(enrollment) };
+    },
   };
 }
 
@@ -290,6 +308,24 @@ export function createPostgresPracticeSeatPackStore(
       );
 
       return result.rows.map(mapSeatPack);
+    },
+    async expirePracticeSeatPack(seatPackId) {
+      const result = await db.query<SeatPackRow>(
+        `
+        UPDATE commerce_practice_seat_packs
+        SET status = 'expired', access_expires_at = NOW(), updated_at = NOW()
+        WHERE id = $1
+        RETURNING *
+        `,
+        [seatPackId]
+      );
+      const seatPack = result.rows[0];
+
+      if (!seatPack) {
+        return { expired: false };
+      }
+
+      return { expired: true, seatPack: mapSeatPack(seatPack) };
     },
     async assignPracticeSeat({
       seatPackId,
@@ -408,6 +444,78 @@ export function createPostgresPracticeSeatPackStore(
       );
 
       return result.rows.map(mapSeatAssignment);
+    },
+    async revokePracticeSeatAssignment(assignmentId) {
+      const client = await db.connect();
+
+      try {
+        await client.query("BEGIN");
+        const assignmentResult = await client.query<SeatAssignmentRow>(
+          `
+          SELECT a.*, p.checkout_session_id, p.offer_id, p.access_started_at, p.access_expires_at
+          FROM commerce_practice_seat_assignments a
+          JOIN commerce_practice_seat_packs p ON p.id = a.seat_pack_id
+          WHERE a.id = $1
+          FOR UPDATE
+          `,
+          [assignmentId]
+        );
+        const assignment = assignmentResult.rows[0];
+
+        if (!assignment) {
+          await client.query("ROLLBACK");
+          return { revoked: false };
+        }
+
+        const updatedAssignment = await client.query<SeatAssignmentRow>(
+          `
+          UPDATE commerce_practice_seat_assignments
+          SET status = 'revoked', updated_at = NOW()
+          WHERE id = $1
+          RETURNING id, seat_pack_id, learner_email, status, assigned_at,
+            $2::text AS checkout_session_id,
+            $3::text AS offer_id,
+            $4::timestamptz AS access_started_at,
+            NOW() AS access_expires_at
+          `,
+          [
+            assignmentId,
+            assignment.checkout_session_id,
+            assignment.offer_id,
+            assignment.access_started_at,
+          ]
+        );
+        const updatedSeatPack = await client.query<SeatPackRow>(
+          `
+          UPDATE commerce_practice_seat_packs
+          SET assigned_seats = GREATEST(assigned_seats - 1, 0), updated_at = NOW()
+          WHERE id = $1 AND $2 <> 'revoked'
+          RETURNING *
+          `,
+          [assignment.seat_pack_id, assignment.status]
+        );
+        const seatPack =
+          updatedSeatPack.rows[0] ??
+          (
+            await client.query<SeatPackRow>(
+              "SELECT * FROM commerce_practice_seat_packs WHERE id = $1",
+              [assignment.seat_pack_id]
+            )
+          ).rows[0];
+
+        await client.query("COMMIT");
+
+        return {
+          revoked: true,
+          assignment: mapSeatAssignment(updatedAssignment.rows[0]),
+          seatPack: seatPack ? mapSeatPack(seatPack) : undefined,
+        };
+      } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+      } finally {
+        client.release();
+      }
     },
   };
 }

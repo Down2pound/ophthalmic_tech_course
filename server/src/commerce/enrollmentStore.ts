@@ -26,6 +26,9 @@ export interface EnrollmentStore {
       }>;
   listEnrollments(): StoreResult<EnrollmentRecord[]>;
   findEnrollmentsByEmail(email: string): StoreResult<EnrollmentRecord[]>;
+  expireEnrollment(
+    enrollmentId: string
+  ): StoreResult<{ expired: boolean; enrollment?: EnrollmentRecord }>;
 }
 
 function addMonths(date: Date, months: number): Date {
@@ -89,6 +92,18 @@ export function createInMemoryEnrollmentStore(): EnrollmentStore {
       return Array.from(enrollmentsById.values()).filter(
         enrollment => enrollment.learnerEmail === normalizedEmail
       );
+    },
+    expireEnrollment(enrollmentId) {
+      const enrollment = enrollmentsById.get(enrollmentId);
+
+      if (!enrollment) {
+        return { expired: false };
+      }
+
+      enrollment.status = "expired";
+      enrollment.accessExpiresAt = new Date().toISOString();
+
+      return { expired: true, enrollment };
     },
   };
 }

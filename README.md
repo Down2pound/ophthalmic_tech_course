@@ -168,6 +168,8 @@ Checkout routes:
 - Protected practice seat pack list endpoint: `GET /api/practice-seat-packs`
 - Protected buyer support lookup endpoint:
   `GET /api/support/buyer-lookup?email=buyer@example.com`
+- Protected access revocation endpoint for refunds or support corrections:
+  `POST /api/support/access-revocations`
 - Health check endpoint: `GET /api/health`
 - Runtime launch check: `GET /api/launch/readiness`
 - Clinical review packet export:

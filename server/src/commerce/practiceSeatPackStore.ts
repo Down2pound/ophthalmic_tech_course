@@ -59,10 +59,18 @@ export interface PracticeSeatPackStore {
   findPracticeSeatPacksByPurchaserEmail(
     email: string
   ): StoreResult<PracticeSeatPackRecord[]>;
+  expirePracticeSeatPack(
+    seatPackId: string
+  ): StoreResult<{ expired: boolean; seatPack?: PracticeSeatPackRecord }>;
   assignPracticeSeat(
     input: PracticeSeatAssignmentInput
   ): StoreResult<PracticeSeatAssignmentResult>;
   listPracticeSeatAssignments(): StoreResult<PracticeSeatAssignmentRecord[]>;
+  revokePracticeSeatAssignment(assignmentId: string): StoreResult<{
+    revoked: boolean;
+    assignment?: PracticeSeatAssignmentRecord;
+    seatPack?: PracticeSeatPackRecord;
+  }>;
 }
 
 function addMonths(date: Date, months: number): Date {
@@ -129,6 +137,18 @@ export function createInMemoryPracticeSeatPackStore(): PracticeSeatPackStore {
         seatPack => seatPack.purchaserEmail === normalizedEmail
       );
     },
+    expirePracticeSeatPack(seatPackId) {
+      const seatPack = seatPacksById.get(seatPackId);
+
+      if (!seatPack) {
+        return { expired: false };
+      }
+
+      seatPack.status = "expired";
+      seatPack.accessExpiresAt = new Date().toISOString();
+
+      return { expired: true, seatPack };
+    },
     assignPracticeSeat({
       seatPackId,
       learnerEmail,
@@ -187,6 +207,26 @@ export function createInMemoryPracticeSeatPackStore(): PracticeSeatPackStore {
     },
     listPracticeSeatAssignments() {
       return Array.from(assignmentsById.values());
+    },
+    revokePracticeSeatAssignment(assignmentId) {
+      const assignment = assignmentsById.get(assignmentId);
+
+      if (!assignment) {
+        return { revoked: false };
+      }
+
+      const seatPack = seatPacksById.get(assignment.seatPackId);
+
+      if (assignment.status !== "revoked") {
+        assignment.status = "revoked";
+        assignment.accessExpiresAt = new Date().toISOString();
+
+        if (seatPack) {
+          seatPack.assignedSeats = Math.max(seatPack.assignedSeats - 1, 0);
+        }
+      }
+
+      return { revoked: true, assignment, seatPack };
     },
   };
 }

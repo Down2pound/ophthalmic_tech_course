@@ -132,4 +132,64 @@ describe("createInMemoryPracticeSeatPackStore", () => {
       reason: "Practice seat pack was not found.",
     });
   });
+
+  it("expires practice seat packs for refund or cancellation", async () => {
+    const store = createInMemoryPracticeSeatPackStore();
+    const seatPack = createPracticeSeatPackFromPurchase(practicePurchase);
+
+    expect(seatPack).not.toBeNull();
+    store.provisionPracticeSeatPack(seatPack!);
+
+    expect(store.expirePracticeSeatPack(seatPack!.seatPackId)).toMatchObject({
+      expired: true,
+      seatPack: {
+        seatPackId: "seatpack_cs_test_practice",
+        status: "expired",
+      },
+    });
+    expect(store.expirePracticeSeatPack("seatpack_missing")).toEqual({
+      expired: false,
+    });
+  });
+
+  it("revokes assigned practice seats and frees capacity", async () => {
+    const store = createInMemoryPracticeSeatPackStore();
+    const seatPack = createPracticeSeatPackFromPurchase({
+      ...practicePurchase,
+      seatCount: 1,
+    });
+
+    expect(seatPack).not.toBeNull();
+    store.provisionPracticeSeatPack(seatPack!);
+    const assignmentResult = await store.assignPracticeSeat({
+      seatPackId: seatPack!.seatPackId,
+      learnerEmail: "tech@example.com",
+    });
+
+    if (!assignmentResult.assigned) throw new Error(assignmentResult.reason);
+
+    expect(
+      store.revokePracticeSeatAssignment(assignmentResult.assignment.assignmentId)
+    ).toMatchObject({
+      revoked: true,
+      assignment: {
+        assignmentId: assignmentResult.assignment.assignmentId,
+        status: "revoked",
+      },
+      seatPack: {
+        assignedSeats: 0,
+      },
+    });
+    expect(
+      await store.assignPracticeSeat({
+        seatPackId: seatPack!.seatPackId,
+        learnerEmail: "second@example.com",
+      })
+    ).toMatchObject({
+      assigned: true,
+      assignment: {
+        learnerEmail: "second@example.com",
+      },
+    });
+  });
 });
