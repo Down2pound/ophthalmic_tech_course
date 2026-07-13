@@ -4,9 +4,40 @@ import {
   practicePackOffers,
 } from "../../../shared/commerce/offers";
 import {
+  buildCheckoutReturnUrls,
   buildStripeCheckoutParams,
   getCheckoutBaseUrl,
 } from "./stripeCheckout";
+
+describe("buildCheckoutReturnUrls", () => {
+  it("sends individual learners to the lesson area after payment", () => {
+    expect(
+      buildCheckoutReturnUrls({
+        baseUrl: "https://example.com/",
+        offer: foundingLearnerOffer,
+      })
+    ).toEqual({
+      successUrl:
+        "https://example.com/learn?checkout=success&offer=founding-learner",
+      cancelUrl:
+        "https://example.com/checkout?checkout=cancelled&offer=founding-learner",
+    });
+  });
+
+  it("sends practice buyers back to seat-pack setup context", () => {
+    expect(
+      buildCheckoutReturnUrls({
+        baseUrl: "https://example.com/",
+        offer: practicePackOffers[0],
+      })
+    ).toEqual({
+      successUrl:
+        "https://example.com/practice-packs?checkout=success&offer=practice-five-seat-pack",
+      cancelUrl:
+        "https://example.com/practice-packs?checkout=cancelled&offer=practice-five-seat-pack",
+    });
+  });
+});
 
 describe("buildStripeCheckoutParams", () => {
   it("uses the canonical founding learner offer", () => {

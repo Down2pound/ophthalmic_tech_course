@@ -1,10 +1,8 @@
-import {
-  getCheckoutOfferById,
-  isPracticePackOffer,
-} from "@shared/commerce/offers";
+import { getCheckoutOfferById } from "@shared/commerce/offers";
 import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
 import type { Request, Response, Router } from "express";
 import {
+  buildCheckoutReturnUrls,
   buildStripeCheckoutParams,
   getCheckoutBaseUrl,
 } from "../commerce/stripeCheckout";
@@ -62,16 +60,9 @@ export function setupCheckoutRoutes(router: Router) {
 
       const offer = getCheckoutOfferById(offerId);
       const baseUrl = getCheckoutBaseUrl(req.get("origin"));
-      const isPracticePurchase = isPracticePackOffer(offer);
-      const successPath = isPracticePurchase ? "/practice-packs" : "/learn";
-      const cancelPath = isPracticePurchase ? "/practice-packs" : "/checkout";
+      const checkoutReturnUrls = buildCheckoutReturnUrls({ baseUrl, offer });
       const params = buildStripeCheckoutParams(
-        {
-          successUrl: `${baseUrl}${successPath}?checkout=success&offer=${encodeURIComponent(
-            offer.id
-          )}`,
-          cancelUrl: `${baseUrl}${cancelPath}?checkout=cancelled`,
-        },
+        checkoutReturnUrls,
         normalizedEmail,
         offer.id
       );

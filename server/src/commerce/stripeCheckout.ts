@@ -1,4 +1,5 @@
 import {
+  type CheckoutOffer,
   getCheckoutOfferById,
   isPracticePackOffer,
 } from "../../../shared/commerce/offers";
@@ -6,6 +7,28 @@ import {
 export interface StripeCheckoutUrls {
   successUrl: string;
   cancelUrl: string;
+}
+
+export function buildCheckoutReturnUrls({
+  baseUrl,
+  offer,
+}: {
+  baseUrl: string;
+  offer: CheckoutOffer;
+}): StripeCheckoutUrls {
+  const normalizedBaseUrl = baseUrl.replace(/\/$/, "");
+  const isPracticePurchase = isPracticePackOffer(offer);
+  const successPath = isPracticePurchase ? "/practice-packs" : "/learn";
+  const cancelPath = isPracticePurchase ? "/practice-packs" : "/checkout";
+
+  return {
+    successUrl: `${normalizedBaseUrl}${successPath}?checkout=success&offer=${encodeURIComponent(
+      offer.id
+    )}`,
+    cancelUrl: `${normalizedBaseUrl}${cancelPath}?checkout=cancelled&offer=${encodeURIComponent(
+      offer.id
+    )}`,
+  };
 }
 
 export function buildStripeCheckoutParams(
