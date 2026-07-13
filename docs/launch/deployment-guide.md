@@ -76,6 +76,7 @@ TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails
 TRANSACTIONAL_EMAIL_API_KEY=
 SIGN_IN_FROM_EMAIL=
 PRACTICE_SEAT_ADMIN_TOKEN=
+ALERT_ADMIN_TOKEN=
 MODULE_ONE_CLINICAL_REVIEWER_NAME=
 MODULE_ONE_CLINICAL_REVIEWER_ROLE=
 MODULE_ONE_CLINICAL_REVIEW_DATE=
@@ -88,6 +89,10 @@ Generate strong values for the private session and admin secrets locally:
 ```bash
 pnpm launch:secrets
 ```
+
+Use a separate strong value for `ALERT_ADMIN_TOKEN` if the alert-button admin
+tool is deployed with the public app. Without that value, the alert admin API
+stays locked.
 
 Keep `ENABLE_PAID_ENROLLMENT=false` while setting everything up. That is the
 safety switch. It prevents the app from accepting payment too early.

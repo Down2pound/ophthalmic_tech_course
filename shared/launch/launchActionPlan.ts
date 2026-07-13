@@ -39,7 +39,7 @@ export const launchActionPlan: LaunchActionItem[] = [
     whyItMatters:
       "Stripe, email sign-in, practice seats, and the database all fail closed until required environment variables exist.",
     action:
-      "Set STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PUBLIC_APP_URL, AUTH_SESSION_SECRET, TRANSACTIONAL_EMAIL_API_URL, TRANSACTIONAL_EMAIL_API_KEY, SIGN_IN_FROM_EMAIL, PRACTICE_SEAT_ADMIN_TOKEN, DATABASE_URL, the MODULE_ONE_CLINICAL_* signoff values, and ENABLE_PAID_ENROLLMENT in the host dashboard. Keep ENABLE_PAID_ENROLLMENT=false until every launch gate passes.",
+      "Set STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PUBLIC_APP_URL, AUTH_SESSION_SECRET, TRANSACTIONAL_EMAIL_API_URL, TRANSACTIONAL_EMAIL_API_KEY, SIGN_IN_FROM_EMAIL, PRACTICE_SEAT_ADMIN_TOKEN, ALERT_ADMIN_TOKEN, DATABASE_URL, the MODULE_ONE_CLINICAL_* signoff values, and ENABLE_PAID_ENROLLMENT in the host dashboard. Keep ENABLE_PAID_ENROLLMENT=false until every launch gate passes.",
     evidenceNeeded:
       "GET /api/launch/readiness reports no missing environment variables.",
   },

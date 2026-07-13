@@ -13,6 +13,7 @@ describe("renderProductionEnvChecklist", () => {
     expect(checklist).toContain("`STRIPE_SECRET_KEY`");
     expect(checklist).toContain("`DATABASE_URL`");
     expect(checklist).toContain("`ENABLE_PAID_ENROLLMENT`");
+    expect(checklist).toContain("`ALERT_ADMIN_TOKEN`");
     expect(checklist).toContain("`VITE_ANALYTICS_ENDPOINT`");
     expect(checklist).toContain("`LAUNCH_SITEMAP_PATH`");
     expect(checklist).toContain("Resend keys should start with re_");

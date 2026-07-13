@@ -40,6 +40,8 @@ services:
         sync: false
       - key: PRACTICE_SEAT_ADMIN_TOKEN
         generateValue: true
+      - key: ALERT_ADMIN_TOKEN
+        generateValue: true
       - key: MODULE_ONE_CLINICAL_REVIEWER_NAME
         sync: false
       - key: MODULE_ONE_CLINICAL_REVIEWER_ROLE

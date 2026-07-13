@@ -187,6 +187,7 @@ export function isUnsafeLaunchEnvironmentValue(
       return !isHttpsUrl(trimmedValue);
     case "AUTH_SESSION_SECRET":
     case "PRACTICE_SEAT_ADMIN_TOKEN":
+    case "ALERT_ADMIN_TOKEN":
       return !hasMinimumLength(value, 32);
     case "DATABASE_URL":
       return !isPostgresUrl(trimmedValue);

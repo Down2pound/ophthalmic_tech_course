@@ -37,6 +37,7 @@ describe("deployment files", () => {
     expect(renderBlueprint).toContain("fromDatabase:");
     expect(renderBlueprint).toContain("sync: false");
     expect(renderBlueprint).toContain("generateValue: true");
+    expect(renderBlueprint).toContain("ALERT_ADMIN_TOKEN");
     expect(renderBlueprint).not.toContain("sk_test_");
     expect(renderBlueprint).not.toContain("whsec_");
   });

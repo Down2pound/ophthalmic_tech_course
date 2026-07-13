@@ -59,6 +59,7 @@ Render generates these automatically from the Blueprint:
 ```text
 AUTH_SESSION_SECRET
 PRACTICE_SEAT_ADMIN_TOKEN
+ALERT_ADMIN_TOKEN
 ```
 
 Render connects this automatically from the Blueprint database:

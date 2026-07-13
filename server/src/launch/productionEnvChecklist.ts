@@ -73,6 +73,12 @@ export const productionEnvironmentChecklist: ProductionEnvironmentChecklistItem[
       launchNote: "Protects temporary practice seat assignment tools.",
     },
     {
+      variableName: "ALERT_ADMIN_TOKEN",
+      source: "Generated with pnpm launch:secrets.",
+      validationRule: "At least 32 characters and never committed.",
+      launchNote: "Protects temporary alert-button admin tools.",
+    },
+    {
       variableName: "MODULE_ONE_CLINICAL_REVIEWER_NAME",
       source: "Clinical review signoff record.",
       validationRule: "Required after Module 1 review is approved.",

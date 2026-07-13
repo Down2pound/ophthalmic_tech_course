@@ -86,6 +86,7 @@ TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails
 TRANSACTIONAL_EMAIL_API_KEY=replace_with_your_email_provider_api_key
 SIGN_IN_FROM_EMAIL="OptiTech Academy <noreply@example.com>"
 PRACTICE_SEAT_ADMIN_TOKEN=replace_with_a_long_random_admin_token
+ALERT_ADMIN_TOKEN=replace_with_a_long_random_alert_admin_token
 ```
 
 `PUBLIC_APP_URL` should be the real deployed site URL in production. The server
@@ -119,6 +120,8 @@ Stripe key guide:
   that starts with `re_`, and a verified sender address.
 - `PRACTICE_SEAT_ADMIN_TOKEN` is a server-only private token used to protect the
   temporary practice-seat assignment API until a full admin login exists.
+- `ALERT_ADMIN_TOKEN` is a server-only private token used to protect the
+  temporary alert-button admin API if the alert tool is deployed with the app.
 - `DATABASE_URL` points the server at managed PostgreSQL so purchases,
   enrollments, practice seat packs, assignments, sign-in sessions, and quiz
   attempts survive restarts.
@@ -141,9 +144,9 @@ Generate strong local values for the private session/admin secrets with:
 pnpm launch:secrets
 ```
 
-Paste the generated `AUTH_SESSION_SECRET` and `PRACTICE_SEAT_ADMIN_TOKEN` into
-the production host dashboard. Do not commit them, save them in Google Drive, or
-send them in chat.
+Paste the generated `AUTH_SESSION_SECRET`, `PRACTICE_SEAT_ADMIN_TOKEN`, and
+`ALERT_ADMIN_TOKEN` into the production host dashboard. Do not commit them, save
+them in Google Drive, or send them in chat.
 
 Checkout routes:
 
@@ -196,6 +199,10 @@ header matching `PRACTICE_SEAT_ADMIN_TOKEN`. The protected list endpoint uses
 the same header and returns current temporary seat packs plus assignments. These
 endpoints are used by the protected practice seat manager page and should only
 be used by a trusted manager/admin workflow.
+
+The temporary alert-button admin endpoint also requires an `x-admin-token`
+header matching `ALERT_ADMIN_TOKEN`. If that token is not configured, the alert
+admin API stays locked.
 
 If `STRIPE_SECRET_KEY` is missing, `ENABLE_PAID_ENROLLMENT` is not `true`, the
 Stripe webhook is not configured, passwordless sign-in is not configured,
@@ -309,11 +316,12 @@ in the host dashboard, not in Git: `DATABASE_URL`,
 `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PUBLIC_APP_URL`,
 `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
 `TRANSACTIONAL_EMAIL_API_KEY`, `SIGN_IN_FROM_EMAIL`, and
-`PRACTICE_SEAT_ADMIN_TOKEN`. Add the `MODULE_ONE_CLINICAL_*` signoff values
-after the review packet is approved. Keep `ENABLE_PAID_ENROLLMENT=false` until
-the live checklist passes, then set `ENABLE_PAID_ENROLLMENT=true` to open paid
-checkout. Do not leave copied `.env.example` placeholders in production; the
-launch doctor will count those values as missing.
+`PRACTICE_SEAT_ADMIN_TOKEN`. If the alert admin tool is deployed, also configure
+`ALERT_ADMIN_TOKEN`. Add the `MODULE_ONE_CLINICAL_*` signoff values after the
+review packet is approved. Keep `ENABLE_PAID_ENROLLMENT=false` until the live
+checklist passes, then set `ENABLE_PAID_ENROLLMENT=true` to open paid checkout.
+Do not leave copied `.env.example` placeholders in production; the launch doctor
+will count those values as missing.
 
 To include `sitemap.xml` in a production Docker image, pass the final public
 domain at build time:

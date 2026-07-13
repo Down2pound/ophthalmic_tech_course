@@ -12,6 +12,7 @@ describe("renderLaunchSecrets", () => {
     expect(report).toContain("# OptiTech Academy Launch Secrets");
     expect(report).toContain("AUTH_SESSION_SECRET=");
     expect(report).toContain("PRACTICE_SEAT_ADMIN_TOKEN=");
+    expect(report).toContain("ALERT_ADMIN_TOKEN=");
     expect(report).toContain("Do not commit them to Git");
     expect(report).not.toContain("replace_with");
     expect(report).not.toContain("example.com");
@@ -21,8 +22,8 @@ describe("renderLaunchSecrets", () => {
       .filter(line => line.includes("="))
       .map(line => line.split("=")[1]);
 
-    expect(values).toHaveLength(2);
+    expect(values).toHaveLength(3);
     expect(values.every(value => value.length >= 32)).toBe(true);
-    expect(new Set(values).size).toBe(2);
+    expect(new Set(values).size).toBe(3);
   });
 });

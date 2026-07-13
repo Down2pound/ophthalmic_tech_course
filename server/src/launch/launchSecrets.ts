@@ -20,6 +20,11 @@ export const launchSecretDefinitions: LaunchSecretDefinition[] = [
     description:
       "Protects temporary practice-seat assignment tools until full admin login exists.",
   },
+  {
+    variableName: "ALERT_ADMIN_TOKEN",
+    description:
+      "Protects temporary alert-button admin tools when the alert workflow is deployed.",
+  },
 ];
 
 function generateSecret(randomBytesProvider: typeof randomBytes): string {

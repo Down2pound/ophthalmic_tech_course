@@ -16,7 +16,8 @@ import PracticePacks from "./pages/PracticePacks";
 import PracticeSeatAdmin from "./pages/PracticeSeatAdmin";
 import CertificatePreview from "./pages/CertificatePreview";
 import LaunchReadiness from "./pages/LaunchReadiness";
-
+import AdminAlertTemplates from "./pages/AdminAlertTemplates";
+import SendAlerts from "./pages/SendAlerts";
 
 function Router() {
   return (
@@ -33,6 +34,8 @@ function Router() {
       <Route path={"/practice-seat-admin"} component={PracticeSeatAdmin} />
       <Route path={"/certificate-preview"} component={CertificatePreview} />
       <Route path={"/launch-readiness"} component={LaunchReadiness} />
+      <Route path={"/send"} component={SendAlerts} />
+      <Route path={"/admin"} component={AdminAlertTemplates} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

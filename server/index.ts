@@ -7,6 +7,7 @@ import { setupAuthRoutes } from "./src/routes/auth";
 import { setupLearnRoutes } from "./src/routes/learn";
 import { setupLaunchReadinessRoutes } from "./src/routes/launchReadiness";
 import { setupStripeWebhookRoute } from "./src/routes/stripeWebhook";
+import { setupAlertTemplateRoutes } from "./src/routes/alertTemplates";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +23,7 @@ async function startServer() {
   setupCheckoutRoutes(apiRouter);
   setupLearnRoutes(apiRouter);
   setupLaunchReadinessRoutes(apiRouter);
+  await setupAlertTemplateRoutes(apiRouter);
   app.use("/api", apiRouter);
 
   // Serve static files from dist/public in production

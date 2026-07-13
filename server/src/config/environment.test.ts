@@ -104,6 +104,9 @@ describe("isUnsafeLaunchEnvironmentValue", () => {
     expect(isUnsafeLaunchEnvironmentValue("AUTH_SESSION_SECRET", "short")).toBe(
       true
     );
+    expect(isUnsafeLaunchEnvironmentValue("ALERT_ADMIN_TOKEN", "short")).toBe(
+      true
+    );
     expect(
       isUnsafeLaunchEnvironmentValue(
         "DATABASE_URL",
@@ -144,6 +147,12 @@ describe("isUnsafeLaunchEnvironmentValue", () => {
       isUnsafeLaunchEnvironmentValue(
         "AUTH_SESSION_SECRET",
         "session-secret-value-with-at-least-32-chars"
+      )
+    ).toBe(false);
+    expect(
+      isUnsafeLaunchEnvironmentValue(
+        "ALERT_ADMIN_TOKEN",
+        "alert-admin-secret-with-at-least-32-chars"
       )
     ).toBe(false);
     expect(
