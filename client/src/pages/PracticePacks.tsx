@@ -26,6 +26,25 @@ import {
 } from "@shared/commerce/salesReadiness";
 import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
+import { submitPracticeInquiry } from "@/lib/practiceInquiryClient";
+
+interface PracticeInquiryFormState {
+  practiceName: string;
+  contactName: string;
+  contactEmail: string;
+  estimatedLearnerCount: string;
+  targetTimeline: string;
+  message: string;
+}
+
+const emptyPracticeInquiryForm: PracticeInquiryFormState = {
+  practiceName: "",
+  contactName: "",
+  contactEmail: "",
+  estimatedLearnerCount: "",
+  targetTimeline: "",
+  message: "",
+};
 
 export default function PracticePacks() {
   const [emailByOfferId, setEmailByOfferId] = useState<Record<string, string>>(
@@ -33,6 +52,14 @@ export default function PracticePacks() {
   );
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [practiceInquiryForm, setPracticeInquiryForm] =
+    useState<PracticeInquiryFormState>(emptyPracticeInquiryForm);
+  const [practiceInquiryStatus, setPracticeInquiryStatus] = useState<
+    "idle" | "submitting" | "sent"
+  >("idle");
+  const [practiceInquiryMessage, setPracticeInquiryMessage] = useState<
+    string | null
+  >(null);
   const checkoutStatus =
     typeof window === "undefined"
       ? null
@@ -68,6 +95,49 @@ export default function PracticePacks() {
       normalizedEmail,
       showEmailValidation: email.trim().length > 0 && !normalizedEmail,
     };
+  };
+  const updatePracticeInquiryField = (
+    field: keyof PracticeInquiryFormState,
+    value: string
+  ) => {
+    setPracticeInquiryForm(current => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+  const handlePracticeInquirySubmit = async () => {
+    setPracticeInquiryStatus("submitting");
+    setPracticeInquiryMessage(null);
+
+    try {
+      const result = await submitPracticeInquiry({
+        inquiry: {
+          practiceName: practiceInquiryForm.practiceName,
+          contactName: practiceInquiryForm.contactName,
+          contactEmail: practiceInquiryForm.contactEmail,
+          estimatedLearnerCount: Number(
+            practiceInquiryForm.estimatedLearnerCount
+          ),
+          targetTimeline: practiceInquiryForm.targetTimeline,
+          message: practiceInquiryForm.message,
+        },
+      });
+
+      setPracticeInquiryStatus("sent");
+      setPracticeInquiryForm(emptyPracticeInquiryForm);
+      setPracticeInquiryMessage(
+        result.notificationSent
+          ? "Inquiry received. Jeff has been notified."
+          : "Inquiry received. Jeff can review it from the protected inquiry list."
+      );
+    } catch (error) {
+      setPracticeInquiryStatus("idle");
+      setPracticeInquiryMessage(
+        error instanceof Error
+          ? error.message
+          : "Practice inquiry could not be sent."
+      );
+    }
   };
   const customPracticeHref = createMailtoHref({
     email: customPracticeInquiryOffer.contactEmail,
@@ -341,11 +411,12 @@ export default function PracticePacks() {
                 - Keep practice-specific workflows out of the national core.
               </p>
             </div>
-            <a href={customPracticeHref}>
-              <Button className="mt-6 w-full bg-blue-700 text-white hover:bg-blue-800">
-                Ask about custom setup
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <a
+              href="#practice-inquiry"
+              className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800"
+            >
+              Ask about custom setup
+              <ArrowRight className="ml-2 h-4 w-4" />
             </a>
             <p className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-3 text-center text-sm leading-6 text-slate-600">
               Seat management is available after purchase through the protected
@@ -410,17 +481,122 @@ export default function PracticePacks() {
               </section>
             </div>
           </div>
-          <Card className="border-slate-200 bg-slate-50 p-6 shadow-sm">
+          <Card
+            id="practice-inquiry"
+            className="border-slate-200 bg-slate-50 p-6 shadow-sm"
+          >
             <h3 className="text-xl font-bold">Need more than 15 seats?</h3>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Send a short inquiry before buying. Include the practice name,
-              estimated learner count, and when onboarding should start.
+              Send a short inquiry before buying.
             </p>
-            <a href={customPracticeHref}>
-              <Button className="mt-5 w-full bg-blue-700 text-white hover:bg-blue-800">
-                Start practice conversation
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <div className="mt-5 space-y-4">
+              <label className="block text-sm font-semibold text-slate-700">
+                Practice name
+                <input
+                  value={practiceInquiryForm.practiceName}
+                  onChange={event =>
+                    updatePracticeInquiryField(
+                      "practiceName",
+                      event.target.value
+                    )
+                  }
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-slate-700">
+                Primary contact
+                <input
+                  value={practiceInquiryForm.contactName}
+                  onChange={event =>
+                    updatePracticeInquiryField(
+                      "contactName",
+                      event.target.value
+                    )
+                  }
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-slate-700">
+                Contact email
+                <input
+                  type="email"
+                  value={practiceInquiryForm.contactEmail}
+                  onChange={event =>
+                    updatePracticeInquiryField(
+                      "contactEmail",
+                      event.target.value
+                    )
+                  }
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-slate-700">
+                Estimated learners
+                <input
+                  type="number"
+                  min="1"
+                  value={practiceInquiryForm.estimatedLearnerCount}
+                  onChange={event =>
+                    updatePracticeInquiryField(
+                      "estimatedLearnerCount",
+                      event.target.value
+                    )
+                  }
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-slate-700">
+                Timeline
+                <input
+                  value={practiceInquiryForm.targetTimeline}
+                  onChange={event =>
+                    updatePracticeInquiryField(
+                      "targetTimeline",
+                      event.target.value
+                    )
+                  }
+                  placeholder="Example: next hiring class"
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-slate-700">
+                Onboarding need
+                <textarea
+                  value={practiceInquiryForm.message}
+                  onChange={event =>
+                    updatePracticeInquiryField("message", event.target.value)
+                  }
+                  rows={5}
+                  className="mt-2 w-full resize-y rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+            </div>
+            {practiceInquiryMessage && (
+              <p
+                className={`mt-4 rounded-md border p-3 text-sm leading-6 ${
+                  practiceInquiryStatus === "sent"
+                    ? "border-green-200 bg-green-50 text-green-900"
+                    : "border-red-200 bg-red-50 text-red-800"
+                }`}
+              >
+                {practiceInquiryMessage}
+              </p>
+            )}
+            <Button
+              className="mt-5 w-full bg-blue-700 text-white hover:bg-blue-800"
+              disabled={practiceInquiryStatus === "submitting"}
+              onClick={handlePracticeInquirySubmit}
+            >
+              {practiceInquiryStatus === "submitting"
+                ? "Sending inquiry..."
+                : "Start practice conversation"}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+            <a
+              href={customPracticeHref}
+              className="mt-4 block text-center text-sm font-semibold text-blue-700 hover:text-blue-900"
+            >
+              Use email instead
             </a>
           </Card>
         </div>
