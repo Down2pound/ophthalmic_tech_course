@@ -31,6 +31,8 @@ Use this when someone buys Founding Learner Access.
 - [ ] Confirm Stripe payment status is paid.
 - [ ] Confirm `checkout.session.completed` webhook was delivered.
 - [ ] Confirm learner access exists for the buyer email.
+- [ ] Confirm the protected buyer lookup endpoint shows the purchase and
+      active enrollment.
 - [ ] Confirm the webhook response showed the welcome email as sent, or record
       why it was skipped.
 - [ ] Confirm the buyer can request a passwordless sign-in link.
@@ -67,6 +69,8 @@ Use this when a practice buys a five-seat or fifteen-seat pack.
 - [ ] Confirm Stripe payment status is paid.
 - [ ] Confirm `checkout.session.completed` webhook was delivered.
 - [ ] Confirm the practice seat pack exists with the correct seat count.
+- [ ] Confirm the protected buyer lookup endpoint shows the practice purchase
+      and remaining seat count.
 - [ ] Confirm the webhook response showed the welcome email as sent, or record
       why it was skipped.
 - [ ] Confirm the manager knows seat assignment happens through the protected
@@ -109,6 +113,7 @@ Save safe evidence only:
 - Stripe event ID.
 - Whether access appeared automatically.
 - Whether the automated welcome email was sent.
+- Buyer lookup summary.
 - Whether sign-in email worked.
 - Whether support follow-up was needed.
 - Any non-private feedback about what confused the buyer.

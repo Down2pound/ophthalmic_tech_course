@@ -16,6 +16,7 @@ import {
   createInMemoryAuthSessionStore,
   type AuthSessionStore,
 } from "../auth/sessionStore";
+import { lookupBuyerSupportProfile } from "../commerce/buyerSupportLookup";
 import { assignPracticeSeatToLearner } from "../commerce/practiceSeatAssignment";
 import { getCheckoutBaseUrl } from "../commerce/stripeCheckout";
 import {
@@ -23,7 +24,11 @@ import {
   getPracticeSeatEnvironmentStatus,
 } from "../config/environment";
 import { getPostgresPool } from "../db/postgres";
-import { getEnrollmentStore, getPracticeSeatPackStore } from "./stripeWebhook";
+import {
+  getEnrollmentStore,
+  getPracticeSeatPackStore,
+  getPurchaseStore,
+} from "./stripeWebhook";
 
 interface PasswordlessStartRequestBody {
   email?: string;
@@ -241,5 +246,36 @@ export function setupAuthRoutes(router: Router) {
       seatPacks: await practiceSeatPackStore.listPracticeSeatPacks(),
       assignments: await practiceSeatPackStore.listPracticeSeatAssignments(),
     });
+  });
+
+  router.get("/support/buyer-lookup", async (req: Request, res: Response) => {
+    const authorization = authorizePracticeSeatAdminRequest(req);
+
+    if (!authorization.authorized) {
+      res.status(authorization.status).json(authorization.payload);
+      return;
+    }
+
+    const email = typeof req.query.email === "string" ? req.query.email : "";
+
+    try {
+      const profile = await lookupBuyerSupportProfile({
+        email,
+        stores: {
+          purchaseStore: getPurchaseStore(),
+          enrollmentStore: getEnrollmentStore(),
+          practiceSeatPackStore: getPracticeSeatPackStore(),
+        },
+      });
+
+      res.json(profile);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Buyer support lookup failed.";
+
+      res.status(400).json({ error: message });
+    }
   });
 }

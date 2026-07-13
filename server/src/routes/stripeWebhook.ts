@@ -67,6 +67,10 @@ export function getReceivedPurchaseEvents() {
   return purchaseStore.listPurchases();
 }
 
+export function getPurchaseStore() {
+  return purchaseStore;
+}
+
 export function getProvisionedEnrollments() {
   return enrollmentStore.listEnrollments();
 }
