@@ -260,6 +260,13 @@ The production start command is:
 node dist/index.js
 ```
 
+The included `Procfile` exposes the same start command for Node hosts that read
+process files automatically:
+
+```text
+web: node dist/index.js
+```
+
 For container hosts, use the included `Dockerfile`. The image includes a
 container health check against `/api/health`, and `.dockerignore` keeps local
 env files, build outputs, dependencies, logs, databases, and generated launch

@@ -36,6 +36,15 @@ The service should expose the port from the host through `PORT`. The server
 already reads `process.env.PORT`, so most Node hosts can supply the port
 automatically.
 
+The repository also includes a `Procfile`:
+
+```text
+web: node dist/index.js
+```
+
+Some Node hosts read that file automatically. It means, "start one web process
+by running the built server."
+
 If the host uses Docker, use the included `Dockerfile`. For the final production
 image, pass the real public domain so the sitemap is generated correctly:
 
