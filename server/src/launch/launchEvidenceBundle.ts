@@ -37,6 +37,7 @@ function renderReadme({
     "## Included Files",
     "",
     "- `production-launch-package.md`: launch handoff checklist.",
+    "- `deployment-guide.md`: beginner-friendly production setup recipe.",
     "- `production-env-checklist.md`: safe fill-in checklist for host dashboard settings.",
     "- `launch-doctor-report.md`: human-readable paid launch preflight report.",
     "- `manual-launch-qa-evidence.md`: safe template for Stripe, learner-flow, practice-pack, browser, and accessibility QA notes.",
@@ -73,6 +74,7 @@ export async function createLaunchEvidenceBundle({
   const files = [
     "README.md",
     "production-launch-package.md",
+    "deployment-guide.md",
     "production-env-checklist.md",
     "launch-doctor-report.md",
     "manual-launch-qa-evidence.md",
@@ -85,6 +87,10 @@ export async function createLaunchEvidenceBundle({
   await mkdir(resolvedOutputDir, { recursive: true });
 
   const launchPackage = await readFile(launchPackagePath, "utf8");
+  const deploymentGuide = await readFile(
+    path.resolve(projectRoot, "docs/launch/deployment-guide.md"),
+    "utf8"
+  );
 
   await writeFile(
     path.join(resolvedOutputDir, "README.md"),
@@ -93,6 +99,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "production-launch-package.md"),
     launchPackage
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "deployment-guide.md"),
+    deploymentGuide
   );
   await writeFile(
     path.join(resolvedOutputDir, "production-env-checklist.md"),

@@ -30,6 +30,9 @@ pnpm test
 pnpm build
 ```
 
+For a step-by-step beginner deployment recipe, use
+`docs/launch/deployment-guide.md`.
+
 Run this after the app is online:
 
 ```bash
@@ -193,6 +196,7 @@ When the launch package is ready to archive, save these files together:
 
 - Generated `launch-evidence/` folder from `pnpm launch:bundle`
 - `docs/launch/production-launch-package.md`
+- `docs/launch/deployment-guide.md`
 - `first-sale-support-runbook.md` from the generated launch evidence folder
 - Downloaded `/api/launch/clinical-review-packet.md`
 - Clinical reviewer signoff evidence

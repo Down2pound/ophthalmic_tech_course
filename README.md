@@ -246,7 +246,8 @@ The command creates the commerce, auth, and assessment tables with safe
 The app can be deployed as one Node/Express service that serves both the React
 frontend and the API. The production build command is:
 
-Use `docs/launch/production-launch-package.md` as the shareable launch handoff
+Use `docs/launch/deployment-guide.md` as the beginner-friendly setup path and
+`docs/launch/production-launch-package.md` as the shareable launch handoff
 checklist before opening paid enrollment.
 
 ```bash
