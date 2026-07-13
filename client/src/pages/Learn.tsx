@@ -20,6 +20,8 @@ import {
   fetchModuleOneLessonProgress,
   markModuleOneLessonComplete,
 } from "@/lib/lessonProgressClient";
+import { requestPasswordlessSignInLink } from "@/lib/passwordlessSignInClient";
+import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
 import { optiTechCourse } from "@shared/course/courseCatalog";
 import {
   Award,
@@ -47,6 +49,10 @@ export default function Learn() {
     useState<ProtectedModuleOneLessons | null>(null);
   const [lessonContentError, setLessonContentError] = useState("");
   const [lessonProgressError, setLessonProgressError] = useState("");
+  const [signInEmail, setSignInEmail] = useState("");
+  const [signInRequestMessage, setSignInRequestMessage] = useState("");
+  const [signInRequestError, setSignInRequestError] = useState("");
+  const [isRequestingSignIn, setIsRequestingSignIn] = useState(false);
 
   const lessonList = protectedLessons?.lessons ?? [];
   const selectedLesson = useMemo(
@@ -62,6 +68,30 @@ export default function Learn() {
     typeof window === "undefined"
       ? null
       : getCheckoutStatus(window.location.search);
+  const normalizedSignInEmail = normalizeCheckoutEmail(signInEmail);
+  const showSignInEmailValidation =
+    signInEmail.trim().length > 0 && !normalizedSignInEmail;
+
+  const requestSignInLink = async () => {
+    setIsRequestingSignIn(true);
+    setSignInRequestError("");
+    setSignInRequestMessage("");
+
+    try {
+      const result = await requestPasswordlessSignInLink({
+        email: signInEmail,
+      });
+      setSignInRequestMessage(result.message);
+    } catch (error) {
+      setSignInRequestError(
+        error instanceof Error
+          ? error.message
+          : "Sign-in link could not be requested."
+      );
+    } finally {
+      setIsRequestingSignIn(false);
+    }
+  };
 
   const completeLesson = async () => {
     if (!selectedLesson) return;
@@ -204,6 +234,12 @@ export default function Learn() {
                   </li>
                 ))}
               </ul>
+              {!learnerAccess?.hasAccess && (
+                <p className="mt-3 rounded-md border border-green-200 bg-white p-3 text-sm leading-6">
+                  Need access on this device? Request a sign-in link below
+                  using the same email entered at checkout.
+                </p>
+              )}
             </Card>
           )}
 
@@ -226,12 +262,61 @@ export default function Learn() {
                       : learnerAccessError || "Checking learner access..."}
                 </p>
                 {!learnerAccess?.hasAccess && (
-                  <a
-                    href="/checkout"
-                    className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
-                  >
-                    Review access options
-                  </a>
+                  <div className="mt-4 border-t border-slate-200 pt-4">
+                    <label
+                      htmlFor="learner-sign-in-email"
+                      className="block text-sm font-semibold text-slate-700"
+                    >
+                      Email used for checkout
+                    </label>
+                    <input
+                      id="learner-sign-in-email"
+                      type="email"
+                      value={signInEmail}
+                      aria-invalid={showSignInEmailValidation}
+                      aria-describedby="learner-sign-in-email-help"
+                      onChange={event => setSignInEmail(event.target.value)}
+                      placeholder="learner@example.com"
+                      className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                    />
+                    <p
+                      id="learner-sign-in-email-help"
+                      className={`mt-2 text-sm leading-5 ${
+                        showSignInEmailValidation
+                          ? "text-red-700"
+                          : "text-slate-500"
+                      }`}
+                    >
+                      {showSignInEmailValidation
+                        ? "Enter a valid email like learner@example.com."
+                        : "Use the email that received the Stripe receipt."}
+                    </p>
+                    {signInRequestMessage && (
+                      <p className="mt-3 rounded-md border border-green-200 bg-green-50 p-3 text-sm leading-6 text-green-900">
+                        {signInRequestMessage}
+                      </p>
+                    )}
+                    {signInRequestError && (
+                      <p className="mt-3 rounded-md border border-red-200 bg-red-50 p-3 text-sm leading-6 text-red-800">
+                        {signInRequestError}
+                      </p>
+                    )}
+                    <Button
+                      className="mt-3 w-full"
+                      disabled={isRequestingSignIn || !normalizedSignInEmail}
+                      onClick={requestSignInLink}
+                    >
+                      {isRequestingSignIn
+                        ? "Sending sign-in link..."
+                        : "Send sign-in link"}
+                    </Button>
+                    <a
+                      href="/checkout"
+                      className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900"
+                    >
+                      Review access options
+                    </a>
+                  </div>
                 )}
               </div>
             </div>
