@@ -107,4 +107,23 @@ describe("deployment files", () => {
     expect(backupScript).toContain("pnpm launch:preflight");
     expect(backupScript).not.toContain("execSync");
   });
+
+  it("keeps a work-computer-safe launch blocker summary available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const blockerScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-blockers-summary.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:blockers": "node scripts/launch-blockers-summary.mjs"'
+    );
+    expect(blockerScript).toContain("STRIPE_SECRET_KEY");
+    expect(blockerScript).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED");
+    expect(blockerScript).toContain("docs/launch/go-live-checklist.md");
+    expect(blockerScript).not.toContain("execSync");
+  });
 });
