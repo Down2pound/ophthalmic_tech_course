@@ -7,6 +7,17 @@ interface CheckoutResponse {
 
 type Fetcher = typeof fetch;
 
+export interface CheckoutAvailabilityReport {
+  ready: boolean;
+  title: string;
+  message: string;
+  primaryAction: "continue-to-checkout" | "join-interest-list";
+}
+
+interface CheckoutAvailabilityErrorResponse {
+  error?: string;
+}
+
 export async function createCheckoutSession({
   email,
   offerId,
@@ -49,4 +60,25 @@ export async function createCheckoutSession({
   }
 
   return { url: payload.url };
+}
+
+export async function fetchCheckoutAvailability({
+  fetcher = fetch,
+}: {
+  fetcher?: Fetcher;
+} = {}): Promise<CheckoutAvailabilityReport> {
+  const response = await fetcher("/api/checkout/availability");
+  const payload = (await response.json()) as
+    | CheckoutAvailabilityReport
+    | CheckoutAvailabilityErrorResponse;
+
+  if (!response.ok) {
+    throw new Error(
+      "error" in payload && payload.error
+        ? payload.error
+        : "Checkout availability is unavailable right now."
+    );
+  }
+
+  return payload as CheckoutAvailabilityReport;
 }

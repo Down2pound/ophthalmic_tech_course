@@ -29,9 +29,14 @@ import {
   purchaseAssurances,
 } from "@shared/commerce/salesReadiness";
 import { useState } from "react";
-import { createCheckoutSession } from "@/lib/checkoutClient";
+import {
+  createCheckoutSession,
+  fetchCheckoutAvailability,
+  type CheckoutAvailabilityReport,
+} from "@/lib/checkoutClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import { submitLearnerInterest } from "@/lib/learnerInterestClient";
+import { useEffect } from "react";
 
 const emptyLearnerInterestForm = {
   learnerName: "",
@@ -51,6 +56,8 @@ export default function Checkout() {
   const [email, setEmail] = useState("");
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [isStartingCheckout, setIsStartingCheckout] = useState(false);
+  const [checkoutAvailability, setCheckoutAvailability] =
+    useState<CheckoutAvailabilityReport | null>(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [learnerInterestForm, setLearnerInterestForm] = useState(
     emptyLearnerInterestForm
@@ -68,6 +75,25 @@ export default function Checkout() {
   const normalizedEmail = normalizeCheckoutEmail(email);
   const emailHasText = email.trim().length > 0;
   const showEmailValidation = emailHasText && !normalizedEmail;
+  const checkoutUnavailable = checkoutAvailability?.ready === false;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchCheckoutAvailability()
+      .then(availability => {
+        if (!isMounted) return;
+        setCheckoutAvailability(availability);
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setCheckoutAvailability(null);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const startCheckout = async () => {
     setIsStartingCheckout(true);
@@ -150,7 +176,9 @@ export default function Checkout() {
             </p>
           </div>
           <div className="rounded-md border border-green-100 bg-green-50 px-4 py-3 text-sm font-semibold text-green-900">
-            Secure Stripe checkout
+            {checkoutAvailability?.ready === false
+              ? "Interest list open"
+              : "Secure Stripe checkout"}
           </div>
         </div>
       </section>
@@ -181,6 +209,30 @@ export default function Checkout() {
                   className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-green-800 hover:text-green-950"
                 >
                   Start Module 1
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
+            </Card>
+          )}
+
+          {checkoutAvailability && (
+            <Card
+              className={`border p-5 shadow-sm ${
+                checkoutAvailability.ready
+                  ? "border-green-200 bg-green-50 text-green-950"
+                  : "border-amber-200 bg-amber-50 text-amber-950"
+              }`}
+            >
+              <h2 className="text-xl font-bold">
+                {checkoutAvailability.title}
+              </h2>
+              <p className="mt-2 leading-7">{checkoutAvailability.message}</p>
+              {!checkoutAvailability.ready && (
+                <a
+                  href="#learner-interest"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-amber-900 hover:text-amber-950"
+                >
+                  Join the founding learner list
                   <ArrowRight className="h-4 w-4" />
                 </a>
               )}
@@ -309,7 +361,10 @@ export default function Checkout() {
             </div>
           </Card>
 
-          <Card className="border-green-200 bg-green-50 p-6 text-green-950 shadow-sm">
+          <Card
+            id="learner-interest"
+            className="border-green-200 bg-green-50 p-6 text-green-950 shadow-sm"
+          >
             <h2 className="text-2xl font-bold">Not ready to buy today?</h2>
             <p className="mt-3 leading-7">
               Join the founding learner interest list so we can follow up when
@@ -479,14 +534,19 @@ export default function Checkout() {
             <Button
               className="mt-4 w-full bg-blue-700 text-white hover:bg-blue-800"
               disabled={
-                isStartingCheckout || !normalizedEmail || !acceptedTerms
+                isStartingCheckout ||
+                !normalizedEmail ||
+                !acceptedTerms ||
+                checkoutUnavailable
               }
               onClick={startCheckout}
             >
               <CreditCard className="mr-2 h-4 w-4" />
               {isStartingCheckout
                 ? "Starting checkout..."
-                : "Continue to Stripe"}
+                : checkoutUnavailable
+                  ? "Enrollment not open yet"
+                  : "Continue to Stripe"}
             </Button>
             <p className="mt-4 text-sm leading-6 text-slate-600">
               Payment details are handled securely by Stripe Checkout, not by

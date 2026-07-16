@@ -24,8 +24,12 @@ import {
   practiceValueProofPoints,
   purchaseAssurances,
 } from "@shared/commerce/salesReadiness";
-import { useState } from "react";
-import { createCheckoutSession } from "@/lib/checkoutClient";
+import { useEffect, useState } from "react";
+import {
+  createCheckoutSession,
+  fetchCheckoutAvailability,
+  type CheckoutAvailabilityReport,
+} from "@/lib/checkoutClient";
 import { submitPracticeInquiry } from "@/lib/practiceInquiryClient";
 
 interface PracticeInquiryFormState {
@@ -55,6 +59,8 @@ export default function PracticePacks() {
   >({});
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [checkoutAvailability, setCheckoutAvailability] =
+    useState<CheckoutAvailabilityReport | null>(null);
   const [practiceInquiryForm, setPracticeInquiryForm] =
     useState<PracticeInquiryFormState>(emptyPracticeInquiryForm);
   const [practiceInquiryStatus, setPracticeInquiryStatus] = useState<
@@ -67,6 +73,25 @@ export default function PracticePacks() {
     typeof window === "undefined"
       ? null
       : getCheckoutStatus(window.location.search);
+  const checkoutUnavailable = checkoutAvailability?.ready === false;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchCheckoutAvailability()
+      .then(availability => {
+        if (!isMounted) return;
+        setCheckoutAvailability(availability);
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setCheckoutAvailability(null);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const startCheckout = async (offerId: string) => {
     setActiveOfferId(offerId);
@@ -204,6 +229,30 @@ export default function PracticePacks() {
                   </li>
                 ))}
               </ul>
+            </Card>
+          )}
+
+          {checkoutAvailability && (
+            <Card
+              className={`border p-5 shadow-sm md:col-span-2 ${
+                checkoutAvailability.ready
+                  ? "border-green-200 bg-green-50 text-green-950"
+                  : "border-amber-200 bg-amber-50 text-amber-950"
+              }`}
+            >
+              <h2 className="text-xl font-bold">
+                {checkoutAvailability.title}
+              </h2>
+              <p className="mt-2 leading-7">{checkoutAvailability.message}</p>
+              {!checkoutAvailability.ready && (
+                <a
+                  href="#practice-inquiry"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-amber-900 hover:text-amber-950"
+                >
+                  Start a practice conversation instead
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
             </Card>
           )}
 
@@ -402,13 +451,16 @@ export default function PracticePacks() {
                       disabled={
                         activeOfferId === offer.id ||
                         !normalizedEmail ||
-                        !acceptedTerms
+                        !acceptedTerms ||
+                        checkoutUnavailable
                       }
                       onClick={() => startCheckout(offer.id)}
                     >
                       {activeOfferId === offer.id
                         ? "Starting checkout..."
-                        : "Buy with Stripe"}
+                        : checkoutUnavailable
+                          ? "Enrollment not open yet"
+                          : "Buy with Stripe"}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>

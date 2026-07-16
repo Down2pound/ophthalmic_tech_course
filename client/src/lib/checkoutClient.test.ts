@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { createCheckoutSession } from "./checkoutClient";
+import {
+  createCheckoutSession,
+  fetchCheckoutAvailability,
+} from "./checkoutClient";
 
 describe("createCheckoutSession", () => {
   it("returns the hosted checkout url on success", async () => {
@@ -104,5 +107,37 @@ describe("createCheckoutSession", () => {
       "Enter a valid email so we can send your receipt and course access."
     );
     expect(fetcher).not.toHaveBeenCalled();
+  });
+});
+
+describe("fetchCheckoutAvailability", () => {
+  it("returns the public checkout availability report", async () => {
+    const availability = {
+      ready: false,
+      title: "Enrollment is not open yet",
+      message:
+        "The course can collect interest, but payment is paused until the final launch checks are complete.",
+      primaryAction: "join-interest-list",
+    };
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => availability,
+    });
+
+    await expect(fetchCheckoutAvailability({ fetcher })).resolves.toEqual(
+      availability
+    );
+    expect(fetcher).toHaveBeenCalledWith("/api/checkout/availability");
+  });
+
+  it("surfaces availability fetch failures", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: "Availability unavailable" }),
+    });
+
+    await expect(fetchCheckoutAvailability({ fetcher })).rejects.toThrow(
+      "Availability unavailable"
+    );
   });
 });

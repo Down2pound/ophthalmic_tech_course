@@ -27,6 +27,7 @@ import {
   getAuthEnvironmentStatus,
   getCommerceEnvironmentStatus,
 } from "../config/environment";
+import { getCheckoutAvailabilityReport } from "../config/checkoutAvailability";
 import { getPaidCheckoutGateStatus } from "../config/paidCheckoutGate";
 import { createRateLimitMiddleware } from "../config/rateLimit";
 import { getLaunchDatabaseReadiness } from "../db/launchDatabaseReadiness";
@@ -131,6 +132,15 @@ function toLearnerInterestInput(
 }
 
 export function setupCheckoutRoutes(router: Router) {
+  router.get("/checkout/availability", async (_req: Request, res: Response) => {
+    const databaseReadiness = await getLaunchDatabaseReadiness({
+      db: getPostgresPool(),
+    });
+    const checkoutGate = getPaidCheckoutGateStatus({ databaseReadiness });
+
+    res.json(getCheckoutAvailabilityReport(checkoutGate));
+  });
+
   router.post(
     "/learner-interests",
     learnerInterestRateLimit,
