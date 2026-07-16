@@ -48,7 +48,7 @@ const readinessReport: RuntimeLaunchReadinessReport = {
   },
   database: {
     databaseConfigured: false,
-    missingDatabaseVariables: ["DATABASE_URL"],
+    missingDatabaseVariables: ["DATABASE_URL", "DATABASE_SSL"],
   },
   databaseReadiness: {
     schemaVerified: false,
@@ -68,13 +68,14 @@ const readinessReport: RuntimeLaunchReadinessReport = {
   },
   warnings: [
     "Stripe checkout setup is missing: STRIPE_SECRET_KEY.",
-    "Database setup is missing: DATABASE_URL.",
+    "Database setup is missing: DATABASE_URL, DATABASE_SSL.",
   ],
   nextSetupSteps: [
     {
       title: "Connect hosted PostgreSQL",
-      detail: "Set DATABASE_URL in the production host dashboard.",
-      command: "DATABASE_URL=...",
+      detail:
+        "Set DATABASE_URL and DATABASE_SSL=true in the production host dashboard.",
+      command: "DATABASE_URL=... DATABASE_SSL=true",
     },
   ],
   launchActions: [
@@ -114,7 +115,9 @@ describe("renderLaunchDoctorReport", () => {
     expect(report).toContain("## Buyer Channel Readiness");
     expect(report).toContain("Practice seat administration is not protected");
     expect(report).toContain("Connect hosted PostgreSQL");
-    expect(report).toContain("Command or setting: `DATABASE_URL=...`");
+    expect(report).toContain(
+      "Command or setting: `DATABASE_URL=... DATABASE_SSL=true`"
+    );
     expect(report).toContain(
       "Get clinical review signoff: Have a reviewer approve Module 1."
     );

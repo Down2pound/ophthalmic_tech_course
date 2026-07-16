@@ -63,7 +63,10 @@ export const practiceSeatAdminEnvironmentVariables = [
 
 export const alertAdminEnvironmentVariables = ["ALERT_ADMIN_TOKEN"] as const;
 
-export const databaseEnvironmentVariables = ["DATABASE_URL"] as const;
+export const databaseEnvironmentVariables = [
+  "DATABASE_URL",
+  "DATABASE_SSL",
+] as const;
 
 export const moduleOneClinicalReviewEnvironmentVariables = [
   "MODULE_ONE_CLINICAL_REVIEWER_NAME",
@@ -198,6 +201,8 @@ export function isUnsafeLaunchEnvironmentValue(
       return !hasMinimumLength(value, 32);
     case "DATABASE_URL":
       return !isPostgresUrl(trimmedValue);
+    case "DATABASE_SSL":
+      return trimmedValue.toLowerCase() !== "true";
     case "TRANSACTIONAL_EMAIL_API_KEY":
       return isTransactionalEmailApiKeyUnsafe(trimmedValue, env);
     case "SIGN_IN_FROM_EMAIL":

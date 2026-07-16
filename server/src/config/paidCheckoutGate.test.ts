@@ -21,6 +21,7 @@ const launchReadyEnv = {
   PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token-with-at-least-32-chars",
   ALERT_ADMIN_TOKEN: "alert-admin-token-with-at-least-32-chars",
   DATABASE_URL: "postgres://optitech_user:credential@db.internal:5432/optitech",
+  DATABASE_SSL: "true",
   MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
   MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
   MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
@@ -72,6 +73,7 @@ describe("getPaidCheckoutGateStatus", () => {
         AUTH_SESSION_SECRET: "replace_with_a_long_random_session_secret",
         PRACTICE_SEAT_ADMIN_TOKEN: "replace_with_a_long_random_admin_token",
         ALERT_ADMIN_TOKEN: "replace_with_a_long_random_alert_admin_token",
+        DATABASE_SSL: "false",
       },
       databaseReadiness: verifiedDatabaseReadiness,
     });
@@ -88,6 +90,7 @@ describe("getPaidCheckoutGateStatus", () => {
         "PRACTICE_SEAT_ADMIN_TOKEN",
         "ALERT_ADMIN_TOKEN",
         "DATABASE_URL",
+        "DATABASE_SSL",
       ])
     );
     expect(JSON.stringify(status)).not.toContain("replace_with");
@@ -145,6 +148,7 @@ describe("getPaidCheckoutGateStatus", () => {
     expect(status.ready).toBe(false);
     expect(status.missingVariables).toContain("STRIPE_SECRET_KEY");
     expect(status.missingVariables).toContain("DATABASE_URL");
+    expect(status.missingVariables).toContain("DATABASE_SSL");
     expect(JSON.stringify(status)).not.toContain("secret-value");
   });
 });

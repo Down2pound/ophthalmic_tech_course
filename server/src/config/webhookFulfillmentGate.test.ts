@@ -3,6 +3,7 @@ import { getWebhookFulfillmentGateStatus } from "./webhookFulfillmentGate";
 
 const configuredDatabaseEnv = {
   DATABASE_URL: "postgres://optitech_user:credential@db.internal:5432/optitech",
+  DATABASE_SSL: "true",
 };
 
 describe("getWebhookFulfillmentGateStatus", () => {
@@ -25,7 +26,7 @@ describe("getWebhookFulfillmentGateStatus", () => {
     });
   });
 
-  it("blocks webhook fulfillment when DATABASE_URL is missing", () => {
+  it("blocks webhook fulfillment when database settings are missing", () => {
     expect(
       getWebhookFulfillmentGateStatus({
         env: {},
@@ -39,8 +40,8 @@ describe("getWebhookFulfillmentGateStatus", () => {
       })
     ).toEqual({
       ready: false,
-      warnings: ["Database setup is missing: DATABASE_URL."],
-      missingVariables: ["DATABASE_URL"],
+      warnings: ["Database setup is missing: DATABASE_URL, DATABASE_SSL."],
+      missingVariables: ["DATABASE_URL", "DATABASE_SSL"],
     });
   });
 

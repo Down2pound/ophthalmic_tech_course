@@ -16,6 +16,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         PRACTICE_SEAT_ADMIN_TOKEN: "",
         ALERT_ADMIN_TOKEN: "",
         DATABASE_URL: "",
+        DATABASE_SSL: "",
         MODULE_ONE_CLINICAL_REVIEWER_NAME: "",
         MODULE_ONE_CLINICAL_REVIEWER_ROLE: "",
         MODULE_ONE_CLINICAL_REVIEW_DATE: "",
@@ -58,7 +59,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
       },
       database: {
         databaseConfigured: false,
-        missingDatabaseVariables: ["DATABASE_URL"],
+        missingDatabaseVariables: ["DATABASE_URL", "DATABASE_SSL"],
       },
       databaseReadiness: {
         schemaVerified: false,
@@ -119,7 +120,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
       "Alert administration setup is missing: ALERT_ADMIN_TOKEN."
     );
     expect(report.warnings).toContain(
-      "Database setup is missing: DATABASE_URL."
+      "Database setup is missing: DATABASE_URL, DATABASE_SSL."
     );
     expect(report.warnings).toContain(
       "Module 1 clinical review signoff is missing or not approved."
@@ -185,6 +186,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         ALERT_ADMIN_TOKEN: "alert-admin-token-with-at-least-32-chars",
         DATABASE_URL:
           "postgres://optitech_user:credential@db.internal:5432/optitech",
+        DATABASE_SSL: "true",
         MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
         MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
         MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",
@@ -235,6 +237,7 @@ describe("getRuntimeLaunchReadinessReport", () => {
         ALERT_ADMIN_TOKEN: "alert-admin-token-with-at-least-32-chars",
         DATABASE_URL:
           "postgres://optitech_user:credential@db.internal:5432/optitech",
+        DATABASE_SSL: "true",
         MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
         MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
         MODULE_ONE_CLINICAL_REVIEW_DATE: "2026-07-13",

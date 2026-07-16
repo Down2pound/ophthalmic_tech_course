@@ -389,11 +389,12 @@ describe("getAlertAdminEnvironmentStatus", () => {
 });
 
 describe("getDatabaseEnvironmentStatus", () => {
-  it("marks database storage as configured when DATABASE_URL exists", () => {
+  it("marks database storage as configured when DATABASE_URL and DATABASE_SSL are set", () => {
     expect(
       getDatabaseEnvironmentStatus({
         DATABASE_URL:
           "postgres://optitech_user:secret@db.internal:5432/optitech",
+        DATABASE_SSL: "true",
       })
     ).toEqual({
       databaseConfigured: true,
@@ -401,10 +402,21 @@ describe("getDatabaseEnvironmentStatus", () => {
     });
   });
 
-  it("shows when durable database storage is missing", () => {
-    expect(getDatabaseEnvironmentStatus({})).toEqual({
+  it("shows when durable database storage or SSL confirmation is missing", () => {
+    expect(getDatabaseEnvironmentStatus({ DATABASE_URL: "" })).toEqual({
       databaseConfigured: false,
-      missingDatabaseVariables: ["DATABASE_URL"],
+      missingDatabaseVariables: ["DATABASE_URL", "DATABASE_SSL"],
+    });
+
+    expect(
+      getDatabaseEnvironmentStatus({
+        DATABASE_URL:
+          "postgres://optitech_user:secret@db.internal:5432/optitech",
+        DATABASE_SSL: "false",
+      })
+    ).toEqual({
+      databaseConfigured: false,
+      missingDatabaseVariables: ["DATABASE_SSL"],
     });
   });
 });

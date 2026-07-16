@@ -51,7 +51,7 @@ const readinessReport: RuntimeLaunchReadinessReport = {
   },
   database: {
     databaseConfigured: false,
-    missingDatabaseVariables: ["DATABASE_URL"],
+    missingDatabaseVariables: ["DATABASE_URL", "DATABASE_SSL"],
   },
   databaseReadiness: {
     schemaVerified: false,
