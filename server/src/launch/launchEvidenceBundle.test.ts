@@ -309,6 +309,7 @@ describe("createLaunchEvidenceBundle", () => {
     expect(homePcCommandCheatsheet).toContain("pnpm db:setup");
     expect(homePcCommandCheatsheet).toContain("pnpm launch:secret-scan");
     expect(homePcCommandCheatsheet).toContain("pnpm launch:blockers");
+    expect(homePcCommandCheatsheet).toContain("pnpm launch:env-template");
     expect(homePcCommandCheatsheet).toContain(
       "git clone optitech-academy-branch"
     );

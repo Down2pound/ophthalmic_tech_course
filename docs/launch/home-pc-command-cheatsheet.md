@@ -73,12 +73,15 @@ without printing the secret values.
 
 ```bash
 pnpm launch:blockers
+pnpm launch:env-template
 pnpm launch:secrets
 pnpm launch:doctor
 ```
 
 `launch:blockers` is the simplest work-safe summary of what still prevents
 paid sales.
+`launch:env-template` prints the safe host settings block for Render or another
+production host.
 `launch:secrets` makes a safe checklist of missing production settings.
 `launch:doctor` explains what is still blocking paid enrollment.
 
