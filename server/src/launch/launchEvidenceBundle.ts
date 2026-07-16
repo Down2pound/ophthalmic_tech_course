@@ -1,6 +1,5 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { renderModuleOneClinicalReviewPacketMarkdown } from "../../../shared/course/clinicalReviewPacket";
 import { renderLaunchDoctorReport } from "./launchDoctor";
 import { renderManualQaTemplate } from "./manualQaTemplate";
 import { renderProductionEnvChecklist } from "./productionEnvChecklist";
@@ -213,6 +212,10 @@ export async function createLaunchEvidenceBundle({
     ),
     "utf8"
   );
+  const moduleOneClinicalReviewPacket = await readFile(
+    path.resolve(projectRoot, "docs/launch/module-1-clinical-review-packet.md"),
+    "utf8"
+  );
 
   await writeFile(
     path.join(resolvedOutputDir, "README.md"),
@@ -312,7 +315,7 @@ export async function createLaunchEvidenceBundle({
   );
   await writeFile(
     path.join(resolvedOutputDir, "module-1-clinical-review-packet.md"),
-    renderModuleOneClinicalReviewPacketMarkdown()
+    moduleOneClinicalReviewPacket
   );
   await writeFile(
     path.join(resolvedOutputDir, "runtime-readiness-snapshot.json"),

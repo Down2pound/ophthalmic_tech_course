@@ -255,7 +255,8 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/go-live-checklist.md`
 - `docs/launch/first-sale-support-runbook.md`
 - `docs/launch/bootcamp-content-migration-checklist.md`
-- Downloaded `/api/launch/clinical-review-packet.md`
+- `docs/launch/module-1-clinical-review-packet.md`
+- Downloaded `/api/launch/clinical-review-packet.md` after deployment, if needed
 - Clinical reviewer signoff evidence
 - Stripe webhook test notes
 - Deployment smoke test output

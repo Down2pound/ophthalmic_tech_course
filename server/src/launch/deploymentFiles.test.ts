@@ -457,4 +457,31 @@ describe("deployment files", () => {
     expect(checklist).not.toContain("sk_test_");
     expect(checklist).not.toContain("whsec_");
   });
+
+  it("keeps a standalone Module 1 clinical review packet in launch docs", async () => {
+    const packet = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/module-1-clinical-review-packet.md"
+      ),
+      "utf8"
+    );
+
+    expect(packet).toContain(
+      "Module 1: Entering Ophthalmic Care Clinical Review Packet"
+    );
+    expect(packet).toContain("Clinical reviewer name: [blank]");
+    expect(packet).toContain("Lesson ID: m1-l1-what-techs-do");
+    expect(packet).toContain("What Ophthalmic Technicians Do");
+    expect(packet).toContain("The Eye Clinic Patient Journey");
+    expect(packet).toContain(
+      "Professional Boundaries, Privacy, and Escalation"
+    );
+    expect(packet).toContain(
+      "Does the lesson avoid diagnosis, treatment advice, or independent clinical authority?"
+    );
+    expect(packet).toContain("Reviewer signature: [blank]");
+    expect(packet).not.toContain("sk_test_");
+    expect(packet).not.toContain("whsec_");
+  });
 });

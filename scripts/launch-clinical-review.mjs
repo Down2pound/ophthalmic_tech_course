@@ -7,6 +7,7 @@ const lines = [
   "",
   "## What The Reviewer Should Read",
   "",
+  "- Standalone packet before deployment: `docs/launch/module-1-clinical-review-packet.md`",
   "- Live packet after deployment: `/api/launch/clinical-review-packet.md`",
   "- Launch evidence file: `module-1-clinical-review-packet.md`",
   "- Guide: `docs/launch/clinical-review-guide.md`",

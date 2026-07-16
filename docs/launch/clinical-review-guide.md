@@ -9,6 +9,12 @@ content is accurate, beginner-appropriate, and clear about scope limits.
 Download or generate the Module 1 review packet:
 
 ```text
+docs/launch/module-1-clinical-review-packet.md
+```
+
+After deployment, the same packet is also available at:
+
+```text
 /api/launch/clinical-review-packet.md
 ```
 
