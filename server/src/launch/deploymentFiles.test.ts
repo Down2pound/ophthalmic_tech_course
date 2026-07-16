@@ -130,4 +130,28 @@ describe("deployment files", () => {
     expect(blockerScript).toContain("LAUNCH_BASE_URL");
     expect(blockerScript).not.toContain("execSync");
   });
+
+  it("keeps a work-computer-safe production env template command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const envTemplateScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-env-template.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:env-template": "node scripts/launch-env-template.mjs"'
+    );
+    expect(envTemplateScript).toContain("Host Dashboard Paste Template");
+    expect(envTemplateScript).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(envTemplateScript).toContain(
+      "MODULE_ONE_CLINICAL_REVIEW_APPROVED=false"
+    );
+    expect(envTemplateScript).toContain("TRANSACTIONAL_EMAIL_API_URL");
+    expect(envTemplateScript).not.toContain("execSync");
+    expect(envTemplateScript).not.toContain("sk_test_");
+    expect(envTemplateScript).not.toContain("whsec_");
+  });
 });

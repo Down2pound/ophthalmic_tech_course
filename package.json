@@ -15,6 +15,7 @@
     "launch:smoke": "tsx server/src/launch/runDeploymentSmokeTest.ts",
     "launch:doctor": "tsx server/src/launch/runLaunchDoctor.ts",
     "launch:blockers": "node scripts/launch-blockers-summary.mjs",
+    "launch:env-template": "node scripts/launch-env-template.mjs",
     "launch:backup": "node scripts/launch-backup-handoff.mjs",
     "launch:workstation-handoff": "node scripts/launch-blockers-summary.mjs && node scripts/launch-secret-scan.mjs && node scripts/launch-backup-handoff.mjs",
     "launch:secrets": "tsx server/src/launch/runLaunchSecrets.ts",
