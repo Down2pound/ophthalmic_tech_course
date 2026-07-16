@@ -17,6 +17,7 @@ import {
   type LearnerInterestInput,
   type LearnerInterestStore,
 } from "../commerce/learnerInterestStore";
+import { hasAcceptedCheckoutTerms } from "../commerce/checkoutTerms";
 import {
   buildCheckoutReturnUrls,
   buildStripeCheckoutParams,
@@ -53,6 +54,7 @@ const checkoutSessionRateLimit = createRateLimitMiddleware({
 interface CheckoutRequestBody {
   email?: string;
   offerId?: string;
+  acceptedTerms?: unknown;
 }
 
 interface PracticeInquiryRequestBody {
@@ -269,6 +271,16 @@ export function setupCheckoutRoutes(router: Router) {
     "/checkout/sessions",
     checkoutSessionRateLimit,
     async (req: Request, res: Response) => {
+      const requestBody = (req.body ?? {}) as CheckoutRequestBody;
+
+      if (!hasAcceptedCheckoutTerms(requestBody.acceptedTerms)) {
+        res.status(400).json({
+          error:
+            "Course policies must be accepted before starting Stripe checkout.",
+        });
+        return;
+      }
+
       const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
       const environmentStatus = getCommerceEnvironmentStatus();
       const databaseReadiness = await getLaunchDatabaseReadiness({
@@ -294,7 +306,7 @@ export function setupCheckoutRoutes(router: Router) {
       }
 
       try {
-        const { email, offerId } = (req.body ?? {}) as CheckoutRequestBody;
+        const { email, offerId } = requestBody;
         const normalizedEmail = normalizeCheckoutEmail(email);
 
         if (!normalizedEmail) {

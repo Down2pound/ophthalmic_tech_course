@@ -51,6 +51,7 @@ export default function Checkout() {
   const [email, setEmail] = useState("");
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [isStartingCheckout, setIsStartingCheckout] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [learnerInterestForm, setLearnerInterestForm] = useState(
     emptyLearnerInterestForm
   );
@@ -75,6 +76,7 @@ export default function Checkout() {
     try {
       const { url } = await createCheckoutSession({
         email,
+        acceptedTerms,
       });
 
       window.location.href = url;
@@ -461,9 +463,24 @@ export default function Checkout() {
                 {checkoutError}
               </p>
             )}
+            <label className="mt-4 flex gap-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-700">
+              <input
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={event => setAcceptedTerms(event.target.checked)}
+                className="mt-1 h-4 w-4 flex-shrink-0"
+              />
+              <span>
+                I reviewed the refund policy, privacy expectations, course
+                limits, and support terms. I understand this is education, not
+                certification, employment, or hands-on competency verification.
+              </span>
+            </label>
             <Button
               className="mt-4 w-full bg-blue-700 text-white hover:bg-blue-800"
-              disabled={isStartingCheckout || !normalizedEmail}
+              disabled={
+                isStartingCheckout || !normalizedEmail || !acceptedTerms
+              }
               onClick={startCheckout}
             >
               <CreditCard className="mr-2 h-4 w-4" />

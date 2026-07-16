@@ -11,7 +11,11 @@ describe("createCheckoutSession", () => {
     });
 
     await expect(
-      createCheckoutSession({ email: " Learner@Example.COM ", fetcher })
+      createCheckoutSession({
+        email: " Learner@Example.COM ",
+        acceptedTerms: true,
+        fetcher,
+      })
     ).resolves.toEqual({
       url: "https://checkout.stripe.com/c/pay/cs_test_123",
     });
@@ -19,7 +23,10 @@ describe("createCheckoutSession", () => {
     expect(fetcher).toHaveBeenCalledWith("/api/checkout/sessions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: "learner@example.com" }),
+      body: JSON.stringify({
+        email: "learner@example.com",
+        acceptedTerms: true,
+      }),
     });
   });
 
@@ -34,6 +41,7 @@ describe("createCheckoutSession", () => {
     await createCheckoutSession({
       email: "manager@example.com",
       offerId: "practice-five-seat-pack",
+      acceptedTerms: true,
       fetcher,
     });
 
@@ -43,6 +51,7 @@ describe("createCheckoutSession", () => {
       body: JSON.stringify({
         email: "manager@example.com",
         offerId: "practice-five-seat-pack",
+        acceptedTerms: true,
       }),
     });
   });
@@ -54,7 +63,11 @@ describe("createCheckoutSession", () => {
     });
 
     await expect(
-      createCheckoutSession({ email: "learner@example.com", fetcher })
+      createCheckoutSession({
+        email: "learner@example.com",
+        acceptedTerms: true,
+        fetcher,
+      })
     ).rejects.toThrow("Checkout unavailable");
   });
 
@@ -65,6 +78,21 @@ describe("createCheckoutSession", () => {
       createCheckoutSession({ email: "not-an-email", fetcher })
     ).rejects.toThrow(
       "Enter a valid email so we can send your receipt and course access."
+    );
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
+  it("requires policy acceptance before contacting checkout", async () => {
+    const fetcher = vi.fn();
+
+    await expect(
+      createCheckoutSession({
+        email: "learner@example.com",
+        acceptedTerms: false,
+        fetcher,
+      })
+    ).rejects.toThrow(
+      "Review and accept the course policies before continuing to Stripe."
     );
     expect(fetcher).not.toHaveBeenCalled();
   });

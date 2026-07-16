@@ -50,6 +50,9 @@ export default function PracticePacks() {
   const [emailByOfferId, setEmailByOfferId] = useState<Record<string, string>>(
     {}
   );
+  const [acceptedTermsByOfferId, setAcceptedTermsByOfferId] = useState<
+    Record<string, boolean>
+  >({});
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [practiceInquiryForm, setPracticeInquiryForm] =
@@ -73,6 +76,7 @@ export default function PracticePacks() {
       const { url } = await createCheckoutSession({
         email: emailByOfferId[offerId] ?? "",
         offerId,
+        acceptedTerms: Boolean(acceptedTermsByOfferId[offerId]),
       });
 
       window.location.href = url;
@@ -277,10 +281,11 @@ export default function PracticePacks() {
             </div>
           </Card>
 
-          {practicePackOffers.map(offer => (
+          {practicePackOffers.map(offer =>
             (() => {
               const { email, normalizedEmail, showEmailValidation } =
                 getOfferEmailState(offer.id);
+              const acceptedTerms = Boolean(acceptedTermsByOfferId[offer.id]);
               const emailHelpId = `${offer.id}-email-help`;
 
               return (
@@ -373,9 +378,32 @@ export default function PracticePacks() {
                         ? "Enter a valid email like manager@example.com."
                         : "We use this email for the receipt and seat setup."}
                     </p>
+                    <label className="mt-4 flex gap-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-700">
+                      <input
+                        type="checkbox"
+                        checked={acceptedTerms}
+                        onChange={event =>
+                          setAcceptedTermsByOfferId(current => ({
+                            ...current,
+                            [offer.id]: event.target.checked,
+                          }))
+                        }
+                        className="mt-1 h-4 w-4 flex-shrink-0"
+                      />
+                      <span>
+                        I reviewed the practice-pack terms, refund policy,
+                        privacy expectations, and course limits. I understand
+                        supervisors remain responsible for local protocols and
+                        hands-on competency signoff.
+                      </span>
+                    </label>
                     <Button
                       className="mt-4 w-full bg-blue-700 text-white hover:bg-blue-800"
-                      disabled={activeOfferId === offer.id || !normalizedEmail}
+                      disabled={
+                        activeOfferId === offer.id ||
+                        !normalizedEmail ||
+                        !acceptedTerms
+                      }
                       onClick={() => startCheckout(offer.id)}
                     >
                       {activeOfferId === offer.id
@@ -387,7 +415,7 @@ export default function PracticePacks() {
                 </Card>
               );
             })()
-          ))}
+          )}
         </section>
 
         <aside>

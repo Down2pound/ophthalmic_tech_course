@@ -18,6 +18,9 @@ describe("renderManualQaTemplate", () => {
     expect(template).toContain(
       "Individual success return showed the learner payment received message"
     );
+    expect(template).toContain(
+      "Individual checkout required policy acceptance"
+    );
     expect(template).toContain("Passwordless Email Delivery");
     expect(template).toContain(
       "Sign-in email arrived without exposing raw token"
@@ -30,6 +33,7 @@ describe("renderManualQaTemplate", () => {
     expect(template).toContain(
       "Practice success return showed practice pack payment received next steps"
     );
+    expect(template).toContain("Practice checkout required policy acceptance");
     expect(template).toContain("Custom Practice Inquiry Test");
     expect(template).toContain("Larger-practice inquiry path is visible");
     expect(template).toContain("Sitemap URL or generated sitemap path:");

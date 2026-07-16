@@ -62,9 +62,8 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     renderChecklistItem(
       "Individual success return showed the learner payment received message"
     ),
-    renderChecklistItem(
-      "Individual cancel return showed no payment was taken"
-    ),
+    renderChecklistItem("Individual checkout required policy acceptance"),
+    renderChecklistItem("Individual cancel return showed no payment was taken"),
     "",
     "### Passwordless Email Delivery",
     "",
@@ -111,6 +110,7 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     renderChecklistItem(
       "Practice success return showed practice pack payment received next steps"
     ),
+    renderChecklistItem("Practice checkout required policy acceptance"),
     renderChecklistItem(
       "Practice cancel return kept the buyer on the practice pack options"
     ),
@@ -126,7 +126,9 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     "",
     "Practice size or rollout note:",
     "",
-    renderChecklistItem("Larger-practice inquiry path is visible on `/practice-packs`"),
+    renderChecklistItem(
+      "Larger-practice inquiry path is visible on `/practice-packs`"
+    ),
     renderChecklistItem(
       "Inquiry message does not include patient information or secrets"
     ),

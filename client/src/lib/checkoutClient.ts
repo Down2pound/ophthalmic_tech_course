@@ -10,10 +10,12 @@ type Fetcher = typeof fetch;
 export async function createCheckoutSession({
   email,
   offerId,
+  acceptedTerms,
   fetcher = fetch,
 }: {
   email: string;
   offerId?: string;
+  acceptedTerms?: boolean;
   fetcher?: Fetcher;
 }): Promise<{ url: string }> {
   const normalizedEmail = normalizeCheckoutEmail(email);
@@ -24,10 +26,16 @@ export async function createCheckoutSession({
     );
   }
 
+  if (!acceptedTerms) {
+    throw new Error(
+      "Review and accept the course policies before continuing to Stripe."
+    );
+  }
+
   const response = await fetcher("/api/checkout/sessions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: normalizedEmail, offerId }),
+    body: JSON.stringify({ email: normalizedEmail, offerId, acceptedTerms }),
   });
 
   const payload = (await response.json()) as CheckoutResponse;
