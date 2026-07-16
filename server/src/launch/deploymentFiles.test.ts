@@ -526,4 +526,27 @@ describe("deployment files", () => {
     expect(template).not.toContain("sk_test_");
     expect(template).not.toContain("whsec_");
   });
+
+  it("keeps a standalone runtime readiness snapshot guide in launch docs", async () => {
+    const guide = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/runtime-readiness-snapshot-guide.md"
+      ),
+      "utf8"
+    );
+
+    expect(guide).toContain(
+      "OptiTech Academy Runtime Readiness Snapshot Guide"
+    );
+    expect(guide).toContain("/api/launch/readiness");
+    expect(guide).toContain("readyForPaidLaunch");
+    expect(guide).toContain("individualLearner");
+    expect(guide).toContain("practicePacks");
+    expect(guide).toContain("databaseReadiness");
+    expect(guide).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED");
+    expect(guide).toContain("ENABLE_PAID_ENROLLMENT");
+    expect(guide).not.toContain("sk_test_");
+    expect(guide).not.toContain("whsec_");
+  });
 });

@@ -53,6 +53,7 @@ function renderReadme({
     "- `production-env-checklist.md`: safe fill-in checklist for host dashboard settings.",
     "- `launch-doctor-report.md`: human-readable paid launch preflight report.",
     "- `manual-launch-qa-evidence.md`: safe template for Stripe, learner-flow, practice-pack, browser, and accessibility QA notes.",
+    "- `runtime-readiness-snapshot-guide.md`: how to save and interpret the deployed readiness endpoint.",
     "- `first-sale-support-runbook.md`: safe support checklist for buyer, learner, practice-seat, and refund issues.",
     "- `bootcamp-content-migration-checklist.md`: source-to-course checklist for Drive and NotebookLM Bootcamp assets.",
     "- `module-1-clinical-review-packet.md`: clinical reviewer packet.",
@@ -109,6 +110,7 @@ export async function createLaunchEvidenceBundle({
     "production-env-checklist.md",
     "launch-doctor-report.md",
     "manual-launch-qa-evidence.md",
+    "runtime-readiness-snapshot-guide.md",
     "first-sale-support-runbook.md",
     "bootcamp-content-migration-checklist.md",
     "module-1-clinical-review-packet.md",
@@ -205,6 +207,13 @@ export async function createLaunchEvidenceBundle({
   );
   const manualQaEvidence = await readFile(
     path.resolve(projectRoot, "docs/launch/manual-launch-qa-evidence.md"),
+    "utf8"
+  );
+  const runtimeReadinessSnapshotGuide = await readFile(
+    path.resolve(
+      projectRoot,
+      "docs/launch/runtime-readiness-snapshot-guide.md"
+    ),
     "utf8"
   );
   const firstSaleSupportRunbook = await readFile(
@@ -310,6 +319,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "manual-launch-qa-evidence.md"),
     manualQaEvidence
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "runtime-readiness-snapshot-guide.md"),
+    runtimeReadinessSnapshotGuide
   );
   await writeFile(
     path.join(resolvedOutputDir, "first-sale-support-runbook.md"),

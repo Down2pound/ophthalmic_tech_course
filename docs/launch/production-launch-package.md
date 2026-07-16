@@ -255,6 +255,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/go-live-checklist.md`
 - `docs/launch/production-env-checklist.md`
 - `docs/launch/manual-launch-qa-evidence.md`
+- `docs/launch/runtime-readiness-snapshot-guide.md`
 - `docs/launch/first-sale-support-runbook.md`
 - `docs/launch/bootcamp-content-migration-checklist.md`
 - `docs/launch/module-1-clinical-review-packet.md`
