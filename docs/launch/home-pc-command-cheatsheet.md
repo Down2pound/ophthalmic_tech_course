@@ -101,23 +101,31 @@ pnpm db:setup
 
 Replace the example URL with your real deployed domain:
 
-```bash
-LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
-PUBLIC_APP_URL=https://your-real-domain.example pnpm launch:sitemap
+```powershell
+$env:LAUNCH_SMOKE_ALLOW_NOT_READY="true"
+$env:LAUNCH_BASE_URL="https://your-real-domain.example"
+pnpm launch:smoke
+$env:PUBLIC_APP_URL="https://your-real-domain.example"
+pnpm launch:sitemap
+pnpm launch:first-sales
 ```
 
 This early smoke test is allowed to pass while paid launch readiness is still
 `false`. That is useful before Stripe live mode, email, database, and clinical
 signoff are all finished. It still checks that the live pages load, browser
 safety headers are present, and `/robots.txt` blocks private/admin-style paths.
+`launch:first-sales` prints the buyer links and short outreach messages using
+your real domain.
 
 ## 7. Run The Final Go-Live Smoke Test
 
 Use this only after all launch gates are complete and paid enrollment should be
 ready:
 
-```bash
-LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
+```powershell
+Remove-Item Env:\LAUNCH_SMOKE_ALLOW_NOT_READY -ErrorAction SilentlyContinue
+$env:LAUNCH_BASE_URL="https://your-real-domain.example"
+pnpm launch:smoke
 ```
 
 This final version does not use `LAUNCH_SMOKE_ALLOW_NOT_READY=true`, so it

@@ -105,6 +105,7 @@ describe("deployment files", () => {
     expect(backupScript).toContain("git remote set-url origin");
     expect(backupScript).toContain("pnpm install");
     expect(backupScript).toContain("pnpm launch:preflight");
+    expect(backupScript).toContain("pnpm launch:first-sales");
     expect(backupScript).not.toContain("execSync");
   });
 
@@ -182,5 +183,31 @@ describe("deployment files", () => {
     expect(clinicalReviewScript).not.toContain("execSync");
     expect(clinicalReviewScript).not.toContain("sk_test_");
     expect(clinicalReviewScript).not.toContain("whsec_");
+  });
+
+  it("keeps a work-computer-safe first-sales link packet command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const firstSalesScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-sales-links.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:first-sales": "node scripts/launch-first-sales-links.mjs"'
+    );
+    expect(firstSalesScript).toContain(
+      "OptiTech Academy First Sales Link Packet"
+    );
+    expect(firstSalesScript).toContain("/checkout");
+    expect(firstSalesScript).toContain("/practice-packs");
+    expect(firstSalesScript).toContain(
+      "docs/launch/first-customers-sales-packet.md"
+    );
+    expect(firstSalesScript).not.toContain("execSync");
+    expect(firstSalesScript).not.toContain("sk_test_");
+    expect(firstSalesScript).not.toContain("whsec_");
   });
 });

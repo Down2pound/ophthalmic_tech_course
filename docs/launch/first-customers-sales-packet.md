@@ -23,6 +23,14 @@ success, income, or that the course replaces hands-on supervision.
 
 Replace `https://your-real-domain.example` with the final production domain:
 
+```powershell
+$env:PUBLIC_APP_URL="https://your-real-domain.example"
+pnpm launch:first-sales
+```
+
+That command prints the same buyer links with your real domain already filled
+in.
+
 ```text
 Individual learners: https://your-real-domain.example/checkout
 Practice buyers: https://your-real-domain.example/practice-packs
