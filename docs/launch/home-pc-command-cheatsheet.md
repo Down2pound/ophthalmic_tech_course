@@ -73,6 +73,7 @@ without printing the secret values.
 
 ```bash
 pnpm launch:blockers
+pnpm launch:admin-tokens
 pnpm launch:clinical-review
 pnpm launch:database-setup
 pnpm launch:email-setup
@@ -84,6 +85,8 @@ pnpm launch:doctor
 
 `launch:blockers` is the simplest work-safe summary of what still prevents
 paid sales.
+`launch:admin-tokens` prints the practice-seat and alert admin token setup and
+test checklist.
 `launch:clinical-review` prints the Module 1 review checklist and approval
 fields.
 `launch:database-setup` prints the production database setup and verification

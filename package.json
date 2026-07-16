@@ -14,6 +14,7 @@
     "db:setup": "tsx server/src/db/runSetup.ts",
     "launch:smoke": "tsx server/src/launch/runDeploymentSmokeTest.ts",
     "launch:doctor": "tsx server/src/launch/runLaunchDoctor.ts",
+    "launch:admin-tokens": "node scripts/launch-admin-tokens.mjs",
     "launch:blockers": "node scripts/launch-blockers-summary.mjs",
     "launch:clinical-review": "node scripts/launch-clinical-review.mjs",
     "launch:database-setup": "node scripts/launch-database-setup.mjs",

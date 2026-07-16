@@ -305,4 +305,27 @@ describe("deployment files", () => {
     expect(databaseSetupScript).not.toContain("sk_test_");
     expect(databaseSetupScript).not.toContain("whsec_");
   });
+
+  it("keeps a work-computer-safe admin token setup command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const adminTokensScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-admin-tokens.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:admin-tokens": "node scripts/launch-admin-tokens.mjs"'
+    );
+    expect(adminTokensScript).toContain("OptiTech Academy Admin Token Setup");
+    expect(adminTokensScript).toContain("PRACTICE_SEAT_ADMIN_TOKEN");
+    expect(adminTokensScript).toContain("ALERT_ADMIN_TOKEN");
+    expect(adminTokensScript).toContain("/practice-seat-admin");
+    expect(adminTokensScript).toContain("/admin/alert-templates");
+    expect(adminTokensScript).not.toContain("execSync");
+    expect(adminTokensScript).not.toContain("sk_test_");
+    expect(adminTokensScript).not.toContain("whsec_");
+  });
 });
