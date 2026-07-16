@@ -124,6 +124,10 @@ describe("deployment files", () => {
     expect(blockerScript).toContain("STRIPE_SECRET_KEY");
     expect(blockerScript).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED");
     expect(blockerScript).toContain("docs/launch/go-live-checklist.md");
+    expect(blockerScript).toContain("First-Sale Action Order");
+    expect(blockerScript).toContain("pnpm launch:preflight");
+    expect(blockerScript).toContain("pnpm db:setup");
+    expect(blockerScript).toContain("LAUNCH_BASE_URL");
     expect(blockerScript).not.toContain("execSync");
   });
 });
