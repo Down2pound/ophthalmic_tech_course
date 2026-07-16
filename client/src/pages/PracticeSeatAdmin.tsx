@@ -4,6 +4,8 @@ import {
   assignPracticeSeat,
   fetchPracticeInquiries,
   fetchPracticeSeatPacks,
+  lookupBuyerSupportProfile,
+  type BuyerSupportProfile,
   type LearnerInterestSummary,
   type PracticeInquirySummary,
   type PracticeSeatAssignmentSummary,
@@ -34,6 +36,9 @@ function getRemainingSeats(seatPack: PracticeSeatPackSummary) {
 
 export default function PracticeSeatAdmin() {
   const [adminToken, setAdminToken] = useState("");
+  const [supportLookupEmail, setSupportLookupEmail] = useState("");
+  const [supportProfile, setSupportProfile] =
+    useState<BuyerSupportProfile | null>(null);
   const [learnerEmailBySeatPackId, setLearnerEmailBySeatPackId] = useState<
     Record<string, string>
   >({});
@@ -86,6 +91,31 @@ export default function PracticeSeatAdmin() {
         error instanceof Error
           ? error.message
           : "Practice seat packs could not be loaded."
+      );
+    } finally {
+      setLoadingAction(null);
+    }
+  };
+
+  const lookupSupportProfile = async () => {
+    setLoadingAction("support-lookup");
+    setErrorMessage(null);
+    setStatusMessage(null);
+    setSupportProfile(null);
+
+    try {
+      const result = await lookupBuyerSupportProfile({
+        adminToken: adminToken.trim(),
+        email: supportLookupEmail,
+      });
+
+      setSupportProfile(result);
+      setStatusMessage(`Support profile loaded for ${result.email}.`);
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Buyer support profile could not be loaded."
       );
     } finally {
       setLoadingAction(null);
@@ -188,10 +218,118 @@ export default function PracticeSeatAdmin() {
                 {errorMessage}
               </p>
             )}
+
+            <div className="mt-6 border-t border-slate-200 pt-5">
+              <h3 className="font-semibold">Buyer support lookup</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Use this when a learner or manager asks about access, seats, or
+                checkout status.
+              </p>
+              <label className="mt-4 block text-sm font-semibold text-slate-700">
+                Buyer or learner email
+              </label>
+              <input
+                type="email"
+                value={supportLookupEmail}
+                onChange={event => setSupportLookupEmail(event.target.value)}
+                placeholder="learner@example.com"
+                className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
+              />
+              <Button
+                className="mt-3 w-full bg-slate-900 text-white hover:bg-slate-800"
+                disabled={
+                  loadingAction === "support-lookup" ||
+                  adminToken.trim() === "" ||
+                  supportLookupEmail.trim() === ""
+                }
+                onClick={lookupSupportProfile}
+              >
+                {loadingAction === "support-lookup"
+                  ? "Looking up..."
+                  : "Lookup buyer"}
+              </Button>
+            </div>
           </Card>
         </aside>
 
         <section className="space-y-5">
+          {supportProfile && (
+            <Card className="border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-blue-700">
+                    Buyer support
+                  </p>
+                  <h2 className="mt-1 text-2xl font-bold">
+                    {supportProfile.email}
+                  </h2>
+                </div>
+                <div className="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm font-semibold text-green-950">
+                  {supportProfile.summary.hasActiveEnrollment
+                    ? "Active access"
+                    : "No active access"}
+                </div>
+              </div>
+
+              <div className="mt-5 grid gap-3 md:grid-cols-5">
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs font-semibold text-slate-500">
+                    Purchases
+                  </p>
+                  <p className="mt-1 text-xl font-bold">
+                    {supportProfile.purchases.length}
+                  </p>
+                </div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs font-semibold text-slate-500">
+                    Enrollments
+                  </p>
+                  <p className="mt-1 text-xl font-bold">
+                    {supportProfile.enrollments.length}
+                  </p>
+                </div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs font-semibold text-slate-500">
+                    Seat packs
+                  </p>
+                  <p className="mt-1 text-xl font-bold">
+                    {supportProfile.practiceSeatPacks.length}
+                  </p>
+                </div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs font-semibold text-slate-500">
+                    Assignments
+                  </p>
+                  <p className="mt-1 text-xl font-bold">
+                    {supportProfile.practiceSeatAssignments.length}
+                  </p>
+                </div>
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs font-semibold text-slate-500">
+                    Seats left
+                  </p>
+                  <p className="mt-1 text-xl font-bold">
+                    {supportProfile.summary.remainingPracticeSeats}
+                  </p>
+                </div>
+              </div>
+
+              <section className="mt-5">
+                <h3 className="font-semibold">Recommended support actions</h3>
+                <ul className="mt-3 space-y-2">
+                  {supportProfile.recommendedActions.map(action => (
+                    <li
+                      key={action}
+                      className="rounded-md border border-blue-100 bg-blue-50 p-3 text-sm leading-6 text-blue-950"
+                    >
+                      {action}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </Card>
+          )}
+
           {pageState.seatPacks.length === 0 ? (
             <Card className="border-slate-200 bg-white p-6 shadow-sm">
               <div className="flex items-center gap-3">

@@ -10,6 +10,7 @@ describe("renderFirstSaleSupportRunbook", () => {
     expect(runbook).toContain("OptiTech Academy First Sale Support Runbook");
     expect(runbook).toContain("recommended next support actions");
     expect(runbook).toContain("lookup `recommendedActions`");
+    expect(runbook).toContain("Practice Seat Manager");
     expect(runbook).toContain("GET /api/support/buyer-lookup");
     expect(runbook).not.toContain("sk_test_");
     expect(runbook).not.toContain("whsec_");

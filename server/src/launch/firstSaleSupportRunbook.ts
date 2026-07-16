@@ -14,7 +14,7 @@ export function renderFirstSaleSupportRunbook({
     "",
     "- Confirm the buyer email, offer type, purchase time, and whether this is an individual learner or practice pack.",
     "- Check Stripe for the Checkout session, payment status, and customer email.",
-    "- Use `GET /api/support/buyer-lookup?email=buyer@example.com` with the private admin token to check app-side purchases, enrollments, practice packs, practice-seat assignments, and recommended next support actions.",
+    "- Use the protected Practice Seat Manager buyer lookup, or `GET /api/support/buyer-lookup?email=buyer@example.com` with the private admin token, to check app-side purchases, enrollments, practice packs, practice-seat assignments, and recommended next support actions.",
     "- Check `/api/launch/readiness` before making system changes.",
     "- If access did not appear after payment, check the Stripe webhook delivery status before retrying anything.",
     "- Record only safe evidence: timestamps, non-secret IDs, buyer email, public error message, and action taken.",

@@ -3,6 +3,7 @@ import {
   assignPracticeSeat,
   fetchPracticeInquiries,
   fetchPracticeSeatPacks,
+  lookupBuyerSupportProfile,
 } from "./practiceSeatAdminClient";
 
 describe("fetchPracticeSeatPacks", () => {
@@ -97,6 +98,57 @@ describe("fetchPracticeInquiries", () => {
         "x-admin-token": "admin-token",
       },
     });
+  });
+});
+
+describe("lookupBuyerSupportProfile", () => {
+  it("loads protected buyer support details with admin token and buyer email", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        email: "learner@example.com",
+        purchases: [{ checkoutSessionId: "cs_test_123" }],
+        enrollments: [{ enrollmentId: "enrollment_cs_test_123" }],
+        practiceSeatPacks: [],
+        practiceSeatAssignments: [],
+        summary: {
+          hasPurchase: true,
+          hasActiveEnrollment: true,
+          hasPracticeSeatPack: false,
+          hasPracticeSeatAssignment: false,
+          remainingPracticeSeats: 0,
+        },
+        recommendedActions: [
+          "Active enrollment exists. Ask the learner to request a fresh passwordless sign-in link with this same email.",
+        ],
+      }),
+    });
+
+    await expect(
+      lookupBuyerSupportProfile({
+        adminToken: "admin-token",
+        email: " Learner@Example.COM ",
+        fetcher,
+      })
+    ).resolves.toMatchObject({
+      email: "learner@example.com",
+      summary: {
+        hasPurchase: true,
+        hasActiveEnrollment: true,
+      },
+      recommendedActions: [
+        expect.stringContaining("fresh passwordless sign-in link"),
+      ],
+    });
+    expect(fetcher).toHaveBeenCalledWith(
+      "/api/support/buyer-lookup?email=learner%40example.com",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-token": "admin-token",
+        },
+      }
+    );
   });
 });
 
