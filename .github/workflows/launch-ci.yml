@@ -36,6 +36,9 @@ jobs:
       - name: Run launch preflight
         run: pnpm launch:preflight
 
+      - name: Verify launch secret scan
+        run: pnpm launch:secret-scan
+
       - name: Verify launch secret generator
         run: pnpm launch:secrets
 

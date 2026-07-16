@@ -64,4 +64,22 @@ describe("deployment files", () => {
     expect(renderBlueprint).not.toContain("sk_test_");
     expect(renderBlueprint).not.toContain("whsec_");
   });
+
+  it("runs the launch secret scan in GitHub launch CI", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const workflow = await readFile(
+      path.resolve(process.cwd(), ".github/workflows/launch-ci.yml"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:secret-scan": "node scripts/launch-secret-scan.mjs"'
+    );
+    expect(workflow).toContain("pnpm launch:preflight");
+    expect(workflow).toContain("pnpm launch:secret-scan");
+    expect(workflow).toContain("actions/upload-artifact@v4");
+  });
 });

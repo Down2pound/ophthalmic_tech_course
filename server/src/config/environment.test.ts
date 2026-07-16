@@ -85,7 +85,7 @@ describe("isPlaceholderEnvironmentValue", () => {
     expect(
       isPlaceholderEnvironmentValue(
         "DATABASE_URL",
-        "postgres://optitech_user:secret@db.internal:5432/optitech"
+        "postgres://db.internal:5432/optitech"
       )
     ).toBe(false);
   });
@@ -392,8 +392,7 @@ describe("getDatabaseEnvironmentStatus", () => {
   it("marks database storage as configured when DATABASE_URL and DATABASE_SSL are set", () => {
     expect(
       getDatabaseEnvironmentStatus({
-        DATABASE_URL:
-          "postgres://optitech_user:secret@db.internal:5432/optitech",
+        DATABASE_URL: "postgres://db.internal:5432/optitech",
         DATABASE_SSL: "true",
       })
     ).toEqual({
@@ -410,8 +409,7 @@ describe("getDatabaseEnvironmentStatus", () => {
 
     expect(
       getDatabaseEnvironmentStatus({
-        DATABASE_URL:
-          "postgres://optitech_user:secret@db.internal:5432/optitech",
+        DATABASE_URL: "postgres://db.internal:5432/optitech",
         DATABASE_SSL: "false",
       })
     ).toEqual({

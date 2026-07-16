@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getWebhookFulfillmentGateStatus } from "./webhookFulfillmentGate";
 
 const configuredDatabaseEnv = {
-  DATABASE_URL: "postgres://optitech_user:credential@db.internal:5432/optitech",
+  DATABASE_URL: "postgres://db.internal:5432/optitech",
   DATABASE_SSL: "true",
 };
 

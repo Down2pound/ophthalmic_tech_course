@@ -16,9 +16,10 @@
     "launch:doctor": "tsx server/src/launch/runLaunchDoctor.ts",
     "launch:backup": "tsx server/src/launch/runBackupHandoffReport.ts",
     "launch:secrets": "tsx server/src/launch/runLaunchSecrets.ts",
+    "launch:secret-scan": "node scripts/launch-secret-scan.mjs",
     "launch:sitemap": "tsx server/src/launch/runSitemap.ts",
     "launch:bundle": "tsx server/src/launch/runLaunchEvidenceBundle.ts",
-    "launch:preflight": "pnpm check && pnpm test && pnpm build && pnpm launch:bundle",
+    "launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm build && pnpm launch:bundle",
     "format": "prettier --write ."
   },
   "dependencies": {

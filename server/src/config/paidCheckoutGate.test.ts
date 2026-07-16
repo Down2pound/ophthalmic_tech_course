@@ -20,7 +20,7 @@ const launchReadyEnv = {
   SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
   PRACTICE_SEAT_ADMIN_TOKEN: "practice-seat-token-with-at-least-32-chars",
   ALERT_ADMIN_TOKEN: "alert-admin-token-with-at-least-32-chars",
-  DATABASE_URL: "postgres://optitech_user:credential@db.internal:5432/optitech",
+  DATABASE_URL: "postgres://db.internal:5432/optitech",
   DATABASE_SSL: "true",
   MODULE_ONE_CLINICAL_REVIEWER_NAME: "Dr. Reviewer",
   MODULE_ONE_CLINICAL_REVIEWER_ROLE: "Ophthalmologist",
