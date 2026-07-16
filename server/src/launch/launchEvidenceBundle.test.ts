@@ -279,6 +279,12 @@ describe("createLaunchEvidenceBundle", () => {
     expect(revenueAndSalesTrackerTemplate).toContain(
       "OptiTech Academy Revenue And Sales Tracker Template"
     );
+    expect(revenueAndSalesTrackerTemplate).toContain(
+      "First 24-Hour Sale Review"
+    );
+    expect(revenueAndSalesTrackerTemplate).toContain(
+      "Continue / Pause / Fix first"
+    );
     expect(revenueAndSalesTrackerTemplate).toContain("Weekly Business Review");
     expect(revenueAndSalesTrackerTemplate).toContain(
       "Do not paste secrets, private medical details, or raw access links"

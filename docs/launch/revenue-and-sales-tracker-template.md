@@ -28,10 +28,10 @@ Do not track:
 
 Use this table before someone buys.
 
-| Date Added | Lead Type | Name Or Practice | Source | Buyer Path | Status | Next Follow-Up | Safe Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-07-13 | Individual | Example Learner | LinkedIn | Individual course | New | 2026-07-16 | Wants beginner-friendly tech training. |
-| 2026-07-13 | Practice | Example Eye Care | Referral | Five-seat pack | Warm | 2026-07-17 | Asked about onboarding new technicians. |
+| Date Added | Lead Type  | Name Or Practice | Source   | Buyer Path        | Status | Next Follow-Up | Safe Notes                              |
+| ---------- | ---------- | ---------------- | -------- | ----------------- | ------ | -------------- | --------------------------------------- |
+| 2026-07-13 | Individual | Example Learner  | LinkedIn | Individual course | New    | 2026-07-16     | Wants beginner-friendly tech training.  |
+| 2026-07-13 | Practice   | Example Eye Care | Referral | Five-seat pack    | Warm   | 2026-07-17     | Asked about onboarding new technicians. |
 
 Status ideas:
 
@@ -47,10 +47,10 @@ Status ideas:
 
 Use this table after someone pays.
 
-| Purchase Date | Buyer Type | Buyer Name Or Practice | Buyer Email | Offer | Amount | Stripe Checkout Session ID | Stripe Event ID | Fulfillment Status | Sign-In Confirmed | Support Needed | Safe Notes |
-| --- | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- |
-| 2026-07-13 | Individual | Example Learner | learner@example.com | Individual learner | 199 | cs_test_example | evt_test_example | Access sent | No | No | Send welcome email. |
-| 2026-07-13 | Practice | Example Eye Care | admin@example.com | Five-seat practice pack | 799 | cs_test_example | evt_test_example | Seats created | No | Yes | Needs seat assignment help. |
+| Purchase Date | Buyer Type | Buyer Name Or Practice | Buyer Email         | Offer                   | Amount | Stripe Checkout Session ID | Stripe Event ID  | Fulfillment Status | Sign-In Confirmed | Support Needed | Safe Notes                  |
+| ------------- | ---------- | ---------------------- | ------------------- | ----------------------- | -----: | -------------------------- | ---------------- | ------------------ | ----------------- | -------------- | --------------------------- |
+| 2026-07-13    | Individual | Example Learner        | learner@example.com | Individual learner      |    199 | cs_test_example            | evt_test_example | Access sent        | No                | No             | Send welcome email.         |
+| 2026-07-13    | Practice   | Example Eye Care       | admin@example.com   | Five-seat practice pack |    799 | cs_test_example            | evt_test_example | Seats created      | No                | Yes            | Needs seat assignment help. |
 
 Fulfillment status ideas:
 
@@ -65,9 +65,9 @@ Fulfillment status ideas:
 
 Use this table when a practice buys seats for employees.
 
-| Practice | Pack Size | Seats Assigned | Seats Remaining | Practice Contact | Onboarding Lead | Next Check-In | Safe Notes |
-| --- | ---: | ---: | ---: | --- | --- | --- | --- |
-| Example Eye Care | 5 | 2 | 3 | admin@example.com | Jeff | 2026-07-20 | Two new technicians starting Module 1. |
+| Practice         | Pack Size | Seats Assigned | Seats Remaining | Practice Contact  | Onboarding Lead | Next Check-In | Safe Notes                             |
+| ---------------- | --------: | -------------: | --------------: | ----------------- | --------------- | ------------- | -------------------------------------- |
+| Example Eye Care |         5 |              2 |               3 | admin@example.com | Jeff            | 2026-07-20    | Two new technicians starting Module 1. |
 
 ## Practice Inquiry Tracker
 
@@ -75,17 +75,17 @@ Use this table for larger-practice conversations that start before purchase.
 Do not save patient details, private employee performance notes, passwords,
 card data, raw sign-in links, or secrets.
 
-| Date | Inquiry ID | Practice | Contact Email | Estimated Learners | Timeline | Status | Next Step |
-| --- | --- | --- | --- | ---: | --- | --- | --- |
-| 2026-07-13 | practice_inquiry_example | Example Eye Care | manager@example.com | 18 | Next hiring class | New | Schedule rollout call. |
+| Date       | Inquiry ID               | Practice         | Contact Email       | Estimated Learners | Timeline          | Status | Next Step              |
+| ---------- | ------------------------ | ---------------- | ------------------- | -----------------: | ----------------- | ------ | ---------------------- |
+| 2026-07-13 | practice_inquiry_example | Example Eye Care | manager@example.com |                 18 | Next hiring class | New    | Schedule rollout call. |
 
 ## Refund And Support Tracker
 
 Use this table when someone needs help or requests a refund.
 
-| Request Date | Buyer Type | Buyer Name Or Practice | Category | Offer | Stripe Refund ID | Status | Follow-Up Date | Safe Reason Theme | Safe Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-07-13 | Individual | Example Learner | Sign-in help | Individual learner | N/A | Open | 2026-07-14 | Email not received | Resend sign-in after confirming email spelling. |
+| Request Date | Buyer Type | Buyer Name Or Practice | Category     | Offer              | Stripe Refund ID | Status | Follow-Up Date | Safe Reason Theme  | Safe Notes                                      |
+| ------------ | ---------- | ---------------------- | ------------ | ------------------ | ---------------- | ------ | -------------- | ------------------ | ----------------------------------------------- |
+| 2026-07-13   | Individual | Example Learner        | Sign-in help | Individual learner | N/A              | Open   | 2026-07-14     | Email not received | Resend sign-in after confirming email spelling. |
 
 Category ideas:
 
@@ -97,14 +97,32 @@ Category ideas:
 - Content question
 - Practice onboarding question
 
+## First 24-Hour Sale Review
+
+Use this table for the first few real purchases. It connects the fulfillment
+checklist to the sales plan, so you do not keep sending checkout links if the
+first buyer needed manual rescue.
+
+| Purchase Date | Buyer Type | Offer                   | Access Worked Without Manual Fix | Sign-In Worked | Support Issue Found                       | Outreach Decision            | Safe Notes                                                |
+| ------------- | ---------- | ----------------------- | -------------------------------- | -------------- | ----------------------------------------- | ---------------------------- | --------------------------------------------------------- |
+| 2026-07-13    | Individual | Founding Learner Access | Yes / No                         | Yes / No       | None / Sign-in / Access / Payment / Other | Continue / Pause / Fix first | Example: buyer reached Module 1 without staff workaround. |
+
+Outreach decision ideas:
+
+- Continue: buyer paid, received access, signed in, and no blocking issue
+  appeared.
+- Pause: buyer needed manual help or readiness changed from ready to not ready.
+- Fix first: one specific page, email, checkout setting, webhook, or support
+  step needs correction before more outreach.
+
 ## Weekly Business Review
 
 Answer these once a week. Think of it like checking the course dashboard, but
 for real customers.
 
-| Week Of | Leads Added | Sales Closed | Revenue | Refunds | Biggest Blocker | Best Source | Next Experiment |
-| --- | ---: | ---: | ---: | ---: | --- | --- | --- |
-| 2026-07-13 | 0 | 0 | 0 | 0 | Need first outreach list | Not known yet | Email five local practices. |
+| Week Of    | Leads Added | Sales Closed | Revenue | Refunds | Biggest Blocker          | Best Source   | Next Experiment             |
+| ---------- | ----------: | -----------: | ------: | ------: | ------------------------ | ------------- | --------------------------- |
+| 2026-07-13 |           0 |            0 |       0 |       0 | Need first outreach list | Not known yet | Email five local practices. |
 
 Weekly questions:
 
