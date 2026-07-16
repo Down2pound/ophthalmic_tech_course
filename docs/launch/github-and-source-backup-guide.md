@@ -41,6 +41,15 @@ When this work computer cannot push to GitHub, keep both files:
 Use the ZIP when you simply need the project files. Use the bundle when you want
 to preserve Git commit history for the branch.
 
+Print the current handoff checklist with:
+
+```bash
+pnpm launch:backup
+```
+
+This command prints the GitHub repo, branch push command, portable backup file
+names, and the Drive/NotebookLM course source trail.
+
 Safe Drive backup rule: upload only the ZIP, bundle, and generated
 `launch-evidence/` folder. Do not upload `.env`, Stripe secret keys, webhook
 secrets, email API keys, database passwords, raw sign-in links, session cookies,

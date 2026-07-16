@@ -14,6 +14,7 @@
     "db:setup": "tsx server/src/db/runSetup.ts",
     "launch:smoke": "tsx server/src/launch/runDeploymentSmokeTest.ts",
     "launch:doctor": "tsx server/src/launch/runLaunchDoctor.ts",
+    "launch:backup": "tsx server/src/launch/runBackupHandoffReport.ts",
     "launch:secrets": "tsx server/src/launch/runLaunchSecrets.ts",
     "launch:sitemap": "tsx server/src/launch/runSitemap.ts",
     "launch:bundle": "tsx server/src/launch/runLaunchEvidenceBundle.ts",
