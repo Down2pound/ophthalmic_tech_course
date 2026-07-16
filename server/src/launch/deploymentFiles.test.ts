@@ -429,4 +429,32 @@ describe("deployment files", () => {
     expect(supportRunbook).not.toContain("sk_test_");
     expect(supportRunbook).not.toContain("whsec_");
   });
+
+  it("keeps a standalone Bootcamp content migration checklist in launch docs", async () => {
+    const checklist = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/bootcamp-content-migration-checklist.md"
+      ),
+      "utf8"
+    );
+
+    expect(checklist).toContain(
+      "OptiTech Academy Bootcamp Content Migration Checklist"
+    );
+    expect(checklist).toContain("Bootcamp days mapped: 10");
+    expect(checklist).toContain("Source assets mapped: 36");
+    expect(checklist).toContain("NotebookLM source workspace");
+    expect(checklist).toContain(
+      "Day 1: Foundations and the First Patient Encounter"
+    );
+    expect(checklist).toContain(
+      "Day 10: Simulation Capstone and Certification Roadmap"
+    );
+    expect(checklist).toContain(
+      "Do not sell unpublished modules as complete content"
+    );
+    expect(checklist).not.toContain("sk_test_");
+    expect(checklist).not.toContain("whsec_");
+  });
 });

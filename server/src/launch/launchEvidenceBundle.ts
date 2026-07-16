@@ -1,7 +1,6 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { renderModuleOneClinicalReviewPacketMarkdown } from "../../../shared/course/clinicalReviewPacket";
-import { renderBootcampContentMigrationChecklist } from "./bootcampContentMigrationChecklist";
 import { renderLaunchDoctorReport } from "./launchDoctor";
 import { renderManualQaTemplate } from "./manualQaTemplate";
 import { renderProductionEnvChecklist } from "./productionEnvChecklist";
@@ -207,6 +206,13 @@ export async function createLaunchEvidenceBundle({
     path.resolve(projectRoot, "docs/launch/first-sale-support-runbook.md"),
     "utf8"
   );
+  const bootcampContentMigrationChecklist = await readFile(
+    path.resolve(
+      projectRoot,
+      "docs/launch/bootcamp-content-migration-checklist.md"
+    ),
+    "utf8"
+  );
 
   await writeFile(
     path.join(resolvedOutputDir, "README.md"),
@@ -302,7 +308,7 @@ export async function createLaunchEvidenceBundle({
   );
   await writeFile(
     path.join(resolvedOutputDir, "bootcamp-content-migration-checklist.md"),
-    renderBootcampContentMigrationChecklist()
+    bootcampContentMigrationChecklist
   );
   await writeFile(
     path.join(resolvedOutputDir, "module-1-clinical-review-packet.md"),
