@@ -115,7 +115,7 @@ lines.push(
   "2. Run `pnpm install`, `pnpm check`, `pnpm test`, and `pnpm launch:preflight`."
 );
 lines.push(
-  "3. Complete Module 1 clinical review before turning on paid enrollment."
+  "3. Run `pnpm launch:clinical-review`, then complete Module 1 clinical review before turning on paid enrollment."
 );
 lines.push("4. Print host settings with `pnpm launch:env-template`.");
 lines.push("5. Deploy the app and set `PUBLIC_APP_URL` to the real HTTPS URL.");
