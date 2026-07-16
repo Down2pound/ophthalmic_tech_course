@@ -35,6 +35,16 @@ describe("deployment files", () => {
     expect(dockerignore).toContain("node_modules");
   });
 
+  it("keeps portable home-PC backups out of Git status", async () => {
+    const gitignore = await readFile(
+      path.resolve(process.cwd(), ".gitignore"),
+      "utf8"
+    );
+
+    expect(gitignore).toContain("optitech-academy-source-*.zip");
+    expect(gitignore).toContain("optitech-academy-branch-*.bundle");
+  });
+
   it("keeps the Render Blueprint aligned with the launch service", async () => {
     const renderBlueprint = await readFile(
       path.resolve(process.cwd(), "render.yaml"),
