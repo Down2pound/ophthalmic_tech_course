@@ -116,6 +116,7 @@ const detectedBundleBackup = findBackupFile(
   ".bundle",
   latestCommit
 );
+const restoreBundleName = detectedBundleBackup || bundleArchiveName;
 
 const report = [
   "# OptiTech Academy Backup Handoff",
@@ -144,6 +145,17 @@ const report = [
   `- Git bundle status: ${formatBackupStatus(detectedBundleBackup)}`,
   "",
   "Upload the ZIP and bundle to the Google Drive handoff folder when GitHub push is blocked.",
+  "",
+  "## Restore The Git Bundle On A Home PC",
+  "",
+  "If GitHub does not have this branch yet, restore the bundle with:",
+  "",
+  "```bash",
+  `git clone ${restoreBundleName} ophthalmic_tech_course --branch ${branchName}`,
+  "cd ophthalmic_tech_course",
+  `git remote set-url origin ${githubRepoUrl}`,
+  `git push -u origin ${branchName}`,
+  "```",
   "",
   "## Home PC Validation Commands",
   "",
