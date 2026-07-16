@@ -108,12 +108,15 @@ Open the deployed URL and check:
 ```text
 https://your-render-or-custom-domain.example/api/health
 https://your-render-or-custom-domain.example/api/launch/readiness
+https://your-render-or-custom-domain.example/api/checkout/availability
 ```
 
 The health endpoint should respond. The readiness endpoint will probably say
 paid launch is not ready yet. That is expected until Stripe, email, clinical
-review, and smoke testing are complete. The database section should say the
-launch schema is verified after `pnpm db:setup` has run successfully.
+review, and smoke testing are complete. The checkout availability endpoint
+should return safe buyer-facing text that says whether enrollment is open or
+paused. The database section should say the launch schema is verified after
+`pnpm db:setup` has run successfully.
 
 The health endpoint also reports a safe release fingerprint when Render provides
 Git metadata:

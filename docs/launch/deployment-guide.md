@@ -188,6 +188,7 @@ Before changing `ENABLE_PAID_ENROLLMENT` to `true`, verify:
 - `pnpm db:setup` has run against the production database.
 - `/api/health` returns `ok: true`.
 - `/api/launch/readiness` has no missing launch-critical setup.
+- `/api/checkout/availability` returns a safe buyer-facing open/paused status.
 - Stripe test checkout creates durable access in PostgreSQL.
 - Passwordless sign-in works on the deployed app.
 - A learner can open Module 1 and submit the protected quiz.

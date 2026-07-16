@@ -178,6 +178,7 @@ Checkout routes:
   `GET /api/support/practice-inquiries`
 - Health check endpoint: `GET /api/health`
 - Runtime launch check: `GET /api/launch/readiness`
+- Public checkout availability check: `GET /api/checkout/availability`
 - Clinical review packet export:
   `GET /api/launch/clinical-review-packet.md`
 - Success return: `/learn?checkout=success&offer=...`
@@ -226,6 +227,10 @@ fields. Use it to collect clinical review before turning on paid enrollment.
 
 `GET /api/health` returns a small safe uptime report for deployment health
 checks. It does not return secret values.
+
+`GET /api/checkout/availability` returns a safe buyer-facing status that tells
+the checkout and practice-pack pages whether enrollment is open or paused. It
+does not expose secret values or internal setup details.
 
 `POST /api/auth/passwordless/start` prepares a magic-link sign-in request and
 stores the hashed magic-link record server-side while returning only a generic
@@ -341,6 +346,8 @@ Then verify:
 - `GET /api/health` returns `ok: true`.
 - `GET /api/launch/readiness` shows no missing environment variables and
   reports the launch database schema as verified.
+- `GET /api/checkout/availability` returns the expected open or paused buyer
+  status.
 - Stripe test checkout creates a durable enrollment through the webhook.
 - A learner can sign in, open Module 1, and submit the protected quiz.
 
@@ -376,15 +383,16 @@ works after deployment:
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
 
-The smoke test checks `/api/health`, `/api/launch/readiness`, browser safety
-headers, `/robots.txt`, and the public buyer pages for home, checkout,
-individual checkout return states, practice packs, practice checkout return
-states, policies, curriculum, and onboarding.
+The smoke test checks `/api/health`, `/api/launch/readiness`,
+`/api/checkout/availability`, browser safety headers, `/robots.txt`, and the
+public buyer pages for home, checkout, individual checkout return states,
+practice packs, practice checkout return states, policies, curriculum, and
+onboarding.
 When `LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true`, it also posts a clearly labeled
 safe test inquiry through `/api/practice-inquiries`.
 With `LAUNCH_SMOKE_ALLOW_NOT_READY=true`, it can pass while
-`readyForPaidLaunch` is still `false`, as long as health, public pages, safety
-headers, and robots rules pass.
+`readyForPaidLaunch` is still `false`, as long as health, checkout
+availability, public pages, safety headers, and robots rules pass.
 For the final go-live check, run the command without
 `LAUNCH_SMOKE_ALLOW_NOT_READY=true`; then it exits with an error until the live
 app reports that paid launch readiness is complete and those public pages

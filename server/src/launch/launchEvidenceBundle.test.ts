@@ -239,12 +239,14 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(deploymentGuide).toContain("OptiTech Academy Deployment Guide");
     expect(deploymentGuide).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(deploymentGuide).toContain("/api/checkout/availability");
     expect(renderDeploymentGuide).toContain(
       "OptiTech Academy Render Deployment Guide"
     );
     expect(renderDeploymentGuide).toContain("render.yaml");
     expect(renderDeploymentGuide).toContain("pre-deploy database setup");
     expect(renderDeploymentGuide).toContain("pnpm db:setup");
+    expect(renderDeploymentGuide).toContain("/api/checkout/availability");
     expect(renderDeploymentGuide).not.toContain("sk_test_");
     expect(renderDeploymentGuide).not.toContain("whsec_");
     expect(deploymentCutoverChecklist).toContain(
@@ -397,6 +399,7 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(goLiveChecklist).toContain("OptiTech Academy Go-Live Checklist");
     expect(goLiveChecklist).toContain("ENABLE_PAID_ENROLLMENT=true");
+    expect(goLiveChecklist).toContain("/api/checkout/availability");
     expect(productionEnvChecklist).toContain("`STRIPE_SECRET_KEY`");
     expect(launchDoctorReport).toContain("OptiTech Academy Launch Doctor");
     expect(launchDoctorReport).toContain("Paid launch ready: no");

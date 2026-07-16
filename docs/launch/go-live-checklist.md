@@ -36,6 +36,7 @@ Detailed guides:
 - [ ] `pnpm db:setup` completed against the production database.
 - [ ] `/api/health` returns `ok: true`.
 - [ ] `/api/launch/readiness` reports database schema verified.
+- [ ] `/api/checkout/availability` returns a safe buyer-facing open/paused status.
 
 ## 4. Connect Stripe And Email
 
@@ -94,6 +95,7 @@ Only after every earlier section passes:
 - [ ] Run `LAUNCH_BASE_URL=https://your-domain.example pnpm launch:smoke`.
 - [ ] Confirm the smoke report includes individual and practice checkout
       success/cancel return pages.
+- [ ] Confirm the smoke report says `Checkout availability endpoint: ok`.
 - [ ] Open `/api/launch/readiness`.
 - [ ] Confirm `readyForPaidLaunch` is `true`.
 - [ ] Run one low-risk internal live-mode purchase.
