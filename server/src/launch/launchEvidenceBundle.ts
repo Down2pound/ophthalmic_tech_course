@@ -2,7 +2,6 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { renderLaunchDoctorReport } from "./launchDoctor";
 import { renderManualQaTemplate } from "./manualQaTemplate";
-import { renderProductionEnvChecklist } from "./productionEnvChecklist";
 import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 import { getRuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 
@@ -201,6 +200,10 @@ export async function createLaunchEvidenceBundle({
     path.resolve(projectRoot, "docs/launch/go-live-checklist.md"),
     "utf8"
   );
+  const productionEnvChecklist = await readFile(
+    path.resolve(projectRoot, "docs/launch/production-env-checklist.md"),
+    "utf8"
+  );
   const firstSaleSupportRunbook = await readFile(
     path.resolve(projectRoot, "docs/launch/first-sale-support-runbook.md"),
     "utf8"
@@ -295,7 +298,7 @@ export async function createLaunchEvidenceBundle({
   );
   await writeFile(
     path.join(resolvedOutputDir, "production-env-checklist.md"),
-    renderProductionEnvChecklist({ generatedAt })
+    productionEnvChecklist
   );
   await writeFile(
     path.join(resolvedOutputDir, "launch-doctor-report.md"),

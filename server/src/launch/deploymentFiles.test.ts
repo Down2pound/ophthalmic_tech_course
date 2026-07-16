@@ -484,4 +484,26 @@ describe("deployment files", () => {
     expect(packet).not.toContain("sk_test_");
     expect(packet).not.toContain("whsec_");
   });
+
+  it("keeps a standalone production environment checklist in launch docs", async () => {
+    const checklist = await readFile(
+      path.resolve(process.cwd(), "docs/launch/production-env-checklist.md"),
+      "utf8"
+    );
+
+    expect(checklist).toContain(
+      "OptiTech Academy Production Environment Checklist"
+    );
+    expect(checklist).toContain("Host Dashboard Paste Template");
+    expect(checklist).toContain("PUBLIC_APP_URL=https://your-domain.example");
+    expect(checklist).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(checklist).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED=false");
+    expect(checklist).toContain(
+      "TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails"
+    );
+    expect(checklist).toContain("pnpm launch:doctor");
+    expect(checklist).not.toContain("sk_test_");
+    expect(checklist).not.toContain("whsec_");
+    expect(checklist).not.toContain("replace_with");
+  });
 });
