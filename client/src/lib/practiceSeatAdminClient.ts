@@ -94,6 +94,28 @@ export interface BuyerSupportProfile {
   recommendedActions: string[];
 }
 
+export type AccessRevocationTarget =
+  | {
+      type: "enrollment";
+      enrollmentId: string;
+    }
+  | {
+      type: "practice-seat-assignment";
+      assignmentId: string;
+    }
+  | {
+      type: "practice-seat-pack";
+      seatPackId: string;
+    };
+
+export interface AccessRevocationResponse {
+  revoked: boolean;
+  target: AccessRevocationTarget;
+  expiredEnrollments: Array<{ enrollmentId: string; status?: string }>;
+  revokedAssignments: Array<{ assignmentId: string; status?: string }>;
+  message: string;
+}
+
 export interface PracticeSeatAssignmentResponse {
   assignment: PracticeSeatAssignmentSummary;
   enrollmentProvisioned: boolean;
@@ -192,6 +214,56 @@ export async function lookupBuyerSupportProfile({
   }
 
   return payload as BuyerSupportProfile;
+}
+
+function buildAccessRevocationPayload(target: AccessRevocationTarget) {
+  if (target.type === "enrollment") {
+    return {
+      targetType: target.type,
+      enrollmentId: target.enrollmentId,
+    };
+  }
+
+  if (target.type === "practice-seat-assignment") {
+    return {
+      targetType: target.type,
+      assignmentId: target.assignmentId,
+    };
+  }
+
+  return {
+    targetType: target.type,
+    seatPackId: target.seatPackId,
+  };
+}
+
+export async function revokeAccessTarget({
+  adminToken,
+  target,
+  fetcher = fetch,
+}: {
+  adminToken: string;
+  target: AccessRevocationTarget;
+  fetcher?: Fetcher;
+}): Promise<AccessRevocationResponse> {
+  const response = await fetcher("/api/support/access-revocations", {
+    method: "POST",
+    headers: getAdminHeaders(adminToken),
+    body: JSON.stringify(buildAccessRevocationPayload(target)),
+  });
+  const payload = (await response.json()) as
+    | AccessRevocationResponse
+    | ApiErrorResponse;
+
+  if (!response.ok) {
+    throw new Error(
+      "error" in payload && payload.error
+        ? payload.error
+        : "Access revocation could not be completed."
+    );
+  }
+
+  return payload as AccessRevocationResponse;
 }
 
 export async function assignPracticeSeat({

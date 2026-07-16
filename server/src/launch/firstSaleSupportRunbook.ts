@@ -53,7 +53,7 @@ export function renderFirstSaleSupportRunbook({
     "2. Confirm the purchase date, offer type, and course access activity.",
     "3. Handle the refund in Stripe, not by editing card or payment data in the app.",
     "4. Use the protected buyer lookup endpoint to confirm the exact learner enrollment, practice-seat assignment, or practice seat pack before changing app access.",
-    "5. If access should be removed after refund, use `POST /api/support/access-revocations` with the private admin token and one target only.",
+    "5. If access should be removed after refund, use the Practice Seat Manager Access revocation panel, or `POST /api/support/access-revocations` with the private admin token, and submit one target only.",
     "6. Record the Stripe refund ID, revocation target, and date in safe notes.",
     "",
     "## Escalate Immediately When",

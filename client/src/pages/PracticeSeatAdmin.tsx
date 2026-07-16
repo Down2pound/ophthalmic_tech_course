@@ -5,6 +5,7 @@ import {
   fetchPracticeInquiries,
   fetchPracticeSeatPacks,
   lookupBuyerSupportProfile,
+  revokeAccessTarget,
   type BuyerSupportProfile,
   type LearnerInterestSummary,
   type PracticeInquirySummary,
@@ -37,6 +38,10 @@ function getRemainingSeats(seatPack: PracticeSeatPackSummary) {
 export default function PracticeSeatAdmin() {
   const [adminToken, setAdminToken] = useState("");
   const [supportLookupEmail, setSupportLookupEmail] = useState("");
+  const [revocationTargetType, setRevocationTargetType] = useState<
+    "enrollment" | "practice-seat-assignment" | "practice-seat-pack"
+  >("enrollment");
+  const [revocationTargetId, setRevocationTargetId] = useState("");
   const [supportProfile, setSupportProfile] =
     useState<BuyerSupportProfile | null>(null);
   const [learnerEmailBySeatPackId, setLearnerEmailBySeatPackId] = useState<
@@ -116,6 +121,36 @@ export default function PracticeSeatAdmin() {
         error instanceof Error
           ? error.message
           : "Buyer support profile could not be loaded."
+      );
+    } finally {
+      setLoadingAction(null);
+    }
+  };
+
+  const revokeAccess = async () => {
+    setLoadingAction("access-revocation");
+    setErrorMessage(null);
+    setStatusMessage(null);
+
+    try {
+      const trimmedTargetId = revocationTargetId.trim();
+      const result = await revokeAccessTarget({
+        adminToken: adminToken.trim(),
+        target:
+          revocationTargetType === "enrollment"
+            ? { type: revocationTargetType, enrollmentId: trimmedTargetId }
+            : revocationTargetType === "practice-seat-assignment"
+              ? { type: revocationTargetType, assignmentId: trimmedTargetId }
+              : { type: revocationTargetType, seatPackId: trimmedTargetId },
+      });
+
+      setStatusMessage(result.message);
+      setRevocationTargetId("");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Access revocation could not be completed."
       );
     } finally {
       setLoadingAction(null);
@@ -247,6 +282,57 @@ export default function PracticeSeatAdmin() {
                 {loadingAction === "support-lookup"
                   ? "Looking up..."
                   : "Lookup buyer"}
+              </Button>
+            </div>
+
+            <div className="mt-6 border-t border-slate-200 pt-5">
+              <h3 className="font-semibold">Access revocation</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Use only after a refund, mistaken assignment, or documented
+                support correction. Handle money in Stripe first.
+              </p>
+              <label className="mt-4 block text-sm font-semibold text-slate-700">
+                Target type
+              </label>
+              <select
+                value={revocationTargetType}
+                onChange={event =>
+                  setRevocationTargetType(
+                    event.target.value as
+                      | "enrollment"
+                      | "practice-seat-assignment"
+                      | "practice-seat-pack"
+                  )
+                }
+                className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
+              >
+                <option value="enrollment">Enrollment</option>
+                <option value="practice-seat-assignment">
+                  Practice seat assignment
+                </option>
+                <option value="practice-seat-pack">Practice seat pack</option>
+              </select>
+              <label className="mt-4 block text-sm font-semibold text-slate-700">
+                Target ID
+              </label>
+              <input
+                value={revocationTargetId}
+                onChange={event => setRevocationTargetId(event.target.value)}
+                placeholder="Paste exact ID from support lookup"
+                className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
+              />
+              <Button
+                className="mt-3 w-full bg-red-700 text-white hover:bg-red-800"
+                disabled={
+                  loadingAction === "access-revocation" ||
+                  adminToken.trim() === "" ||
+                  revocationTargetId.trim() === ""
+                }
+                onClick={revokeAccess}
+              >
+                {loadingAction === "access-revocation"
+                  ? "Revoking..."
+                  : "Revoke access"}
               </Button>
             </div>
           </Card>

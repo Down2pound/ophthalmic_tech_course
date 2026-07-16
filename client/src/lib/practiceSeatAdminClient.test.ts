@@ -4,6 +4,7 @@ import {
   fetchPracticeInquiries,
   fetchPracticeSeatPacks,
   lookupBuyerSupportProfile,
+  revokeAccessTarget,
 } from "./practiceSeatAdminClient";
 
 describe("fetchPracticeSeatPacks", () => {
@@ -149,6 +150,49 @@ describe("lookupBuyerSupportProfile", () => {
         },
       }
     );
+  });
+});
+
+describe("revokeAccessTarget", () => {
+  it("posts one protected access revocation target", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        revoked: true,
+        target: {
+          type: "enrollment",
+          enrollmentId: "enrollment_cs_123",
+        },
+        expiredEnrollments: [{ enrollmentId: "enrollment_cs_123" }],
+        revokedAssignments: [],
+        message: "Enrollment access was expired.",
+      }),
+    });
+
+    await expect(
+      revokeAccessTarget({
+        adminToken: "admin-token",
+        target: {
+          type: "enrollment",
+          enrollmentId: "enrollment_cs_123",
+        },
+        fetcher,
+      })
+    ).resolves.toMatchObject({
+      revoked: true,
+      message: "Enrollment access was expired.",
+    });
+    expect(fetcher).toHaveBeenCalledWith("/api/support/access-revocations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-token": "admin-token",
+      },
+      body: JSON.stringify({
+        targetType: "enrollment",
+        enrollmentId: "enrollment_cs_123",
+      }),
+    });
   });
 });
 
