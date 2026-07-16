@@ -117,15 +117,16 @@ lines.push(
 lines.push(
   "3. Complete Module 1 clinical review before turning on paid enrollment."
 );
-lines.push("4. Deploy the app and set `PUBLIC_APP_URL` to the real HTTPS URL.");
-lines.push("5. Configure the hosted database, then run `pnpm db:setup`.");
+lines.push("4. Print host settings with `pnpm launch:env-template`.");
+lines.push("5. Deploy the app and set `PUBLIC_APP_URL` to the real HTTPS URL.");
+lines.push("6. Configure the hosted database, then run `pnpm db:setup`.");
 lines.push(
-  "6. Configure Stripe checkout, Stripe webhook, passwordless email, and admin tokens."
+  "7. Configure Stripe checkout, Stripe webhook, passwordless email, and admin tokens."
 );
 lines.push(
-  "7. Run `LAUNCH_BASE_URL=https://your-domain.example pnpm launch:smoke` against production."
+  "8. Run `LAUNCH_BASE_URL=https://your-domain.example pnpm launch:smoke` against production."
 );
-lines.push("8. Complete one low-risk internal live-mode purchase.");
+lines.push("9. Complete one low-risk internal live-mode purchase.");
 lines.push("");
 
 lines.push("## Final Go-Live Proof");

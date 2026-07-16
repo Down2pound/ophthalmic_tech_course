@@ -126,6 +126,7 @@ describe("deployment files", () => {
     expect(blockerScript).toContain("docs/launch/go-live-checklist.md");
     expect(blockerScript).toContain("First-Sale Action Order");
     expect(blockerScript).toContain("pnpm launch:preflight");
+    expect(blockerScript).toContain("pnpm launch:env-template");
     expect(blockerScript).toContain("pnpm db:setup");
     expect(blockerScript).toContain("LAUNCH_BASE_URL");
     expect(blockerScript).not.toContain("execSync");
