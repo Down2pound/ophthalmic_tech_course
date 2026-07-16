@@ -328,4 +328,33 @@ describe("deployment files", () => {
     expect(adminTokensScript).not.toContain("sk_test_");
     expect(adminTokensScript).not.toContain("whsec_");
   });
+
+  it("keeps a work-computer-safe Render deployment setup command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const renderSetupScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-render-setup.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:render-setup": "node scripts/launch-render-setup.mjs"'
+    );
+    expect(renderSetupScript).toContain(
+      "OptiTech Academy Render Deployment Setup"
+    );
+    expect(renderSetupScript).toContain("render.yaml");
+    expect(renderSetupScript).toContain("optitech-academy");
+    expect(renderSetupScript).toContain("pnpm build");
+    expect(renderSetupScript).toContain("pnpm db:setup");
+    expect(renderSetupScript).toContain("node dist/index.js");
+    expect(renderSetupScript).toContain("/api/health");
+    expect(renderSetupScript).toContain("/api/launch/readiness");
+    expect(renderSetupScript).toContain("LAUNCH_SMOKE_ALLOW_NOT_READY");
+    expect(renderSetupScript).not.toContain("execSync");
+    expect(renderSetupScript).not.toContain("sk_test_");
+    expect(renderSetupScript).not.toContain("whsec_");
+  });
 });

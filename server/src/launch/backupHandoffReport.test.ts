@@ -24,6 +24,7 @@ describe("renderBackupHandoffReport", () => {
     expect(report).toContain("pnpm launch:env-template");
     expect(report).toContain("pnpm launch:admin-tokens");
     expect(report).toContain("pnpm launch:database-setup");
+    expect(report).toContain("pnpm launch:render-setup");
     expect(report).toContain("pnpm launch:email-setup");
     expect(report).toContain("pnpm launch:stripe-products");
     expect(report).toContain("pnpm launch:first-sales");

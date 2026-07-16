@@ -15,6 +15,12 @@ safe setup recipe. It creates:
 - The start command: `node dist/index.js`.
 - The health check path: `/api/health`.
 
+For the short copy/paste checklist, run:
+
+```bash
+pnpm launch:render-setup
+```
+
 ## Before You Click Deploy
 
 1. Push the latest Git branch to GitHub.
