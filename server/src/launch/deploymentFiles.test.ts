@@ -82,4 +82,21 @@ describe("deployment files", () => {
     expect(workflow).toContain("pnpm launch:secret-scan");
     expect(workflow).toContain("actions/upload-artifact@v4");
   });
+
+  it("keeps the backup handoff command runnable without tsx", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const backupScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-backup-handoff.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:backup": "node scripts/launch-backup-handoff.mjs"'
+    );
+    expect(backupScript).toContain('path.join(projectRoot, ".git", "HEAD")');
+    expect(backupScript).not.toContain("execSync");
+  });
 });
