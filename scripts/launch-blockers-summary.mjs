@@ -126,7 +126,9 @@ lines.push(
 lines.push(
   "8. Run `LAUNCH_BASE_URL=https://your-domain.example pnpm launch:smoke` against production."
 );
-lines.push("9. Complete one low-risk internal live-mode purchase.");
+lines.push(
+  "9. Run `pnpm launch:live-purchase-test`, then complete one low-risk internal live-mode purchase."
+);
 lines.push("");
 
 lines.push("## Final Go-Live Proof");
@@ -136,7 +138,7 @@ lines.push("- Deploy to the production host.");
 lines.push("- Run `pnpm db:setup` against the production database.");
 lines.push("- Run the deployment smoke test against the real production URL.");
 lines.push(
-  "- Complete one low-risk internal live-mode purchase before public sales."
+  "- Run `pnpm launch:live-purchase-test`, then complete one low-risk internal live-mode purchase before public sales."
 );
 lines.push("");
 lines.push("Main checklist: docs/launch/go-live-checklist.md");

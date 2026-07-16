@@ -101,6 +101,8 @@ Only after every earlier section passes:
 - [ ] Confirm the smoke report says `Checkout availability endpoint: ok`.
 - [ ] Open `/api/launch/readiness`.
 - [ ] Confirm `readyForPaidLaunch` is `true`.
+- [ ] Run `pnpm launch:live-purchase-test` and read the internal purchase
+      rehearsal checklist.
 - [ ] Run one low-risk internal live-mode purchase.
 - [ ] Confirm live purchase creates durable access.
 

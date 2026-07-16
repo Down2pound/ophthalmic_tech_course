@@ -357,4 +357,31 @@ describe("deployment files", () => {
     expect(renderSetupScript).not.toContain("sk_test_");
     expect(renderSetupScript).not.toContain("whsec_");
   });
+
+  it("keeps a work-computer-safe live purchase rehearsal command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const livePurchaseScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-live-purchase-test.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:live-purchase-test": "node scripts/launch-live-purchase-test.mjs"'
+    );
+    expect(livePurchaseScript).toContain(
+      "OptiTech Academy Live Purchase Rehearsal"
+    );
+    expect(livePurchaseScript).toContain("Founding Learner Access");
+    expect(livePurchaseScript).toContain("ENABLE_PAID_ENROLLMENT=true");
+    expect(livePurchaseScript).toContain("/api/launch/readiness");
+    expect(livePurchaseScript).toContain("/api/checkout/availability");
+    expect(livePurchaseScript).toContain("checkout.session.completed");
+    expect(livePurchaseScript).toContain("turn paid enrollment back off");
+    expect(livePurchaseScript).not.toContain("execSync");
+    expect(livePurchaseScript).not.toContain("sk_test_");
+    expect(livePurchaseScript).not.toContain("whsec_");
+  });
 });

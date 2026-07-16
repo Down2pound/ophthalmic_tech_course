@@ -21,6 +21,7 @@
     "launch:email-setup": "node scripts/launch-email-setup.mjs",
     "launch:env-template": "node scripts/launch-env-template.mjs",
     "launch:first-sales": "node scripts/launch-first-sales-links.mjs",
+    "launch:live-purchase-test": "node scripts/launch-live-purchase-test.mjs",
     "launch:render-setup": "node scripts/launch-render-setup.mjs",
     "launch:sales-tracker": "node scripts/launch-sales-tracker.mjs",
     "launch:stripe-products": "node scripts/launch-stripe-products.mjs",

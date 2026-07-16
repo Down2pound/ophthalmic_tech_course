@@ -78,6 +78,7 @@ pnpm launch:clinical-review
 pnpm launch:database-setup
 pnpm launch:email-setup
 pnpm launch:env-template
+pnpm launch:live-purchase-test
 pnpm launch:render-setup
 pnpm launch:stripe-products
 pnpm launch:secrets
@@ -96,6 +97,8 @@ checklist.
 checklist.
 `launch:env-template` prints the safe host settings block for Render or another
 production host.
+`launch:live-purchase-test` prints the final internal live-mode purchase
+rehearsal checklist.
 `launch:render-setup` prints the Render Blueprint deployment order and live URL
 checks.
 `launch:stripe-products` prints the exact Stripe offer ids, prices, lookup
