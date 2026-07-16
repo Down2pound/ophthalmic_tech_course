@@ -69,6 +69,12 @@ pnpm launch:workstation-handoff
 It runs the plain-Node blocker summary, runs the secret scan, and then prints
 the backup handoff report.
 
+To print only the current paid-launch blocker summary, run:
+
+```bash
+pnpm launch:blockers
+```
+
 Safe Drive backup rule: upload only the ZIP, bundle, and generated
 `launch-evidence/` folder. Do not upload `.env`, Stripe secret keys, webhook
 secrets, email API keys, database passwords, raw sign-in links, session cookies,

@@ -35,6 +35,12 @@ Beginner translation: this shows what still blocks paid launch, checks that
 obvious private keys were not saved in the project, and then prints the exact
 backup files and home-PC commands.
 
+If you only want to see what still blocks paid launch, run:
+
+```bash
+pnpm launch:blockers
+```
+
 ## Install The Basics
 
 Install these on the home PC:
