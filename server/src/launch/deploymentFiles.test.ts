@@ -155,4 +155,31 @@ describe("deployment files", () => {
     expect(envTemplateScript).not.toContain("sk_test_");
     expect(envTemplateScript).not.toContain("whsec_");
   });
+
+  it("keeps a work-computer-safe clinical review checklist command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const clinicalReviewScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-clinical-review.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:clinical-review": "node scripts/launch-clinical-review.mjs"'
+    );
+    expect(clinicalReviewScript).toContain(
+      "OptiTech Academy Clinical Review Checklist"
+    );
+    expect(clinicalReviewScript).toContain(
+      "MODULE_ONE_CLINICAL_REVIEW_APPROVED=false"
+    );
+    expect(clinicalReviewScript).toContain(
+      "/api/launch/clinical-review-packet.md"
+    );
+    expect(clinicalReviewScript).not.toContain("execSync");
+    expect(clinicalReviewScript).not.toContain("sk_test_");
+    expect(clinicalReviewScript).not.toContain("whsec_");
+  });
 });
