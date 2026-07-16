@@ -210,4 +210,26 @@ describe("deployment files", () => {
     expect(firstSalesScript).not.toContain("sk_test_");
     expect(firstSalesScript).not.toContain("whsec_");
   });
+
+  it("keeps a work-computer-safe sales tracker export command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const salesTrackerScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-sales-tracker.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:sales-tracker": "node scripts/launch-sales-tracker.mjs"'
+    );
+    expect(salesTrackerScript).toContain("lead-tracker.csv");
+    expect(salesTrackerScript).toContain("purchase-tracker.csv");
+    expect(salesTrackerScript).toContain("weekly-business-review.csv");
+    expect(salesTrackerScript).toContain("Do not paste secrets");
+    expect(salesTrackerScript).not.toContain("execSync");
+    expect(salesTrackerScript).not.toContain("sk_test_");
+    expect(salesTrackerScript).not.toContain("whsec_");
+  });
 });

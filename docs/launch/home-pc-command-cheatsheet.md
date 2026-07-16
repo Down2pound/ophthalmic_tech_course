@@ -108,6 +108,7 @@ pnpm launch:smoke
 $env:PUBLIC_APP_URL="https://your-real-domain.example"
 pnpm launch:sitemap
 pnpm launch:first-sales
+pnpm launch:sales-tracker
 ```
 
 This early smoke test is allowed to pass while paid launch readiness is still
@@ -116,6 +117,8 @@ signoff are all finished. It still checks that the live pages load, browser
 safety headers are present, and `/robots.txt` blocks private/admin-style paths.
 `launch:first-sales` prints the buyer links and short outreach messages using
 your real domain.
+`launch:sales-tracker` creates CSV tracker templates for leads, purchases,
+support, practice seats, and weekly revenue.
 
 ## 7. Run The Final Go-Live Smoke Test
 
