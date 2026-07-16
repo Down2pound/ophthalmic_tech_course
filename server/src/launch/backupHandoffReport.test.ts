@@ -30,6 +30,7 @@ describe("renderBackupHandoffReport", () => {
     expect(report).toContain("pnpm launch:first-sales");
     expect(report).toContain("pnpm launch:sales-tracker");
     expect(report).toContain("pnpm launch:live-purchase-test");
+    expect(report).toContain("pnpm launch:first-10-customers");
     expect(report).toContain(
       "Bootcamp Drive folder: https://drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q"
     );

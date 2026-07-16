@@ -78,6 +78,7 @@ pnpm launch:clinical-review
 pnpm launch:database-setup
 pnpm launch:email-setup
 pnpm launch:env-template
+pnpm launch:first-10-customers
 pnpm launch:live-purchase-test
 pnpm launch:render-setup
 pnpm launch:stripe-products
@@ -97,6 +98,7 @@ checklist.
 checklist.
 `launch:env-template` prints the safe host settings block for Render or another
 production host.
+`launch:first-10-customers` prints the controlled first-buyer outreach plan.
 `launch:live-purchase-test` prints the final internal live-mode purchase
 rehearsal checklist.
 `launch:render-setup` prints the Render Blueprint deployment order and live URL

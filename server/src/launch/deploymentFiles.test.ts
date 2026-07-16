@@ -211,6 +211,33 @@ describe("deployment files", () => {
     expect(firstSalesScript).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe first 10 customers launch command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const firstCustomersScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-10-customers.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:first-10-customers": "node scripts/launch-first-10-customers.mjs"'
+    );
+    expect(firstCustomersScript).toContain(
+      "OptiTech Academy First 10 Customers Plan"
+    );
+    expect(firstCustomersScript).toContain("Individual learners");
+    expect(firstCustomersScript).toContain("Practice buyers");
+    expect(firstCustomersScript).toContain("Do not send paid checkout links");
+    expect(firstCustomersScript).toContain(
+      "docs/launch/first-customers-sales-packet.md"
+    );
+    expect(firstCustomersScript).not.toContain("execSync");
+    expect(firstCustomersScript).not.toContain("sk_test_");
+    expect(firstCustomersScript).not.toContain("whsec_");
+  });
+
   it("keeps a work-computer-safe sales tracker export command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
