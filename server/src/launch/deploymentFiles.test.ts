@@ -97,6 +97,7 @@ describe("deployment files", () => {
       '"launch:backup": "node scripts/launch-backup-handoff.mjs"'
     );
     expect(backupScript).toContain('path.join(projectRoot, ".git", "HEAD")');
+    expect(backupScript).toContain("formatBackupStatus");
     expect(backupScript).not.toContain("execSync");
   });
 });

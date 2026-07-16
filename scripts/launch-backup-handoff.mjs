@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -32,6 +32,14 @@ function countMatches(pattern) {
   return sourceMapText.match(pattern)?.length ?? 0;
 }
 
+function readProjectFilenames() {
+  try {
+    return readdirSync(projectRoot);
+  } catch {
+    return [];
+  }
+}
+
 function readTextFile(filePath) {
   try {
     return readFileSync(filePath, "utf8").trim();
@@ -60,6 +68,22 @@ function detectGitCommit(headText) {
   return refCommit.slice(0, 7);
 }
 
+function findBackupFile(filenames, prefix, extension, commit) {
+  return (
+    filenames.find(
+      filename =>
+        filename.startsWith(prefix) &&
+        filename.endsWith(`${commit}${extension}`)
+    ) || ""
+  );
+}
+
+function formatBackupStatus(filename) {
+  return filename && existsSync(path.join(projectRoot, filename))
+    ? `found: ${filename}`
+    : "missing";
+}
+
 const gitHead = readGitHead();
 const branchName = valueOrPlaceholder(
   process.env.BACKUP_BRANCH_NAME,
@@ -79,6 +103,19 @@ const bundleArchiveName = valueOrPlaceholder(
 );
 const bootcampDayCount = countMatches(/^\s*day:\s*\d+,/gm);
 const sourceAssetCount = countMatches(/^\s*storageKey:/gm);
+const projectFilenames = readProjectFilenames();
+const detectedSourceBackup = findBackupFile(
+  projectFilenames,
+  "optitech-academy-source-",
+  ".zip",
+  latestCommit
+);
+const detectedBundleBackup = findBackupFile(
+  projectFilenames,
+  "optitech-academy-branch-",
+  ".bundle",
+  latestCommit
+);
 
 const report = [
   "# OptiTech Academy Backup Handoff",
@@ -103,6 +140,8 @@ const report = [
   "",
   `- Source ZIP: ${sourceArchiveName}`,
   `- Git bundle: ${bundleArchiveName}`,
+  `- Source ZIP status: ${formatBackupStatus(detectedSourceBackup)}`,
+  `- Git bundle status: ${formatBackupStatus(detectedBundleBackup)}`,
   "",
   "Upload the ZIP and bundle to the Google Drive handoff folder when GitHub push is blocked.",
   "",
