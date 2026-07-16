@@ -16,6 +16,7 @@
     "launch:doctor": "tsx server/src/launch/runLaunchDoctor.ts",
     "launch:blockers": "node scripts/launch-blockers-summary.mjs",
     "launch:clinical-review": "node scripts/launch-clinical-review.mjs",
+    "launch:database-setup": "node scripts/launch-database-setup.mjs",
     "launch:email-setup": "node scripts/launch-email-setup.mjs",
     "launch:env-template": "node scripts/launch-env-template.mjs",
     "launch:first-sales": "node scripts/launch-first-sales-links.mjs",

@@ -22,6 +22,15 @@ DATABASE_SSL=true
 Most managed PostgreSQL providers require SSL. Leave `DATABASE_SSL=true` unless
 your database provider clearly says otherwise.
 
+Print the work-safe database setup checklist with:
+
+```bash
+pnpm launch:database-setup
+```
+
+That command lists the required host variables, launch tables, setup order, and
+proof to save without printing any database secrets.
+
 ## Tables Created By Setup
 
 Run:

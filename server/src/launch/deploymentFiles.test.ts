@@ -280,4 +280,29 @@ describe("deployment files", () => {
     expect(emailSetupScript).not.toContain("sk_test_");
     expect(emailSetupScript).not.toContain("whsec_");
   });
+
+  it("keeps a work-computer-safe database setup command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const databaseSetupScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-database-setup.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:database-setup": "node scripts/launch-database-setup.mjs"'
+    );
+    expect(databaseSetupScript).toContain("OptiTech Academy Database Setup");
+    expect(databaseSetupScript).toContain("DATABASE_URL=");
+    expect(databaseSetupScript).toContain("DATABASE_SSL=true");
+    expect(databaseSetupScript).toContain("commerce_purchases");
+    expect(databaseSetupScript).toContain("auth_magic_links");
+    expect(databaseSetupScript).toContain("assessment_attempts");
+    expect(databaseSetupScript).not.toContain("execSync");
+    expect(databaseSetupScript).not.toContain("postgres://");
+    expect(databaseSetupScript).not.toContain("sk_test_");
+    expect(databaseSetupScript).not.toContain("whsec_");
+  });
 });

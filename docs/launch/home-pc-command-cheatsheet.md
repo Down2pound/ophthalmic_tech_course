@@ -74,6 +74,7 @@ without printing the secret values.
 ```bash
 pnpm launch:blockers
 pnpm launch:clinical-review
+pnpm launch:database-setup
 pnpm launch:email-setup
 pnpm launch:env-template
 pnpm launch:stripe-products
@@ -85,6 +86,8 @@ pnpm launch:doctor
 paid sales.
 `launch:clinical-review` prints the Module 1 review checklist and approval
 fields.
+`launch:database-setup` prints the production database setup and verification
+checklist.
 `launch:email-setup` prints the passwordless sign-in email setup and test
 checklist.
 `launch:env-template` prints the safe host settings block for Render or another
@@ -100,6 +103,7 @@ Only run this after `DATABASE_URL` points to the real managed PostgreSQL
 database:
 
 ```bash
+pnpm launch:database-setup
 pnpm db:setup
 ```
 
