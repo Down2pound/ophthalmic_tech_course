@@ -257,4 +257,27 @@ describe("deployment files", () => {
     expect(stripeProductsScript).not.toContain("sk_test_");
     expect(stripeProductsScript).not.toContain("whsec_");
   });
+
+  it("keeps a work-computer-safe email setup command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const emailSetupScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-email-setup.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:email-setup": "node scripts/launch-email-setup.mjs"'
+    );
+    expect(emailSetupScript).toContain("OptiTech Academy Email Setup");
+    expect(emailSetupScript).toContain("TRANSACTIONAL_EMAIL_API_URL");
+    expect(emailSetupScript).toContain("https://api.resend.com/emails");
+    expect(emailSetupScript).toContain("SIGN_IN_FROM_EMAIL");
+    expect(emailSetupScript).toContain("Your OptiTech Academy sign-in link");
+    expect(emailSetupScript).not.toContain("execSync");
+    expect(emailSetupScript).not.toContain("sk_test_");
+    expect(emailSetupScript).not.toContain("whsec_");
+  });
 });

@@ -12,6 +12,15 @@ The simplest production path is Resend. The app can send directly to:
 TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails
 ```
 
+Print the work-safe email setup checklist with:
+
+```bash
+pnpm launch:email-setup
+```
+
+That command lists the required host variables, message shape, and pre-sale
+email tests without printing any secret values.
+
 The request uses this authorization header:
 
 ```text

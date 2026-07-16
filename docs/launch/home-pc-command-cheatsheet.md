@@ -74,6 +74,7 @@ without printing the secret values.
 ```bash
 pnpm launch:blockers
 pnpm launch:clinical-review
+pnpm launch:email-setup
 pnpm launch:env-template
 pnpm launch:stripe-products
 pnpm launch:secrets
@@ -84,6 +85,8 @@ pnpm launch:doctor
 paid sales.
 `launch:clinical-review` prints the Module 1 review checklist and approval
 fields.
+`launch:email-setup` prints the passwordless sign-in email setup and test
+checklist.
 `launch:env-template` prints the safe host settings block for Render or another
 production host.
 `launch:stripe-products` prints the exact Stripe offer ids, prices, lookup
