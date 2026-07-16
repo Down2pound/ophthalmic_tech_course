@@ -113,6 +113,7 @@ describe("createLaunchEvidenceBundle", () => {
       "home-pc-runbook.md",
       "home-pc-command-cheatsheet.md",
       "first-customers-sales-packet.md",
+      "practice-manager-approval-one-pager.md",
       "first-buyer-fulfillment-checklist.md",
       "revenue-and-sales-tracker-template.md",
       "stripe-setup-guide.md",
@@ -163,6 +164,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const firstCustomersSalesPacket = await readFile(
       path.join(result.outputDir, "first-customers-sales-packet.md"),
+      "utf8"
+    );
+    const practiceManagerApprovalOnePager = await readFile(
+      path.join(result.outputDir, "practice-manager-approval-one-pager.md"),
       "utf8"
     );
     const firstBuyerFulfillmentChecklist = await readFile(
@@ -270,6 +275,21 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(firstCustomersSalesPacket).toContain(
       "Do not pressure the buyer or offer medical, legal, hiring, billing, or certification advice."
+    );
+    expect(practiceManagerApprovalOnePager).toContain(
+      "OptiTech Academy Practice Manager Approval One-Pager"
+    );
+    expect(practiceManagerApprovalOnePager).toContain(
+      "Why This May Help The Practice"
+    );
+    expect(practiceManagerApprovalOnePager).toContain(
+      "This is not a certification program"
+    );
+    expect(practiceManagerApprovalOnePager).toContain(
+      "Five-seat practice pack"
+    );
+    expect(practiceManagerApprovalOnePager).toContain(
+      "Do not add patient names, chart details, private employee performance notes, secrets, or payment card information."
     );
     expect(firstBuyerFulfillmentChecklist).toContain(
       "OptiTech Academy First Buyer Fulfillment Checklist"

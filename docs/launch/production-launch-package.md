@@ -242,6 +242,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/home-pc-runbook.md`
 - `docs/launch/home-pc-command-cheatsheet.md`
 - `docs/launch/first-customers-sales-packet.md`
+- `docs/launch/practice-manager-approval-one-pager.md`
 - `docs/launch/first-buyer-fulfillment-checklist.md`
 - `docs/launch/revenue-and-sales-tracker-template.md`
 - `docs/launch/stripe-setup-guide.md`

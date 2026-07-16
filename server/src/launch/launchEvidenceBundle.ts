@@ -44,6 +44,7 @@ function renderReadme({
     "- `home-pc-runbook.md`: beginner-friendly fallback for admin-blocked work computers.",
     "- `home-pc-command-cheatsheet.md`: short command list for finishing checks on a home PC.",
     "- `first-customers-sales-packet.md`: first-buyer outreach scripts and feedback tracker.",
+    "- `practice-manager-approval-one-pager.md`: short practice approval memo for managers and budget decision-makers.",
     "- `first-buyer-fulfillment-checklist.md`: first paid buyer receipt, access, and welcome checklist.",
     "- `revenue-and-sales-tracker-template.md`: safe lead, purchase, support, and weekly revenue tracker.",
     "- `stripe-setup-guide.md`: Stripe checkout and webhook setup recipe.",
@@ -96,6 +97,7 @@ export async function createLaunchEvidenceBundle({
     "home-pc-runbook.md",
     "home-pc-command-cheatsheet.md",
     "first-customers-sales-packet.md",
+    "practice-manager-approval-one-pager.md",
     "first-buyer-fulfillment-checklist.md",
     "revenue-and-sales-tracker-template.md",
     "stripe-setup-guide.md",
@@ -138,6 +140,13 @@ export async function createLaunchEvidenceBundle({
   );
   const firstCustomersSalesPacket = await readFile(
     path.resolve(projectRoot, "docs/launch/first-customers-sales-packet.md"),
+    "utf8"
+  );
+  const practiceManagerApprovalOnePager = await readFile(
+    path.resolve(
+      projectRoot,
+      "docs/launch/practice-manager-approval-one-pager.md"
+    ),
     "utf8"
   );
   const firstBuyerFulfillmentChecklist = await readFile(
@@ -206,6 +215,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "first-customers-sales-packet.md"),
     firstCustomersSalesPacket
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "practice-manager-approval-one-pager.md"),
+    practiceManagerApprovalOnePager
   );
   await writeFile(
     path.join(resolvedOutputDir, "first-buyer-fulfillment-checklist.md"),
