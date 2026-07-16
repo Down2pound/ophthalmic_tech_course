@@ -60,5 +60,6 @@ describe("robots.txt", () => {
     expect(robots).toContain("Disallow: /send");
     expect(robots).toContain("Disallow: /practice-seat-admin");
     expect(robots).toContain("Disallow: /launch-readiness");
+    expect(robots).toContain("Sitemap: /sitemap.xml");
   });
 });

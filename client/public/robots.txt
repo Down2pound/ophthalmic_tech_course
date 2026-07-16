@@ -5,3 +5,4 @@ Disallow: /admin
 Disallow: /send
 Disallow: /practice-seat-admin
 Disallow: /launch-readiness
+Sitemap: /sitemap.xml
