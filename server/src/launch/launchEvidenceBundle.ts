@@ -1,7 +1,6 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { renderLaunchDoctorReport } from "./launchDoctor";
-import { renderManualQaTemplate } from "./manualQaTemplate";
 import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 import { getRuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 
@@ -204,6 +203,10 @@ export async function createLaunchEvidenceBundle({
     path.resolve(projectRoot, "docs/launch/production-env-checklist.md"),
     "utf8"
   );
+  const manualQaEvidence = await readFile(
+    path.resolve(projectRoot, "docs/launch/manual-launch-qa-evidence.md"),
+    "utf8"
+  );
   const firstSaleSupportRunbook = await readFile(
     path.resolve(projectRoot, "docs/launch/first-sale-support-runbook.md"),
     "utf8"
@@ -306,7 +309,7 @@ export async function createLaunchEvidenceBundle({
   );
   await writeFile(
     path.join(resolvedOutputDir, "manual-launch-qa-evidence.md"),
-    renderManualQaTemplate({ generatedAt })
+    manualQaEvidence
   );
   await writeFile(
     path.join(resolvedOutputDir, "first-sale-support-runbook.md"),

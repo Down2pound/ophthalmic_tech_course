@@ -506,4 +506,24 @@ describe("deployment files", () => {
     expect(checklist).not.toContain("whsec_");
     expect(checklist).not.toContain("replace_with");
   });
+
+  it("keeps a standalone manual launch QA evidence template in launch docs", async () => {
+    const template = await readFile(
+      path.resolve(process.cwd(), "docs/launch/manual-launch-qa-evidence.md"),
+      "utf8"
+    );
+
+    expect(template).toContain("OptiTech Academy Manual Launch QA Evidence");
+    expect(template).toContain("Deployment URL:");
+    expect(template).toContain("Commit SHA:");
+    expect(template).toContain("Stripe checkout session ID:");
+    expect(template).toContain("Individual checkout success return URL:");
+    expect(template).toContain("Passwordless Email Delivery");
+    expect(template).toContain("Practice checkout success return URL:");
+    expect(template).toContain("Custom Practice Inquiry Test");
+    expect(template).toContain("Sitemap URL or generated sitemap path:");
+    expect(template).toContain("ENABLE_PAID_ENROLLMENT stayed false");
+    expect(template).not.toContain("sk_test_");
+    expect(template).not.toContain("whsec_");
+  });
 });
