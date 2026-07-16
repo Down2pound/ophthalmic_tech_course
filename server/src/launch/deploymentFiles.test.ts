@@ -98,6 +98,8 @@ describe("deployment files", () => {
     );
     expect(backupScript).toContain('path.join(projectRoot, ".git", "HEAD")');
     expect(backupScript).toContain("formatBackupStatus");
+    expect(backupScript).toContain("pnpm install");
+    expect(backupScript).toContain("pnpm launch:preflight");
     expect(backupScript).not.toContain("execSync");
   });
 });
