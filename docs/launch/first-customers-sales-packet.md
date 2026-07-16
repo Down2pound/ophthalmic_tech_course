@@ -161,6 +161,24 @@ totally fine.
 [Your Name]
 ```
 
+## Common Buyer Objections
+
+Use these when someone is interested but unsure. Keep the answer short, helpful,
+and honest. The goal is to lower confusion, not pressure someone.
+
+| If they say...                             | Safe answer                                                                                                                                             | Next step                                                              |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| "Is this a certification course?"          | "No. It is foundational education for ophthalmic vocabulary, clinic flow, patient communication, and supervised practice preparation."                  | Send the policies page with the course overview.                       |
+| "I need to talk to my manager first."      | "That makes sense. The practice-pack page explains seat options, limits, and how supervisors can pair the course with local hands-on training."         | Ask: "Can you send me the practice pack link and the policies page?"   |
+| "What if I am brand new to eye care?"      | "That is the intended learner. The course starts with plain-language foundations before moving into clinic habits and knowledge checks."                | Send the individual learner link and invite one question.              |
+| "Can this replace our in-office training?" | "No. It can make the first layer of onboarding more consistent, but local protocols, observation, and hands-on signoff still belong with the practice." | Offer the practice pack page or a custom practice conversation.        |
+| "Why should we buy now?"                   | "The founding version is priced for early buyers who want structured foundations and are willing to share feedback as the course improves."             | Ask whether individual access or a practice pack fits their situation. |
+| "What if it is not a fit?"                 | "The course has clear policies and support expectations. Refund review is available under the posted refund policy."                                    | Send the policies page and support email.                              |
+
+Do not pressure the buyer or offer medical, legal, hiring, billing, or
+certification advice. If someone needs employer approval, give them the correct
+link and let them decide.
+
 ## First Sales Call Questions
 
 Ask simple questions. Listen more than you talk.

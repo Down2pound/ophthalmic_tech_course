@@ -261,6 +261,16 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(firstCustomersSalesPacket).toContain("Five seats for $799");
     expect(firstCustomersSalesPacket).toContain("Do not promise certification");
+    expect(firstCustomersSalesPacket).toContain("Common Buyer Objections");
+    expect(firstCustomersSalesPacket).toContain(
+      "I need to talk to my manager first"
+    );
+    expect(firstCustomersSalesPacket).toContain(
+      "Can you send me the practice pack link and the policies page?"
+    );
+    expect(firstCustomersSalesPacket).toContain(
+      "Do not pressure the buyer or offer medical, legal, hiring, billing, or certification advice."
+    );
     expect(firstBuyerFulfillmentChecklist).toContain(
       "OptiTech Academy First Buyer Fulfillment Checklist"
     );
