@@ -59,6 +59,15 @@ pnpm launch:backup
 This command prints the GitHub repo, branch push command, portable backup file
 names, and the Drive/NotebookLM course source trail.
 
+On a locked-down work computer, run this combined safe handoff command before
+stopping:
+
+```bash
+pnpm launch:workstation-handoff
+```
+
+It runs the plain-Node secret scan and then prints the backup handoff report.
+
 Safe Drive backup rule: upload only the ZIP, bundle, and generated
 `launch-evidence/` folder. Do not upload `.env`, Stripe secret keys, webhook
 secrets, email API keys, database passwords, raw sign-in links, session cookies,

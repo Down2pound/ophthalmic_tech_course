@@ -96,6 +96,9 @@ describe("deployment files", () => {
     expect(packageJson).toContain(
       '"launch:backup": "node scripts/launch-backup-handoff.mjs"'
     );
+    expect(packageJson).toContain(
+      '"launch:workstation-handoff": "node scripts/launch-secret-scan.mjs && node scripts/launch-backup-handoff.mjs"'
+    );
     expect(backupScript).toContain('path.join(projectRoot, ".git", "HEAD")');
     expect(backupScript).toContain("formatBackupStatus");
     expect(backupScript).toContain("git clone ${restoreBundleName}");

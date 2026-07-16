@@ -25,6 +25,15 @@ Drive source-code ZIP is the safest way to continue from home. Think of GitHub
 as the shared bookshelf and the Drive ZIP as the backpack copy you can carry
 home today.
 
+Before leaving the work computer, run:
+
+```bash
+pnpm launch:workstation-handoff
+```
+
+Beginner translation: this checks that obvious private keys were not saved in
+the project and then prints the exact backup files and home-PC commands.
+
 ## Install The Basics
 
 Install these on the home PC:

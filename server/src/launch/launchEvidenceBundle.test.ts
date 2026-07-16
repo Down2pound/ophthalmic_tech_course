@@ -286,6 +286,9 @@ describe("createLaunchEvidenceBundle", () => {
     expect(githubAndSourceBackupGuide).toContain(
       "git clone optitech-academy-branch"
     );
+    expect(githubAndSourceBackupGuide).toContain(
+      "pnpm launch:workstation-handoff"
+    );
     expect(githubAndSourceBackupGuide).not.toContain("sk_test_");
     expect(githubAndSourceBackupGuide).not.toContain("whsec_");
     expect(homePcRunbook).toContain("OptiTech Academy Home PC Runbook");
@@ -294,6 +297,7 @@ describe("createLaunchEvidenceBundle", () => {
     expect(homePcRunbook).toContain("pnpm launch:secret-scan");
     expect(homePcRunbook).toContain("git clone optitech-academy-branch");
     expect(homePcRunbook).toContain("--branch codex/optitech-product-spec");
+    expect(homePcRunbook).toContain("pnpm launch:workstation-handoff");
     expect(homePcCommandCheatsheet).toContain(
       "OptiTech Academy Home PC Command Cheat Sheet"
     );
