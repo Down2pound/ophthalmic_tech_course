@@ -66,7 +66,8 @@ stopping:
 pnpm launch:workstation-handoff
 ```
 
-It runs the plain-Node secret scan and then prints the backup handoff report.
+It runs the plain-Node blocker summary, runs the secret scan, and then prints
+the backup handoff report.
 
 Safe Drive backup rule: upload only the ZIP, bundle, and generated
 `launch-evidence/` folder. Do not upload `.env`, Stripe secret keys, webhook

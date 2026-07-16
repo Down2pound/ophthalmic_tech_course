@@ -31,8 +31,9 @@ Before leaving the work computer, run:
 pnpm launch:workstation-handoff
 ```
 
-Beginner translation: this checks that obvious private keys were not saved in
-the project and then prints the exact backup files and home-PC commands.
+Beginner translation: this shows what still blocks paid launch, checks that
+obvious private keys were not saved in the project, and then prints the exact
+backup files and home-PC commands.
 
 ## Install The Basics
 
