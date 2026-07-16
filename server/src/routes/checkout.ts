@@ -10,6 +10,14 @@ import {
   type PracticeInquiryStore,
 } from "../commerce/practiceInquiryStore";
 import {
+  createInMemoryLearnerInterestStore,
+  createPostgresLearnerInterestStore,
+  prepareLearnerInterestRecord,
+  sendLearnerInterestNotification,
+  type LearnerInterestInput,
+  type LearnerInterestStore,
+} from "../commerce/learnerInterestStore";
+import {
   buildCheckoutReturnUrls,
   buildStripeCheckoutParams,
   getCheckoutBaseUrl,
@@ -28,6 +36,11 @@ const STRIPE_CHECKOUT_SESSIONS_URL =
 const STRIPE_API_VERSION = "2026-02-25.clover";
 const practiceInquiryRateLimit = createRateLimitMiddleware({
   label: "practice-inquiry",
+  windowMs: 60 * 60 * 1000,
+  maxRequests: 5,
+});
+const learnerInterestRateLimit = createRateLimitMiddleware({
+  label: "learner-interest",
   windowMs: 60 * 60 * 1000,
   maxRequests: 5,
 });
@@ -51,6 +64,13 @@ interface PracticeInquiryRequestBody {
   message?: string;
 }
 
+interface LearnerInterestRequestBody {
+  learnerName?: string;
+  email?: string;
+  background?: string;
+  goal?: string;
+}
+
 function createPracticeInquiryStore(): PracticeInquiryStore {
   const postgresPool = getPostgresPool();
 
@@ -61,10 +81,25 @@ function createPracticeInquiryStore(): PracticeInquiryStore {
   return createInMemoryPracticeInquiryStore();
 }
 
+function createLearnerInterestStore(): LearnerInterestStore {
+  const postgresPool = getPostgresPool();
+
+  if (postgresPool) {
+    return createPostgresLearnerInterestStore(postgresPool);
+  }
+
+  return createInMemoryLearnerInterestStore();
+}
+
 const practiceInquiryStore = createPracticeInquiryStore();
+const learnerInterestStore = createLearnerInterestStore();
 
 export function getPracticeInquiryStore() {
   return practiceInquiryStore;
+}
+
+export function getLearnerInterestStore() {
+  return learnerInterestStore;
 }
 
 function toPracticeInquiryInput(
@@ -82,7 +117,86 @@ function toPracticeInquiryInput(
   };
 }
 
+function toLearnerInterestInput(
+  body: LearnerInterestRequestBody
+): LearnerInterestInput {
+  return {
+    learnerName: body.learnerName ?? "",
+    email: body.email ?? "",
+    background: body.background ?? "",
+    goal: body.goal ?? "",
+  };
+}
+
 export function setupCheckoutRoutes(router: Router) {
+  router.post(
+    "/learner-interests",
+    learnerInterestRateLimit,
+    async (req: Request, res: Response) => {
+      try {
+        const interest = prepareLearnerInterestRecord({
+          interest: toLearnerInterestInput(
+            (req.body ?? {}) as LearnerInterestRequestBody
+          ),
+        });
+        const storedInterest =
+          await learnerInterestStore.recordLearnerInterest(interest);
+        const authStatus = getAuthEnvironmentStatus();
+        const from = process.env.SIGN_IN_FROM_EMAIL?.trim();
+        const apiUrl = process.env.TRANSACTIONAL_EMAIL_API_URL?.trim();
+        const apiKey = process.env.TRANSACTIONAL_EMAIL_API_KEY?.trim();
+        let notification: {
+          attempted: boolean;
+          sent: boolean;
+          providerMessageId?: string;
+          skippedReason?: string;
+          error?: string;
+        } = {
+          attempted: false,
+          sent: false,
+          skippedReason: "Transactional email is not configured.",
+        };
+
+        if (authStatus.passwordlessConfigured && from && apiUrl && apiKey) {
+          try {
+            const result = await sendLearnerInterestNotification({
+              interest: storedInterest,
+              from,
+              apiUrl,
+              apiKey,
+            });
+
+            notification = {
+              attempted: true,
+              sent: true,
+              ...(result.providerMessageId
+                ? { providerMessageId: result.providerMessageId }
+                : {}),
+            };
+          } catch {
+            notification = {
+              attempted: true,
+              sent: false,
+              error: "Learner interest notification could not be sent.",
+            };
+          }
+        }
+
+        res.status(201).json({
+          interest: storedInterest,
+          notification,
+        });
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Learner interest could not be recorded.";
+
+        res.status(400).json({ error: message });
+      }
+    }
+  );
+
   router.post(
     "/practice-inquiries",
     practiceInquiryRateLimit,

@@ -249,6 +249,9 @@ Week 2:
 Week 3:
 
 - Share the individual learner link with career changers and medical assistants.
+- Review `/checkout` learner interest leads in the protected Practice Seat
+  Manager, send the learner decision one-pager, and invite founding access when
+  paid enrollment opens.
 - Share the practice pack link with managers or supervisors.
 - Collect testimonials only with permission.
 

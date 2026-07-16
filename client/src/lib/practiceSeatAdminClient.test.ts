@@ -58,6 +58,17 @@ describe("fetchPracticeInquiries", () => {
             },
           },
         ],
+        learnerInterests: [
+          {
+            interestId: "learner_interest_123",
+            learnerName: "Future Tech",
+            email: "learner@example.com",
+            background: "medical-assistant",
+            goal: "I want to move into ophthalmology.",
+            status: "new",
+            createdAt: "2026-07-16T12:30:00.000Z",
+          },
+        ],
       }),
     });
 
@@ -71,6 +82,12 @@ describe("fetchPracticeInquiries", () => {
             priority: "high",
             recommendedOffer: "Custom practice onboarding call",
           },
+        },
+      ],
+      learnerInterests: [
+        {
+          learnerName: "Future Tech",
+          email: "learner@example.com",
         },
       ],
     });

@@ -35,7 +35,7 @@ import {
   getPurchaseStore,
 } from "./stripeWebhook";
 import { preparePracticeInquiryLeadRecord } from "../commerce/practiceInquiryStore";
-import { getPracticeInquiryStore } from "./checkout";
+import { getLearnerInterestStore, getPracticeInquiryStore } from "./checkout";
 
 interface PasswordlessStartRequestBody {
   email?: string;
@@ -370,6 +370,8 @@ export function setupAuthRoutes(router: Router) {
         inquiries: (
           await getPracticeInquiryStore().listPracticeInquiries()
         ).map(preparePracticeInquiryLeadRecord),
+        learnerInterests:
+          await getLearnerInterestStore().listLearnerInterests(),
       });
     }
   );

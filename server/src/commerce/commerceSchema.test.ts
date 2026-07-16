@@ -13,6 +13,7 @@ describe("commerceSchemaSql", () => {
       "commerce_practice_seat_packs",
       "commerce_practice_seat_assignments",
       "commerce_practice_inquiries",
+      "commerce_learner_interests",
     ]);
     expect(commerceSchemaSql).toContain(
       "CREATE TABLE IF NOT EXISTS commerce_purchases"
@@ -28,6 +29,9 @@ describe("commerceSchemaSql", () => {
     );
     expect(commerceSchemaSql).toContain(
       "CREATE TABLE IF NOT EXISTS commerce_practice_inquiries"
+    );
+    expect(commerceSchemaSql).toContain(
+      "CREATE TABLE IF NOT EXISTS commerce_learner_interests"
     );
   });
 
@@ -64,6 +68,13 @@ describe("commerceSchemaSql", () => {
       "commerce_practice_inquiries_contact_email_idx"
     );
   });
+
+  it("stores individual learner interest leads durably", () => {
+    expect(commerceSchemaSql).toContain("learner_name TEXT NOT NULL");
+    expect(commerceSchemaSql).toContain("background TEXT NOT NULL");
+    expect(commerceSchemaSql).toContain("goal TEXT NOT NULL");
+    expect(commerceSchemaSql).toContain("commerce_learner_interests_email_idx");
+  });
 });
 
 describe("getCommerceSchemaChecklist", () => {
@@ -76,6 +87,7 @@ describe("getCommerceSchemaChecklist", () => {
       "Provision practice seat packs from checkout metadata before inviting individual learners.",
       "Assign practice seats to learner emails without exceeding purchased seat capacity.",
       "Store practice inquiries durably so larger team leads do not depend on mailto links.",
+      "Store learner interest leads durably so individual buyers can be contacted before paid enrollment opens.",
     ]);
   });
 });

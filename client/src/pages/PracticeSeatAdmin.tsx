@@ -4,6 +4,7 @@ import {
   assignPracticeSeat,
   fetchPracticeInquiries,
   fetchPracticeSeatPacks,
+  type LearnerInterestSummary,
   type PracticeInquirySummary,
   type PracticeSeatAssignmentSummary,
   type PracticeSeatPackSummary,
@@ -24,6 +25,7 @@ interface PageState {
   seatPacks: PracticeSeatPackSummary[];
   assignments: PracticeSeatAssignmentSummary[];
   inquiries: PracticeInquirySummary[];
+  learnerInterests: LearnerInterestSummary[];
 }
 
 function getRemainingSeats(seatPack: PracticeSeatPackSummary) {
@@ -39,6 +41,7 @@ export default function PracticeSeatAdmin() {
     seatPacks: [],
     assignments: [],
     inquiries: [],
+    learnerInterests: [],
   });
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -75,6 +78,7 @@ export default function PracticeSeatAdmin() {
       setPageState({
         ...seatPackResult,
         inquiries: inquiryResult.inquiries,
+        learnerInterests: inquiryResult.learnerInterests,
       });
       setStatusMessage("Practice sales dashboard loaded.");
     } catch (error) {
@@ -389,6 +393,48 @@ export default function PracticeSeatAdmin() {
                     </ul>
                     <p className="mt-4 text-sm leading-6 text-slate-600">
                       {inquiry.message}
+                    </p>
+                  </section>
+                ))}
+              </div>
+            )}
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center gap-3">
+              <Users className="h-6 w-6 text-blue-700" />
+              <h2 className="text-2xl font-bold">Individual learner leads</h2>
+            </div>
+            <p className="mt-3 leading-7 text-slate-600">
+              These are learners who are interested before checkout, before
+              launch gates are complete, or before they are ready to purchase.
+            </p>
+            {pageState.learnerInterests.length === 0 ? (
+              <p className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+                No learner interest leads loaded yet.
+              </p>
+            ) : (
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                {pageState.learnerInterests.map(interest => (
+                  <section
+                    key={interest.interestId}
+                    className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <p className="text-sm font-semibold text-blue-700">
+                      {interest.background}
+                    </p>
+                    <h3 className="mt-1 text-xl font-bold">
+                      {interest.learnerName}
+                    </h3>
+                    <p className="mt-1 text-sm text-slate-600">
+                      {interest.email}
+                    </p>
+                    <p className="mt-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm leading-6 text-green-950">
+                      Recommended next step: send the learner decision one-pager
+                      and invite founding access when paid enrollment opens.
+                    </p>
+                    <p className="mt-3 text-sm leading-6 text-slate-700">
+                      {interest.goal}
                     </p>
                   </section>
                 ))}

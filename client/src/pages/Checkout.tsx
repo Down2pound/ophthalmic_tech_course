@@ -31,6 +31,14 @@ import {
 import { useState } from "react";
 import { createCheckoutSession } from "@/lib/checkoutClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
+import { submitLearnerInterest } from "@/lib/learnerInterestClient";
+
+const emptyLearnerInterestForm = {
+  learnerName: "",
+  email: "",
+  background: "",
+  goal: "",
+};
 
 const policySummary = commercePolicies;
 const supportHref = createMailtoHref({
@@ -43,6 +51,15 @@ export default function Checkout() {
   const [email, setEmail] = useState("");
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [isStartingCheckout, setIsStartingCheckout] = useState(false);
+  const [learnerInterestForm, setLearnerInterestForm] = useState(
+    emptyLearnerInterestForm
+  );
+  const [learnerInterestStatus, setLearnerInterestStatus] = useState<
+    "idle" | "submitting" | "sent"
+  >("idle");
+  const [learnerInterestMessage, setLearnerInterestMessage] = useState<
+    string | null
+  >(null);
   const checkoutStatus =
     typeof window === "undefined"
       ? null
@@ -69,6 +86,42 @@ export default function Checkout() {
       );
     } finally {
       setIsStartingCheckout(false);
+    }
+  };
+
+  const updateLearnerInterestField = (
+    field: keyof typeof emptyLearnerInterestForm,
+    value: string
+  ) => {
+    setLearnerInterestForm(current => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
+  const handleLearnerInterestSubmit = async () => {
+    setLearnerInterestStatus("submitting");
+    setLearnerInterestMessage(null);
+
+    try {
+      const result = await submitLearnerInterest({
+        interest: learnerInterestForm,
+      });
+
+      setLearnerInterestStatus("sent");
+      setLearnerInterestForm(emptyLearnerInterestForm);
+      setLearnerInterestMessage(
+        result.notificationSent
+          ? "You're on the founding learner interest list. Jeff has been notified."
+          : "You're on the founding learner interest list. Jeff can review it from the protected lead dashboard."
+      );
+    } catch (error) {
+      setLearnerInterestStatus("idle");
+      setLearnerInterestMessage(
+        error instanceof Error
+          ? error.message
+          : "Learner interest could not be sent."
+      );
     }
   };
 
@@ -252,6 +305,92 @@ export default function Checkout() {
                 </section>
               ))}
             </div>
+          </Card>
+
+          <Card className="border-green-200 bg-green-50 p-6 text-green-950 shadow-sm">
+            <h2 className="text-2xl font-bold">Not ready to buy today?</h2>
+            <p className="mt-3 leading-7">
+              Join the founding learner interest list so we can follow up when
+              enrollment is ready or help you decide whether the course fits
+              your goal.
+            </p>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <label className="block text-sm font-semibold text-green-950">
+                Name
+                <input
+                  value={learnerInterestForm.learnerName}
+                  onChange={event =>
+                    updateLearnerInterestField(
+                      "learnerName",
+                      event.target.value
+                    )
+                  }
+                  className="mt-2 w-full rounded-md border border-green-200 px-3 py-2 font-normal text-slate-950 outline-none ring-green-600 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-green-950">
+                Email
+                <input
+                  type="email"
+                  value={learnerInterestForm.email}
+                  onChange={event =>
+                    updateLearnerInterestField("email", event.target.value)
+                  }
+                  className="mt-2 w-full rounded-md border border-green-200 px-3 py-2 font-normal text-slate-950 outline-none ring-green-600 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-green-950">
+                Background
+                <select
+                  value={learnerInterestForm.background}
+                  onChange={event =>
+                    updateLearnerInterestField("background", event.target.value)
+                  }
+                  className="mt-2 w-full rounded-md border border-green-200 px-3 py-2 font-normal text-slate-950 outline-none ring-green-600 focus:ring-2"
+                >
+                  <option value="">Choose one</option>
+                  <option value="career-changer">Career changer</option>
+                  <option value="medical-assistant">Medical assistant</option>
+                  <option value="new-ophthalmic-tech">
+                    New ophthalmic technician
+                  </option>
+                  <option value="student">Student</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label className="block text-sm font-semibold text-green-950 md:col-span-2">
+                What do you want this course to help you do?
+                <textarea
+                  value={learnerInterestForm.goal}
+                  onChange={event =>
+                    updateLearnerInterestField("goal", event.target.value)
+                  }
+                  rows={4}
+                  className="mt-2 w-full resize-y rounded-md border border-green-200 px-3 py-2 font-normal text-slate-950 outline-none ring-green-600 focus:ring-2"
+                />
+              </label>
+            </div>
+            {learnerInterestMessage && (
+              <p
+                className={`mt-4 rounded-md border p-3 text-sm leading-6 ${
+                  learnerInterestStatus === "sent"
+                    ? "border-green-300 bg-white text-green-950"
+                    : "border-red-200 bg-red-50 text-red-800"
+                }`}
+              >
+                {learnerInterestMessage}
+              </p>
+            )}
+            <Button
+              className="mt-5 bg-green-700 text-white hover:bg-green-800"
+              disabled={learnerInterestStatus === "submitting"}
+              onClick={handleLearnerInterestSubmit}
+            >
+              {learnerInterestStatus === "submitting"
+                ? "Joining list..."
+                : "Join interest list"}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </Card>
 
           <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">

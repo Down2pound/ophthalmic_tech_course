@@ -47,8 +47,19 @@ export interface PracticeInquirySummary {
   followUpPlan: PracticeInquiryFollowUpPlan;
 }
 
+export interface LearnerInterestSummary {
+  interestId: string;
+  learnerName: string;
+  email: string;
+  background: string;
+  goal: string;
+  status: string;
+  createdAt: string;
+}
+
 export interface PracticeInquiryListResponse {
   inquiries: PracticeInquirySummary[];
+  learnerInterests: LearnerInterestSummary[];
 }
 
 export interface PracticeSeatAssignmentResponse {
