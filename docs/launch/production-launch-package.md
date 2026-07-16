@@ -238,6 +238,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/production-launch-package.md`
 - `docs/launch/deployment-guide.md`
 - `docs/launch/render-deployment-guide.md`
+- `docs/launch/deployment-cutover-checklist.md`
 - `docs/launch/domain-and-sharing-guide.md`
 - `docs/launch/home-pc-runbook.md`
 - `docs/launch/home-pc-command-cheatsheet.md`

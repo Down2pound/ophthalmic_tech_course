@@ -109,6 +109,7 @@ describe("createLaunchEvidenceBundle", () => {
       "production-launch-package.md",
       "deployment-guide.md",
       "render-deployment-guide.md",
+      "deployment-cutover-checklist.md",
       "domain-and-sharing-guide.md",
       "home-pc-runbook.md",
       "home-pc-command-cheatsheet.md",
@@ -149,6 +150,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const renderDeploymentGuide = await readFile(
       path.join(result.outputDir, "render-deployment-guide.md"),
+      "utf8"
+    );
+    const deploymentCutoverChecklist = await readFile(
+      path.join(result.outputDir, "deployment-cutover-checklist.md"),
       "utf8"
     );
     const domainAndSharingGuide = await readFile(
@@ -237,6 +242,20 @@ describe("createLaunchEvidenceBundle", () => {
     expect(renderDeploymentGuide).toContain("pnpm db:setup");
     expect(renderDeploymentGuide).not.toContain("sk_test_");
     expect(renderDeploymentGuide).not.toContain("whsec_");
+    expect(deploymentCutoverChecklist).toContain(
+      "OptiTech Academy Deployment Cutover Checklist"
+    );
+    expect(deploymentCutoverChecklist).toContain(
+      "Keep `ENABLE_PAID_ENROLLMENT=false`"
+    );
+    expect(deploymentCutoverChecklist).toContain(
+      "LAUNCH_SMOKE_ALLOW_NOT_READY=true"
+    );
+    expect(deploymentCutoverChecklist).toContain(
+      "Set `ENABLE_PAID_ENROLLMENT=false` again"
+    );
+    expect(deploymentCutoverChecklist).not.toContain("sk_test_");
+    expect(deploymentCutoverChecklist).not.toContain("whsec_");
     expect(domainAndSharingGuide).toContain(
       "OptiTech Academy Domain And Sharing Guide"
     );
