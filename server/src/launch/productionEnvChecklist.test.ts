@@ -17,6 +17,10 @@ describe("renderProductionEnvChecklist", () => {
     expect(checklist).toContain("`VITE_ANALYTICS_ENDPOINT`");
     expect(checklist).toContain("`LAUNCH_SITEMAP_PATH`");
     expect(checklist).toContain("Resend keys should start with re_");
+    expect(checklist).toContain("Host Dashboard Paste Template");
+    expect(checklist).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(checklist).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED=false");
+    expect(checklist).toContain("Never paste this template into GitHub");
     expect(checklist).toContain("pnpm launch:doctor");
     expect(checklist).not.toContain("sk_test_");
     expect(checklist).not.toContain("replace_with");
