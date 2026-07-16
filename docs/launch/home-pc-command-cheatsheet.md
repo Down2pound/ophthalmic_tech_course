@@ -75,6 +75,7 @@ without printing the secret values.
 pnpm launch:blockers
 pnpm launch:clinical-review
 pnpm launch:env-template
+pnpm launch:stripe-products
 pnpm launch:secrets
 pnpm launch:doctor
 ```
@@ -85,6 +86,8 @@ paid sales.
 fields.
 `launch:env-template` prints the safe host settings block for Render or another
 production host.
+`launch:stripe-products` prints the exact Stripe offer ids, prices, lookup
+keys, and webhook event to mirror in Stripe.
 `launch:secrets` makes a safe checklist of missing production settings.
 `launch:doctor` explains what is still blocking paid enrollment.
 

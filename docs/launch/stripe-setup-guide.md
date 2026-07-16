@@ -9,10 +9,10 @@ app never stores card numbers.
 The checkout route creates one-time Stripe Checkout Sessions from the app's
 shared offer list:
 
-| Offer | App offer id | Price |
-| --- | --- | --- |
-| Founding Learner Access | `founding-learner` | `$199` |
-| Five-Seat Practice Onboarding Pack | `practice-five-seat-pack` | `$799` |
+| Offer                                 | App offer id                 | Price    |
+| ------------------------------------- | ---------------------------- | -------- |
+| Founding Learner Access               | `founding-learner`           | `$199`   |
+| Five-Seat Practice Onboarding Pack    | `practice-five-seat-pack`    | `$799`   |
 | Fifteen-Seat Practice Onboarding Pack | `practice-fifteen-seat-pack` | `$1,799` |
 
 The app sends these values to Stripe when checkout starts:
@@ -26,6 +26,15 @@ Because the app sends price data directly, you do not need to manually create
 Stripe products before test checkout. If you later want Stripe dashboard
 products for reporting, keep the app offer ids and prices aligned with this
 file.
+
+Print the work-safe Stripe product checklist with:
+
+```bash
+pnpm launch:stripe-products
+```
+
+That command lists the exact offer ids, prices, optional Stripe lookup keys, and
+webhook event without printing any secret values.
 
 ## Test Mode First
 

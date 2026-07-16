@@ -232,4 +232,29 @@ describe("deployment files", () => {
     expect(salesTrackerScript).not.toContain("sk_test_");
     expect(salesTrackerScript).not.toContain("whsec_");
   });
+
+  it("keeps a work-computer-safe Stripe product setup command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const stripeProductsScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-stripe-products.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:stripe-products": "node scripts/launch-stripe-products.mjs"'
+    );
+    expect(stripeProductsScript).toContain(
+      "OptiTech Academy Stripe Product Setup"
+    );
+    expect(stripeProductsScript).toContain("optitech_founding_learner_199");
+    expect(stripeProductsScript).toContain("optitech_practice_5_seats_799");
+    expect(stripeProductsScript).toContain("optitech_practice_15_seats_1799");
+    expect(stripeProductsScript).toContain("checkout.session.completed");
+    expect(stripeProductsScript).not.toContain("execSync");
+    expect(stripeProductsScript).not.toContain("sk_test_");
+    expect(stripeProductsScript).not.toContain("whsec_");
+  });
 });

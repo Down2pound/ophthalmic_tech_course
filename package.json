@@ -19,6 +19,7 @@
     "launch:env-template": "node scripts/launch-env-template.mjs",
     "launch:first-sales": "node scripts/launch-first-sales-links.mjs",
     "launch:sales-tracker": "node scripts/launch-sales-tracker.mjs",
+    "launch:stripe-products": "node scripts/launch-stripe-products.mjs",
     "launch:backup": "node scripts/launch-backup-handoff.mjs",
     "launch:workstation-handoff": "node scripts/launch-blockers-summary.mjs && node scripts/launch-secret-scan.mjs && node scripts/launch-backup-handoff.mjs",
     "launch:secrets": "tsx server/src/launch/runLaunchSecrets.ts",
