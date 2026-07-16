@@ -45,6 +45,7 @@ Run each command by itself first, so errors are easier to understand:
 ```bash
 pnpm check
 pnpm test
+pnpm launch:secret-scan
 pnpm build
 pnpm launch:bundle
 ```
@@ -54,6 +55,9 @@ After those pass once, this one command runs the same main checks:
 ```bash
 pnpm launch:preflight
 ```
+
+`launch:secret-scan` checks the project for likely private keys or passwords
+without printing the secret values.
 
 ## 4. Check Production Setup Files
 

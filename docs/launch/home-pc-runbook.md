@@ -83,6 +83,7 @@ Run:
 ```bash
 pnpm check
 pnpm test
+pnpm launch:secret-scan
 pnpm build
 pnpm launch:bundle
 ```
@@ -92,6 +93,11 @@ If those all pass, run the one-command version next time:
 ```bash
 pnpm launch:preflight
 ```
+
+`launch:secret-scan` is a plain safety check that looks for likely Stripe keys,
+webhook secrets, database passwords, and similar values before you package or
+push the project. Beginner translation: it checks that private keys did not
+accidentally get mixed into the public project files.
 
 ## If You See `spawn EPERM`
 

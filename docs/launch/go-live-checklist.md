@@ -7,6 +7,7 @@ until every section is complete and the deployed app says it is ready.
 
 - [ ] Choose the commit that will be deployed.
 - [ ] Run `pnpm launch:preflight`.
+- [ ] Confirm `pnpm launch:secret-scan` passes for the release candidate.
 - [ ] Save the generated `launch-evidence/` folder.
 - [ ] Confirm no `.env`, secret keys, raw tokens, cookies, database passwords,
       or protected health information were saved.

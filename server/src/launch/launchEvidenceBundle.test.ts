@@ -288,6 +288,7 @@ describe("createLaunchEvidenceBundle", () => {
     expect(homePcRunbook).toContain("OptiTech Academy Home PC Runbook");
     expect(homePcRunbook).toContain("spawn EPERM");
     expect(homePcRunbook).toContain("pnpm launch:preflight");
+    expect(homePcRunbook).toContain("pnpm launch:secret-scan");
     expect(homePcCommandCheatsheet).toContain(
       "OptiTech Academy Home PC Command Cheat Sheet"
     );
@@ -295,6 +296,7 @@ describe("createLaunchEvidenceBundle", () => {
       "LAUNCH_SMOKE_ALLOW_NOT_READY=true"
     );
     expect(homePcCommandCheatsheet).toContain("pnpm db:setup");
+    expect(homePcCommandCheatsheet).toContain("pnpm launch:secret-scan");
     expect(homePcCommandCheatsheet).not.toContain("sk_test_");
     expect(homePcCommandCheatsheet).not.toContain("whsec_");
     expect(firstCustomersSalesPacket).toContain(
@@ -400,6 +402,7 @@ describe("createLaunchEvidenceBundle", () => {
     expect(goLiveChecklist).toContain("OptiTech Academy Go-Live Checklist");
     expect(goLiveChecklist).toContain("ENABLE_PAID_ENROLLMENT=true");
     expect(goLiveChecklist).toContain("/api/checkout/availability");
+    expect(goLiveChecklist).toContain("pnpm launch:secret-scan");
     expect(productionEnvChecklist).toContain("`STRIPE_SECRET_KEY`");
     expect(launchDoctorReport).toContain("OptiTech Academy Launch Doctor");
     expect(launchDoctorReport).toContain("Paid launch ready: no");
