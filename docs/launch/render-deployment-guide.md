@@ -115,6 +115,28 @@ paid launch is not ready yet. That is expected until Stripe, email, clinical
 review, and smoke testing are complete. The database section should say the
 launch schema is verified after `pnpm db:setup` has run successfully.
 
+The health endpoint also reports a safe release fingerprint when Render provides
+Git metadata:
+
+```json
+{
+  "ok": true,
+  "service": "optitech-academy",
+  "environment": "production",
+  "uptimeSeconds": 12,
+  "release": {
+    "host": "render",
+    "branch": "main",
+    "commit": "1234567",
+    "serviceName": "optitech-academy",
+    "url": "https://your-render-or-custom-domain.example"
+  }
+}
+```
+
+Beginner translation: this is the label on the live app. If a buyer has trouble,
+compare the `commit` value with GitHub so you know exactly which copy is online.
+
 ## Connect Stripe
 
 In Stripe, create the webhook endpoint:
