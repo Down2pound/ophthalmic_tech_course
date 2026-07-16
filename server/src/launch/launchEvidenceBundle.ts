@@ -42,6 +42,7 @@ function renderReadme({
     "- `render-deployment-guide.md`: Render Blueprint setup recipe.",
     "- `deployment-cutover-checklist.md`: short first-deploy to paid-launch cutover sequence.",
     "- `domain-and-sharing-guide.md`: production URL, sitemap, and shared-link setup recipe.",
+    "- `github-and-source-backup-guide.md`: GitHub push, portable backup, Drive, and NotebookLM source trail.",
     "- `home-pc-runbook.md`: beginner-friendly fallback for admin-blocked work computers.",
     "- `home-pc-command-cheatsheet.md`: short command list for finishing checks on a home PC.",
     "- `first-customers-sales-packet.md`: first-buyer outreach scripts and feedback tracker.",
@@ -97,6 +98,7 @@ export async function createLaunchEvidenceBundle({
     "render-deployment-guide.md",
     "deployment-cutover-checklist.md",
     "domain-and-sharing-guide.md",
+    "github-and-source-backup-guide.md",
     "home-pc-runbook.md",
     "home-pc-command-cheatsheet.md",
     "first-customers-sales-packet.md",
@@ -136,6 +138,10 @@ export async function createLaunchEvidenceBundle({
   );
   const domainAndSharingGuide = await readFile(
     path.resolve(projectRoot, "docs/launch/domain-and-sharing-guide.md"),
+    "utf8"
+  );
+  const githubAndSourceBackupGuide = await readFile(
+    path.resolve(projectRoot, "docs/launch/github-and-source-backup-guide.md"),
     "utf8"
   );
   const homePcRunbook = await readFile(
@@ -222,6 +228,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "domain-and-sharing-guide.md"),
     domainAndSharingGuide
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "github-and-source-backup-guide.md"),
+    githubAndSourceBackupGuide
   );
   await writeFile(
     path.join(resolvedOutputDir, "home-pc-runbook.md"),

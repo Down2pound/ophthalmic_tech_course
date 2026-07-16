@@ -111,6 +111,7 @@ describe("createLaunchEvidenceBundle", () => {
       "render-deployment-guide.md",
       "deployment-cutover-checklist.md",
       "domain-and-sharing-guide.md",
+      "github-and-source-backup-guide.md",
       "home-pc-runbook.md",
       "home-pc-command-cheatsheet.md",
       "first-customers-sales-packet.md",
@@ -158,6 +159,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const domainAndSharingGuide = await readFile(
       path.join(result.outputDir, "domain-and-sharing-guide.md"),
+      "utf8"
+    );
+    const githubAndSourceBackupGuide = await readFile(
+      path.join(result.outputDir, "github-and-source-backup-guide.md"),
       "utf8"
     );
     const homePcRunbook = await readFile(
@@ -261,6 +266,23 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(domainAndSharingGuide).toContain("PUBLIC_APP_URL");
     expect(domainAndSharingGuide).toContain("pnpm launch:sitemap");
+    expect(githubAndSourceBackupGuide).toContain(
+      "OptiTech Academy GitHub And Source Backup Guide"
+    );
+    expect(githubAndSourceBackupGuide).toContain(
+      "https://github.com/Down2pound/ophthalmic_tech_course.git"
+    );
+    expect(githubAndSourceBackupGuide).toContain(
+      "git push -u origin codex/optitech-product-spec"
+    );
+    expect(githubAndSourceBackupGuide).toContain(
+      "Bootcamp Drive folder: https://drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q"
+    );
+    expect(githubAndSourceBackupGuide).toContain(
+      "NotebookLM workspace: https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1"
+    );
+    expect(githubAndSourceBackupGuide).not.toContain("sk_test_");
+    expect(githubAndSourceBackupGuide).not.toContain("whsec_");
     expect(homePcRunbook).toContain("OptiTech Academy Home PC Runbook");
     expect(homePcRunbook).toContain("spawn EPERM");
     expect(homePcRunbook).toContain("pnpm launch:preflight");

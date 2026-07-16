@@ -240,6 +240,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/render-deployment-guide.md`
 - `docs/launch/deployment-cutover-checklist.md`
 - `docs/launch/domain-and-sharing-guide.md`
+- `docs/launch/github-and-source-backup-guide.md`
 - `docs/launch/home-pc-runbook.md`
 - `docs/launch/home-pc-command-cheatsheet.md`
 - `docs/launch/first-customers-sales-packet.md`
