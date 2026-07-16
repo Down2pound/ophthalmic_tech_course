@@ -65,6 +65,24 @@ C:\dev\ophthalmic_tech_course
 Do not extract the project inside Downloads if Windows security keeps blocking
 commands. A simple folder like `C:\dev` is usually easier.
 
+If you are using the Git bundle instead:
+
+1. Download the newest `optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle`.
+2. Put it in a simple folder, such as `C:\dev`.
+3. Open PowerShell in that folder.
+4. Run:
+
+```bash
+git clone optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle ophthalmic_tech_course --branch codex/optitech-product-spec
+cd ophthalmic_tech_course
+git remote set-url origin https://github.com/Down2pound/ophthalmic_tech_course.git
+git push -u origin codex/optitech-product-spec
+```
+
+Beginner translation: the bundle is a travel copy of the Git branch. This turns
+that travel copy back into a normal project folder, reconnects it to GitHub,
+and pushes your saved work to the online repo.
+
 ## Install Project Packages
 
 Run:

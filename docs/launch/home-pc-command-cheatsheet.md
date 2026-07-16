@@ -32,6 +32,16 @@ C:\dev\ophthalmic_tech_course
 Beginner translation: GitHub is best once everything has been pushed. The Drive
 ZIP is the backup copy you can use right away from home.
 
+If you brought home the Git bundle instead, put the newest `.bundle` file in
+`C:\dev`, open PowerShell there, and run:
+
+```bash
+git clone optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle ophthalmic_tech_course --branch codex/optitech-product-spec
+cd ophthalmic_tech_course
+git remote set-url origin https://github.com/Down2pound/ophthalmic_tech_course.git
+git push -u origin codex/optitech-product-spec
+```
+
 ## 2. Install The App Helpers
 
 ```bash

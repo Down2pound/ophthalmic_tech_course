@@ -283,12 +283,17 @@ describe("createLaunchEvidenceBundle", () => {
     expect(githubAndSourceBackupGuide).toContain(
       "NotebookLM workspace: https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1"
     );
+    expect(githubAndSourceBackupGuide).toContain(
+      "git clone optitech-academy-branch"
+    );
     expect(githubAndSourceBackupGuide).not.toContain("sk_test_");
     expect(githubAndSourceBackupGuide).not.toContain("whsec_");
     expect(homePcRunbook).toContain("OptiTech Academy Home PC Runbook");
     expect(homePcRunbook).toContain("spawn EPERM");
     expect(homePcRunbook).toContain("pnpm launch:preflight");
     expect(homePcRunbook).toContain("pnpm launch:secret-scan");
+    expect(homePcRunbook).toContain("git clone optitech-academy-branch");
+    expect(homePcRunbook).toContain("--branch codex/optitech-product-spec");
     expect(homePcCommandCheatsheet).toContain(
       "OptiTech Academy Home PC Command Cheat Sheet"
     );
@@ -297,6 +302,9 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(homePcCommandCheatsheet).toContain("pnpm db:setup");
     expect(homePcCommandCheatsheet).toContain("pnpm launch:secret-scan");
+    expect(homePcCommandCheatsheet).toContain(
+      "git clone optitech-academy-branch"
+    );
     expect(homePcCommandCheatsheet).not.toContain("sk_test_");
     expect(homePcCommandCheatsheet).not.toContain("whsec_");
     expect(firstCustomersSalesPacket).toContain(

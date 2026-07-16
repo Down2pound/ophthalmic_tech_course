@@ -41,6 +41,15 @@ When this work computer cannot push to GitHub, keep both files:
 Use the ZIP when you simply need the project files. Use the bundle when you want
 to preserve Git commit history for the branch.
 
+To restore the Git bundle on a home PC:
+
+```bash
+git clone optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle ophthalmic_tech_course --branch codex/optitech-product-spec
+cd ophthalmic_tech_course
+git remote set-url origin https://github.com/Down2pound/ophthalmic_tech_course.git
+git push -u origin codex/optitech-product-spec
+```
+
 Print the current handoff checklist with:
 
 ```bash
