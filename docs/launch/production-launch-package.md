@@ -253,7 +253,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/database-setup-guide.md`
 - `docs/launch/clinical-review-guide.md`
 - `docs/launch/go-live-checklist.md`
-- `first-sale-support-runbook.md` from the generated launch evidence folder
+- `docs/launch/first-sale-support-runbook.md`
 - `bootcamp-content-migration-checklist.md` from the generated launch evidence folder
 - Downloaded `/api/launch/clinical-review-packet.md`
 - Clinical reviewer signoff evidence

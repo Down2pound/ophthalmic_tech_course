@@ -1,0 +1,107 @@
+# OptiTech Academy First Sale Support Runbook
+
+Use this when a real buyer, learner, or practice manager needs help after paid
+enrollment opens.
+
+Simple translation: this is the help-desk recipe for the first customers. It
+tells you what to check before changing anything.
+
+Do not paste card numbers, Stripe secret keys, webhook secrets, passwordless
+sign-in links, session cookies, database passwords, patient information, private
+staff details, or protected health information into support notes.
+
+## Fast Triage
+
+- Confirm the buyer email, offer type, purchase time, and whether this is an
+  individual learner or practice pack.
+- Check Stripe for the Checkout session, payment status, and customer email.
+- Use the protected Practice Seat Manager buyer lookup, or
+  `GET /api/support/buyer-lookup?email=buyer@example.com` with the private admin
+  token, to check app-side purchases, enrollments, practice packs, practice-seat
+  assignments, and recommended next support actions.
+- Check `/api/launch/readiness` before making system changes.
+- If access did not appear after payment, check the Stripe webhook delivery
+  status before retrying anything.
+- Record only safe evidence: timestamps, non-secret IDs, buyer email, public
+  error message, and action taken.
+
+## Payment Succeeded But Access Is Missing
+
+1. Confirm the Stripe Checkout session is paid.
+2. Confirm the webhook event was delivered to `/api/stripe/webhook`.
+3. Confirm the app database is reachable and launch tables are verified.
+4. Use the protected buyer lookup endpoint to confirm whether the purchase,
+   enrollment, or practice pack exists in the app.
+5. Follow the lookup `recommendedActions` before editing records manually.
+6. Confirm the buyer email is present on the checkout session or customer
+   details.
+7. Retry the Stripe webhook only after the database and readiness checks are
+   healthy.
+
+## Learner Cannot Sign In
+
+1. Confirm the learner is using the same email that received access.
+2. Use the protected buyer lookup endpoint to confirm the learner has an active
+   enrollment or practice-seat assignment.
+3. Follow the lookup `recommendedActions`; if active enrollment exists, ask the
+   learner to request a fresh sign-in link.
+4. Confirm transactional email settings are configured in `/api/launch/readiness`.
+5. Check spam or quarantine before changing the learner record.
+6. Never forward or paste a magic-link token into support notes.
+
+## Practice Seat Problem
+
+1. Confirm the practice pack size purchased.
+2. Use the protected buyer lookup endpoint to confirm the purchaser email, seat
+   pack, assigned seat count, and remaining seats.
+3. Confirm the manager is using the correct buyer or admin email.
+4. Confirm the requested learner email is typed correctly.
+5. Check whether the seat pack is already full.
+6. If a seat was assigned to the wrong email, document the request before
+   changing access.
+
+## Refund Or Cancellation Request
+
+1. Review the published refund policy before promising an outcome.
+2. Confirm the purchase date, offer type, and course access activity.
+3. Handle the refund in Stripe, not by editing card or payment data in the app.
+4. Use the protected buyer lookup endpoint to confirm the exact learner
+   enrollment, practice-seat assignment, or practice seat pack before changing
+   app access.
+5. If access should be removed after refund, use the Practice Seat Manager
+   Access revocation panel, or `POST /api/support/access-revocations` with the
+   private admin token, and submit one target only.
+6. Record the Stripe refund ID, revocation target, and date in safe notes.
+
+## Escalate Immediately When
+
+- A learner reports clinical or medical advice concerns.
+- Payment succeeded but repeated webhook retries fail.
+- More than one buyer reports the same checkout, login, or access issue.
+- The readiness endpoint changes from ready to not ready.
+- Any support note accidentally includes secrets or protected health
+  information.
+
+## Safe Support Note Template
+
+```text
+Date/time:
+Support owner:
+Buyer or learner email:
+Offer type:
+Issue category:
+Public error message:
+Stripe Checkout session ID:
+Stripe event ID:
+Buyer lookup summary:
+Access revocation target, if any:
+Readiness status checked:
+Action taken:
+Follow-up needed:
+```
+
+## Related Tools
+
+- `pnpm launch:live-purchase-test`
+- `pnpm launch:sales-tracker`
+- `pnpm launch:first-10-customers`

@@ -2,7 +2,6 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { renderModuleOneClinicalReviewPacketMarkdown } from "../../../shared/course/clinicalReviewPacket";
 import { renderBootcampContentMigrationChecklist } from "./bootcampContentMigrationChecklist";
-import { renderFirstSaleSupportRunbook } from "./firstSaleSupportRunbook";
 import { renderLaunchDoctorReport } from "./launchDoctor";
 import { renderManualQaTemplate } from "./manualQaTemplate";
 import { renderProductionEnvChecklist } from "./productionEnvChecklist";
@@ -204,6 +203,10 @@ export async function createLaunchEvidenceBundle({
     path.resolve(projectRoot, "docs/launch/go-live-checklist.md"),
     "utf8"
   );
+  const firstSaleSupportRunbook = await readFile(
+    path.resolve(projectRoot, "docs/launch/first-sale-support-runbook.md"),
+    "utf8"
+  );
 
   await writeFile(
     path.join(resolvedOutputDir, "README.md"),
@@ -295,7 +298,7 @@ export async function createLaunchEvidenceBundle({
   );
   await writeFile(
     path.join(resolvedOutputDir, "first-sale-support-runbook.md"),
-    renderFirstSaleSupportRunbook({ generatedAt })
+    firstSaleSupportRunbook
   );
   await writeFile(
     path.join(resolvedOutputDir, "bootcamp-content-migration-checklist.md"),

@@ -411,4 +411,22 @@ describe("deployment files", () => {
     expect(livePurchaseScript).not.toContain("sk_test_");
     expect(livePurchaseScript).not.toContain("whsec_");
   });
+
+  it("keeps a standalone first-sale support runbook in launch docs", async () => {
+    const supportRunbook = await readFile(
+      path.resolve(process.cwd(), "docs/launch/first-sale-support-runbook.md"),
+      "utf8"
+    );
+
+    expect(supportRunbook).toContain(
+      "OptiTech Academy First Sale Support Runbook"
+    );
+    expect(supportRunbook).toContain("Payment Succeeded But Access Is Missing");
+    expect(supportRunbook).toContain("recommended next support actions");
+    expect(supportRunbook).toContain("Practice Seat Manager");
+    expect(supportRunbook).toContain("Access revocation");
+    expect(supportRunbook).toContain("GET /api/support/buyer-lookup");
+    expect(supportRunbook).not.toContain("sk_test_");
+    expect(supportRunbook).not.toContain("whsec_");
+  });
 });

@@ -211,6 +211,6 @@ again.
 
 ## After The First Real Sale
 
-Use the generated `launch-evidence/first-sale-support-runbook.md` if a buyer
+Use `docs/launch/first-sale-support-runbook.md` if a buyer
 needs help. It gives a safe checklist for payment, access, sign-in, practice
 seat, and refund questions without saving secrets or private clinical details.
