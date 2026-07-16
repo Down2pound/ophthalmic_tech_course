@@ -5,6 +5,7 @@ export interface DeploymentSmokeTestReport {
   baseUrl: string;
   healthOk: boolean;
   publicPagesOk: boolean;
+  checkoutAvailabilityOk: boolean;
   securityHeadersOk: boolean;
   securityHeaders: DeploymentSmokeSecurityHeaderResult[];
   robotsTxtOk: boolean;
@@ -64,6 +65,10 @@ export interface DeploymentSmokeExitOptions {
 
 interface HealthResponse {
   ok?: boolean;
+}
+
+interface CheckoutAvailabilityResponse {
+  ready?: unknown;
 }
 
 const requiredSecurityHeaders: Array<{ header: string; expected: string }> = [
@@ -239,6 +244,19 @@ export async function runDeploymentSmokeTest({
     fetcher,
     url: `${normalizedBaseUrl}/api/launch/readiness`,
   });
+  let checkoutAvailabilityOk = false;
+
+  try {
+    const checkoutAvailability = await fetchJson<CheckoutAvailabilityResponse>({
+      fetcher,
+      url: `${normalizedBaseUrl}/api/checkout/availability`,
+    });
+
+    checkoutAvailabilityOk = typeof checkoutAvailability.ready === "boolean";
+  } catch {
+    checkoutAvailabilityOk = false;
+  }
+
   const publicPages = await Promise.all(
     deploymentSmokePublicPaths.map(path =>
       fetchPublicPage({ fetcher, baseUrl: normalizedBaseUrl, path })
@@ -268,6 +286,7 @@ export async function runDeploymentSmokeTest({
     baseUrl: normalizedBaseUrl,
     healthOk: health.ok === true,
     publicPagesOk: publicPages.every(page => page.ok),
+    checkoutAvailabilityOk,
     securityHeadersOk: securityHeaders.every(header => header.ok),
     securityHeaders,
     robotsTxtOk: robotsTxt.ok,
@@ -289,6 +308,7 @@ export function getDeploymentSmokeExitCode(
   if (
     !report.healthOk ||
     !report.publicPagesOk ||
+    !report.checkoutAvailabilityOk ||
     !report.securityHeadersOk ||
     !report.robotsTxtOk
   ) {
@@ -319,6 +339,9 @@ export function renderDeploymentSmokeReport(
     "",
     `- Health endpoint: ${report.healthOk ? "ok" : "failed"}`,
     `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
+    `- Checkout availability endpoint: ${
+      report.checkoutAvailabilityOk ? "ok" : "failed"
+    }`,
     `- Security headers: ${report.securityHeadersOk ? "ok" : "failed"}`,
     `- Robots.txt rules: ${report.robotsTxtOk ? "ok" : "failed"}`,
     `- Practice inquiry capture: ${
@@ -397,6 +420,9 @@ export function renderDeploymentSmokeConsoleSummary({
     `Deployment smoke test for ${report.baseUrl}`,
     `- Health: ${report.healthOk ? "ok" : "failed"}`,
     `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
+    `- Checkout availability: ${
+      report.checkoutAvailabilityOk ? "ok" : "failed"
+    }`,
     ...report.publicPages.map(
       page =>
         `  - ${page.path}: ${page.ok ? "ok" : "failed"} (HTTP ${page.status})`

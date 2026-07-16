@@ -86,6 +86,16 @@ describe("runDeploymentSmokeTest", () => {
         });
       }
 
+      if (requestedUrl.endsWith("/api/checkout/availability")) {
+        return createResponse({
+          ready: false,
+          title: "Enrollment is not open yet",
+          message:
+            "The course can collect interest, but payment is paused until the final launch checks are complete.",
+          primaryAction: "join-interest-list",
+        });
+      }
+
       if (requestedUrl.endsWith("/robots.txt")) {
         return createRobotsResponse();
       }
@@ -103,6 +113,7 @@ describe("runDeploymentSmokeTest", () => {
       baseUrl: "https://example.com",
       healthOk: true,
       publicPagesOk: true,
+      checkoutAvailabilityOk: true,
       securityHeadersOk: true,
       securityHeaders: [
         {
@@ -201,6 +212,7 @@ describe("runDeploymentSmokeTest", () => {
     expect(requestedUrls).toEqual([
       "https://example.com/api/health",
       "https://example.com/api/launch/readiness",
+      "https://example.com/api/checkout/availability",
       "https://example.com/",
       "https://example.com/checkout",
       "https://example.com/checkout?checkout=cancelled&offer=founding-learner",
@@ -243,6 +255,16 @@ describe("runDeploymentSmokeTest", () => {
           },
           warnings: [],
           launchActions: [],
+        });
+      }
+
+      if (requestedUrl.endsWith("/api/checkout/availability")) {
+        return createResponse({
+          ready: true,
+          title: "Enrollment is open",
+          message:
+            "Stripe checkout is available for individual learners and practice packs.",
+          primaryAction: "continue-to-checkout",
         });
       }
 
@@ -310,6 +332,16 @@ describe("runDeploymentSmokeTest", () => {
         });
       }
 
+      if (requestedUrl.endsWith("/api/checkout/availability")) {
+        return createResponse({
+          ready: false,
+          title: "Enrollment is not open yet",
+          message:
+            "The course can collect interest, but payment is paused until the final launch checks are complete.",
+          primaryAction: "join-interest-list",
+        });
+      }
+
       if (requestedUrl.endsWith("/checkout")) {
         return createTextResponse({ ok: false, status: 500 });
       }
@@ -326,12 +358,59 @@ describe("runDeploymentSmokeTest", () => {
       fetcher: fetcher as typeof fetch,
     });
 
+    expect(report.checkoutAvailabilityOk).toBe(true);
     expect(report.publicPagesOk).toBe(false);
     expect(report.publicPages).toContainEqual({
       path: "/checkout",
       ok: false,
       status: 500,
     });
+    expect(getDeploymentSmokeExitCode(report, { allowNotReady: true })).toBe(1);
+  });
+
+  it("reports checkout availability endpoint failures", async () => {
+    const fetcher = async (url: string | URL | Request) => {
+      const requestedUrl = String(url);
+
+      if (requestedUrl.endsWith("/api/health")) {
+        return createResponse({ ok: true });
+      }
+
+      if (requestedUrl.endsWith("/api/launch/readiness")) {
+        return createResponse({
+          readyForPaidLaunch: false,
+          staticSummary: {
+            blockers: [],
+          },
+          warnings: [],
+          launchActions: [],
+        });
+      }
+
+      if (requestedUrl.endsWith("/api/checkout/availability")) {
+        return createResponse(
+          {
+            error: "Checkout availability unavailable",
+          },
+          { ok: false, status: 503 }
+        );
+      }
+
+      if (requestedUrl.endsWith("/robots.txt")) {
+        return createRobotsResponse();
+      }
+
+      return createTextResponse();
+    };
+
+    const report = await runDeploymentSmokeTest({
+      baseUrl: "https://example.com",
+      fetcher: fetcher as typeof fetch,
+    });
+
+    expect(report.checkoutAvailabilityOk).toBe(false);
+    expect(report.publicPagesOk).toBe(true);
+    expect(getDeploymentSmokeExitCode(report, { allowNotReady: true })).toBe(1);
   });
 
   it("reports missing deployment security headers", async () => {
@@ -350,6 +429,16 @@ describe("runDeploymentSmokeTest", () => {
           },
           warnings: [],
           launchActions: [],
+        });
+      }
+
+      if (requestedUrl.endsWith("/api/checkout/availability")) {
+        return createResponse({
+          ready: true,
+          title: "Enrollment is open",
+          message:
+            "Stripe checkout is available for individual learners and practice packs.",
+          primaryAction: "continue-to-checkout",
         });
       }
 
@@ -407,6 +496,16 @@ describe("runDeploymentSmokeTest", () => {
         });
       }
 
+      if (requestedUrl.endsWith("/api/checkout/availability")) {
+        return createResponse({
+          ready: true,
+          title: "Enrollment is open",
+          message:
+            "Stripe checkout is available for individual learners and practice packs.",
+          primaryAction: "continue-to-checkout",
+        });
+      }
+
       if (requestedUrl.endsWith("/robots.txt")) {
         return {
           ok: true,
@@ -438,6 +537,7 @@ describe("runDeploymentSmokeTest", () => {
       baseUrl: "https://academy.spindeleye.com",
       healthOk: true,
       publicPagesOk: true,
+      checkoutAvailabilityOk: true,
       securityHeadersOk: true,
       securityHeaders: [
         {
@@ -484,6 +584,7 @@ describe("runDeploymentSmokeTest", () => {
     expect(report).toContain("Deployment URL: https://academy.spindeleye.com");
     expect(report).toContain("- Health endpoint: ok");
     expect(report).toContain("- Public buyer pages: ok");
+    expect(report).toContain("- Checkout availability endpoint: ok");
     expect(report).toContain("- Security headers: ok");
     expect(report).toContain("- Robots.txt rules: ok");
     expect(report).toContain("- Practice inquiry capture: ok");
@@ -505,6 +606,7 @@ describe("runDeploymentSmokeTest", () => {
         baseUrl: "https://academy.spindeleye.com",
         healthOk: true,
         publicPagesOk: true,
+        checkoutAvailabilityOk: true,
         securityHeadersOk: false,
         securityHeaders: [
           {
@@ -557,6 +659,7 @@ describe("runDeploymentSmokeTest", () => {
 
     expect(summary).toContain("Deployment smoke test for");
     expect(summary).toContain("- Public buyer pages: ok");
+    expect(summary).toContain("- Checkout availability: ok");
     expect(summary).toContain("- Security headers: failed");
     expect(summary).toContain(
       "X-Frame-Options: failed (expected DENY, got missing)"
@@ -576,6 +679,7 @@ describe("runDeploymentSmokeTest", () => {
       baseUrl: "https://academy.spindeleye.com",
       healthOk: true,
       publicPagesOk: true,
+      checkoutAvailabilityOk: true,
       securityHeadersOk: true,
       securityHeaders: [],
       robotsTxtOk: true,
@@ -608,6 +712,7 @@ describe("runDeploymentSmokeTest", () => {
           baseUrl: "https://academy.spindeleye.com",
           healthOk: true,
           publicPagesOk: false,
+          checkoutAvailabilityOk: true,
           securityHeadersOk: true,
           securityHeaders: [],
           robotsTxtOk: true,
@@ -646,6 +751,7 @@ describe("runDeploymentSmokeTest", () => {
           baseUrl: "https://academy.spindeleye.com",
           healthOk: true,
           publicPagesOk: true,
+          checkoutAvailabilityOk: true,
           securityHeadersOk: true,
           securityHeaders: [],
           robotsTxtOk: true,
