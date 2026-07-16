@@ -113,6 +113,7 @@ describe("createLaunchEvidenceBundle", () => {
       "home-pc-runbook.md",
       "home-pc-command-cheatsheet.md",
       "first-customers-sales-packet.md",
+      "individual-learner-decision-one-pager.md",
       "practice-manager-approval-one-pager.md",
       "first-buyer-fulfillment-checklist.md",
       "revenue-and-sales-tracker-template.md",
@@ -164,6 +165,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const firstCustomersSalesPacket = await readFile(
       path.join(result.outputDir, "first-customers-sales-packet.md"),
+      "utf8"
+    );
+    const individualLearnerDecisionOnePager = await readFile(
+      path.join(result.outputDir, "individual-learner-decision-one-pager.md"),
       "utf8"
     );
     const practiceManagerApprovalOnePager = await readFile(
@@ -275,6 +280,19 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(firstCustomersSalesPacket).toContain(
       "Do not pressure the buyer or offer medical, legal, hiring, billing, or certification advice."
+    );
+    expect(individualLearnerDecisionOnePager).toContain(
+      "OptiTech Academy Individual Learner Decision One-Pager"
+    );
+    expect(individualLearnerDecisionOnePager).toContain("Good Fit If You Are");
+    expect(individualLearnerDecisionOnePager).toContain(
+      "Founding Learner Access is $199"
+    );
+    expect(individualLearnerDecisionOnePager).toContain(
+      "This is education, not certification"
+    );
+    expect(individualLearnerDecisionOnePager).toContain(
+      "Do not add patient names, private employer details, passwords, raw sign-in links, secrets, or payment card information."
     );
     expect(practiceManagerApprovalOnePager).toContain(
       "OptiTech Academy Practice Manager Approval One-Pager"
