@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   assignPracticeSeat,
+  fetchPracticeInquiries,
   fetchPracticeSeatPacks,
 } from "./practiceSeatAdminClient";
 
@@ -31,6 +32,54 @@ describe("fetchPracticeSeatPacks", () => {
     await expect(
       fetchPracticeSeatPacks({ adminToken: "bad-token", fetcher })
     ).rejects.toThrow("Practice seat assignment is protected.");
+  });
+});
+
+describe("fetchPracticeInquiries", () => {
+  it("loads protected practice inquiries with the admin token header", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        inquiries: [
+          {
+            inquiryId: "practice_inquiry_123",
+            practiceName: "Example Eye Care",
+            contactName: "Dr. Manager",
+            contactEmail: "manager@example.com",
+            targetTimeline: "Next hiring class",
+            message: "Need custom onboarding.",
+            status: "new",
+            createdAt: "2026-07-13T12:00:00.000Z",
+            followUpPlan: {
+              priority: "high",
+              recommendedOffer: "Custom practice onboarding call",
+              nextAction: "Reply within 1 business day.",
+              talkingPoints: ["Confirm learner count."],
+            },
+          },
+        ],
+      }),
+    });
+
+    await expect(
+      fetchPracticeInquiries({ adminToken: "admin-token", fetcher })
+    ).resolves.toMatchObject({
+      inquiries: [
+        {
+          practiceName: "Example Eye Care",
+          followUpPlan: {
+            priority: "high",
+            recommendedOffer: "Custom practice onboarding call",
+          },
+        },
+      ],
+    });
+    expect(fetcher).toHaveBeenCalledWith("/api/support/practice-inquiries", {
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-token": "admin-token",
+      },
+    });
   });
 });
 

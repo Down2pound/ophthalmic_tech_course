@@ -34,6 +34,7 @@ import {
   getPracticeSeatPackStore,
   getPurchaseStore,
 } from "./stripeWebhook";
+import { preparePracticeInquiryLeadRecord } from "../commerce/practiceInquiryStore";
 import { getPracticeInquiryStore } from "./checkout";
 
 interface PasswordlessStartRequestBody {
@@ -68,10 +69,7 @@ function getAccessRevocationTarget(
     return { type: "enrollment", enrollmentId: body.enrollmentId };
   }
 
-  if (
-    body.targetType === "practice-seat-assignment" &&
-    body.assignmentId
-  ) {
+  if (body.targetType === "practice-seat-assignment" && body.assignmentId) {
     return {
       type: "practice-seat-assignment",
       assignmentId: body.assignmentId,
@@ -318,9 +316,7 @@ export function setupAuthRoutes(router: Router) {
       res.json(profile);
     } catch (error) {
       const message =
-        error instanceof Error
-          ? error.message
-          : "Buyer support lookup failed.";
+        error instanceof Error ? error.message : "Buyer support lookup failed.";
 
       res.status(400).json({ error: message });
     }
@@ -360,16 +356,21 @@ export function setupAuthRoutes(router: Router) {
     }
   );
 
-  router.get("/support/practice-inquiries", async (req: Request, res: Response) => {
-    const authorization = authorizePracticeSeatAdminRequest(req);
+  router.get(
+    "/support/practice-inquiries",
+    async (req: Request, res: Response) => {
+      const authorization = authorizePracticeSeatAdminRequest(req);
 
-    if (!authorization.authorized) {
-      res.status(authorization.status).json(authorization.payload);
-      return;
+      if (!authorization.authorized) {
+        res.status(authorization.status).json(authorization.payload);
+        return;
+      }
+
+      res.json({
+        inquiries: (
+          await getPracticeInquiryStore().listPracticeInquiries()
+        ).map(preparePracticeInquiryLeadRecord),
+      });
     }
-
-    res.json({
-      inquiries: await getPracticeInquiryStore().listPracticeInquiries(),
-    });
-  });
+  );
 }

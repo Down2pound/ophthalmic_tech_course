@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  createPracticeInquiryFollowUpPlan,
   createInMemoryPracticeInquiryStore,
   createPracticeInquiryNotificationMessage,
   preparePracticeInquiryRecord,
@@ -77,6 +78,31 @@ describe("createInMemoryPracticeInquiryStore", () => {
   });
 });
 
+describe("createPracticeInquiryFollowUpPlan", () => {
+  it("prioritizes larger near-term practice leads with a clear next action", () => {
+    const inquiry = preparePracticeInquiryRecord({
+      inquiry: {
+        ...inquiryInput,
+        estimatedLearnerCount: 18,
+        targetTimeline: "Need this before our next hiring class in 30 days",
+      },
+      createdAt: "2026-07-13T12:00:00.000Z",
+    });
+
+    expect(createPracticeInquiryFollowUpPlan(inquiry)).toEqual({
+      priority: "high",
+      recommendedOffer: "Custom practice onboarding call",
+      nextAction:
+        "Reply within 1 business day, confirm learner count and timeline, then schedule a 20-minute onboarding fit call.",
+      talkingPoints: [
+        "Confirm whether they need more than 15 seats or a staggered hiring class rollout.",
+        "Explain that online coursework builds the shared foundation while hands-on competency remains supervisor verified.",
+        "Ask who owns onboarding decisions, budget approval, and Skills Passport signoff.",
+      ],
+    });
+  });
+});
+
 describe("createPracticeInquiryNotificationMessage", () => {
   it("builds a safe internal lead notification", () => {
     const inquiry = preparePracticeInquiryRecord({
@@ -94,6 +120,7 @@ describe("createPracticeInquiryNotificationMessage", () => {
       from: "OptiTech Academy <noreply@example.com>",
       to: "jeff@example.com",
       subject: "OptiTech practice inquiry: Example Eye Care",
+      text: expect.stringContaining("Lead priority: high"),
     });
   });
 });

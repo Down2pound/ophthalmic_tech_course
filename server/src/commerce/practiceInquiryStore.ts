@@ -27,6 +27,19 @@ export interface PracticeInquiryRecord extends PracticeInquiryInput {
   createdAt: string;
 }
 
+export type PracticeInquiryLeadPriority = "high" | "medium" | "standard";
+
+export interface PracticeInquiryFollowUpPlan {
+  priority: PracticeInquiryLeadPriority;
+  recommendedOffer: string;
+  nextAction: string;
+  talkingPoints: string[];
+}
+
+export interface PracticeInquiryLeadRecord extends PracticeInquiryRecord {
+  followUpPlan: PracticeInquiryFollowUpPlan;
+}
+
 export interface PracticeInquiryStore {
   recordPracticeInquiry(
     inquiry: PracticeInquiryRecord
@@ -183,6 +196,74 @@ export function createPostgresPracticeInquiryStore(
   };
 }
 
+function hasNearTermTimeline(targetTimeline: string): boolean {
+  return /soon|urgent|asap|now|next|30\s*days|this month|hiring class/i.test(
+    targetTimeline
+  );
+}
+
+export function createPracticeInquiryFollowUpPlan(
+  inquiry: PracticeInquiryRecord
+): PracticeInquiryFollowUpPlan {
+  const learnerCount = inquiry.estimatedLearnerCount ?? 0;
+  const nearTermTimeline = hasNearTermTimeline(inquiry.targetTimeline);
+  const priority: PracticeInquiryLeadPriority =
+    learnerCount > 15 || (learnerCount >= 5 && nearTermTimeline)
+      ? "high"
+      : learnerCount >= 3 || nearTermTimeline
+        ? "medium"
+        : "standard";
+
+  if (priority === "high") {
+    return {
+      priority,
+      recommendedOffer: "Custom practice onboarding call",
+      nextAction:
+        "Reply within 1 business day, confirm learner count and timeline, then schedule a 20-minute onboarding fit call.",
+      talkingPoints: [
+        "Confirm whether they need more than 15 seats or a staggered hiring class rollout.",
+        "Explain that online coursework builds the shared foundation while hands-on competency remains supervisor verified.",
+        "Ask who owns onboarding decisions, budget approval, and Skills Passport signoff.",
+      ],
+    };
+  }
+
+  if (priority === "medium") {
+    return {
+      priority,
+      recommendedOffer: "Practice seat pack",
+      nextAction:
+        "Reply within 2 business days and recommend the closest published practice pack unless they need custom rollout support.",
+      talkingPoints: [
+        "Confirm learner count, start date, and whether they already have a supervisor checklist.",
+        "Explain the difference between course completion and workplace skill verification.",
+        "Offer a short setup conversation if they are unsure which pack fits.",
+      ],
+    };
+  }
+
+  return {
+    priority,
+    recommendedOffer: "Individual learner or small practice starter path",
+    nextAction:
+      "Reply within 3 business days with the practice-pack page and ask whether they are buying for a team or advising one learner.",
+    talkingPoints: [
+      "Clarify whether this is for one learner, a small team, or future hiring.",
+      "Point them to the public curriculum, policies, and practice-pack options.",
+      "Invite them to send onboarding questions without patient or employee private details.",
+    ],
+  };
+}
+
+export function preparePracticeInquiryLeadRecord(
+  inquiry: PracticeInquiryRecord
+): PracticeInquiryLeadRecord {
+  return {
+    ...inquiry,
+    followUpPlan: createPracticeInquiryFollowUpPlan(inquiry),
+  };
+}
+
 export function createPracticeInquiryNotificationMessage({
   inquiry,
   from,
@@ -193,6 +274,7 @@ export function createPracticeInquiryNotificationMessage({
   to?: string;
 }): TransactionalEmailMessage {
   const subject = `OptiTech practice inquiry: ${inquiry.practiceName}`;
+  const followUpPlan = createPracticeInquiryFollowUpPlan(inquiry);
   const lines = [
     "New OptiTech Academy practice onboarding inquiry.",
     "",
@@ -202,6 +284,13 @@ export function createPracticeInquiryNotificationMessage({
     `Estimated learners: ${inquiry.estimatedLearnerCount ?? "Not provided"}`,
     `Timeline: ${inquiry.targetTimeline}`,
     `Inquiry ID: ${inquiry.inquiryId}`,
+    "",
+    `Lead priority: ${followUpPlan.priority}`,
+    `Recommended offer: ${followUpPlan.recommendedOffer}`,
+    `Next action: ${followUpPlan.nextAction}`,
+    "",
+    "Talking points:",
+    ...followUpPlan.talkingPoints.map(point => `- ${point}`),
     "",
     "Message:",
     inquiry.message,

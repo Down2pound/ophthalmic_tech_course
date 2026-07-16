@@ -27,6 +27,30 @@ export interface PracticeSeatPackListResponse {
   assignments: PracticeSeatAssignmentSummary[];
 }
 
+export interface PracticeInquiryFollowUpPlan {
+  priority: "high" | "medium" | "standard";
+  recommendedOffer: string;
+  nextAction: string;
+  talkingPoints: string[];
+}
+
+export interface PracticeInquirySummary {
+  inquiryId: string;
+  practiceName: string;
+  contactName: string;
+  contactEmail: string;
+  estimatedLearnerCount?: number;
+  targetTimeline: string;
+  message: string;
+  status: string;
+  createdAt: string;
+  followUpPlan: PracticeInquiryFollowUpPlan;
+}
+
+export interface PracticeInquiryListResponse {
+  inquiries: PracticeInquirySummary[];
+}
+
 export interface PracticeSeatAssignmentResponse {
   assignment: PracticeSeatAssignmentSummary;
   enrollmentProvisioned: boolean;
@@ -69,6 +93,31 @@ export async function fetchPracticeSeatPacks({
   }
 
   return payload as PracticeSeatPackListResponse;
+}
+
+export async function fetchPracticeInquiries({
+  adminToken,
+  fetcher = fetch,
+}: {
+  adminToken: string;
+  fetcher?: Fetcher;
+}): Promise<PracticeInquiryListResponse> {
+  const response = await fetcher("/api/support/practice-inquiries", {
+    headers: getAdminHeaders(adminToken),
+  });
+  const payload = (await response.json()) as
+    | PracticeInquiryListResponse
+    | ApiErrorResponse;
+
+  if (!response.ok) {
+    throw new Error(
+      "error" in payload && payload.error
+        ? payload.error
+        : "Practice inquiries could not be loaded."
+    );
+  }
+
+  return payload as PracticeInquiryListResponse;
 }
 
 export async function assignPracticeSeat({
