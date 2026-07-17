@@ -27,6 +27,7 @@
     "launch:first-sales": "node scripts/launch-first-sales-links.mjs",
     "launch:first-week-sales": "tsx server/src/launch/runFirstWeekSalesPlan.ts",
     "launch:go-no-go": "tsx server/src/launch/runLaunchGoNoGo.ts",
+    "launch:jeffmini": "node scripts/launch-jeffmini-resume.mjs",
     "launch:live-purchase-test": "node scripts/launch-live-purchase-test.mjs",
     "launch:next": "tsx server/src/launch/runProductionSetupPlan.ts",
     "launch:post-0716-handoff": "node scripts/launch-post-0716-handoff.mjs",

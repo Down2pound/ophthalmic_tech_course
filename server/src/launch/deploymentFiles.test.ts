@@ -412,6 +412,39 @@ describe("deployment files", () => {
     expect(livePurchaseScript).not.toContain("whsec_");
   });
 
+  it("keeps the jeffmini home-PC resume guide printable", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const resumeScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-jeffmini-resume.mjs"),
+      "utf8"
+    );
+    const resumeGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/jeffmini-resume-guide.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:jeffmini": "node scripts/launch-jeffmini-resume.mjs"'
+    );
+    expect(resumeScript).toContain("jeffmini-resume-guide.md");
+    expect(resumeScript).not.toContain("execSync");
+    expect(resumeGuide).toContain("codex/optitech-product-spec");
+    expect(resumeGuide).toContain("b851c92");
+    expect(resumeGuide).toContain(
+      "optitech-academy-source-2026-07-17-b851c92.zip"
+    );
+    expect(resumeGuide).toContain(
+      "optitech-academy-branch-2026-07-17-b851c92.bundle"
+    );
+    expect(resumeGuide).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(resumeGuide).toContain("pnpm launch:doctor");
+    expect(resumeGuide).not.toContain("sk_test_");
+    expect(resumeGuide).not.toContain("whsec_");
+  });
+
   it("keeps a standalone first-sale support runbook in launch docs", async () => {
     const supportRunbook = await readFile(
       path.resolve(process.cwd(), "docs/launch/first-sale-support-runbook.md"),

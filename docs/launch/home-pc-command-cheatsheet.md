@@ -93,6 +93,7 @@ pnpm launch:env-template
 pnpm launch:external-setup
 pnpm launch:first-10-customers
 pnpm launch:first-week-sales
+pnpm launch:jeffmini
 pnpm launch:live-purchase-test
 pnpm launch:next
 pnpm launch:render-setup
@@ -125,6 +126,8 @@ Render, Stripe, email, clinical signoff, and first live purchase proof.
 `launch:first-10-customers` prints the controlled first-buyer outreach plan.
 `launch:first-week-sales` prints the day-by-day first week sales plan for
 controlled outreach after deployment.
+`launch:jeffmini` prints the exact home-PC resume guide with the July 17 GitHub
+branch, Google Drive backup files, and production setup order.
 `launch:live-purchase-test` prints the final internal live-mode purchase
 rehearsal checklist.
 `launch:next` prints one beginner-friendly command center with your current
