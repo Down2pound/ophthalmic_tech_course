@@ -13,6 +13,22 @@ function extractStructuredData(html: string): unknown[] {
 }
 
 describe("storefront metadata", () => {
+  it("publishes safe social sharing metadata without localhost or admin links", async () => {
+    const html = await readFile(
+      path.resolve(process.cwd(), "client/index.html"),
+      "utf8"
+    );
+
+    expect(html).toContain('rel="canonical"');
+    expect(html).toContain('property="og:url"');
+    expect(html).toContain('property="og:image"');
+    expect(html).toContain('name="twitter:image"');
+    expect(html).toContain("/social-preview.svg");
+    expect(html).not.toContain("localhost");
+    expect(html).not.toContain("/practice-seat-admin");
+    expect(html).not.toContain("/api/");
+  });
+
   it("publishes course structured data aligned with the founding offer", async () => {
     const html = await readFile(
       path.resolve(process.cwd(), "client/index.html"),

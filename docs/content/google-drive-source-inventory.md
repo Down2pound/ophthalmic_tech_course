@@ -17,7 +17,21 @@ Before publication, each asset must receive:
 - Accessibility review.
 - Duplicate/version resolution.
 
-Do not publish patient information, staff personal details, provider credentials, internal schedules, insurance rules, proprietary practice workflows, or other Spindel-only operational material in the national course.
+Do not publish patient information, staff personal details, provider credentials,
+internal schedules, insurance rules, proprietary practice workflows,
+doctor-specific protocols, or other Spindel-only operational material in the
+national course.
+
+Doctor-specific protocols, provider workup preferences, Spindel post-op/pre-op
+rules, and SEA workflow instructions belong in the private Spindel Eye
+Technician onboarding course version under the `spindel-onboarding` namespace.
+They should not be mixed into the public OptiTech Academy course.
+
+Use this command when sorting SEA-only material:
+
+```bash
+pnpm launch:spindel-onboarding
+```
 
 ## Canonical Curriculum Sources
 
@@ -53,6 +67,44 @@ Do not publish patient information, staff personal details, provider credentials
   - Do not copy raw files into the public app until rights, clinical review, accessibility, and storage location are approved.
   - Prefer linking each asset to a module through repository metadata before publishing it.
 
+#### July 17, 2026 Folder Refresh Intake
+
+The Bootcamp folder was visually rechecked in Google Drive after the user added
+new files. The visible folder list contained 46 top-level items. The existing
+typed map in `shared/course/bootcampSourceMap.ts` already covers 33 asset
+filenames. The items below were visible in Drive but are not yet in the typed
+Bootcamp source map.
+
+This is an intake queue, not an approval list. Do not publish these files until
+each one has a Drive file ID, owner/rights status, clinical review status,
+accessibility review, intended module, and public/practice-only/excluded
+classification.
+
+| Visible item                                                                    | Type seen in Drive | Initial classification                      | Next action                                                                                                                                                     |
+| ------------------------------------------------------------------------------- | ------------------ | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Course backup1`                                                                | Folder             | Needs inspection                            | Identify whether this is a duplicate archive, current course export, or obsolete backup. Do not import bulk content until duplicate/version status is clear.    |
+| `Ophthalmic Technician Course`                                                  | Shared folder      | Needs inspection                            | Inspect child files and determine whether this is a newer course source, duplicate source, or external shared package. Preserve child file IDs before mapping.  |
+| `ophthalmic-tech-bootcamp-site`                                                 | Folder             | Already known source folder                 | Keep as the structured legacy course-app source. Confirm whether new child files were added before changing the canonical course map.                           |
+| `Advanced_Ocular_Diagnostic_Masterclass.pdf`                                    | PDF                | Advanced-content candidate                  | Mapped to Day 3 diagnostic testing as an advanced supplemental PDF. Confirm rights, version status, and clinical review before publishing.                      |
+| `Clinical Guide_ Manual Lensometry Standards and Procedures.pdf`                | PDF                | Public-course candidate                     | Mapped to Day 5 manual lensometry. Compare against the editable Lensometry Google Doc before publishing.                                                        |
+| `Clinical Guide_ Soft Skills and Patient Care for Ophthalmic Professionals.pdf` | PDF                | Public-course candidate                     | Already mapped to the patient-care/professional-skills days. Compare against the preferred Soft Skills Google Doc/PDF pair before publishing.                   |
+| `Day_1.mp4`                                                                     | Video              | Public-course candidate                     | Review as a possible Day 1 replacement or duplicate for `Ophthalmic_Tech_Foundations.mp4` and `Intro-Demystifying_the_Eye_Exam.mp4`.                            |
+| `Keratoconus2 jeff.png`                                                         | Image              | Visual public-course candidate after review | Compare against `Keratoconus image Jeff.png`; choose one accessible, rights-cleared visual for the disease/red-flags module.                                    |
+| `Mod_1_Video_Overiew.mp4`                                                       | Video              | Public-course candidate                     | Review spelling/version and compare against current Day 1 videos before mapping.                                                                                |
+| `Ophthalmic_Tech_Bootcamp (1).mp4`                                              | Video              | Public-course candidate                     | Determine whether this is an overview, duplicate, or free-preview candidate. Needs clinical and rights review before use.                                       |
+| `Ophthalmic_Tech_Crash_Course.mp4`                                              | Video              | Public-course candidate                     | Consider as a short free-preview or marketing/intro asset after scope, claims, and clinical review.                                                             |
+| `Project Detailing.pdf`                                                         | PDF                | Product/process source                      | Inspect before use. Likely useful for product planning or production workflow, not automatically public learner content.                                        |
+| `spindel-eye-weekly-newsletter.html`                                            | HTML               | Practice-only or excluded                   | Do not publish in the national course. It may inform the separate SEA newsletter workflow, but staff/internal content must stay out of public course ingestion. |
+
+Refresh notes:
+
+- Google Drive file IDs were not captured from the browser-only visible list.
+- Before production use, fetch metadata for each unmapped file and add the
+  canonical ID here.
+- If an unmapped file replaces an existing mapped asset, update
+  `shared/course/bootcampSourceMap.ts` only after duplicate resolution and
+  clinical review.
+
 ### Ophthalmic Tech Bootcamp Site Course Data
 
 - Type: Source-code file from nested Drive folder
@@ -74,18 +126,18 @@ Do not publish patient information, staff personal details, provider credentials
 
 #### Course Data Day Map
 
-| Day | Slug | Title | Main Asset Types |
-| ---: | --- | --- | --- |
-| 1 | `foundations-first-patient-encounter` | Foundations and the First Patient Encounter | Videos, anatomy PDF, duties infographic |
-| 2 | `anatomy-biological-camera` | Anatomy and the Biological Camera | Anatomy video, audio overview, technician blueprint PDF |
-| 3 | `diagnostic-testing-map` | Essential Diagnostic Testing | Diagnostics video, slide deck PDFs, diagnostics infographic |
-| 4 | `common-eye-diseases` | Common Eye Diseases and Red Flags | Disease videos, HPI cheat sheet PDF, keratoconus image |
-| 5 | `lensometry-practical-guide` | Manual Lensometry | Lensometry video, lensometry PDFs, topography PDF |
-| 6 | `tonometry-goldmann-and-alternatives` | Tonometry and Eye Pressure Methods | Tonometry video, tonometry infographic, Goldmann reference image |
-| 7 | `refraction-troubleshooting` | Refraction Support and Troubleshooting | Refraction video, ocular diagnostic mapping PDFs |
-| 8 | `exam-room-skills-pharma` | Exam Room Skills and Pharmacology | Exam-room video, soft-skills PDF |
-| 9 | `professional-skills-emr` | Professional Skills and EMR Documentation | Professional-skills video, soft-skills PDF, scheduling image |
-| 10 | `capstone-certification-roadmap` | Simulation Capstone and Certification Roadmap | Capstone PDF, final-test video, COA videos, career infographic |
+| Day | Slug                                  | Title                                         | Main Asset Types                                                 |
+| --: | ------------------------------------- | --------------------------------------------- | ---------------------------------------------------------------- |
+|   1 | `foundations-first-patient-encounter` | Foundations and the First Patient Encounter   | Videos, anatomy PDF, duties infographic                          |
+|   2 | `anatomy-biological-camera`           | Anatomy and the Biological Camera             | Anatomy video, audio overview, technician blueprint PDF          |
+|   3 | `diagnostic-testing-map`              | Essential Diagnostic Testing                  | Diagnostics video, slide deck PDFs, diagnostics infographic      |
+|   4 | `common-eye-diseases`                 | Common Eye Diseases and Red Flags             | Disease videos, HPI cheat sheet PDF, keratoconus image           |
+|   5 | `lensometry-practical-guide`          | Manual Lensometry                             | Lensometry video, lensometry PDFs, topography PDF                |
+|   6 | `tonometry-goldmann-and-alternatives` | Tonometry and Eye Pressure Methods            | Tonometry video, tonometry infographic, Goldmann reference image |
+|   7 | `refraction-troubleshooting`          | Refraction Support and Troubleshooting        | Refraction video, ocular diagnostic mapping PDFs                 |
+|   8 | `exam-room-skills-pharma`             | Exam Room Skills and Pharmacology             | Exam-room video, soft-skills PDF                                 |
+|   9 | `professional-skills-emr`             | Professional Skills and EMR Documentation     | Professional-skills video, soft-skills PDF, scheduling image     |
+|  10 | `capstone-certification-roadmap`      | Simulation Capstone and Certification Roadmap | Capstone PDF, final-test video, COA videos, career infographic   |
 
 ### Practical Ophthalmic Technician Foundations Bootcamp Curriculum
 

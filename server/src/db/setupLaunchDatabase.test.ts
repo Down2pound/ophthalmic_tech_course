@@ -37,6 +37,8 @@ describe("setupLaunchDatabase", () => {
       "commerce_enrollments",
       "commerce_practice_seat_packs",
       "commerce_practice_seat_assignments",
+      "commerce_practice_inquiries",
+      "commerce_learner_interests",
       "auth_users",
       "auth_magic_links",
       "auth_sessions",

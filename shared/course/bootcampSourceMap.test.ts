@@ -17,9 +17,7 @@ describe("bootcampSourceMap", () => {
     expect(bootcampSourceDays[0].slug).toBe(
       "foundations-first-patient-encounter"
     );
-    expect(bootcampSourceDays[9].slug).toBe(
-      "capstone-certification-roadmap"
-    );
+    expect(bootcampSourceDays[9].slug).toBe("capstone-certification-roadmap");
   });
 
   it("keeps source locations visible for audit and migration", () => {
@@ -57,5 +55,48 @@ describe("bootcampSourceMap", () => {
         asset => asset.freePreview
       )
     ).toBe(true);
+  });
+
+  it("places newly discovered course PDF sources into the matching course days", () => {
+    const diagnosticsDay = getBootcampSourceDay("diagnostic-testing-map");
+    const lensometryDay = getBootcampSourceDay("lensometry-practical-guide");
+    const professionalSkillsDay = getBootcampSourceDay(
+      "professional-skills-emr"
+    );
+
+    expect(diagnosticsDay.assets).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: "pdf",
+          sourceFilename: "Advanced_Ocular_Diagnostic_Masterclass.pdf",
+          storageKey: "pdfs/day-03/advanced-ocular-diagnostic-masterclass.pdf",
+        }),
+      ])
+    );
+    expect(lensometryDay.assets).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: "pdf",
+          sourceFilename:
+            "Clinical Guide_ Manual Lensometry Standards and Procedures.pdf",
+          storageKey:
+            "pdfs/day-05/manual-lensometry-standards-and-procedures.pdf",
+        }),
+      ])
+    );
+    expect(professionalSkillsDay.assets).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: "pdf",
+          sourceFilename:
+            "Clinical Guide_ Soft Skills and Patient Care for Ophthalmic Professionals.pdf",
+        }),
+      ])
+    );
+    expect(
+      bootcampSourceDays.flatMap(day =>
+        day.assets.map(asset => asset.sourceFilename)
+      )
+    ).not.toContain("Project Detailing.pdf");
   });
 });

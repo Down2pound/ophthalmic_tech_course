@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Building2,
+  Calculator,
   CheckCircle2,
   Mail,
   ShieldCheck,
@@ -16,6 +17,10 @@ import {
   practicePackOffers,
 } from "@shared/commerce/offers";
 import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
+import {
+  calculatePracticeValueEstimate,
+  formatPracticeValueCurrency,
+} from "@shared/commerce/practiceValueCalculator";
 import { buyerSupportContact } from "@shared/commerce/policies";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import {
@@ -69,11 +74,19 @@ export default function PracticePacks() {
   const [practiceInquiryMessage, setPracticeInquiryMessage] = useState<
     string | null
   >(null);
+  const [practiceValueLearners, setPracticeValueLearners] = useState("5");
+  const [practiceValueHourlyCost, setPracticeValueHourlyCost] = useState("45");
+  const [practiceValueHoursSaved, setPracticeValueHoursSaved] = useState("3");
   const checkoutStatus =
     typeof window === "undefined"
       ? null
       : getCheckoutStatus(window.location.search);
   const checkoutUnavailable = checkoutAvailability?.ready === false;
+  const practiceValueEstimate = calculatePracticeValueEstimate({
+    learnerCount: Number(practiceValueLearners),
+    supervisorHourlyCost: Number(practiceValueHourlyCost),
+    estimatedHoursSavedPerLearner: Number(practiceValueHoursSaved),
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -330,6 +343,110 @@ export default function PracticePacks() {
             </div>
           </Card>
 
+          <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm md:col-span-2">
+            <div className="flex items-start gap-3">
+              <Calculator className="mt-1 h-7 w-7 text-blue-700" />
+              <div>
+                <p className="text-sm font-semibold text-blue-700">
+                  Practice value planner
+                </p>
+                <h2 className="text-2xl font-bold">
+                  Estimate the training time a shared foundation may protect
+                </h2>
+                <p className="mt-3 max-w-3xl leading-7 text-slate-600">
+                  This is a planning estimate, not a promise. Use your own
+                  numbers to compare seat-pack cost against supervisor time that
+                  may be spent repeating basic vocabulary, clinic flow, and
+                  onboarding expectations.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <label className="block text-sm font-semibold text-slate-700">
+                Learners to onboard
+                <input
+                  type="number"
+                  min="1"
+                  max="500"
+                  value={practiceValueLearners}
+                  onChange={event =>
+                    setPracticeValueLearners(event.target.value)
+                  }
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-slate-700">
+                Supervisor hourly cost
+                <input
+                  type="number"
+                  min="0"
+                  max="500"
+                  value={practiceValueHourlyCost}
+                  onChange={event =>
+                    setPracticeValueHourlyCost(event.target.value)
+                  }
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-slate-700">
+                Basic-training hours saved per learner
+                <input
+                  type="number"
+                  min="0"
+                  max="80"
+                  step="0.5"
+                  value={practiceValueHoursSaved}
+                  onChange={event =>
+                    setPracticeValueHoursSaved(event.target.value)
+                  }
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 font-normal text-slate-950 outline-none ring-blue-500 focus:ring-2"
+                />
+              </label>
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <section className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                <h3 className="text-sm font-semibold text-slate-600">
+                  Estimated supervisor time value
+                </h3>
+                <p className="mt-2 text-2xl font-bold text-slate-950">
+                  {formatPracticeValueCurrency(
+                    practiceValueEstimate.estimatedSupervisorTimeValue
+                  )}
+                </p>
+              </section>
+              <section className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                <h3 className="text-sm font-semibold text-slate-600">
+                  Suggested next step
+                </h3>
+                <p className="mt-2 text-lg font-bold text-slate-950">
+                  {practiceValueEstimate.recommendedOffer
+                    ? practiceValueEstimate.recommendedOffer.name
+                    : "Custom practice conversation"}
+                </p>
+              </section>
+              <section className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                <h3 className="text-sm font-semibold text-slate-600">
+                  Planning comparison
+                </h3>
+                <p className="mt-2 text-lg font-bold text-slate-950">
+                  {practiceValueEstimate.recommendedOffer
+                    ? `${formatPracticeValueCurrency(
+                        practiceValueEstimate.estimatedNetPlanningValue
+                      )} after pack cost`
+                    : "Ask about a larger rollout"}
+                </p>
+              </section>
+            </div>
+
+            <p className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-950">
+              This tool estimates possible planning value only. It does not
+              guarantee saved time, staffing outcomes, employee retention,
+              competency, certification, exam results, or revenue.
+            </p>
+          </Card>
+
           {practicePackOffers.map(offer =>
             (() => {
               const { email, normalizedEmail, showEmailValidation } =
@@ -507,6 +624,12 @@ export default function PracticePacks() {
               className="mt-4 block text-center text-sm font-semibold text-blue-700 hover:text-blue-900"
             >
               Review course policies
+            </a>
+            <a
+              href="/buyer-guide"
+              className="mt-4 block text-center text-sm font-semibold text-blue-700 hover:text-blue-900"
+            >
+              Open buyer guide
             </a>
             <a
               href={supportHref}

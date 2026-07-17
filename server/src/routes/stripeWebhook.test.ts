@@ -108,8 +108,8 @@ describe("sendFulfillmentWelcomeEmail", () => {
     AUTH_SESSION_SECRET: "session-secret-value-with-at-least-32-chars",
     TRANSACTIONAL_EMAIL_API_URL: "https://api.resend.com/emails",
     TRANSACTIONAL_EMAIL_API_KEY: "re_test_key_123456",
-    SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@example.com>",
-    PUBLIC_APP_URL: "https://academy.example.com",
+    SIGN_IN_FROM_EMAIL: "OptiTech Academy <noreply@spindeleye.com>",
+    PUBLIC_APP_URL: "https://academy.spindeleye.com",
   };
 
   it("uses the transactional email settings after access is provisioned", async () => {
@@ -136,8 +136,8 @@ describe("sendFulfillmentWelcomeEmail", () => {
     });
     expect(sender).toHaveBeenCalledWith({
       purchase: purchaseEvent,
-      from: "OptiTech Academy <noreply@example.com>",
-      publicAppUrl: "https://academy.example.com",
+      from: "OptiTech Academy <noreply@spindeleye.com>",
+      publicAppUrl: "https://academy.spindeleye.com",
       apiUrl: "https://api.resend.com/emails",
       apiKey: "re_test_key_123456",
     });

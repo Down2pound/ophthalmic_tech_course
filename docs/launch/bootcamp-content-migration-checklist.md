@@ -21,6 +21,9 @@ use it.
 - [ ] Confirm content owner and reuse rights for every file.
 - [ ] Confirm no patient information, staff-private details, or internal-only
       Spindel workflow details are present.
+- [ ] Save doctor-specific protocols, provider workup preferences, Spindel
+      post-op/pre-op rules, and SEA workflow instructions only in the private
+      Spindel Eye Technician onboarding version.
 - [ ] Assign each asset to public course, practice-only onboarding, or excluded.
 - [ ] Clinical reviewer approves the lesson claims before publication.
 - [ ] Create accessible alternatives for media: captions or transcript for
@@ -34,8 +37,62 @@ use it.
 ## Source Summary
 
 - Bootcamp days mapped: 10
-- Source assets mapped: 36
+- Source assets mapped: 37
 - Free-preview candidate days: 1
+
+## Latest Drive Refresh Intake
+
+- Refresh date: 2026-07-17
+- Visible top-level Drive items: 46
+- Visible filenames already in typed source map: 35
+- Drive refresh intake items needing review: 13
+
+These files are not approved course content yet. Treat them as a review queue
+before changing paid lessons, public assets, or the typed Bootcamp source map.
+
+- [ ] `Course backup1` (folder; needs-inspection)
+  - Next action: Identify whether this is a duplicate archive, current course
+    export, or obsolete backup before importing anything.
+- [ ] `Ophthalmic Technician Course` (shared-folder; needs-inspection)
+  - Next action: Inspect child files and preserve Drive IDs before deciding
+    whether this is a newer course source or a duplicate package.
+- [ ] `ophthalmic-tech-bootcamp-site` (folder; known-source-folder)
+  - Next action: Keep as the structured legacy course-app source and confirm
+    whether new child files were added before changing the course map.
+- [ ] `Advanced_Ocular_Diagnostic_Masterclass.pdf` (pdf;
+      advanced-content-candidate)
+  - Next action: Mapped as a Day 3 advanced diagnostic-testing PDF. Confirm
+    rights, version status, and clinical review before publishing to learners.
+- [ ] `Clinical Guide_ Manual Lensometry Standards and Procedures.pdf` (pdf;
+      public-course-candidate)
+  - Next action: Mapped as a Day 5 manual lensometry standards PDF. Compare
+    against the editable Lensometry Google Doc before publishing.
+- [ ] `Clinical Guide_ Soft Skills and Patient Care for Ophthalmic Professionals.pdf`
+      (pdf; public-course-candidate)
+  - Next action: Already mapped to the patient-care/professional-skills days.
+    Compare against the preferred Soft Skills Google Doc and PDF pair before
+    publishing.
+- [ ] `Day_1.mp4` (video; public-course-candidate)
+  - Next action: Review as a possible Day 1 replacement or duplicate for the
+    current foundations and intro videos.
+- [ ] `Keratoconus2 jeff.png` (image; visual-public-course-candidate)
+  - Next action: Compare against the existing keratoconus image and choose one
+    accessible, rights-cleared visual.
+- [ ] `Mod_1_Video_Overiew.mp4` (video; public-course-candidate)
+  - Next action: Review spelling, version, and overlap with current Day 1
+    videos before mapping.
+- [ ] `Ophthalmic_Tech_Bootcamp (1).mp4` (video; public-course-candidate)
+  - Next action: Determine whether this is an overview, duplicate, or
+    free-preview candidate before clinical and rights review.
+- [ ] `Ophthalmic_Tech_Crash_Course.mp4` (video; public-course-candidate)
+  - Next action: Consider as a short free-preview or marketing intro asset
+    after scope, claims, and clinical review.
+- [ ] `Project Detailing.pdf` (pdf; product-process-source)
+  - Next action: Inspect as product planning or production workflow material,
+    not automatically public learner content.
+- [ ] `spindel-eye-weekly-newsletter.html` (html; practice-only-or-excluded)
+  - Next action: Keep out of the national course; it may inform the separate
+    SEA newsletter workflow only after internal-content review.
 
 ## Day-By-Day Migration Queue
 
@@ -86,6 +143,7 @@ Assets to classify and review:
 - Day 3 Diagnostics Video
 - Day 3 Diagnostic Slide Deck
 - Mastering Ophthalmic Diagnostics
+- Advanced Ocular Diagnostic Masterclass
 - Diagnostics Infographic
 
 ### Day 4: Common Eye Diseases and Red Flags
@@ -114,6 +172,7 @@ Assets to classify and review:
 - Lensometry: A Practical Guide
 - Mastering Manual Lensometry
 - Lensometry Blueprint
+- Manual Lensometry Standards and Procedures
 - Precision Lens Topography
 
 ### Day 6: Tonometry and Eye Pressure Methods

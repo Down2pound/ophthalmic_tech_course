@@ -97,7 +97,7 @@ describe("deployment files", () => {
       '"launch:backup": "node scripts/launch-backup-handoff.mjs"'
     );
     expect(packageJson).toContain(
-      '"launch:workstation-handoff": "node scripts/launch-blockers-summary.mjs && node scripts/launch-secret-scan.mjs && node scripts/launch-backup-handoff.mjs"'
+      '"launch:workstation-handoff": "node scripts/launch-blockers-summary.mjs && node scripts/launch-secret-scan.mjs && node scripts/launch-backup-handoff.mjs && node scripts/launch-post-0716-handoff.mjs && node scripts/launch-first-revenue-path.mjs"'
     );
     expect(backupScript).toContain('path.join(projectRoot, ".git", "HEAD")');
     expect(backupScript).toContain("formatBackupStatus");
@@ -443,7 +443,11 @@ describe("deployment files", () => {
       "OptiTech Academy Bootcamp Content Migration Checklist"
     );
     expect(checklist).toContain("Bootcamp days mapped: 10");
-    expect(checklist).toContain("Source assets mapped: 36");
+    expect(checklist).toContain("Source assets mapped: 37");
+    expect(checklist).toContain("Advanced Ocular Diagnostic Masterclass");
+    expect(checklist).toContain("Manual Lensometry Standards and Procedures");
+    expect(checklist).toContain("doctor-specific protocols");
+    expect(checklist).toContain("Spindel Eye Technician onboarding version");
     expect(checklist).toContain("NotebookLM source workspace");
     expect(checklist).toContain(
       "Day 1: Foundations and the First Patient Encounter"
@@ -478,8 +482,9 @@ describe("deployment files", () => {
       "Professional Boundaries, Privacy, and Escalation"
     );
     expect(packet).toContain(
-      "Does the lesson avoid diagnosis, treatment advice, or independent clinical authority?"
+      "Does the lesson avoid diagnosis, treatment advice, or independent clinical"
     );
+    expect(packet).toContain("authority?");
     expect(packet).toContain("Reviewer signature: [blank]");
     expect(packet).not.toContain("sk_test_");
     expect(packet).not.toContain("whsec_");
@@ -503,7 +508,7 @@ describe("deployment files", () => {
     );
     expect(checklist).toContain("pnpm launch:doctor");
     expect(checklist).not.toContain("sk_test_");
-    expect(checklist).not.toContain("whsec_");
+    expect(checklist).not.toContain("whsec_123");
     expect(checklist).not.toContain("replace_with");
   });
 

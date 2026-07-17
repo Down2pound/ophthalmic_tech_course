@@ -27,6 +27,7 @@ export function renderLaunchDoctorReport({
   readinessReport = getRuntimeLaunchReadinessReport(),
 }: LaunchDoctorInput = {}): string {
   const readiness = readinessReport;
+  const nextSetupSteps = readiness.nextSetupSteps ?? [];
   const setupSections = [
     {
       label: "Stripe checkout",
@@ -123,13 +124,13 @@ export function renderLaunchDoctorReport({
     "",
     "## Recommended Next Setup Steps",
     "",
-    ...readiness.nextSetupSteps
+    ...nextSetupSteps
       .flatMap(step => [
         `- ${step.title}: ${step.detail}`,
         step.command ? `  Command or setting: \`${step.command}\`` : "",
       ])
       .filter(Boolean),
-    ...(readiness.nextSetupSteps.length === 0
+    ...(nextSetupSteps.length === 0
       ? ["- No runtime setup steps reported."]
       : []),
     "",

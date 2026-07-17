@@ -17,6 +17,8 @@ const baseUrl = normalizeBaseUrl(process.env.PUBLIC_APP_URL);
 const individualCheckoutUrl = `${baseUrl}/checkout`;
 const practicePacksUrl = `${baseUrl}/practice-packs`;
 const courseOverviewUrl = `${baseUrl}/`;
+const freePreviewUrl = `${baseUrl}/preview`;
+const buyerGuideUrl = `${baseUrl}/buyer-guide`;
 const policiesUrl = `${baseUrl}/policies`;
 const readinessUrl = `${baseUrl}/api/launch/readiness`;
 
@@ -52,6 +54,8 @@ const lines = [
   `- Individual learners: ${individualCheckoutUrl}`,
   `- Practice buyers: ${practicePacksUrl}`,
   `- Course overview: ${courseOverviewUrl}`,
+  `- Free lesson preview: ${freePreviewUrl}`,
+  `- Buyer decision guide: ${buyerGuideUrl}`,
   `- Policies: ${policiesUrl}`,
   `- Readiness check: ${readinessUrl}`,
   `- Custom practice inquiry email: ${practiceInquiryMailto}`,
@@ -74,7 +78,9 @@ const lines = [
   "",
   "It focuses on plain-language ophthalmic vocabulary, clinic flow, patient communication, knowledge checks, and supervised practice preparation. It is not a certification program and it does not replace hands-on training, but it can help someone feel much less lost when starting in eye care.",
   "",
-  `Founding Learner Access is $199 for 12 months: ${individualCheckoutUrl}`,
+  `Free preview: ${freePreviewUrl}`,
+  `Buyer guide: ${buyerGuideUrl}`,
+  `Founding Learner Access is $199 for 12 months when enrollment opens: ${individualCheckoutUrl}`,
   "",
   "Would you be open to taking a look when enrollment opens?",
   "```",
@@ -88,6 +94,8 @@ const lines = [
   "",
   "The practice packs are designed for onboarding: each learner gets their own access, and supervisors can pair the course with local hands-on observation and practice-specific protocols.",
   "",
+  `Free preview: ${freePreviewUrl}`,
+  `Buyer guide: ${buyerGuideUrl}`,
   `Practice pack details: ${practicePacksUrl}`,
   "",
   "Would it be useful for your team if I sent the course overview link when it is ready?",

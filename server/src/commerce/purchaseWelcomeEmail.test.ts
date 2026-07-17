@@ -40,7 +40,12 @@ describe("createPurchaseWelcomeEmailMessage", () => {
     });
     expect(message.text).toContain("Start learning here");
     expect(message.text).toContain("https://academy.example.com/learn");
+    expect(message.text).toContain("request a passwordless sign-in link");
+    expect(message.text).toContain("https://academy.example.com/buyer-guide");
     expect(message.text).toContain("foundational education");
+    expect(message.text).toContain("Support reference");
+    expect(message.text).toContain("Checkout session: cs_test_123");
+    expect(message.text).toContain("Stripe event: evt_123");
     expect(message.text).toContain("Do not send patient information");
   });
 
@@ -59,6 +64,10 @@ describe("createPurchaseWelcomeEmailMessage", () => {
     expect(message.text).toContain(
       "https://academy.example.com/practice-seat-admin"
     );
+    expect(message.text).toContain("choose the learner emails");
+    expect(message.text).toContain("one learner email per seat");
+    expect(message.text).toContain("Checkout session: cs_test_practice");
+    expect(message.text).toContain("Stripe event: evt_practice");
     expect(message.text).toContain("local protocols");
     expect(message.text).toContain("Do not send patient information");
   });

@@ -93,6 +93,8 @@ const requiredRobotsTxtRules = [
 
 export const deploymentSmokePublicPaths = [
   "/",
+  "/preview",
+  "/buyer-guide",
   "/checkout",
   "/checkout?checkout=cancelled&offer=founding-learner",
   "/learn?checkout=success&offer=founding-learner",

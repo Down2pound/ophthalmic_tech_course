@@ -1,4 +1,11 @@
 import {
+  bootcampDriveRefreshDate,
+  bootcampDriveRefreshIntakeItems,
+  bootcampDriveRefreshMappedFilenameCount,
+  bootcampDriveRefreshVisibleItemCount,
+  getBootcampDriveRefreshUnmappedCount,
+} from "../../../shared/course/bootcampDriveRefreshIntake";
+import {
   bootcampNotebookLmUrl,
   bootcampSiteCourseDataUrl,
   bootcampSourceDays,
@@ -27,19 +34,50 @@ export function renderBootcampContentMigrationChecklist(): string {
     "## Migration Rules",
     "",
     renderCheckbox("Confirm content owner and reuse rights for every file."),
-    renderCheckbox("Confirm no patient information, staff-private details, or internal-only Spindel workflow details are present."),
-    renderCheckbox("Assign each asset to public course, practice-only onboarding, or excluded."),
-    renderCheckbox("Clinical reviewer approves the lesson claims before publication."),
-    renderCheckbox("Create accessible alternatives for media: captions or transcript for video/audio, alt text or summary for images, and readable PDF text."),
-    renderCheckbox("Copy approved assets into the final managed storage location before using the proposed storage keys."),
-    renderCheckbox("Keep source Drive IDs and original filenames in content metadata."),
-    renderCheckbox("Do not sell unpublished modules as complete content; show release status clearly."),
+    renderCheckbox(
+      "Confirm no patient information, staff-private details, or internal-only Spindel workflow details are present."
+    ),
+    renderCheckbox(
+      "Save doctor-specific protocols, provider workup preferences, Spindel post-op/pre-op rules, and SEA workflow instructions only in the private Spindel Eye Technician onboarding version."
+    ),
+    renderCheckbox(
+      "Assign each asset to public course, practice-only onboarding, or excluded."
+    ),
+    renderCheckbox(
+      "Clinical reviewer approves the lesson claims before publication."
+    ),
+    renderCheckbox(
+      "Create accessible alternatives for media: captions or transcript for video/audio, alt text or summary for images, and readable PDF text."
+    ),
+    renderCheckbox(
+      "Copy approved assets into the final managed storage location before using the proposed storage keys."
+    ),
+    renderCheckbox(
+      "Keep source Drive IDs and original filenames in content metadata."
+    ),
+    renderCheckbox(
+      "Do not sell unpublished modules as complete content; show release status clearly."
+    ),
     "",
     "## Source Summary",
     "",
     `- Bootcamp days mapped: ${bootcampSourceDays.length}`,
     `- Source assets mapped: ${getBootcampSourceAssetCount()}`,
     `- Free-preview candidate days: ${bootcampSourceDays.filter(day => day.freePreview).length}`,
+    "",
+    "## Latest Drive Refresh Intake",
+    "",
+    `- Refresh date: ${bootcampDriveRefreshDate}`,
+    `- Visible top-level Drive items: ${bootcampDriveRefreshVisibleItemCount}`,
+    `- Visible filenames already in typed source map: ${bootcampDriveRefreshMappedFilenameCount}`,
+    `- Drive refresh intake items needing review: ${getBootcampDriveRefreshUnmappedCount()}`,
+    "",
+    "These files are not approved course content yet. Treat them as a review queue before changing paid lessons, public assets, or the typed Bootcamp source map.",
+    "",
+    ...bootcampDriveRefreshIntakeItems.flatMap(item => [
+      `- [ ] \`${item.visibleName}\` (${item.itemType}; ${item.classification})`,
+      `  - Next action: ${item.nextAction}`,
+    ]),
     "",
     "## Day-By-Day Migration Queue",
     "",

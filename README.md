@@ -47,6 +47,31 @@ and public/practice-only classification.
 
 ---
 
+## Owner Quick Commands
+
+Use these when resuming from the work computer or getting ready for first
+revenue.
+
+```bash
+pnpm launch:post-0716-handoff
+pnpm launch:first-revenue
+pnpm launch:bootcamp-intake
+pnpm launch:blockers
+```
+
+- `launch:post-0716-handoff` explains what changed after the latest completed
+  `07/16/2026` backup and what to commit when Git is available.
+- `launch:first-revenue` prints the shortest safe path from restored code to
+  one controlled paid buyer.
+- `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
+  before becoming paid course content.
+- `launch:blockers` prints the setup areas still preventing paid launch.
+
+Keep the `07/16/2026` backup label tied to commit `2efefd0` unless a new backup
+is intentionally created.
+
+---
+
 ## Project Structure
 
 ```

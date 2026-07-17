@@ -162,6 +162,8 @@ describe("runDeploymentSmokeTest", () => {
       },
       publicPages: [
         { path: "/", ok: true, status: 200 },
+        { path: "/preview", ok: true, status: 200 },
+        { path: "/buyer-guide", ok: true, status: 200 },
         { path: "/checkout", ok: true, status: 200 },
         {
           path: "/checkout?checkout=cancelled&offer=founding-learner",
@@ -214,6 +216,8 @@ describe("runDeploymentSmokeTest", () => {
       "https://example.com/api/launch/readiness",
       "https://example.com/api/checkout/availability",
       "https://example.com/",
+      "https://example.com/preview",
+      "https://example.com/buyer-guide",
       "https://example.com/checkout",
       "https://example.com/checkout?checkout=cancelled&offer=founding-learner",
       "https://example.com/learn?checkout=success&offer=founding-learner",

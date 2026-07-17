@@ -5,6 +5,13 @@ import { describe, expect, it } from "vitest";
 import { createLaunchEvidenceBundle } from "./launchEvidenceBundle";
 import type { RuntimeLaunchReadinessReport } from "../config/runtimeReadiness";
 
+function expectTextToContainWords(text: string, expected: string) {
+  const normalize = (value: string) =>
+    value.replace(/\s+/g, " ").trim().toLowerCase();
+
+  expect(normalize(text)).toContain(normalize(expected));
+}
+
 const readinessReport: RuntimeLaunchReadinessReport = {
   generatedAt: "2026-07-13T12:00:00.000Z",
   readyForPaidLaunch: false,
@@ -127,6 +134,7 @@ describe("createLaunchEvidenceBundle", () => {
       "production-env-checklist.md",
       "launch-doctor-report.md",
       "manual-launch-qa-evidence.md",
+      "runtime-readiness-snapshot-guide.md",
       "first-sale-support-runbook.md",
       "bootcamp-content-migration-checklist.md",
       "module-1-clinical-review-packet.md",
@@ -341,8 +349,9 @@ describe("createLaunchEvidenceBundle", () => {
       "Can you send me the practice pack link and the policies page?"
     );
     expect(firstCustomersSalesPacket).toContain(
-      "Do not pressure the buyer or offer medical, legal, hiring, billing, or certification advice."
+      "Do not pressure the buyer or offer medical, legal, hiring, billing, or"
     );
+    expect(firstCustomersSalesPacket).toContain("certification advice.");
     expect(individualLearnerDecisionOnePager).toContain(
       "OptiTech Academy Individual Learner Decision One-Pager"
     );
@@ -353,7 +362,8 @@ describe("createLaunchEvidenceBundle", () => {
     expect(individualLearnerDecisionOnePager).toContain(
       "This is education, not certification"
     );
-    expect(individualLearnerDecisionOnePager).toContain(
+    expectTextToContainWords(
+      individualLearnerDecisionOnePager,
       "Do not add patient names, private employer details, passwords, raw sign-in links, secrets, or payment card information."
     );
     expect(practiceManagerApprovalOnePager).toContain(
@@ -368,7 +378,8 @@ describe("createLaunchEvidenceBundle", () => {
     expect(practiceManagerApprovalOnePager).toContain(
       "Five-seat practice pack"
     );
-    expect(practiceManagerApprovalOnePager).toContain(
+    expectTextToContainWords(
+      practiceManagerApprovalOnePager,
       "Do not add patient names, chart details, private employee performance notes, secrets, or payment card information."
     );
     expect(firstBuyerFulfillmentChecklist).toContain(
@@ -427,7 +438,10 @@ describe("createLaunchEvidenceBundle", () => {
     expect(manualQaEvidence).toContain(
       "OptiTech Academy Manual Launch QA Evidence"
     );
-    expect(manualQaEvidence).toContain("Test the paid learner flow end to end");
+    expectTextToContainWords(
+      manualQaEvidence,
+      "Test the paid learner flow end to end"
+    );
     expect(manualQaEvidence).toContain(
       "Individual checkout success return URL:"
     );

@@ -204,11 +204,19 @@ describe("getRuntimeLaunchReadinessReport", () => {
     expect(report.readyForPaidLaunch).toBe(false);
     expect(report.salesChannels.individualLearner).toMatchObject({
       ready: false,
-      blockers: ["Hosted database schema is not verified"],
+      blockers: [
+        "Verified Stripe webhook fulfillment is not ready",
+        "Learner accounts and access control is not ready",
+        "Hosted database schema is not verified",
+      ],
     });
     expect(report.salesChannels.practicePacks).toMatchObject({
       ready: false,
-      blockers: ["Hosted database schema is not verified"],
+      blockers: [
+        "Verified Stripe webhook fulfillment is not ready",
+        "Learner accounts and access control is not ready",
+        "Hosted database schema is not verified",
+      ],
     });
     expect(report.warnings).toContain(
       "Launch database schema is not verified. Missing tables: auth_users."

@@ -16,6 +16,7 @@ import {
   ArrowLeft,
   BriefcaseBusiness,
   CheckCircle2,
+  Download,
   KeyRound,
   RefreshCw,
   ShieldCheck,
@@ -23,6 +24,11 @@ import {
   Users,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import {
+  buildLearnerLeadCsv,
+  buildPracticeLeadCsv,
+  downloadCsvFile,
+} from "@/lib/leadCsvExport";
 
 interface PageState {
   seatPacks: PracticeSeatPackSummary[];
@@ -185,6 +191,20 @@ export default function PracticeSeatAdmin() {
     } finally {
       setLoadingAction(null);
     }
+  };
+
+  const exportPracticeLeads = () => {
+    downloadCsvFile({
+      filename: "optitech-practice-leads.csv",
+      csv: buildPracticeLeadCsv(pageState.inquiries),
+    });
+  };
+
+  const exportLearnerLeads = () => {
+    downloadCsvFile({
+      filename: "optitech-learner-leads.csv",
+      csv: buildLearnerLeadCsv(pageState.learnerInterests),
+    });
   };
 
   return (
@@ -551,9 +571,20 @@ export default function PracticeSeatAdmin() {
           )}
 
           <Card className="border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center gap-3">
-              <BriefcaseBusiness className="h-6 w-6 text-blue-700" />
-              <h2 className="text-2xl font-bold">Custom practice leads</h2>
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-3">
+                <BriefcaseBusiness className="h-6 w-6 text-blue-700" />
+                <h2 className="text-2xl font-bold">Custom practice leads</h2>
+              </div>
+              {pageState.inquiries.length > 0 && (
+                <Button
+                  className="w-full border border-slate-300 bg-white text-slate-900 hover:bg-slate-50 md:w-auto"
+                  onClick={exportPracticeLeads}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Export CSV
+                </Button>
+              )}
             </div>
             <p className="mt-3 leading-7 text-slate-600">
               These are larger-practice or custom setup inquiries from the
@@ -625,9 +656,20 @@ export default function PracticeSeatAdmin() {
           </Card>
 
           <Card className="border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center gap-3">
-              <Users className="h-6 w-6 text-blue-700" />
-              <h2 className="text-2xl font-bold">Individual learner leads</h2>
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-3">
+                <Users className="h-6 w-6 text-blue-700" />
+                <h2 className="text-2xl font-bold">Individual learner leads</h2>
+              </div>
+              {pageState.learnerInterests.length > 0 && (
+                <Button
+                  className="w-full border border-slate-300 bg-white text-slate-900 hover:bg-slate-50 md:w-auto"
+                  onClick={exportLearnerLeads}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Export CSV
+                </Button>
+              )}
             </div>
             <p className="mt-3 leading-7 text-slate-600">
               These are learners who are interested before checkout, before

@@ -68,6 +68,18 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-8">
             <a
+              href="/buyer-guide"
+              className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+            >
+              Buyer Guide
+            </a>
+            <a
+              href="/preview"
+              className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+            >
+              Free Preview
+            </a>
+            <a
               href="#curriculum"
               className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
             >
@@ -147,6 +159,14 @@ export default function Home() {
                     <Building2 className="ml-2 w-4 h-4" />
                   </Button>
                 </a>
+                <a href="/buyer-guide">
+                  <Button
+                    size="lg"
+                    className="w-full glass-dark text-white border border-white/20 hover:bg-white/10 text-base"
+                  >
+                    Buyer Guide
+                  </Button>
+                </a>
                 <a href="/curriculum">
                   <Button
                     size="lg"
@@ -155,12 +175,12 @@ export default function Home() {
                     View Curriculum
                   </Button>
                 </a>
-                <a href="/skills-passport">
+                <a href="/preview">
                   <Button
                     size="lg"
                     className="w-full glass-dark text-white border border-white/20 hover:bg-white/10 text-base"
                   >
-                    Skills Passport
+                    Try Free Preview
                   </Button>
                 </a>
               </div>
@@ -305,8 +325,8 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-gray-300 text-lg">
-              Founding access to the published course content and planned
-              future releases
+              Founding access to the published course content and planned future
+              releases
             </p>
           </div>
 
@@ -410,9 +430,7 @@ export default function Home() {
                 <h3 className="text-xl font-semibold text-white">
                   {answer.question}
                 </h3>
-                <p className="mt-3 leading-7 text-gray-300">
-                  {answer.answer}
-                </p>
+                <p className="mt-3 leading-7 text-gray-300">{answer.answer}</p>
               </Card>
             ))}
           </div>
@@ -436,6 +454,17 @@ export default function Home() {
                 className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
               >
                 Start Learning Today <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </a>
+            <a
+              href="/preview"
+              className="ml-0 mt-3 inline-flex md:ml-3 md:mt-0"
+            >
+              <Button
+                size="lg"
+                className="glass-dark text-white border border-white/20 hover:bg-white/10 text-base"
+              >
+                Preview a Lesson
               </Button>
             </a>
           </div>

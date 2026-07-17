@@ -102,6 +102,12 @@ describe("isUnsafeLaunchEnvironmentValue", () => {
     expect(
       isUnsafeLaunchEnvironmentValue("PUBLIC_APP_URL", "http://academy.test")
     ).toBe(true);
+    expect(
+      isUnsafeLaunchEnvironmentValue(
+        "PUBLIC_APP_URL",
+        "https://your-real-domain.example"
+      )
+    ).toBe(true);
     expect(isUnsafeLaunchEnvironmentValue("AUTH_SESSION_SECRET", "short")).toBe(
       true
     );

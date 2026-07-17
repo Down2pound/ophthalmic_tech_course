@@ -67,7 +67,18 @@ pnpm launch:workstation-handoff
 ```
 
 It runs the plain-Node blocker summary, runs the secret scan, and then prints
-the backup handoff report.
+the backup handoff report, the post-`07/16/2026` workspace handoff, and the
+first-revenue path.
+
+If you continued working after the `07/16/2026` backup, also review:
+
+```bash
+pnpm launch:post-0716-handoff
+```
+
+That command prints `docs/launch/post-0716-workspace-handoff.md`, which lists
+post-backup workspace changes and the exact commit command to run when Git is
+available.
 
 To print only the current paid-launch blocker summary, run:
 

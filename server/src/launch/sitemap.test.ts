@@ -17,6 +17,12 @@ describe("renderLaunchSitemap", () => {
     expect(sitemap).toContain(
       "<loc>https://academy.spindeleye.com/practice-packs</loc>"
     );
+    expect(sitemap).toContain(
+      "<loc>https://academy.spindeleye.com/preview</loc>"
+    );
+    expect(sitemap).toContain(
+      "<loc>https://academy.spindeleye.com/buyer-guide</loc>"
+    );
     expect(sitemap).toContain("<lastmod>2026-07-13</lastmod>");
     expect(sitemap).not.toContain("/api/");
     expect(sitemap).not.toContain("/admin");

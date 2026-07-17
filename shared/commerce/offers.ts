@@ -187,11 +187,13 @@ export function createMailtoHref({
   subject: string;
   body?: string;
 }): string {
-  const params = new URLSearchParams({ subject });
+  const params = [
+    `subject=${encodeURIComponent(subject).replaceAll("%20", "+")}`,
+  ];
 
   if (body) {
-    params.set("body", body);
+    params.push(`body=${encodeURIComponent(body)}`);
   }
 
-  return `mailto:${email}?${params.toString()}`;
+  return `mailto:${email}?${params.join("&")}`;
 }

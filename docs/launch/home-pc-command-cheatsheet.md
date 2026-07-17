@@ -6,6 +6,15 @@ project folder after cloning or opening the repo.
 Beginner translation: this is the recipe card. The longer runbook explains why
 each step matters.
 
+## Stop After 3 Same Errors
+
+If the same command fails with the same error 3 times, stop retrying it on the
+work computer and continue from home instead. Write down the command, the error,
+and what already passed.
+
+Known work-computer blocks include `spawn EPERM`, missing `git`, and
+`git: 'remote-https' is not a git command`.
+
 ## 1. Get The Latest Code
 
 If the latest work was pushed to GitHub, use:
@@ -74,13 +83,20 @@ without printing the secret values.
 ```bash
 pnpm launch:blockers
 pnpm launch:admin-tokens
+pnpm launch:post-0716-handoff
+pnpm launch:bootcamp-intake
+pnpm launch:first-revenue
 pnpm launch:clinical-review
 pnpm launch:database-setup
 pnpm launch:email-setup
 pnpm launch:env-template
+pnpm launch:external-setup
 pnpm launch:first-10-customers
+pnpm launch:first-week-sales
 pnpm launch:live-purchase-test
+pnpm launch:next
 pnpm launch:render-setup
+pnpm launch:spindel-onboarding
 pnpm launch:stripe-products
 pnpm launch:secrets
 pnpm launch:doctor
@@ -90,6 +106,12 @@ pnpm launch:doctor
 paid sales.
 `launch:admin-tokens` prints the practice-seat and alert admin token setup and
 test checklist.
+`launch:post-0716-handoff` prints the post-`07/16/2026` workspace changes that
+need committing/backing up before deployment.
+`launch:bootcamp-intake` prints the latest unmapped Bootcamp Drive review queue
+so new source files do not get published before review.
+`launch:first-revenue` prints the shortest safe path from restored code to one
+controlled paid buyer.
 `launch:clinical-review` prints the Module 1 review checklist and approval
 fields.
 `launch:database-setup` prints the production database setup and verification
@@ -98,11 +120,19 @@ checklist.
 checklist.
 `launch:env-template` prints the safe host settings block for Render or another
 production host.
+`launch:external-setup` prints the outside-account worksheet for GitHub,
+Render, Stripe, email, clinical signoff, and first live purchase proof.
 `launch:first-10-customers` prints the controlled first-buyer outreach plan.
+`launch:first-week-sales` prints the day-by-day first week sales plan for
+controlled outreach after deployment.
 `launch:live-purchase-test` prints the final internal live-mode purchase
 rehearsal checklist.
+`launch:next` prints one beginner-friendly command center with your current
+launch phase, blocked gates, next best actions, and exact smoke-test commands.
 `launch:render-setup` prints the Render Blueprint deployment order and live URL
 checks.
+`launch:spindel-onboarding` prints the private Spindel Eye Technician
+onboarding lanes for doctor-specific protocols and SEA-only workflows.
 `launch:stripe-products` prints the exact Stripe offer ids, prices, lookup
 keys, and webhook event to mirror in Stripe.
 `launch:secrets` makes a safe checklist of missing production settings.
@@ -129,6 +159,9 @@ pnpm launch:smoke
 $env:PUBLIC_APP_URL="https://your-real-domain.example"
 pnpm launch:sitemap
 pnpm launch:first-sales
+pnpm launch:first-week-sales
+$env:LAUNCH_BASE_URL="https://your-real-domain.example"
+pnpm launch:go-no-go
 pnpm launch:sales-tracker
 ```
 
@@ -138,8 +171,15 @@ signoff are all finished. It still checks that the live pages load, browser
 safety headers are present, and `/robots.txt` blocks private/admin-style paths.
 `launch:first-sales` prints the buyer links and short outreach messages using
 your real domain.
+`launch:first-week-sales` turns the first-buyer packet into daily actions and
+keeps paid checkout links gated until production proof exists.
+`launch:go-no-go` is the owner-friendly live-site decision report: GO, CAUTION,
+or NO-GO for preview sharing, practice inquiries, and paid checkout sharing.
 `launch:sales-tracker` creates CSV tracker templates for leads, purchases,
 support, practice seats, and weekly revenue.
+The protected Practice Seat Manager can also export custom practice leads and
+individual learner leads as CSV after you load the dashboard with the private
+practice-seat admin token.
 
 ## 7. Run The Final Go-Live Smoke Test
 

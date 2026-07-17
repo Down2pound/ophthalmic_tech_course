@@ -9,6 +9,8 @@ import { setupLaunchReadinessRoutes } from "./src/routes/launchReadiness";
 import { setupStripeWebhookRoute } from "./src/routes/stripeWebhook";
 import { setupAlertTemplateRoutes } from "./src/routes/alertTemplates";
 import { applySecurityHeaders } from "./src/config/securityHeaders";
+import { injectPublicAppUrlMetadata } from "./src/config/indexHtmlMetadata";
+import { readFile } from "fs/promises";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,11 +38,19 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
-  app.use(express.static(staticPath));
+  app.use(express.static(staticPath, { index: false }));
 
   // Handle client-side routing - serve index.html for all routes
-  app.get("*", (_req, res) => {
-    res.sendFile(path.join(staticPath, "index.html"));
+  app.get("*", async (_req, res, next) => {
+    try {
+      const indexHtml = await readFile(path.join(staticPath, "index.html"), {
+        encoding: "utf8",
+      });
+
+      res.type("html").send(injectPublicAppUrlMetadata({ html: indexHtml }));
+    } catch (error) {
+      next(error);
+    }
   });
 
   const port = process.env.PORT || 3000;

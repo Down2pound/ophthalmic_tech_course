@@ -5,6 +5,11 @@ OptiTech Academy to an owner, administrator, or budget decision-maker.
 
 Simple translation: this is the short "why this is worth buying" page.
 
+The practice-pack page also includes a practice value planner. It estimates
+possible supervisor time value from the practice's own numbers without
+promising saved time, staffing outcomes, certification, competency, retention,
+or revenue.
+
 ## Short Summary
 
 OptiTech Academy is a self-paced ophthalmic technician foundations course for
@@ -84,6 +89,8 @@ Replace `https://your-real-domain.example` with the final production domain:
 ```text
 Practice packs: https://your-real-domain.example/practice-packs
 Course overview: https://your-real-domain.example/
+Buyer decision guide: https://your-real-domain.example/buyer-guide
+Free lesson preview: https://your-real-domain.example/preview
 Policies: https://your-real-domain.example/policies
 ```
 

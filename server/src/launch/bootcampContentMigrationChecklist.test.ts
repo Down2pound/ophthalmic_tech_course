@@ -11,8 +11,18 @@ describe("renderBootcampContentMigrationChecklist", () => {
     );
     expect(checklist).toContain("Bootcamp days mapped: 10");
     expect(checklist).toContain("Source assets mapped:");
+    expect(checklist).toContain("Latest Drive Refresh Intake");
+    expect(checklist).toContain(
+      "Drive refresh intake items needing review: 13"
+    );
+    expect(checklist).toContain("Day_1.mp4");
+    expect(checklist).toContain("Ophthalmic_Tech_Crash_Course.mp4");
+    expect(checklist).toContain("spindel-eye-weekly-newsletter.html");
     expect(checklist).toContain("NotebookLM source workspace");
     expect(checklist).toContain("free-preview candidate");
+    expect(checklist).toContain(
+      "private Spindel Eye Technician onboarding version"
+    );
     expect(checklist).toContain("Do not paste live Stripe keys");
 
     for (const day of bootcampSourceDays) {

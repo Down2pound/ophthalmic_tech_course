@@ -40,6 +40,7 @@ If a work computer blocks tests or launch commands, use
 `docs/launch/home-pc-runbook.md`.
 For the short home-PC command list, use
 `docs/launch/home-pc-command-cheatsheet.md`.
+For the outside-account setup sequence, run `pnpm launch:external-setup`.
 For first-customer outreach, sales scripts, and feedback tracking, use
 `docs/launch/first-customers-sales-packet.md`.
 For first paid buyer receipt, access, and welcome checks, use
@@ -62,8 +63,8 @@ LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 
 The smoke test checks the health endpoint, launch readiness endpoint, browser
 safety headers, `/robots.txt`, and the public buyer pages for home, checkout,
-individual checkout return states, practice packs, practice checkout return
-states, policies, curriculum, and onboarding.
+free preview, buyer guide, individual checkout return states, practice packs,
+practice checkout return states, policies, curriculum, and onboarding.
 
 Before the paid launch switch is enabled, the same smoke test can confirm the
 deployed health endpoint, buyer pages, safety headers, and robots rules while
@@ -230,6 +231,13 @@ LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 4. Open `/api/launch/readiness` and confirm `readyForPaidLaunch` is `true`.
 5. Run one final Stripe live-mode purchase with a low-risk internal buyer.
 
+For a short owner-facing sequence from restored code to first controlled paid
+buyer, run:
+
+```bash
+pnpm launch:first-revenue
+```
+
 ## Google Drive Handoff
 
 When the launch package is ready to archive, save these files together:
@@ -241,6 +249,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/deployment-cutover-checklist.md`
 - `docs/launch/domain-and-sharing-guide.md`
 - `docs/launch/github-and-source-backup-guide.md`
+- `docs/launch/post-0716-workspace-handoff.md`
 - `docs/launch/home-pc-runbook.md`
 - `docs/launch/home-pc-command-cheatsheet.md`
 - `docs/launch/first-customers-sales-packet.md`

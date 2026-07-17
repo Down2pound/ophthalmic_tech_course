@@ -47,12 +47,17 @@ feel less lost before or during supervised training.
 
 ## Questions To Ask Yourself
 
+The checkout page includes a quick learner readiness check. It helps learners
+decide whether buying now makes sense, whether they should try the free preview
+first, or whether they should pause before buying.
+
 | Question                                                                            | Your Notes |
 | ----------------------------------------------------------------------------------- | ---------- |
 | Am I interested in eye care or ophthalmic assisting?                                |            |
 | Do I want beginner-friendly foundations?                                            |            |
 | Do I understand this is not certification?                                          |            |
 | Do I have a supervisor, mentor, or future employer who can observe hands-on skills? |            |
+| Do I have a learning goal for the next 30 days?                                     |            |
 | Is $199 for 12 months reasonable for my learning goal?                              |            |
 
 ## Safe Message To Send A Supervisor Or Mentor
@@ -79,6 +84,8 @@ Replace `https://your-real-domain.example` with the final production domain:
 ```text
 Individual learner checkout: https://your-real-domain.example/checkout
 Course overview: https://your-real-domain.example/
+Buyer decision guide: https://your-real-domain.example/buyer-guide
+Free lesson preview: https://your-real-domain.example/preview
 Policies: https://your-real-domain.example/policies
 ```
 

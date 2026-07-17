@@ -56,6 +56,8 @@ Open these in a private browser window:
 
 ```text
 https://your-real-domain.example/
+https://your-real-domain.example/preview
+https://your-real-domain.example/buyer-guide
 https://your-real-domain.example/checkout
 https://your-real-domain.example/practice-packs
 https://your-real-domain.example/curriculum
@@ -130,10 +132,21 @@ looks professional:
 - Description: ophthalmic technician foundations training.
 - Link points to the real production domain.
 - No localhost, temporary preview URL, or admin URL appears.
+- Free preview and buyer guide links should look safe and professional before
+  you send them to warm leads.
 
 The app already includes basic page title and description metadata in
-`client/index.html`. If you later add a social preview image, use a simple
-professional image and keep the file public.
+`client/index.html`. The server fills the `__PUBLIC_APP_URL__` placeholders
+from the production `PUBLIC_APP_URL` value, so the canonical URL, Open Graph URL,
+and social preview image point to the final buyer-facing domain after deploy.
+The public preview image is:
+
+```text
+https://your-real-domain.example/social-preview.svg
+```
+
+If a shared-link preview still shows a temporary host URL, `localhost`, or no
+image, recheck `PUBLIC_APP_URL`, redeploy, and paste the link again.
 
 ## Stripe And Email Link Check
 
@@ -155,7 +168,10 @@ Use only these public links in emails, social posts, flyers, and direct messages
 ```text
 Individual learners: https://your-real-domain.example/checkout
 Practice buyers: https://your-real-domain.example/practice-packs
-Course overview: https://your-real-domain.example/curriculum
+Course overview: https://your-real-domain.example/
+Free lesson preview: https://your-real-domain.example/preview
+Buyer decision guide: https://your-real-domain.example/buyer-guide
+Curriculum: https://your-real-domain.example/curriculum
 Policies: https://your-real-domain.example/policies
 ```
 

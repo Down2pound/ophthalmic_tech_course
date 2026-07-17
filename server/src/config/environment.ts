@@ -94,7 +94,9 @@ export function isPlaceholderEnvironmentValue(
     normalizedValue.includes("replace_with") ||
     normalizedValue.includes("_replace_") ||
     normalizedValue.includes("your_") ||
-    normalizedValue.includes("example.com")
+    normalizedValue.includes("your-") ||
+    normalizedValue.includes("example.com") ||
+    normalizedValue.includes(".example")
   ) {
     return true;
   }

@@ -106,11 +106,7 @@ export const bootcampSourceDays: BootcampSourceDay[] = [
       "Describe how the cornea, lens, retina, and optic nerve support vision.",
       "Connect anatomy findings to common testing decisions.",
     ],
-    clinicTasks: [
-      "Anatomy language",
-      "Patient education",
-      "Exam preparation",
-    ],
+    clinicTasks: ["Anatomy language", "Patient education", "Exam preparation"],
     assets: [
       {
         title: "Module 2: Anatomy Overview",
@@ -180,6 +176,12 @@ export const bootcampSourceDays: BootcampSourceDay[] = [
         kind: "pdf",
         sourceFilename: "Mastering_Ophthalmic_Diagnostics_(2).pdf",
         storageKey: "pdfs/day-03/mastering-ophthalmic-diagnostics.pdf",
+      },
+      {
+        title: "Advanced Ocular Diagnostic Masterclass",
+        kind: "pdf",
+        sourceFilename: "Advanced_Ocular_Diagnostic_Masterclass.pdf",
+        storageKey: "pdfs/day-03/advanced-ocular-diagnostic-masterclass.pdf",
       },
       {
         title: "Diagnostics Infographic",
@@ -289,6 +291,14 @@ export const bootcampSourceDays: BootcampSourceDay[] = [
         kind: "pdf",
         sourceFilename: "Lensometry_Blueprint_(3).pdf",
         storageKey: "pdfs/day-05/lensometry-blueprint.pdf",
+      },
+      {
+        title: "Manual Lensometry Standards and Procedures",
+        kind: "pdf",
+        sourceFilename:
+          "Clinical Guide_ Manual Lensometry Standards and Procedures.pdf",
+        storageKey:
+          "pdfs/day-05/manual-lensometry-standards-and-procedures.pdf",
       },
       {
         title: "Precision Lens Topography",
@@ -418,11 +428,7 @@ export const bootcampSourceDays: BootcampSourceDay[] = [
       "Support efficient exam-room flow without sacrificing patient care.",
       "Understand entry-level ophthalmic medication categories.",
     ],
-    clinicTasks: [
-      "Medication history",
-      "Drop safety",
-      "Physician support",
-    ],
+    clinicTasks: ["Medication history", "Drop safety", "Physician support"],
     assets: [
       {
         title: "Day 5: Exam Room Skills and Pharma",
@@ -514,11 +520,7 @@ export const bootcampSourceDays: BootcampSourceDay[] = [
       "Prepare for final review and COA certification next steps.",
       "Understand COA, COT, and COMT career-path progression.",
     ],
-    clinicTasks: [
-      "Scenario review",
-      "Final test",
-      "Certification planning",
-    ],
+    clinicTasks: ["Scenario review", "Final test", "Certification planning"],
     assets: [
       {
         title: "Clinical Simulation Capstone",

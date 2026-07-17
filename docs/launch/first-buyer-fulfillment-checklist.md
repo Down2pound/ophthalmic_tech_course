@@ -35,6 +35,8 @@ Use this when someone buys Founding Learner Access.
       active enrollment.
 - [ ] Confirm the webhook response showed the welcome email as sent, or record
       why it was skipped.
+- [ ] Confirm the welcome email includes the support reference, checkout email,
+      access link, policy link, and safe-support warning.
 - [ ] Confirm the buyer can request a passwordless sign-in link.
 - [ ] Confirm the buyer can open Module 1.
 - [ ] Confirm the buyer can see course policies and support contact.
@@ -73,6 +75,9 @@ Use this when a practice buys a five-seat or fifteen-seat pack.
       and remaining seat count.
 - [ ] Confirm the webhook response showed the welcome email as sent, or record
       why it was skipped.
+- [ ] Confirm the welcome email includes the support reference, practice-seat
+      setup link, policy link, one-learner-per-seat reminder, and safe-support
+      warning.
 - [ ] Confirm the manager knows seat assignment happens through the protected
       practice setup process.
 - [ ] Confirm the manager has the support email and policy link.

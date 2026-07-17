@@ -10,7 +10,7 @@ safe setup recipe. It creates:
 
 - A Node web service named `optitech-academy`.
 - A managed PostgreSQL database named `optitech-academy-db`.
-- The build command: `pnpm install --frozen-lockfile && pnpm build`.
+- The build command: `corepack enable && corepack prepare pnpm@10.4.1 --activate && pnpm install --frozen-lockfile && pnpm build`.
 - The pre-deploy database setup command: `pnpm db:setup`.
 - The start command: `node dist/index.js`.
 - The health check path: `/api/health`.
@@ -19,6 +19,12 @@ For the short copy/paste checklist, run:
 
 ```bash
 pnpm launch:render-setup
+```
+
+For the full owner path from restored code to one controlled paid buyer, run:
+
+```bash
+pnpm launch:first-revenue
 ```
 
 ## Before You Click Deploy
@@ -168,15 +174,18 @@ From your home PC or any machine that can run the project commands:
 
 ```bash
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-render-or-custom-domain.example pnpm launch:smoke
+LAUNCH_BASE_URL=https://your-render-or-custom-domain.example pnpm launch:go-no-go
 ```
 
 Use that command before paid launch to confirm the deployed app and public buyer
-pages load.
+pages load. Use the go/no-go command to decide whether you can share preview
+links, collect practice inquiries, or send paid checkout links.
 
 After every gate is complete and `ENABLE_PAID_ENROLLMENT=true`, run:
 
 ```bash
 LAUNCH_BASE_URL=https://your-render-or-custom-domain.example pnpm launch:smoke
+LAUNCH_BASE_URL=https://your-render-or-custom-domain.example pnpm launch:go-no-go
 ```
 
 Only accept real buyers after that final smoke test passes.

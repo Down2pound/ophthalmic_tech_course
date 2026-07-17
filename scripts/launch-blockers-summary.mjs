@@ -143,5 +143,17 @@ lines.push(
 lines.push("");
 lines.push("Main checklist: docs/launch/go-live-checklist.md");
 lines.push("");
+lines.push("## Repeated Error Rule");
+lines.push("");
+lines.push(
+  "If the same command fails with the same error 3 times on the work computer, stop retrying it there."
+);
+lines.push(
+  "Write down the command, the repeated error, what already passed, and the next home-PC step."
+);
+lines.push(
+  "Known work-computer blocks include `spawn EPERM`, missing `git`, and `git: 'remote-https' is not a git command`."
+);
+lines.push("");
 
 console.log(lines.join("\n"));

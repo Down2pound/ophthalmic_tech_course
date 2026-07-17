@@ -18,6 +18,10 @@ import {
 } from "@shared/commerce/offers";
 import { normalizeCheckoutEmail } from "@shared/commerce/checkoutEmail";
 import {
+  getLearnerReadinessResult,
+  learnerReadinessItems,
+} from "@shared/commerce/learnerReadinessChecklist";
+import {
   buyerSupportContact,
   commercePolicies,
 } from "@shared/commerce/policies";
@@ -68,6 +72,9 @@ export default function Checkout() {
   const [learnerInterestMessage, setLearnerInterestMessage] = useState<
     string | null
   >(null);
+  const [learnerReadinessCheckedIds, setLearnerReadinessCheckedIds] = useState<
+    string[]
+  >([]);
   const checkoutStatus =
     typeof window === "undefined"
       ? null
@@ -76,6 +83,9 @@ export default function Checkout() {
   const emailHasText = email.trim().length > 0;
   const showEmailValidation = emailHasText && !normalizedEmail;
   const checkoutUnavailable = checkoutAvailability?.ready === false;
+  const learnerReadinessResult = getLearnerReadinessResult(
+    learnerReadinessCheckedIds
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -125,6 +135,13 @@ export default function Checkout() {
       ...current,
       [field]: value,
     }));
+  };
+  const toggleLearnerReadinessItem = (itemId: string, checked: boolean) => {
+    setLearnerReadinessCheckedIds(current => {
+      if (checked) return Array.from(new Set([...current, itemId]));
+
+      return current.filter(id => id !== itemId);
+    });
   };
 
   const handleLearnerInterestSubmit = async () => {
@@ -287,6 +304,68 @@ export default function Checkout() {
                   </ul>
                 </section>
               ))}
+            </div>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
+            <h2 className="text-2xl font-bold">
+              Quick learner readiness check
+            </h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              Check what is true for you. This does not approve or deny
+              enrollment; it helps you decide whether buying now makes sense.
+            </p>
+            <div className="mt-5 space-y-3">
+              {learnerReadinessItems.map(item => {
+                const checked = learnerReadinessCheckedIds.includes(item.id);
+
+                return (
+                  <label
+                    key={item.id}
+                    className="flex gap-3 rounded-md border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={event =>
+                        toggleLearnerReadinessItem(
+                          item.id,
+                          event.target.checked
+                        )
+                      }
+                      className="mt-1 h-4 w-4 flex-shrink-0"
+                    />
+                    <span>
+                      <span className="block font-semibold text-slate-950">
+                        {item.label}
+                      </span>
+                      <span className="mt-1 block text-slate-600">
+                        {item.whyItMatters}
+                      </span>
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+            <div
+              className={`mt-5 rounded-md border p-4 ${
+                learnerReadinessResult.level === "strong-fit"
+                  ? "border-green-200 bg-green-50 text-green-950"
+                  : learnerReadinessResult.level === "possible-fit"
+                    ? "border-blue-200 bg-blue-50 text-blue-950"
+                    : "border-amber-200 bg-amber-50 text-amber-950"
+              }`}
+            >
+              <p className="text-sm font-semibold">
+                {learnerReadinessResult.checkedCount} of{" "}
+                {learnerReadinessResult.totalCount} checked
+              </p>
+              <h3 className="mt-2 text-xl font-bold">
+                {learnerReadinessResult.title}
+              </h3>
+              <p className="mt-2 leading-7">
+                {learnerReadinessResult.guidance}
+              </p>
             </div>
           </Card>
 
@@ -572,6 +651,13 @@ export default function Checkout() {
               className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900"
             >
               View practice packs
+              <ArrowRight className="h-4 w-4" />
+            </a>
+            <a
+              href="/buyer-guide"
+              className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900"
+            >
+              Still deciding?
               <ArrowRight className="h-4 w-4" />
             </a>
             <a

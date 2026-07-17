@@ -31,16 +31,35 @@ pnpm launch:first-sales
 That command prints the same buyer links with your real domain already filled
 in.
 
+For the whole path from restored project to first controlled paid buyer, run:
+
+```bash
+pnpm launch:first-revenue
+```
+
+For a day-by-day first week outreach plan, run:
+
+```bash
+pnpm launch:first-week-sales
+```
+
 ```text
 Individual learners: https://your-real-domain.example/checkout
 Practice buyers: https://your-real-domain.example/practice-packs
 Course overview: https://your-real-domain.example/
+Free lesson preview: https://your-real-domain.example/preview
+Buyer decision guide: https://your-real-domain.example/buyer-guide
 Policies: https://your-real-domain.example/policies
 ```
 
 Send the individual learner link to career changers, medical assistants, and
 new technicians buying for themselves. Send the practice pack link to managers,
 supervisors, owners, or training leads buying seats for a team.
+When someone needs proof before buying, send the free lesson preview first.
+When someone asks whether the course fits their situation, send the buyer
+decision guide.
+When a practice manager is trying to justify the purchase, send the practice
+pack page and point them to the practice value planner.
 
 Do not send paid checkout links broadly until:
 
@@ -110,6 +129,12 @@ help someone feel much less lost when starting in eye care.
 
 Founding Learner Access is $199 for 12 months.
 
+Free preview:
+[Preview link]
+
+Buyer guide:
+[Buyer guide link]
+
 Would you be open to taking a look when enrollment opens?
 
 [Your Name]
@@ -144,6 +169,12 @@ The course does not replace employer supervision, clinical policy, or hands-on
 competency signoff. The goal is to make the first layer of training more
 consistent before the learner practices in clinic.
 
+Free preview:
+[Preview link]
+
+Buyer guide:
+[Buyer guide link]
+
 Would it be useful for your team if I sent the course overview link when it is
 ready?
 
@@ -174,14 +205,15 @@ totally fine.
 Use these when someone is interested but unsure. Keep the answer short, helpful,
 and honest. The goal is to lower confusion, not pressure someone.
 
-| If they say...                             | Safe answer                                                                                                                                             | Next step                                                              |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| "Is this a certification course?"          | "No. It is foundational education for ophthalmic vocabulary, clinic flow, patient communication, and supervised practice preparation."                  | Send the policies page with the course overview.                       |
-| "I need to talk to my manager first."      | "That makes sense. The practice-pack page explains seat options, limits, and how supervisors can pair the course with local hands-on training."         | Ask: "Can you send me the practice pack link and the policies page?"   |
-| "What if I am brand new to eye care?"      | "That is the intended learner. The course starts with plain-language foundations before moving into clinic habits and knowledge checks."                | Send the individual learner link and invite one question.              |
-| "Can this replace our in-office training?" | "No. It can make the first layer of onboarding more consistent, but local protocols, observation, and hands-on signoff still belong with the practice." | Offer the practice pack page or a custom practice conversation.        |
-| "Why should we buy now?"                   | "The founding version is priced for early buyers who want structured foundations and are willing to share feedback as the course improves."             | Ask whether individual access or a practice pack fits their situation. |
-| "What if it is not a fit?"                 | "The course has clear policies and support expectations. Refund review is available under the posted refund policy."                                    | Send the policies page and support email.                              |
+| If they say...                             | Safe answer                                                                                                                                                                         | Next step                                                              |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| "Is this a certification course?"          | "No. It is foundational education for ophthalmic vocabulary, clinic flow, patient communication, and supervised practice preparation."                                              | Send the policies page with the course overview.                       |
+| "I need to talk to my manager first."      | "That makes sense. The practice-pack page explains seat options, limits, and how supervisors can pair the course with local hands-on training."                                     | Ask: "Can you send me the practice pack link and the policies page?"   |
+| "What if I am brand new to eye care?"      | "That is the intended learner. The course starts with plain-language foundations before moving into clinic habits and knowledge checks."                                            | Send the individual learner link and invite one question.              |
+| "Can this replace our in-office training?" | "No. It can make the first layer of onboarding more consistent, but local protocols, observation, and hands-on signoff still belong with the practice."                             | Offer the practice pack page or a custom practice conversation.        |
+| "Why should we buy now?"                   | "The founding version is priced for early buyers who want structured foundations and are willing to share feedback as the course improves."                                         | Ask whether individual access or a practice pack fits their situation. |
+| "How do I justify this to an owner?"       | "The practice-pack page includes a planning tool that compares seat-pack cost with supervisor time spent repeating basic onboarding foundations. It is an estimate, not a promise." | Send the practice pack page and buyer guide.                           |
+| "What if it is not a fit?"                 | "The course has clear policies and support expectations. Refund review is available under the posted refund policy."                                                                | Send the policies page and support email.                              |
 
 Do not pressure the buyer or offer medical, legal, hiring, billing, or
 certification advice. If someone needs employer approval, give them the correct
@@ -247,6 +279,7 @@ Week 1:
 - Contact 10 warm leads.
 - Ask for 3 feedback conversations.
 - Run at least one full test purchase before sharing widely.
+- Use `pnpm launch:first-week-sales` to split the work into daily actions.
 
 Week 2:
 

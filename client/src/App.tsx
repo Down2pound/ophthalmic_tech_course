@@ -1,28 +1,44 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
+import { lazy, Suspense } from "react";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-import Curriculum from "./pages/Curriculum";
-import Learn from "./pages/Learn";
-import Checkout from "./pages/Checkout";
-import Policies from "./pages/Policies";
-import SkillsPassport from "./pages/SkillsPassport";
-import CareerToolkit from "./pages/CareerToolkit";
-import OnboardingAssessment from "./pages/OnboardingAssessment";
-import PracticePacks from "./pages/PracticePacks";
-import PracticeSeatAdmin from "./pages/PracticeSeatAdmin";
-import CertificatePreview from "./pages/CertificatePreview";
-import LaunchReadiness from "./pages/LaunchReadiness";
-import AdminAlertTemplates from "./pages/AdminAlertTemplates";
-import SendAlerts from "./pages/SendAlerts";
+
+const Home = lazy(() => import("./pages/Home"));
+const Curriculum = lazy(() => import("./pages/Curriculum"));
+const FreePreview = lazy(() => import("./pages/FreePreview"));
+const BuyerGuide = lazy(() => import("./pages/BuyerGuide"));
+const Learn = lazy(() => import("./pages/Learn"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const Policies = lazy(() => import("./pages/Policies"));
+const SkillsPassport = lazy(() => import("./pages/SkillsPassport"));
+const CareerToolkit = lazy(() => import("./pages/CareerToolkit"));
+const OnboardingAssessment = lazy(() => import("./pages/OnboardingAssessment"));
+const PracticePacks = lazy(() => import("./pages/PracticePacks"));
+const PracticeSeatAdmin = lazy(() => import("./pages/PracticeSeatAdmin"));
+const CertificatePreview = lazy(() => import("./pages/CertificatePreview"));
+const LaunchReadiness = lazy(() => import("./pages/LaunchReadiness"));
+const AdminAlertTemplates = lazy(() => import("./pages/AdminAlertTemplates"));
+const SendAlerts = lazy(() => import("./pages/SendAlerts"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+function PageLoading() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 text-slate-700">
+      <div className="rounded-md border border-slate-200 bg-white px-5 py-4 text-sm font-semibold shadow-sm">
+        Loading OptiTech Academy...
+      </div>
+    </main>
+  );
+}
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/preview"} component={FreePreview} />
+      <Route path={"/buyer-guide"} component={BuyerGuide} />
       <Route path={"/curriculum"} component={Curriculum} />
       <Route path={"/learn"} component={Learn} />
       <Route path={"/checkout"} component={Checkout} />
@@ -57,7 +73,9 @@ function App() {
       >
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <Suspense fallback={<PageLoading />}>
+            <Router />
+          </Suspense>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
