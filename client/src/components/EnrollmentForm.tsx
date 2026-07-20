@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle2 } from "lucide-react";
+import { AlertCircle, Loader2, X } from "lucide-react";
 
 interface EnrollmentFormProps {
   tier: string;
@@ -17,194 +17,222 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
     experience: "beginner",
     goal: "",
     type: "individual",
+    organizationName: "",
+    seats: "1",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 3000);
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/enrollment/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, tier }),
+      });
+      const payload = (await response.json()) as { url?: string; error?: string };
+
+      if (!response.ok || !payload.url) {
+        throw new Error(payload.error ?? "Unable to start secure checkout.");
+      }
+
+      window.location.assign(payload.url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to start secure checkout.");
+      setIsSubmitting(false);
+    }
   };
 
-  if (submitted) {
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <Card className="w-full max-w-md p-8 text-center">
-          <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Enrollment Submitted!</h3>
-          <p className="text-gray-600 mb-4">
-            Thank you for enrolling in the {tier.charAt(0).toUpperCase() + tier.slice(1)} program. Check your email for next steps.
-          </p>
-          <p className="text-sm text-gray-500">Redirecting...</p>
-        </Card>
-      </div>
-    );
-  }
-
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <Card className="w-full max-w-2xl p-8 my-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-900">Enroll in {tier.charAt(0).toUpperCase() + tier.slice(1)} Program</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4">
+      <Card className="my-8 w-full max-w-2xl p-8">
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900">Enroll in OptiTech Academy</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Complete the form to continue to Stripe's secure checkout for the $699 one-time course purchase.
+            </p>
+          </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            className="text-gray-500 hover:text-gray-700"
+            aria-label="Close enrollment form"
           >
-            ×
+            <X className="h-6 w-6" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Personal Information */}
           <div className="space-y-4">
             <h3 className="font-semibold text-gray-900">Personal Information</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name *
-                </label>
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="text-sm font-medium text-gray-700">
+                First Name *
                 <input
                   type="text"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="John"
+                  autoComplete="given-name"
+                  className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name *
-                </label>
+              </label>
+              <label className="text-sm font-medium text-gray-700">
+                Last Name *
                 <input
                   type="text"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Doe"
+                  autoComplete="family-name"
+                  className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                 />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address *
               </label>
+            </div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email Address *
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="john@example.com"
+                autoComplete="email"
+                className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number *
-              </label>
+            </label>
+            <label className="block text-sm font-medium text-gray-700">
+              Phone Number *
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="(555) 123-4567"
+                autoComplete="tel"
+                className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               />
-            </div>
+            </label>
           </div>
 
-          {/* Professional Information */}
           <div className="space-y-4">
             <h3 className="font-semibold text-gray-900">Professional Background</h3>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Experience Level *
-              </label>
+            <label className="block text-sm font-medium text-gray-700">
+              Experience Level *
               <select
                 name="experience"
                 value={formData.experience}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               >
-                <option value="beginner">Beginner - No ophthalmic experience</option>
+                <option value="beginner">Beginner — no ophthalmic experience</option>
                 <option value="some">Some experience in eye care</option>
-                <option value="experienced">Experienced technician seeking certification</option>
+                <option value="experienced">Experienced technician seeking additional training</option>
               </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Enrollment Type *
-              </label>
+            </label>
+            <label className="block text-sm font-medium text-gray-700">
+              Enrollment Type *
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               >
                 <option value="individual">Individual Technician</option>
-                <option value="practice">Practice/Clinic Team</option>
+                <option value="practice">Practice or Clinic Team</option>
               </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                What is your primary goal? *
-              </label>
+            </label>
+
+            {formData.type === "practice" && (
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Practice or Clinic Name *
+                  <input
+                    type="text"
+                    name="organizationName"
+                    value={formData.organizationName}
+                    onChange={handleChange}
+                    required
+                    className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                  />
+                </label>
+                <label className="text-sm font-medium text-gray-700">
+                  Number of Seats *
+                  <input
+                    type="number"
+                    name="seats"
+                    value={formData.seats}
+                    onChange={handleChange}
+                    min="1"
+                    max="50"
+                    required
+                    className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                  />
+                </label>
+              </div>
+            )}
+
+            <label className="block text-sm font-medium text-gray-700">
+              What is your primary training goal? *
               <textarea
                 name="goal"
                 value={formData.goal}
                 onChange={handleChange}
                 required
+                maxLength={500}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="e.g., I want to become certified as an ophthalmic technician..."
+                className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                placeholder="Tell us what you hope to learn or improve."
               />
-            </div>
+            </label>
           </div>
 
-          {/* Agreement */}
-          <div className="bg-blue-50 p-4 rounded-lg">
+          <div className="rounded-lg bg-blue-50 p-4">
             <label className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                required
-                className="mt-1 w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-              />
+              <input type="checkbox" required className="mt-1 h-4 w-4 rounded text-blue-600" />
               <span className="text-sm text-gray-700">
-                I agree to the terms of service and privacy policy. I understand this is a 7-day intensive program.
+                I agree to the terms of service and privacy policy. I understand this is a self-paced, 10-module online training course and that a certificate of completion is not a professional certification.
               </span>
             </label>
           </div>
 
-          {/* Buttons */}
-          <div className="flex gap-4">
+          {error && (
+            <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-3 sm:flex-row">
             <Button
               type="submit"
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={isSubmitting}
+              className="flex-1 bg-blue-600 text-white hover:bg-blue-700"
             >
-              Complete Enrollment
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Opening Secure Checkout
+                </>
+              ) : (
+                "Continue to Secure Checkout"
+              )}
             </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="flex-1"
-            >
+            <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting} className="flex-1">
               Cancel
             </Button>
           </div>
