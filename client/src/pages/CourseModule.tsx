@@ -2,8 +2,8 @@ import CourseQuiz from "@/components/CourseQuiz";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getCourseContent } from "@/data/courseContent";
-import { getModuleById, curriculumModules } from "@/data/curriculum";
-import { getQuizByDay } from "@/data/quizzes";
+import { getCourseQuizByDay } from "@/data/courseQuizzes";
+import { curriculumModules } from "@/data/curriculum";
 import { ApiError, apiRequest, type CourseUser } from "@/lib/api";
 import { AlertTriangle, ArrowLeft, CheckCircle2, Clock, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -17,7 +17,7 @@ export default function CourseModule() {
     [day],
   );
   const lesson = getCourseContent(day);
-  const quiz = getQuizByDay(day);
+  const quiz = getCourseQuizByDay(day);
   const [user, setUser] = useState<CourseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
