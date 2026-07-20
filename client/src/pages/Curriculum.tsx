@@ -1,207 +1,100 @@
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, BookOpen, Video, FileText, HelpCircle, Clock } from "lucide-react";
-import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import { curriculumModules, getTotalCourseDuration } from "@/data/curriculum";
+import { ArrowLeft, BookOpen, CheckCircle2, Clock } from "lucide-react";
+import { useState } from "react";
 
 export default function Curriculum() {
-  const [expandedDay, setExpandedDay] = useState<number | null>(null);
+  const [expandedDay, setExpandedDay] = useState<number | null>(1);
   const totalDuration = getTotalCourseDuration();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex items-center gap-3 mb-4">
-            <BookOpen className="w-8 h-8" />
-            <h1 className="text-4xl font-bold">10-Day Course Curriculum</h1>
-          </div>
-          <p className="text-xl text-blue-100">
-            Comprehensive, structured learning path to master ophthalmic technician skills
-          </p>
-          <div className="flex items-center gap-2 mt-4 text-blue-100">
-            <Clock className="w-5 h-5" />
-            <span>Total Course Duration: {totalDuration.toFixed(1)} hours</span>
+    <div className="min-h-screen bg-slate-100">
+      <header className="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 px-4 py-14 text-white">
+        <div className="mx-auto max-w-6xl">
+          <a href="/" className="mb-7 inline-flex items-center text-sm text-blue-200 hover:text-white">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Course Home
+          </a>
+          <div className="flex items-start gap-4">
+            <BookOpen className="mt-1 h-10 w-10 text-cyan-400" />
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wider text-cyan-300">Public Preview</p>
+              <h1 className="mt-2 text-4xl font-bold sm:text-5xl">Ophthalmic Technician Foundations</h1>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-300">
+                Ten self-paced modules with instructional lessons, supervised-practice checklists, safety guidance, and end-of-module assessments.
+              </p>
+              <p className="mt-4 inline-flex items-center text-blue-100">
+                <Clock className="mr-2 h-5 w-5" /> Approximately {totalDuration.toFixed(1)} hours
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid gap-4">
-          {curriculumModules.map((module) => (
-            <Card
-              key={module.id}
-              className="overflow-hidden hover:shadow-lg transition-shadow"
-            >
-              <button
-                onClick={() =>
-                  setExpandedDay(
-                    expandedDay === module.day ? null : module.day
-                  )
-                }
-                className="w-full p-6 flex items-start justify-between hover:bg-blue-50 transition-colors"
-              >
-                <div className="flex items-start gap-4 flex-1 text-left">
-                  <div className="text-4xl">{module.icon}</div>
+      <main className="mx-auto max-w-6xl px-4 py-12">
+        <div className="space-y-4">
+          {curriculumModules.map((module) => {
+            const expanded = expandedDay === module.day;
+            return (
+              <Card key={module.id} className="overflow-hidden bg-white shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setExpandedDay(expanded ? null : module.day)}
+                  className="flex w-full items-start gap-4 p-6 text-left hover:bg-blue-50"
+                  aria-expanded={expanded}
+                >
+                  <span className="text-4xl">{module.icon}</span>
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-sm font-semibold text-blue-600">
-                        Day {module.day}
-                      </h3>
-                      <div className="flex items-center gap-1 text-xs">
-                        <Clock className="w-3 h-3 text-gray-500" />
-                        <span className="text-gray-600">{module.duration}</span>
+                    <div className="flex flex-wrap items-center gap-3 text-sm">
+                      <span className="font-bold text-blue-600">Day {module.day}</span>
+                      <span className="text-slate-500">{module.duration}</span>
+                      <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600">{module.difficulty}</span>
+                    </div>
+                    <h2 className="mt-2 text-xl font-bold text-slate-900">{module.title}</h2>
+                    <p className="mt-2 text-slate-600">{module.description}</p>
+                  </div>
+                  <span className="text-2xl font-light text-blue-600">{expanded ? "−" : "+"}</span>
+                </button>
+
+                {expanded && (
+                  <div className="border-t border-slate-200 bg-slate-50 p-6">
+                    <div className="grid gap-7 md:grid-cols-2">
+                      <div>
+                        <h3 className="font-bold text-slate-900">Learning Objectives</h3>
+                        <ul className="mt-4 space-y-3">
+                          {module.objectives.map((objective) => (
+                            <li key={objective} className="flex items-start gap-3 text-slate-700">
+                              <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" /> {objective}
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                      {module.difficulty && (
-                        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                          module.difficulty === "Beginner"
-                            ? "bg-green-100 text-green-700"
-                            : module.difficulty === "Intermediate"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-red-100 text-red-700"
-                        }`}>
-                          {module.difficulty}
-                        </span>
-                      )}
-                    </div>
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">
-                      {module.title}
-                    </h2>
-                    <p className="text-gray-600">{module.description}</p>
-                  </div>
-                </div>
-                <div className="ml-4">
-                  {expandedDay === module.day ? (
-                    <ChevronUp className="w-6 h-6 text-blue-600 flex-shrink-0" />
-                  ) : (
-                    <ChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0" />
-                  )}
-                </div>
-              </button>
-
-              {/* Expanded Content */}
-              {expandedDay === module.day && (
-                <div className="border-t bg-gray-50 p-6 space-y-6">
-                  {/* Learning Objectives */}
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <Video className="w-5 h-5 text-blue-600" />
-                      Learning Objectives
-                    </h4>
-                    <ul className="space-y-2">
-                      {module.objectives.map((objective, idx) => (
-                        <li key={idx} className="flex items-start gap-3">
-                          <span className="text-blue-600 font-bold mt-1">
-                            ✓
-                          </span>
-                          <span className="text-gray-700">{objective}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Key Topics */}
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-blue-600" />
-                      Key Topics
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {module.topics.map((topic, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-white p-3 rounded-lg border border-blue-100"
-                        >
-                          <p className="text-gray-700">{topic}</p>
+                      <div>
+                        <h3 className="font-bold text-slate-900">Key Topics</h3>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {module.topics.map((topic) => (
+                            <span key={topic} className="rounded-full border border-blue-200 bg-white px-3 py-2 text-sm text-slate-700">{topic}</span>
+                          ))}
                         </div>
-                      ))}
+                      </div>
                     </div>
                   </div>
-
-                  {/* Studio Assets */}
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <HelpCircle className="w-5 h-5 text-blue-600" />
-                      Learning Materials
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {module.assets.map((asset, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium"
-                        >
-                          {asset}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* CTA */}
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                    Enroll to Access This Content
-                  </Button>
-                </div>
-              )}
-            </Card>
-          ))}
+                )}
+              </Card>
+            );
+          })}
         </div>
 
-        {/* Summary Section */}
-        <Card className="mt-12 p-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            What You'll Master
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex gap-3">
-              <span className="text-2xl">🎯</span>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1">
-                  Clinical Skills
-                </h4>
-                <p className="text-gray-600">
-                  Master all essential ophthalmic diagnostic and imaging
-                  techniques
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <span className="text-2xl">💼</span>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1">
-                  Professional Competency
-                </h4>
-                <p className="text-gray-600">
-                  Develop soft skills and professional communication abilities
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <span className="text-2xl">📚</span>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1">
-                  Knowledge Foundation
-                </h4>
-                <p className="text-gray-600">
-                  Build comprehensive understanding of ophthalmic principles
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <span className="text-2xl">🚀</span>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1">
-                  Career Ready
-                </h4>
-                <p className="text-gray-600">
-                  Prepare for certification and career advancement
-                </p>
-              </div>
-            </div>
-          </div>
+        <Card className="mt-10 border-blue-200 bg-gradient-to-r from-blue-50 to-cyan-50 p-8 text-center">
+          <h2 className="text-3xl font-bold text-slate-900">Ready to begin?</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-slate-600">
+            Enrollment is $699 per student seat and includes all lessons, quizzes, saved progress, and the course completion certificate.
+          </p>
+          <a href="/#pricing">
+            <Button className="mt-6 bg-blue-600 px-8 py-6 text-white hover:bg-blue-700">View Pricing and Enroll</Button>
+          </a>
         </Card>
-      </div>
+      </main>
     </div>
   );
 }

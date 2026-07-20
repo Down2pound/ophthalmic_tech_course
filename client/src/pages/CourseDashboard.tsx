@@ -1,0 +1,224 @@
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { curriculumModules } from "@/data/curriculum";
+import { ApiError, apiRequest, type CourseUser } from "@/lib/api";
+import {
+  Award,
+  CheckCircle2,
+  Clipboard,
+  Eye,
+  Loader2,
+  LogOut,
+  PlayCircle,
+  Users,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+
+interface TeamResponse {
+  team: CourseUser[];
+  invites: Array<{
+    code: string;
+    createdAt: string;
+    usedAt?: string;
+    usedBy?: string;
+  }>;
+  seatLimit: number;
+}
+
+export default function CourseDashboard() {
+  const [user, setUser] = useState<CourseUser | null>(null);
+  const [team, setTeam] = useState<TeamResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [copiedCode, setCopiedCode] = useState("");
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const response = await apiRequest<{ user: CourseUser }>("/api/auth/me");
+        setUser(response.user);
+        if (response.user.role === "manager") {
+          setTeam(await apiRequest<TeamResponse>("/api/practice/team"));
+        }
+      } catch (requestError) {
+        if (requestError instanceof ApiError && requestError.status === 401) {
+          window.location.assign("/login");
+          return;
+        }
+        setError(requestError instanceof Error ? requestError.message : "Unable to load the course.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    void load();
+  }, []);
+
+  const logout = async () => {
+    await apiRequest("/api/auth/logout", { method: "POST" });
+    window.location.assign("/");
+  };
+
+  const copyInvite = async (code: string) => {
+    const inviteUrl = `${window.location.origin}/join/${code}`;
+    await navigator.clipboard.writeText(inviteUrl);
+    setCopiedCode(code);
+    window.setTimeout(() => setCopiedCode(""), 2000);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
+        <Loader2 className="mr-3 h-6 w-6 animate-spin" /> Loading your course...
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <div className="min-h-screen bg-slate-950 p-8 text-center text-red-300">{error || "Course access is unavailable."}</div>;
+  }
+
+  const percentComplete = Math.round((user.completedModules / curriculumModules.length) * 100);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white">
+      <header className="border-b border-white/10 bg-slate-950/70 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5">
+          <a href="/course" className="flex items-center gap-2 font-bold">
+            <Eye className="h-6 w-6 text-cyan-400" /> OptiTech Academy
+          </a>
+          <div className="flex items-center gap-3">
+            <span className="hidden text-sm text-slate-300 sm:inline">{user.firstName} {user.lastName}</span>
+            <Button variant="outline" onClick={logout} className="border-white/20 bg-transparent text-white hover:bg-white/10">
+              <LogOut className="mr-2 h-4 w-4" /> Sign Out
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-7xl space-y-10 px-4 py-10">
+        <section className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+          <Card className="border-white/10 bg-white/10 p-8 text-white backdrop-blur">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-cyan-300">Student Dashboard</p>
+            <h1 className="text-4xl font-bold">Welcome back, {user.firstName}</h1>
+            <p className="mt-3 max-w-2xl text-slate-300">
+              Complete each lesson and earn at least 70% on every module quiz to receive the course completion certificate.
+            </p>
+            <div className="mt-7">
+              <div className="mb-2 flex justify-between text-sm text-slate-300">
+                <span>{user.completedModules} of {curriculumModules.length} modules passed</span>
+                <span>{percentComplete}%</span>
+              </div>
+              <div className="h-3 overflow-hidden rounded-full bg-slate-800">
+                <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style={{ width: `${percentComplete}%` }} />
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-white/10 bg-white/10 p-8 text-white backdrop-blur">
+            <Award className="mb-4 h-10 w-10 text-amber-300" />
+            <h2 className="text-2xl font-bold">Completion Certificate</h2>
+            <p className="mt-2 text-sm text-slate-300">
+              {user.certificateEligible
+                ? "All modules are complete. Your printable certificate is ready."
+                : `${curriculumModules.length - user.completedModules} module(s) remain.`}
+            </p>
+            <a href="/course/certificate" className="mt-5 block">
+              <Button disabled={!user.certificateEligible} className="w-full bg-amber-500 text-slate-950 hover:bg-amber-400">
+                View Certificate
+              </Button>
+            </a>
+          </Card>
+        </section>
+
+        <section>
+          <div className="mb-5 flex items-end justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wider text-cyan-300">Course Modules</p>
+              <h2 className="text-3xl font-bold">10-Day Learning Path</h2>
+            </div>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {curriculumModules.map((module) => {
+              const progress = user.progress.find((item) => item.day === module.day);
+              return (
+                <Card key={module.id} className="border-white/10 bg-white p-6 text-slate-900 shadow-lg">
+                  <div className="flex items-start gap-4">
+                    <div className="text-4xl">{module.icon}</div>
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm font-bold text-blue-600">Day {module.day}</span>
+                        {progress?.passed && (
+                          <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+                            <CheckCircle2 className="mr-1 h-3 w-3" /> Passed {progress.score}%
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="mt-1 text-xl font-bold">{module.title}</h3>
+                      <p className="mt-2 text-sm text-slate-600">{module.description}</p>
+                      <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
+                        <span>{module.duration}</span>
+                        <span>{module.difficulty}</span>
+                      </div>
+                      <a href={`/course/module/${module.day}`} className="mt-5 block">
+                        <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                          <PlayCircle className="mr-2 h-4 w-4" />
+                          {progress?.passed ? "Review Module" : progress ? "Continue Module" : "Start Module"}
+                        </Button>
+                      </a>
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+
+        {user.role === "manager" && team && (
+          <section className="space-y-5">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wider text-cyan-300">Practice Management</p>
+              <h2 className="flex items-center gap-2 text-3xl font-bold"><Users className="h-7 w-7" /> Team Seats</h2>
+              <p className="mt-2 text-slate-300">{team.team.length} of {team.seatLimit} purchased seats assigned.</p>
+            </div>
+
+            <div className="grid gap-5 lg:grid-cols-2">
+              <Card className="bg-white p-6 text-slate-900">
+                <h3 className="mb-4 text-xl font-bold">Team Progress</h3>
+                <div className="space-y-3">
+                  {team.team.map((member) => (
+                    <div key={member.id} className="flex items-center justify-between rounded-lg bg-slate-50 p-3">
+                      <div>
+                        <p className="font-semibold">{member.firstName} {member.lastName}</p>
+                        <p className="text-xs text-slate-500">{member.email}</p>
+                      </div>
+                      <span className="text-sm font-semibold text-blue-700">{member.completedModules}/10</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              <Card className="bg-white p-6 text-slate-900">
+                <h3 className="mb-2 text-xl font-bold">Unused Invitation Links</h3>
+                <p className="mb-4 text-sm text-slate-600">Copy one private link for each additional staff member.</p>
+                <div className="space-y-3">
+                  {team.invites.filter((invite) => !invite.usedAt).map((invite) => (
+                    <div key={invite.code} className="flex items-center gap-2 rounded-lg border border-slate-200 p-3">
+                      <code className="min-w-0 flex-1 truncate text-xs">{window.location.origin}/join/{invite.code}</code>
+                      <Button size="sm" variant="outline" onClick={() => copyInvite(invite.code)}>
+                        <Clipboard className="mr-1 h-3 w-3" /> {copiedCode === invite.code ? "Copied" : "Copy"}
+                      </Button>
+                    </div>
+                  ))}
+                  {team.invites.every((invite) => invite.usedAt) && (
+                    <p className="rounded-lg bg-slate-50 p-4 text-sm text-slate-600">No unused invitations remain.</p>
+                  )}
+                </div>
+              </Card>
+            </div>
+          </section>
+        )}
+      </main>
+    </div>
+  );
+}
