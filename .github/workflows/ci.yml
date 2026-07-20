@@ -16,5 +16,16 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run check
-      - run: pnpm run build
+      - name: TypeScript check
+        run: pnpm run check 2>&1 | tee typecheck.log
+      - name: Production build
+        run: pnpm run build 2>&1 | tee build.log
+      - name: Upload validation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-logs
+          path: |
+            typecheck.log
+            build.log
+          if-no-files-found: ignore
