@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /spindel
 Disallow: /course
 Disallow: /login
 Disallow: /forgot-password

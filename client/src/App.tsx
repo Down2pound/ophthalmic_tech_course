@@ -11,6 +11,8 @@ import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
 import { Disclaimer, Privacy, Refunds, Terms } from "@/pages/Policies";
 import ResetPassword from "@/pages/ResetPassword";
+import SpindelLogin from "@/pages/SpindelLogin";
+import SpindelWelcome from "@/pages/SpindelWelcome";
 import Support from "@/pages/Support";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -24,6 +26,8 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/curriculum" component={Curriculum} />
+      <Route path="/spindel" component={SpindelWelcome} />
+      <Route path="/spindel/login" component={SpindelLogin} />
       <Route path="/enrollment/success" component={EnrollmentSuccess} />
       <Route path="/enrollment/activate" component={ActivateEnrollment} />
       <Route path="/login" component={Login} />
