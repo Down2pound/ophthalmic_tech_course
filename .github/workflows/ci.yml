@@ -16,6 +16,8 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Automated tests
+        run: pnpm run test 2>&1 | tee test.log
       - name: TypeScript check
         run: pnpm run check 2>&1 | tee typecheck.log
       - name: Production build
@@ -26,6 +28,7 @@ jobs:
         with:
           name: validation-logs
           path: |
+            test.log
             typecheck.log
             build.log
           if-no-files-found: ignore

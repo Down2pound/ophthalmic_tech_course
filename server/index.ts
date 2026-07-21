@@ -13,8 +13,24 @@ import {
   verifyPassword,
 } from "./auth";
 import {
+  emailConfigured,
+  sendActivationEmail,
+  sendPasswordResetEmail,
+  sendSaleNotification,
+  sendSupportMessage,
+} from "./email";
+import {
+  createOpaqueToken,
+  hashOpaqueToken,
+  rateLimit,
+  requireSameOrigin,
+  securityHeaders,
+  verifyStripeSignature,
+} from "./security";
+import {
   mutateDatabase,
   readDatabase,
+  type CoursePurchase,
   type CourseUser,
   type PracticeInvite,
 } from "./store";
@@ -24,6 +40,9 @@ const __dirname = path.dirname(__filename);
 const COURSE_ID = "ophthalmic-technician-foundations";
 const MODULE_COUNT = 10;
 const PASSING_SCORE = 70;
+const TERMS_VERSION = "2026-07-21";
+const ACTIVATION_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
+const PASSWORD_RESET_DURATION_MS = 60 * 60 * 1000;
 
 class HttpError extends Error {
   constructor(
@@ -32,6 +51,25 @@ class HttpError extends Error {
   ) {
     super(message);
   }
+}
+
+interface StripeCheckoutSession {
+  id?: string;
+  mode?: string;
+  status?: string;
+  payment_status?: string;
+  customer_email?: string | null;
+  customer_details?: { email?: string | null } | null;
+  payment_intent?: string | { id?: string } | null;
+  metadata?: Record<string, string> | null;
+  error?: { message?: string };
+  url?: string;
+}
+
+interface StripeEvent {
+  id?: string;
+  type?: string;
+  data?: { object?: StripeCheckoutSession };
 }
 
 function readString(value: unknown, maxLength = 500): string {
@@ -43,15 +81,38 @@ function readInteger(value: unknown): number {
   return Number.parseInt(readString(value, 12), 10);
 }
 
-function getBaseUrl(req: express.Request): string {
+function getBaseUrl(req?: express.Request): string {
   const configuredUrl = process.env.PUBLIC_APP_URL?.trim();
   if (configuredUrl) return configuredUrl.replace(/\/$/, "");
+  if (!req) return "http://localhost:3000";
 
   const forwardedProtocol = req.get("x-forwarded-proto")?.split(",")[0]?.trim();
   const protocol = forwardedProtocol || req.protocol;
   const host = req.get("host");
   if (!host) throw new Error("Unable to determine the public application URL.");
   return `${protocol}://${host}`;
+}
+
+function requireProductionConfiguration(): void {
+  if (process.env.NODE_ENV !== "production") return;
+
+  const required = [
+    "PUBLIC_APP_URL",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_STANDARD_PRICE_ID",
+    "STRIPE_WEBHOOK_SECRET",
+    "SESSION_SECRET",
+    "DATA_FILE",
+    "RESEND_API_KEY",
+    "EMAIL_FROM",
+    "SUPPORT_EMAIL",
+    "BUSINESS_LEGAL_NAME",
+    "BUSINESS_ADDRESS",
+  ];
+  const missing = required.filter((key) => !process.env[key]?.trim());
+  if (missing.length > 0) {
+    throw new Error(`Missing required production environment variables: ${missing.join(", ")}`);
+  }
 }
 
 function createInviteCode(): string {
@@ -97,17 +158,16 @@ async function requireUser(
   return user;
 }
 
-interface StripeCheckoutSession {
-  id?: string;
-  mode?: string;
-  status?: string;
-  payment_status?: string;
-  customer_email?: string | null;
-  customer_details?: { email?: string | null } | null;
-  payment_intent?: string | { id?: string } | null;
-  metadata?: Record<string, string> | null;
-  error?: { message?: string };
-  url?: string;
+function validatePaidSession(session: StripeCheckoutSession): void {
+  if (
+    !session.id ||
+    session.mode !== "payment" ||
+    session.status !== "complete" ||
+    session.payment_status !== "paid" ||
+    session.metadata?.courseId !== COURSE_ID
+  ) {
+    throw new HttpError(400, "Payment has not been verified for this course.");
+  }
 }
 
 async function getStripeCheckoutSession(sessionId: string): Promise<StripeCheckoutSession> {
@@ -125,27 +185,248 @@ async function getStripeCheckoutSession(sessionId: string): Promise<StripeChecko
   return session;
 }
 
+function purchaseDetails(session: StripeCheckoutSession) {
+  validatePaidSession(session);
+  const metadata = session.metadata ?? {};
+  const email = (session.customer_details?.email || session.customer_email || "")
+    .trim()
+    .toLowerCase();
+  const paymentIntentId =
+    typeof session.payment_intent === "string"
+      ? session.payment_intent
+      : session.payment_intent?.id;
+
+  if (!email) throw new HttpError(400, "Stripe did not return a customer email address.");
+
+  return {
+    checkoutSessionId: session.id as string,
+    paymentIntentId,
+    email,
+    firstName: readString(metadata.firstName, 80) || "Course",
+    lastName: readString(metadata.lastName, 80) || "Student",
+    enrollmentType: metadata.enrollmentType === "practice" ? "practice" as const : "individual" as const,
+    organizationName: readString(metadata.organizationName, 160) || undefined,
+    seats: Math.min(Math.max(readInteger(metadata.seats) || 1, 1), 50),
+  };
+}
+
+async function ensurePurchase(session: StripeCheckoutSession): Promise<CoursePurchase> {
+  const details = purchaseDetails(session);
+  const newActivationToken = createOpaqueToken();
+  let tokenToEmail: string | null = null;
+
+  const purchase = await mutateDatabase((database) => {
+    const existing = database.purchases.find(
+      (candidate) => candidate.checkoutSessionId === details.checkoutSessionId,
+    );
+
+    if (existing) {
+      if (!existing.activatedAt && !existing.emailSentAt) {
+        existing.activationTokenHash = hashOpaqueToken(newActivationToken);
+        existing.activationExpiresAt = new Date(Date.now() + ACTIVATION_DURATION_MS).toISOString();
+        tokenToEmail = newActivationToken;
+      }
+      return existing;
+    }
+
+    const created: CoursePurchase = {
+      ...details,
+      activationTokenHash: hashOpaqueToken(newActivationToken),
+      activationExpiresAt: new Date(Date.now() + ACTIVATION_DURATION_MS).toISOString(),
+      createdAt: new Date().toISOString(),
+    };
+    database.purchases.push(created);
+    tokenToEmail = newActivationToken;
+    return created;
+  });
+
+  if (tokenToEmail) {
+    const sent = await sendActivationEmail({
+      email: purchase.email,
+      firstName: purchase.firstName,
+      token: tokenToEmail,
+      checkoutSessionId: purchase.checkoutSessionId,
+    });
+    await sendSaleNotification({
+      email: purchase.email,
+      enrollmentType: purchase.enrollmentType,
+      seats: purchase.seats,
+      checkoutSessionId: purchase.checkoutSessionId,
+    });
+
+    if (sent) {
+      await mutateDatabase((database) => {
+        const stored = database.purchases.find(
+          (candidate) => candidate.checkoutSessionId === purchase.checkoutSessionId,
+        );
+        if (stored) stored.emailSentAt = new Date().toISOString();
+      });
+    }
+  }
+
+  return purchase;
+}
+
+async function activatePurchase(
+  purchaseSelector: (purchase: CoursePurchase) => boolean,
+  password: string,
+): Promise<CourseUser> {
+  const passwordError = validatePassword(password);
+  if (passwordError) throw new HttpError(400, passwordError);
+
+  return mutateDatabase((database) => {
+    const purchase = database.purchases.find(purchaseSelector);
+    if (!purchase) throw new HttpError(400, "This activation link is invalid or unavailable.");
+    if (purchase.activatedAt || purchase.activatedUserId) {
+      throw new HttpError(409, "This purchase has already been activated. Please sign in.");
+    }
+    if (new Date(purchase.activationExpiresAt).getTime() < Date.now()) {
+      throw new HttpError(400, "This activation link has expired. Request a new link.");
+    }
+    if (database.users.some((user) => user.email === purchase.email)) {
+      throw new HttpError(409, "An account already exists for this email. Please sign in.");
+    }
+
+    const user: CourseUser = {
+      id: randomUUID(),
+      email: purchase.email,
+      firstName: purchase.firstName,
+      lastName: purchase.lastName,
+      passwordHash: hashPassword(password),
+      role: purchase.enrollmentType === "practice" ? "manager" : "student",
+      organizationName: purchase.organizationName,
+      seatLimit: purchase.seats,
+      checkoutSessionId: purchase.checkoutSessionId,
+      paymentIntentId: purchase.paymentIntentId,
+      createdAt: new Date().toISOString(),
+      progress: [],
+    };
+    database.users.push(user);
+
+    if (user.role === "manager") {
+      for (let index = 1; index < purchase.seats; index += 1) {
+        const invite: PracticeInvite = {
+          code: createInviteCode(),
+          managerId: user.id,
+          createdAt: new Date().toISOString(),
+        };
+        database.invites.push(invite);
+      }
+    }
+
+    purchase.activatedAt = new Date().toISOString();
+    purchase.activatedUserId = user.id;
+    return user;
+  });
+}
+
 async function startServer() {
   assertAuthConfigured();
+  requireProductionConfiguration();
 
   const app = express();
   const server = createServer(app);
 
   app.disable("x-powered-by");
   app.set("trust proxy", 1);
-  app.use(express.json({ limit: "20kb" }));
+  app.use(securityHeaders);
 
-  app.get("/api/health", (_req, res) => {
-    res.json({ status: "ok", courseId: COURSE_ID });
+  app.post(
+    "/api/stripe/webhook",
+    express.raw({ type: "application/json", limit: "1mb" }),
+    async (req, res) => {
+      const secret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+      const rawBody = Buffer.isBuffer(req.body) ? req.body : Buffer.from("");
+      if (!secret || !verifyStripeSignature(rawBody, req.get("stripe-signature"), secret)) {
+        return res.status(400).send("Invalid Stripe signature");
+      }
+
+      let event: StripeEvent;
+      try {
+        event = JSON.parse(rawBody.toString("utf8")) as StripeEvent;
+      } catch {
+        return res.status(400).send("Invalid webhook payload");
+      }
+
+      if (!event.id) return res.status(400).send("Missing event ID");
+      const database = await readDatabase();
+      if (database.processedStripeEvents.some((stored) => stored.id === event.id)) {
+        return res.json({ received: true, duplicate: true });
+      }
+
+      try {
+        if (
+          event.type === "checkout.session.completed" ||
+          event.type === "checkout.session.async_payment_succeeded"
+        ) {
+          const session = event.data?.object;
+          if (session?.payment_status === "paid" && session.metadata?.courseId === COURSE_ID) {
+            await ensurePurchase(session);
+          }
+        }
+
+        await mutateDatabase((storedDatabase) => {
+          storedDatabase.processedStripeEvents.push({
+            id: event.id as string,
+            processedAt: new Date().toISOString(),
+          });
+          if (storedDatabase.processedStripeEvents.length > 2_000) {
+            storedDatabase.processedStripeEvents.splice(
+              0,
+              storedDatabase.processedStripeEvents.length - 2_000,
+            );
+          }
+        });
+        return res.json({ received: true });
+      } catch (error) {
+        console.error("Stripe webhook fulfillment error", error);
+        return res.status(500).json({ error: "Webhook fulfillment failed." });
+      }
+    },
+  );
+
+  app.use(express.json({ limit: "30kb" }));
+  app.use("/api", requireSameOrigin);
+
+  const checkoutLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 10 });
+  const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 12 });
+  const recoveryLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 6 });
+  const supportLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 5 });
+
+  app.get("/api/health", async (_req, res) => {
+    try {
+      await readDatabase();
+      res.json({
+        status: "ok",
+        courseId: COURSE_ID,
+        emailConfigured: emailConfigured(),
+        webhookConfigured: Boolean(process.env.STRIPE_WEBHOOK_SECRET?.trim()),
+      });
+    } catch (error) {
+      console.error("Health check failed", error);
+      res.status(503).json({ status: "error" });
+    }
   });
 
-  app.post("/api/enrollment/checkout", async (req, res) => {
+  app.get("/api/public/config", (_req, res) => {
+    res.json({
+      businessName: process.env.BUSINESS_NAME?.trim() || "OptiTech Academy",
+      businessLegalName: process.env.BUSINESS_LEGAL_NAME?.trim() || "OptiTech Academy",
+      businessAddress: process.env.BUSINESS_ADDRESS?.trim() || "",
+      supportEmail: process.env.SUPPORT_EMAIL?.trim() || "",
+      pricePerSeat: 699,
+      refundDays: 7,
+      termsVersion: TERMS_VERSION,
+    });
+  });
+
+  app.post("/api/enrollment/checkout", checkoutLimiter, async (req, res) => {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
     const stripePriceId = process.env.STRIPE_STANDARD_PRICE_ID?.trim();
 
     if (!stripeSecretKey || !stripePriceId) {
       return res.status(503).json({
-        error: "Enrollment checkout is not configured yet. Please contact the course administrator.",
+        error: "Enrollment checkout is not configured yet. Please contact support.",
       });
     }
 
@@ -171,9 +452,7 @@ async function startServer() {
       return res.status(400).json({ error: "Please enter the practice or clinic name." });
     }
     if (!Number.isInteger(seats) || seats < 1 || seats > 50) {
-      return res.status(400).json({
-        error: "Practice enrollments must include between 1 and 50 seats.",
-      });
+      return res.status(400).json({ error: "Practice enrollments must include between 1 and 50 seats." });
     }
 
     try {
@@ -181,6 +460,8 @@ async function startServer() {
       const checkoutParams = new URLSearchParams({
         mode: "payment",
         customer_email: email,
+        customer_creation: "always",
+        billing_address_collection: "auto",
         success_url: `${baseUrl}/enrollment/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/?enrollment=cancelled`,
         "line_items[0][price]": stripePriceId,
@@ -194,11 +475,18 @@ async function startServer() {
         "metadata[enrollmentType]": enrollmentType,
         "metadata[organizationName]": organizationName,
         "metadata[seats]": String(seats),
+        "metadata[termsVersion]": TERMS_VERSION,
         "payment_intent_data[metadata][courseId]": COURSE_ID,
         "payment_intent_data[metadata][enrollmentType]": enrollmentType,
         "payment_intent_data[metadata][organizationName]": organizationName,
         "payment_intent_data[metadata][seats]": String(seats),
       });
+      if (process.env.STRIPE_ALLOW_PROMOTION_CODES !== "false") {
+        checkoutParams.set("allow_promotion_codes", "true");
+      }
+      if (process.env.STRIPE_AUTOMATIC_TAX === "true") {
+        checkoutParams.set("automatic_tax[enabled]", "true");
+      }
 
       const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
         method: "POST",
@@ -220,101 +508,110 @@ async function startServer() {
       return res.json({ url: session.url });
     } catch (error) {
       console.error("Stripe checkout error", error);
-      return res.status(500).json({
-        error: "Unable to start checkout. Please try again or contact support.",
-      });
+      return res.status(500).json({ error: "Unable to start checkout. Please try again." });
     }
   });
 
-  app.post("/api/enrollment/complete", async (req, res) => {
+  app.post("/api/enrollment/complete", recoveryLimiter, async (req, res) => {
     const body = (req.body ?? {}) as Record<string, unknown>;
     const sessionId = readString(body.sessionId, 300);
     const password = readString(body.password, 200);
-    const passwordError = validatePassword(password);
 
-    if (!sessionId.startsWith("cs_") || passwordError) {
-      return res.status(400).json({
-        error: passwordError ?? "A valid Stripe Checkout session is required.",
-      });
+    if (!sessionId.startsWith("cs_")) {
+      return res.status(400).json({ error: "A valid Stripe Checkout session is required." });
     }
 
     try {
       const session = await getStripeCheckoutSession(sessionId);
-      const metadata = session.metadata ?? {};
-      if (
-        session.mode !== "payment" ||
-        session.status !== "complete" ||
-        session.payment_status !== "paid" ||
-        metadata.courseId !== COURSE_ID
-      ) {
-        throw new HttpError(400, "Payment has not been verified for this course.");
-      }
-
-      const email = (session.customer_details?.email || session.customer_email || "")
-        .trim()
-        .toLowerCase();
-      const firstName = readString(metadata.firstName, 80) || "Course";
-      const lastName = readString(metadata.lastName, 80) || "Student";
-      const enrollmentType = metadata.enrollmentType === "practice" ? "practice" : "individual";
-      const organizationName = readString(metadata.organizationName, 160);
-      const seats = Math.min(Math.max(readInteger(metadata.seats) || 1, 1), 50);
-      const paymentIntentId =
-        typeof session.payment_intent === "string"
-          ? session.payment_intent
-          : session.payment_intent?.id;
-
-      if (!email) throw new HttpError(400, "Stripe did not return a customer email address.");
-
-      const result = await mutateDatabase((database) => {
-        if (database.users.some((user) => user.checkoutSessionId === sessionId)) {
-          throw new HttpError(409, "This purchase has already been activated. Please sign in.");
-        }
-        if (database.users.some((user) => user.email === email)) {
-          throw new HttpError(409, "An account already exists for this email. Please sign in.");
-        }
-
-        const user: CourseUser = {
-          id: randomUUID(),
-          email,
-          firstName,
-          lastName,
-          passwordHash: hashPassword(password),
-          role: enrollmentType === "practice" ? "manager" : "student",
-          organizationName: organizationName || undefined,
-          seatLimit: seats,
-          checkoutSessionId: sessionId,
-          paymentIntentId,
-          createdAt: new Date().toISOString(),
-          progress: [],
-        };
-        database.users.push(user);
-
-        if (user.role === "manager") {
-          for (let index = 1; index < seats; index += 1) {
-            const invite: PracticeInvite = {
-              code: createInviteCode(),
-              managerId: user.id,
-              createdAt: new Date().toISOString(),
-            };
-            database.invites.push(invite);
-          }
-        }
-
-        return user;
-      });
-
-      setSessionCookie(res, result.id);
-      return res.status(201).json({ user: publicUser(result) });
+      await ensurePurchase(session);
+      const user = await activatePurchase(
+        (purchase) => purchase.checkoutSessionId === sessionId,
+        password,
+      );
+      setSessionCookie(res, user.id);
+      return res.status(201).json({ user: publicUser(user) });
     } catch (error) {
-      if (error instanceof HttpError) {
-        return res.status(error.status).json({ error: error.message });
-      }
+      if (error instanceof HttpError) return res.status(error.status).json({ error: error.message });
       console.error("Enrollment activation error", error);
       return res.status(500).json({ error: "Unable to activate course access." });
     }
   });
 
-  app.post("/api/auth/login", async (req, res) => {
+  app.get("/api/enrollment/activation", async (req, res) => {
+    const token = readString(req.query.token, 200);
+    const tokenHash = hashOpaqueToken(token);
+    const database = await readDatabase();
+    const purchase = database.purchases.find(
+      (candidate) =>
+        candidate.activationTokenHash === tokenHash &&
+        !candidate.activatedAt &&
+        new Date(candidate.activationExpiresAt).getTime() >= Date.now(),
+    );
+    if (!purchase) return res.status(400).json({ error: "This activation link is invalid or expired." });
+    return res.json({
+      purchase: {
+        email: purchase.email,
+        firstName: purchase.firstName,
+        lastName: purchase.lastName,
+        enrollmentType: purchase.enrollmentType,
+        organizationName: purchase.organizationName,
+        seats: purchase.seats,
+      },
+    });
+  });
+
+  app.post("/api/enrollment/activate", recoveryLimiter, async (req, res) => {
+    const body = (req.body ?? {}) as Record<string, unknown>;
+    const token = readString(body.token, 200);
+    const password = readString(body.password, 200);
+    try {
+      const tokenHash = hashOpaqueToken(token);
+      const user = await activatePurchase(
+        (purchase) => purchase.activationTokenHash === tokenHash,
+        password,
+      );
+      setSessionCookie(res, user.id);
+      return res.status(201).json({ user: publicUser(user) });
+    } catch (error) {
+      if (error instanceof HttpError) return res.status(error.status).json({ error: error.message });
+      console.error("Token activation error", error);
+      return res.status(500).json({ error: "Unable to activate course access." });
+    }
+  });
+
+  app.post("/api/enrollment/resend-activation", recoveryLimiter, async (req, res) => {
+    const email = readString((req.body as Record<string, unknown>)?.email, 254).toLowerCase();
+    const token = createOpaqueToken();
+    const purchase = await mutateDatabase((database) => {
+      const found = [...database.purchases]
+        .reverse()
+        .find((candidate) => candidate.email === email && !candidate.activatedAt);
+      if (!found) return null;
+      found.activationTokenHash = hashOpaqueToken(token);
+      found.activationExpiresAt = new Date(Date.now() + ACTIVATION_DURATION_MS).toISOString();
+      found.emailSentAt = undefined;
+      return found;
+    });
+    if (purchase) {
+      const sent = await sendActivationEmail({
+        email: purchase.email,
+        firstName: purchase.firstName,
+        token,
+        checkoutSessionId: `${purchase.checkoutSessionId}-${Date.now()}`,
+      });
+      if (sent) {
+        await mutateDatabase((database) => {
+          const stored = database.purchases.find(
+            (candidate) => candidate.checkoutSessionId === purchase.checkoutSessionId,
+          );
+          if (stored) stored.emailSentAt = new Date().toISOString();
+        });
+      }
+    }
+    return res.status(202).json({ message: "If an unactivated purchase exists, a new link has been sent." });
+  });
+
+  app.post("/api/auth/login", loginLimiter, async (req, res) => {
     const body = (req.body ?? {}) as Record<string, unknown>;
     const email = readString(body.email, 254).toLowerCase();
     const password = readString(body.password, 200);
@@ -338,6 +635,93 @@ async function startServer() {
     const user = await requireUser(req, res);
     if (!user) return;
     return res.json({ user: publicUser(user) });
+  });
+
+  app.post("/api/auth/request-reset", recoveryLimiter, async (req, res) => {
+    const email = readString((req.body as Record<string, unknown>)?.email, 254).toLowerCase();
+    const database = await readDatabase();
+    const user = database.users.find((candidate) => candidate.email === email && !candidate.accessRevoked);
+
+    if (user) {
+      const token = createOpaqueToken();
+      await mutateDatabase((storedDatabase) => {
+        storedDatabase.passwordResets = storedDatabase.passwordResets.filter(
+          (reset) => reset.userId !== user.id || reset.usedAt,
+        );
+        storedDatabase.passwordResets.push({
+          tokenHash: hashOpaqueToken(token),
+          userId: user.id,
+          createdAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + PASSWORD_RESET_DURATION_MS).toISOString(),
+        });
+      });
+      await sendPasswordResetEmail({
+        email: user.email,
+        firstName: user.firstName,
+        token,
+        userId: user.id,
+      });
+    }
+
+    return res.status(202).json({ message: "If an account exists, a reset link has been sent." });
+  });
+
+  app.get("/api/auth/reset-status", async (req, res) => {
+    const token = readString(req.query.token, 200);
+    const database = await readDatabase();
+    const reset = database.passwordResets.find(
+      (candidate) =>
+        candidate.tokenHash === hashOpaqueToken(token) &&
+        !candidate.usedAt &&
+        new Date(candidate.expiresAt).getTime() >= Date.now(),
+    );
+    if (!reset) return res.status(400).json({ error: "This reset link is invalid or expired." });
+    return res.json({ valid: true });
+  });
+
+  app.post("/api/auth/reset-password", recoveryLimiter, async (req, res) => {
+    const body = (req.body ?? {}) as Record<string, unknown>;
+    const token = readString(body.token, 200);
+    const password = readString(body.password, 200);
+    const passwordError = validatePassword(password);
+    if (passwordError) return res.status(400).json({ error: passwordError });
+
+    try {
+      const user = await mutateDatabase((database) => {
+        const reset = database.passwordResets.find(
+          (candidate) =>
+            candidate.tokenHash === hashOpaqueToken(token) &&
+            !candidate.usedAt &&
+            new Date(candidate.expiresAt).getTime() >= Date.now(),
+        );
+        if (!reset) throw new HttpError(400, "This reset link is invalid or expired.");
+        const found = database.users.find((candidate) => candidate.id === reset.userId);
+        if (!found || found.accessRevoked) throw new HttpError(400, "This account is unavailable.");
+        found.passwordHash = hashPassword(password);
+        reset.usedAt = new Date().toISOString();
+        return found;
+      });
+      setSessionCookie(res, user.id);
+      return res.json({ user: publicUser(user) });
+    } catch (error) {
+      if (error instanceof HttpError) return res.status(error.status).json({ error: error.message });
+      console.error("Password reset error", error);
+      return res.status(500).json({ error: "Unable to reset the password." });
+    }
+  });
+
+  app.post("/api/support", supportLimiter, async (req, res) => {
+    const body = (req.body ?? {}) as Record<string, unknown>;
+    const name = readString(body.name, 120);
+    const email = readString(body.email, 254).toLowerCase();
+    const subject = readString(body.subject, 160);
+    const message = readString(body.message, 3_000);
+    if (!name || !/^\S+@\S+\.\S+$/.test(email) || !subject || message.length < 10) {
+      return res.status(400).json({ error: "Please complete all support fields." });
+    }
+    const sent = await sendSupportMessage({ name, email, subject, message });
+    if (!sent) return res.status(503).json({ error: "Support email is temporarily unavailable." });
+    return res.status(202).json({ message: "Your support request has been sent." });
   });
 
   app.post("/api/course/progress", async (req, res) => {
@@ -402,7 +786,7 @@ async function startServer() {
     return res.json({ team, invites, seatLimit: manager.seatLimit });
   });
 
-  app.post("/api/practice/redeem", async (req, res) => {
+  app.post("/api/practice/redeem", recoveryLimiter, async (req, res) => {
     const body = (req.body ?? {}) as Record<string, unknown>;
     const code = readString(body.code, 40).toUpperCase();
     const firstName = readString(body.firstName, 80);
@@ -412,9 +796,7 @@ async function startServer() {
     const passwordError = validatePassword(password);
 
     if (!code || !firstName || !lastName || !/^\S+@\S+\.\S+$/.test(email) || passwordError) {
-      return res.status(400).json({
-        error: passwordError ?? "Please complete all required account fields.",
-      });
+      return res.status(400).json({ error: passwordError ?? "Please complete all required account fields." });
     }
 
     try {
@@ -461,9 +843,7 @@ async function startServer() {
       setSessionCookie(res, user.id);
       return res.status(201).json({ user: publicUser(user) });
     } catch (error) {
-      if (error instanceof HttpError) {
-        return res.status(error.status).json({ error: error.message });
-      }
+      if (error instanceof HttpError) return res.status(error.status).json({ error: error.message });
       console.error("Practice invitation error", error);
       return res.status(500).json({ error: "Unable to create the invited account." });
     }
@@ -474,14 +854,14 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
-  app.use(express.static(staticPath));
+  app.use(express.static(staticPath, { maxAge: process.env.NODE_ENV === "production" ? "1h" : 0 }));
   app.get("*", (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 
-  const port = process.env.PORT || 3000;
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+  const port = Number(process.env.PORT || 3000);
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on port ${port}`);
   });
 }
 
