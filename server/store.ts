@@ -1,5 +1,7 @@
+import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { hashPassword } from "./auth";
 
 export interface CourseProgress {
   day: number;
@@ -82,10 +84,72 @@ const emptyDatabase: CourseDatabase = {
 };
 let mutationQueue: Promise<unknown> = Promise.resolve();
 
+function deterministicSpindelId(email: string): string {
+  return `spindel-${createHash("sha256").update(email).digest("hex").slice(0, 24)}`;
+}
+
+function deterministicInviteCode(managerId: string, index: number): string {
+  const secret = process.env.SESSION_SECRET?.trim() || "spindel-onboarding";
+  const digest = createHash("sha256")
+    .update(`${secret}:${managerId}:${index}`)
+    .digest("hex")
+    .slice(0, 12)
+    .toUpperCase();
+  return `SEA-${digest}`;
+}
+
+function applySpindelBootstrap(database: CourseDatabase): CourseDatabase {
+  const email = process.env.SPINDEL_MANAGER_EMAIL?.trim().toLowerCase();
+  const password = process.env.SPINDEL_MANAGER_PASSWORD?.trim();
+  if (!email || !password) return database;
+
+  const managerId = deterministicSpindelId(email);
+  const seatLimit = Math.min(
+    Math.max(Number.parseInt(process.env.SPINDEL_SEAT_LIMIT?.trim() || "100", 10) || 100, 2),
+    500,
+  );
+  let manager = database.users.find(
+    (user) => user.id === managerId || user.email.toLowerCase() === email,
+  );
+
+  if (!manager) {
+    manager = {
+      id: managerId,
+      email,
+      firstName: process.env.SPINDEL_MANAGER_FIRST_NAME?.trim() || "Spindel",
+      lastName: process.env.SPINDEL_MANAGER_LAST_NAME?.trim() || "Administrator",
+      passwordHash: hashPassword(password),
+      role: "manager",
+      organizationName: "Spindel Eye Associates",
+      seatLimit,
+      createdAt: new Date().toISOString(),
+      progress: [],
+    };
+    database.users.push(manager);
+  } else {
+    manager.role = "manager";
+    manager.organizationName = "Spindel Eye Associates";
+    manager.seatLimit = Math.max(manager.seatLimit || 1, seatLimit);
+  }
+
+  const currentInviteCount = database.invites.filter(
+    (invite) => invite.managerId === manager!.id,
+  ).length;
+  for (let index = currentInviteCount + 1; index < manager.seatLimit; index += 1) {
+    database.invites.push({
+      code: deterministicInviteCode(manager.id, index),
+      managerId: manager.id,
+      createdAt: manager.createdAt,
+    });
+  }
+
+  return database;
+}
+
 function normalizeDatabase(value: unknown): CourseDatabase {
-  if (!value || typeof value !== "object") return structuredClone(emptyDatabase);
+  if (!value || typeof value !== "object") return applySpindelBootstrap(structuredClone(emptyDatabase));
   const candidate = value as Partial<CourseDatabase>;
-  return {
+  return applySpindelBootstrap({
     users: Array.isArray(candidate.users) ? candidate.users : [],
     invites: Array.isArray(candidate.invites) ? candidate.invites : [],
     purchases: Array.isArray(candidate.purchases) ? candidate.purchases : [],
@@ -93,7 +157,7 @@ function normalizeDatabase(value: unknown): CourseDatabase {
     processedStripeEvents: Array.isArray(candidate.processedStripeEvents)
       ? candidate.processedStripeEvents
       : [],
-  };
+  });
 }
 
 export async function readDatabase(): Promise<CourseDatabase> {
@@ -102,7 +166,7 @@ export async function readDatabase(): Promise<CourseDatabase> {
     return normalizeDatabase(JSON.parse(raw));
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return structuredClone(emptyDatabase);
+      return applySpindelBootstrap(structuredClone(emptyDatabase));
     }
     throw error;
   }
