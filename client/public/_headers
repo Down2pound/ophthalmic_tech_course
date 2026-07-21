@@ -1,0 +1,7 @@
+# Hosts that support static header files may use these values.
+# The Express server also sets equivalent security headers dynamically.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
