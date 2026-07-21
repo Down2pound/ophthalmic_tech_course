@@ -34,13 +34,52 @@ export interface PracticeInvite {
   usedBy?: string;
 }
 
+export interface CoursePurchase {
+  checkoutSessionId: string;
+  paymentIntentId?: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  enrollmentType: "individual" | "practice";
+  organizationName?: string;
+  seats: number;
+  activationTokenHash: string;
+  activationExpiresAt: string;
+  createdAt: string;
+  emailSentAt?: string;
+  activatedAt?: string;
+  activatedUserId?: string;
+}
+
+export interface PasswordReset {
+  tokenHash: string;
+  userId: string;
+  createdAt: string;
+  expiresAt: string;
+  usedAt?: string;
+}
+
+export interface ProcessedStripeEvent {
+  id: string;
+  processedAt: string;
+}
+
 export interface CourseDatabase {
   users: CourseUser[];
   invites: PracticeInvite[];
+  purchases: CoursePurchase[];
+  passwordResets: PasswordReset[];
+  processedStripeEvents: ProcessedStripeEvent[];
 }
 
 const dataFile = process.env.DATA_FILE?.trim() || path.resolve(process.cwd(), "data", "course-data.json");
-const emptyDatabase: CourseDatabase = { users: [], invites: [] };
+const emptyDatabase: CourseDatabase = {
+  users: [],
+  invites: [],
+  purchases: [],
+  passwordResets: [],
+  processedStripeEvents: [],
+};
 let mutationQueue: Promise<unknown> = Promise.resolve();
 
 function normalizeDatabase(value: unknown): CourseDatabase {
@@ -49,6 +88,11 @@ function normalizeDatabase(value: unknown): CourseDatabase {
   return {
     users: Array.isArray(candidate.users) ? candidate.users : [],
     invites: Array.isArray(candidate.invites) ? candidate.invites : [],
+    purchases: Array.isArray(candidate.purchases) ? candidate.purchases : [],
+    passwordResets: Array.isArray(candidate.passwordResets) ? candidate.passwordResets : [],
+    processedStripeEvents: Array.isArray(candidate.processedStripeEvents)
+      ? candidate.processedStripeEvents
+      : [],
   };
 }
 
