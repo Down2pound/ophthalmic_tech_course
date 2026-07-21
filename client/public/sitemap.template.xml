@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Replace COURSE_DOMAIN before publishing a custom-domain sitemap. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://COURSE_DOMAIN/</loc><priority>1.0</priority></url>
+  <url><loc>https://COURSE_DOMAIN/curriculum</loc><priority>0.8</priority></url>
+  <url><loc>https://COURSE_DOMAIN/terms</loc><priority>0.3</priority></url>
+  <url><loc>https://COURSE_DOMAIN/privacy</loc><priority>0.3</priority></url>
+  <url><loc>https://COURSE_DOMAIN/refunds</loc><priority>0.3</priority></url>
+  <url><loc>https://COURSE_DOMAIN/support</loc><priority>0.4</priority></url>
+</urlset>
