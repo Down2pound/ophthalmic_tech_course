@@ -20,7 +20,10 @@ services:
       - key: SESSION_SECRET
         generateValue: true
       - key: PUBLIC_APP_URL
-        sync: false
+        fromService:
+          type: web
+          name: optitech-academy
+          envVarKey: RENDER_EXTERNAL_URL
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: STRIPE_STANDARD_PRICE_ID
