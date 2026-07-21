@@ -4,20 +4,20 @@ import { Card } from "@/components/ui/card";
 import { getCourseContent } from "@/data/courseContent";
 import { getCourseQuizByDay } from "@/data/courseQuizzes";
 import { curriculumModules } from "@/data/curriculum";
+import {
+  getSpindelLesson,
+  getSpindelQuiz,
+  isSpindelOrganization,
+  spindelOnboardingModules,
+} from "@/data/spindelOnboarding";
 import { ApiError, apiRequest, type CourseUser } from "@/lib/api";
-import { AlertTriangle, ArrowLeft, CheckCircle2, Clock, Loader2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { AlertTriangle, ArrowLeft, CheckCircle2, Clock, Eye, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useRoute } from "wouter";
 
 export default function CourseModule() {
   const [, params] = useRoute("/course/module/:day");
   const day = Number(params?.day);
-  const module = useMemo(
-    () => curriculumModules.find((candidate) => candidate.day === day),
-    [day],
-  );
-  const lesson = getCourseContent(day);
-  const quiz = getCourseQuizByDay(day);
   const [user, setUser] = useState<CourseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -40,6 +40,20 @@ export default function CourseModule() {
     void load();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
+        <Loader2 className="mr-3 h-6 w-6 animate-spin" /> Loading module...
+      </div>
+    );
+  }
+
+  const spindel = isSpindelOrganization(user?.organizationName);
+  const modules = spindel ? spindelOnboardingModules : curriculumModules;
+  const module = modules.find((candidate) => candidate.day === day);
+  const lesson = spindel ? getSpindelLesson(day) : getCourseContent(day);
+  const quiz = spindel ? getSpindelQuiz(day) : getCourseQuizByDay(day);
+
   const saveScore = async (score: number) => {
     const response = await apiRequest<{ user: CourseUser }>("/api/course/progress", {
       method: "POST",
@@ -49,16 +63,8 @@ export default function CourseModule() {
   };
 
   const continueCourse = () => {
-    window.location.assign(day < curriculumModules.length ? `/course/module/${day + 1}` : "/course");
+    window.location.assign(day < modules.length ? `/course/module/${day + 1}` : "/course");
   };
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
-        <Loader2 className="mr-3 h-6 w-6 animate-spin" /> Loading module...
-      </div>
-    );
-  }
 
   if (!module || !lesson || !quiz || !user) {
     return (
@@ -74,21 +80,24 @@ export default function CourseModule() {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <header className="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 text-white">
+      <header className={`bg-gradient-to-r ${spindel ? "from-sky-950 via-blue-900 to-cyan-900" : "from-slate-950 via-blue-950 to-slate-900"} text-white`}>
         <div className="mx-auto max-w-5xl px-4 py-10">
-          <a href="/course" className="mb-6 inline-flex items-center text-sm text-blue-200 hover:text-white">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Course Dashboard
-          </a>
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+            <a href="/course" className="inline-flex items-center text-sm text-blue-100 hover:text-white">
+              <ArrowLeft className="mr-2 h-4 w-4" /> {spindel ? "Onboarding Dashboard" : "Course Dashboard"}
+            </a>
+            {spindel && <div className="flex items-center gap-2 text-sm font-semibold"><Eye className="h-5 w-5" /> Spindel Eye Associates</div>}
+          </div>
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
             <div className="text-6xl">{module.icon}</div>
             <div>
-              <p className="font-semibold uppercase tracking-wider text-cyan-300">Day {module.day} · {module.difficulty}</p>
+              <p className="font-semibold uppercase tracking-wider text-cyan-200">{spindel ? "Module" : "Day"} {module.day} · {module.difficulty}</p>
               <h1 className="mt-2 text-4xl font-bold sm:text-5xl">{module.title}</h1>
-              <p className="mt-4 max-w-3xl text-lg text-slate-300">{module.description}</p>
-              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-slate-300">
+              <p className="mt-4 max-w-3xl text-lg text-blue-100">{module.description}</p>
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-blue-100">
                 <span className="inline-flex items-center"><Clock className="mr-2 h-4 w-4" /> {module.duration}</span>
                 {priorProgress?.passed && (
-                  <span className="inline-flex items-center rounded-full bg-green-500/20 px-3 py-1 text-green-200">
+                  <span className="inline-flex items-center rounded-full bg-green-500/20 px-3 py-1 text-green-100">
                     <CheckCircle2 className="mr-2 h-4 w-4" /> Passed with {priorProgress.score}%
                   </span>
                 )}
@@ -99,12 +108,18 @@ export default function CourseModule() {
       </header>
 
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-10">
+        {spindel && (
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-5 text-sm leading-6 text-blue-950">
+            <strong>Internal onboarding:</strong> Use fictional examples only. Current Spindel policies, physician instructions, and supervisor direction take priority over this lesson.
+          </div>
+        )}
+
         <Card className="p-6 shadow-lg sm:p-8">
           <h2 className="text-2xl font-bold text-slate-900">Learning Objectives</h2>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {module.objectives.map((objective) => (
               <div key={objective} className="flex items-start gap-3 rounded-lg bg-blue-50 p-4 text-slate-700">
-                <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
+                <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-700" />
                 <span>{objective}</span>
               </div>
             ))}
@@ -127,7 +142,7 @@ export default function CourseModule() {
                 <ul className="mt-3 space-y-2 text-slate-700">
                   {section.keyPoints.map((point) => (
                     <li key={point} className="flex items-start gap-2">
-                      <span className="font-bold text-blue-600">•</span> {point}
+                      <span className="font-bold text-blue-700">•</span> {point}
                     </li>
                   ))}
                 </ul>
@@ -137,8 +152,8 @@ export default function CourseModule() {
         ))}
 
         <Card className="p-6 shadow-lg sm:p-8">
-          <h2 className="text-2xl font-bold text-slate-900">Skills Practice Checklist</h2>
-          <p className="mt-2 text-slate-600">Review these steps with a qualified supervisor and the practice's approved protocol.</p>
+          <h2 className="text-2xl font-bold text-slate-900">{spindel ? "Supervisor Review Checklist" : "Skills Practice Checklist"}</h2>
+          <p className="mt-2 text-slate-600">Review these steps with a qualified supervisor and the practice's current approved protocol.</p>
           <div className="mt-5 space-y-3">
             {lesson.practiceChecklist.map((item) => (
               <label key={item} className="flex items-start gap-3 rounded-lg border border-slate-200 p-4">
