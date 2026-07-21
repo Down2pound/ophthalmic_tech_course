@@ -4,6 +4,7 @@ interface EmailMessage {
   html: string;
   text: string;
   idempotencyKey?: string;
+  replyTo?: string;
 }
 
 function escapeHtml(value: string): string {
@@ -20,7 +21,11 @@ function escapeHtml(value: string): string {
 }
 
 function baseUrl(): string {
-  return (process.env.PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "");
+  return (
+    process.env.PUBLIC_APP_URL?.trim() ||
+    process.env.RENDER_EXTERNAL_URL?.trim() ||
+    "http://localhost:3000"
+  ).replace(/\/$/, "");
 }
 
 function businessName(): string {
@@ -53,7 +58,7 @@ export async function sendEmail(message: EmailMessage): Promise<boolean> {
       subject: message.subject,
       html: message.html,
       text: message.text,
-      reply_to: process.env.SUPPORT_EMAIL?.trim() || undefined,
+      reply_to: message.replyTo || process.env.SUPPORT_EMAIL?.trim() || undefined,
     }),
   });
 
@@ -132,6 +137,7 @@ export async function sendSupportMessage(input: {
 
   return sendEmail({
     to: recipient,
+    replyTo: input.email,
     subject: `[Course Support] ${input.subject}`,
     text: `From: ${input.name} <${input.email}>\n\n${input.message}`,
     html: `<div style="font-family:Arial,sans-serif"><p><strong>From:</strong> ${escapeHtml(input.name)} &lt;${escapeHtml(input.email)}&gt;</p><p><strong>Subject:</strong> ${escapeHtml(input.subject)}</p><p>${escapeHtml(input.message).replace(/\n/g, "<br>")}</p></div>`,
