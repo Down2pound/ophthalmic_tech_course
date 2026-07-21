@@ -1,3 +1,4 @@
+import SiteFooter from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ActivateEnrollment from "@/pages/ActivateEnrollment";
@@ -44,12 +45,15 @@ function Router() {
 }
 
 function App() {
+  const showPublicFooter = ["/", "/curriculum"].includes(window.location.pathname);
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
           <Router />
+          {showPublicFooter ? <SiteFooter /> : null}
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
