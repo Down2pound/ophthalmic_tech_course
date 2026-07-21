@@ -46,3 +46,13 @@ services:
         sync: false
       - key: BUSINESS_ADDRESS
         sync: false
+      - key: SPINDEL_MANAGER_EMAIL
+        sync: false
+      - key: SPINDEL_MANAGER_PASSWORD
+        sync: false
+      - key: SPINDEL_MANAGER_FIRST_NAME
+        value: Spindel
+      - key: SPINDEL_MANAGER_LAST_NAME
+        value: Administrator
+      - key: SPINDEL_SEAT_LIMIT
+        value: "100"
