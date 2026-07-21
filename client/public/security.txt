@@ -1,0 +1,4 @@
+# Publish at /.well-known/security.txt after setting a monitored security address.
+Contact: mailto:SUPPORT_EMAIL
+Preferred-Languages: en
+Canonical: https://YOUR_DOMAIN/.well-known/security.txt
