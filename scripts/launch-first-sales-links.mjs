@@ -14,6 +14,7 @@ function buildMailtoHref({ email, subject, body }) {
 }
 
 const baseUrl = normalizeBaseUrl(process.env.PUBLIC_APP_URL);
+const firstSaleUrl = `${baseUrl}/first-sale`;
 const individualCheckoutUrl = `${baseUrl}/checkout`;
 const practicePacksUrl = `${baseUrl}/practice-packs`;
 const courseOverviewUrl = `${baseUrl}/`;
@@ -51,7 +52,9 @@ const lines = [
   "",
   "## Links To Share",
   "",
-  `- Individual learners: ${individualCheckoutUrl}`,
+  `- First buyer overview: ${firstSaleUrl}`,
+  `- Individual learners: ${firstSaleUrl}`,
+  `- Individual checkout or interest list: ${individualCheckoutUrl}`,
   `- Practice buyers: ${practicePacksUrl}`,
   `- Course overview: ${courseOverviewUrl}`,
   `- Free lesson preview: ${freePreviewUrl}`,
@@ -80,7 +83,7 @@ const lines = [
   "",
   `Free preview: ${freePreviewUrl}`,
   `Buyer guide: ${buyerGuideUrl}`,
-  `Founding Learner Access is $199 for 12 months when enrollment opens: ${individualCheckoutUrl}`,
+  `Founding Learner Access is $199 for 12 months when enrollment opens: ${firstSaleUrl}`,
   "",
   "Would you be open to taking a look when enrollment opens?",
   "```",

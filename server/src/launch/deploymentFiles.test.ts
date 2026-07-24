@@ -278,6 +278,7 @@ describe("deployment files", () => {
     expect(firstSalesScript).toContain(
       "OptiTech Academy First Sales Link Packet"
     );
+    expect(firstSalesScript).toContain("/first-sale");
     expect(firstSalesScript).toContain("/checkout");
     expect(firstSalesScript).toContain("/practice-packs");
     expect(firstSalesScript).toContain(

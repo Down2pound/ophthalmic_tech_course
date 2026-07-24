@@ -44,7 +44,9 @@ pnpm launch:first-week-sales
 ```
 
 ```text
-Individual learners: https://your-real-domain.example/checkout
+First buyer overview: https://your-real-domain.example/first-sale
+Individual learners: https://your-real-domain.example/first-sale
+Individual checkout or interest list: https://your-real-domain.example/checkout
 Practice buyers: https://your-real-domain.example/practice-packs
 Course overview: https://your-real-domain.example/
 Free lesson preview: https://your-real-domain.example/preview
@@ -55,6 +57,8 @@ Policies: https://your-real-domain.example/policies
 Send the individual learner link to career changers, medical assistants, and
 new technicians buying for themselves. Send the practice pack link to managers,
 supervisors, owners, or training leads buying seats for a team.
+Use the first buyer overview as the safest public front door because it explains
+both buyer paths before anyone reaches checkout.
 When someone needs proof before buying, send the free lesson preview first.
 When someone asks whether the course fits their situation, send the buyer
 decision guide.
