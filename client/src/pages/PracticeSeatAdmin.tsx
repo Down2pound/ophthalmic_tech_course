@@ -13,6 +13,10 @@ import {
   type PracticeSeatPackSummary,
 } from "@/lib/practiceSeatAdminClient";
 import {
+  fetchCheckoutAvailability,
+  type CheckoutAvailabilityReport,
+} from "@/lib/checkoutClient";
+import {
   ArrowLeft,
   BriefcaseBusiness,
   CheckCircle2,
@@ -25,7 +29,7 @@ import {
   UserPlus,
   Users,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   buildBuyerSupportCsv,
   buildLearnerLeadCsv,
@@ -61,6 +65,10 @@ export default function PracticeSeatAdmin() {
   );
   const [draftPaidEnrollmentReady, setDraftPaidEnrollmentReady] =
     useState(false);
+  const [checkoutAvailability, setCheckoutAvailability] =
+    useState<CheckoutAvailabilityReport | null>(null);
+  const [checkoutAvailabilityMessage, setCheckoutAvailabilityMessage] =
+    useState("Checking checkout readiness for follow-up drafts...");
   const [supportLookupEmail, setSupportLookupEmail] = useState("");
   const [revocationTargetType, setRevocationTargetType] = useState<
     "enrollment" | "practice-seat-assignment" | "practice-seat-pack"
@@ -94,6 +102,32 @@ export default function PracticeSeatAdmin() {
       };
     }, {});
   }, [pageState.assignments]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchCheckoutAvailability()
+      .then(availability => {
+        if (!isMounted) return;
+        setCheckoutAvailability(availability);
+        setCheckoutAvailabilityMessage(availability.message);
+        setDraftPaidEnrollmentReady(availability.ready);
+      })
+      .catch(error => {
+        if (!isMounted) return;
+        setCheckoutAvailability(null);
+        setCheckoutAvailabilityMessage(
+          error instanceof Error
+            ? error.message
+            : "Checkout readiness could not be checked. Keep drafts in paused mode unless launch readiness is proven."
+        );
+        setDraftPaidEnrollmentReady(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const loadSeatPacks = async () => {
     setLoadingAction("load");
@@ -319,6 +353,20 @@ export default function PracticeSeatAdmin() {
                 Use the deployed site URL here before opening learner or
                 practice follow-up drafts.
               </p>
+              <div
+                className={`mt-4 rounded-md border p-3 text-sm leading-6 ${
+                  checkoutAvailability?.ready
+                    ? "border-green-200 bg-green-50 text-green-950"
+                    : "border-amber-200 bg-amber-50 text-amber-950"
+                }`}
+              >
+                <p className="font-semibold">
+                  {checkoutAvailability?.ready
+                    ? "Checkout appears open"
+                    : "Drafts default to paused mode"}
+                </p>
+                <p className="mt-1">{checkoutAvailabilityMessage}</p>
+              </div>
               <label className="mt-4 flex gap-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-950">
                 <input
                   type="checkbox"
