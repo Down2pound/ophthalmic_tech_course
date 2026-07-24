@@ -172,6 +172,12 @@ function renderPaidLaunchEvidencePrompts(): string[] {
     renderChecklistItem(
       "One low-risk live-mode internal purchase was verified"
     ),
+    renderChecklistItem(
+      "`pnpm launch:fulfillment` was used to verify receipt, webhook, access, welcome email, sign-in, and support path"
+    ),
+    renderChecklistItem(
+      "`first-buyer-fulfillment-checklist.csv` was completed with safe evidence only"
+    ),
     "",
   ];
 }

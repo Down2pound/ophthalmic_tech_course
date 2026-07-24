@@ -206,6 +206,10 @@ Shared-link preview checked for title/description:
 - [ ] ENABLE_PAID_ENROLLMENT stayed false until all gates passed.
 - [ ] Final readiness check passed after the switch was enabled.
 - [ ] One low-risk live-mode internal purchase was verified.
+- [ ] `pnpm launch:fulfillment` was used to verify receipt, webhook, access,
+      welcome email, sign-in, and support path.
+- [ ] `first-buyer-fulfillment-checklist.csv` was completed with safe evidence
+      only.
 
 ## Final Decision
 
