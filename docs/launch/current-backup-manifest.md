@@ -41,17 +41,21 @@ optitech-academy-static-first-sale-page-2026-07-24-433a358.zip
 
 ## Latest Confirmed Backup
 
-Latest confirmed saved point:
+Latest confirmed full source backup point:
 
-- Commit: `f8d59dc`
+- Commit: `fe4421b`
 - Source code ZIP:
-  `https://drive.google.com/file/d/1eKhQWNvpXLfm6IJ49d11JVj52s02SPeP/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1p5IZD7xmaI4YOht2F9Emi3WpJdzNrigD/view?usp=drivesdk`
 - Git branch bundle:
-  `https://drive.google.com/file/d/1dnmpAUa-jbkW6kcdpSH5G0sXFrcdn7OY/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1T4HtILAq6iOq5L00OqagtiM0Yr0GYUHf/view?usp=drivesdk`
 - Launch evidence ZIP:
-  `https://drive.google.com/file/d/17bPe9y3PxiWFGhuXrU0vKDDFmNhMj9Bl/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1mBJOuXNt_tKqBe380rLt9IgLbckbcvYZ/view?usp=drivesdk`
 - Static first-sale page ZIP:
-  `https://drive.google.com/file/d/1rkztVhXGcy6A6atybwLshbP90MwO2aul/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1fkFyRw7VKaXsAAyG6XRd-rl7RyriBRII/view?usp=drivesdk`
+
+If this manifest has a newer GitHub commit than the listed backup commit, that
+newer commit is usually only backup bookkeeping. For full restore, use the
+newest matching source ZIP and Git bundle in the Drive folder.
 
 Use the newest matching ZIP and bundle pair in the Google Drive folder. The
 date and short commit hash should match in both filenames.
