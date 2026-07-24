@@ -174,7 +174,7 @@ addCheck(
   checks,
   "Launch preflight includes offer audit",
   source.packageJson.includes(
-    "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm build && pnpm launch:bundle"
+    "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:bundle"
   ),
   files.packageJson
 );

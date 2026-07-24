@@ -46,7 +46,7 @@
     "launch:spindel-onboarding": "tsx server/src/launch/runSpindelOnboardingChecklist.ts",
     "launch:sitemap": "tsx server/src/launch/runSitemap.ts",
     "launch:bundle": "tsx server/src/launch/runLaunchEvidenceBundle.ts",
-    "launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm build && pnpm launch:bundle",
+    "launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:bundle",
     "format": "prettier --write ."
   },
   "dependencies": {

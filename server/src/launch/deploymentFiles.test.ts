@@ -78,6 +78,9 @@ describe("deployment files", () => {
     expect(packageJson).toContain(
       '"launch:secret-scan": "node scripts/launch-secret-scan.mjs"'
     );
+    expect(packageJson).toContain(
+      '"launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:bundle"'
+    );
     expect(workflow).toContain("pnpm launch:preflight");
     expect(workflow).toContain("pnpm launch:secret-scan");
     expect(workflow).toContain("actions/upload-artifact@v4");

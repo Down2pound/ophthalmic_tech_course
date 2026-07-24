@@ -378,8 +378,8 @@ Then verify:
 
 GitHub Actions runs launch CI on pushes and pull requests:
 
-- `pnpm launch:preflight`, which runs type-checking, tests, production build,
-  and launch bundle generation.
+- `pnpm launch:preflight`, which runs type-checking, tests, secret scan, offer
+  audit, deployment audit, production build, and launch bundle generation.
 - `pnpm launch:secrets`
 - `pnpm launch:doctor`
 - `PUBLIC_APP_URL=https://academy.spindeleye.test pnpm launch:sitemap`
