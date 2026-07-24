@@ -127,6 +127,7 @@ describe("createLaunchEvidenceBundle", () => {
       "individual-learner-decision-one-pager.md",
       "practice-manager-approval-one-pager.md",
       "manual-payment-link-checklist.md",
+      "static-first-sale-page-guide.md",
       "first-buyer-fulfillment-checklist.md",
       "revenue-and-sales-tracker-template.md",
       "stripe-setup-guide.md",
@@ -206,6 +207,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const manualPaymentLinkChecklist = await readFile(
       path.join(result.outputDir, "manual-payment-link-checklist.md"),
+      "utf8"
+    );
+    const staticFirstSalePageGuide = await readFile(
+      path.join(result.outputDir, "static-first-sale-page-guide.md"),
       "utf8"
     );
     const firstBuyerFulfillmentChecklist = await readFile(
@@ -417,6 +422,16 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(manualPaymentLinkChecklist).not.toContain("sk_test_");
     expect(manualPaymentLinkChecklist).not.toContain("whsec_");
+    expect(staticFirstSalePageGuide).toContain(
+      "OptiTech Academy Static First-Sale Page Guide"
+    );
+    expect(staticFirstSalePageGuide).toContain(
+      "pnpm launch:static-first-sale-page"
+    );
+    expect(staticFirstSalePageGuide).toContain("launch-static/first-sale.html");
+    expect(staticFirstSalePageGuide).toContain("pnpm launch:fulfillment");
+    expect(staticFirstSalePageGuide).not.toContain("sk_test_");
+    expect(staticFirstSalePageGuide).not.toContain("whsec_");
     expect(firstBuyerFulfillmentChecklist).toContain(
       "OptiTech Academy First Buyer Fulfillment Checklist"
     );

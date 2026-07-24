@@ -514,6 +514,39 @@ describe("deployment files", () => {
     expect(manualPaymentChecklist).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe static first-sale page command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const staticPageScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-static-first-sale-page.mjs"),
+      "utf8"
+    );
+    const staticPageGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/static-first-sale-page-guide.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:static-first-sale-page": "node scripts/launch-static-first-sale-page.mjs"'
+    );
+    expect(staticPageScript).toContain("launch-static");
+    expect(staticPageScript).toContain("first-sale.html");
+    expect(staticPageScript).toContain('url.protocol !== "https:"');
+    expect(staticPageScript).toContain('url.hostname !== "buy.stripe.com"');
+    expect(staticPageScript).not.toContain("execSync");
+    expect(staticPageScript).not.toContain("sk_test_");
+    expect(staticPageScript).not.toContain("whsec_");
+    expect(staticPageGuide).toContain(
+      "OptiTech Academy Static First-Sale Page Guide"
+    );
+    expect(staticPageGuide).toContain("pnpm launch:manual-payment-links");
+    expect(staticPageGuide).toContain("pnpm launch:fulfillment");
+    expect(staticPageGuide).not.toContain("sk_test_");
+    expect(staticPageGuide).not.toContain("whsec_");
+  });
+
   it("keeps the jeffmini home-PC resume guide printable", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

@@ -56,6 +56,9 @@ For first paid buyer receipt, access, and welcome checks, use
 For controlled first-buyer Stripe Payment Links while automated checkout is
 paused, use `docs/launch/manual-payment-link-checklist.md` or run
 `pnpm launch:manual-payment-links`.
+For a static first-sale page that can be published separately while the backend
+launch is still gated, use `docs/launch/static-first-sale-page-guide.md` or run
+`pnpm launch:static-first-sale-page`.
 For safe lead, purchase, refund, support, and weekly revenue tracking, use
 `docs/launch/revenue-and-sales-tracker-template.md`.
 For Stripe-specific setup, use `docs/launch/stripe-setup-guide.md`.
@@ -273,6 +276,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/individual-learner-decision-one-pager.md`
 - `docs/launch/practice-manager-approval-one-pager.md`
 - `docs/launch/manual-payment-link-checklist.md`
+- `docs/launch/static-first-sale-page-guide.md`
 - `docs/launch/first-buyer-fulfillment-checklist.md`
 - `docs/launch/revenue-and-sales-tracker-template.md`
 - `docs/launch/stripe-setup-guide.md`

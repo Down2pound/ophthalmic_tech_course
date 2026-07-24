@@ -49,6 +49,7 @@
     "launch:secret-scan": "node scripts/launch-secret-scan.mjs",
     "launch:spindel-onboarding": "tsx server/src/launch/runSpindelOnboardingChecklist.ts",
     "launch:sitemap": "tsx server/src/launch/runSitemap.ts",
+    "launch:static-first-sale-page": "node scripts/launch-static-first-sale-page.mjs",
     "launch:bundle": "node scripts/launch-evidence-bundle.mjs",
     "launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:bundle",
     "format": "prettier --write ."

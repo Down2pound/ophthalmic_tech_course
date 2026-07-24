@@ -82,6 +82,11 @@ const evidenceFiles = [
     description: "controlled first-buyer Stripe Payment Link setup and stop rules.",
   },
   {
+    source: "docs/launch/static-first-sale-page-guide.md",
+    target: "static-first-sale-page-guide.md",
+    description: "static one-page first-sale fallback for controlled buyer conversations.",
+  },
+  {
     source: "docs/launch/first-buyer-fulfillment-checklist.md",
     target: "first-buyer-fulfillment-checklist.md",
     description: "first paid buyer receipt, access, and welcome checklist.",
