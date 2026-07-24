@@ -29,6 +29,7 @@ import {
 import {
   buyerConfidenceAnswers,
   foundingReleaseStatus,
+  individualLearnerFirstMonthPlan,
   individualLearnerSalesPath,
   individualLearnerStartSteps,
   learnerValueProofPoints,
@@ -402,6 +403,32 @@ export default function Checkout() {
                     Step {index + 1}
                   </p>
                   <h3 className="mt-2 font-semibold">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {step.description}
+                  </p>
+                </section>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="border-blue-100 bg-blue-50 p-6 text-blue-950 shadow-sm">
+            <h2 className="text-2xl font-bold">Your first 30 days</h2>
+            <p className="mt-3 leading-7 text-blue-900">
+              A simple self-paced plan helps you start learning without
+              pretending online completion replaces supervised practice.
+            </p>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {individualLearnerFirstMonthPlan.map(step => (
+                <section
+                  key={step.timeframe}
+                  className="rounded-md border border-blue-100 bg-white p-4"
+                >
+                  <p className="text-sm font-semibold text-blue-700">
+                    {step.timeframe}
+                  </p>
+                  <h3 className="mt-2 font-semibold text-blue-950">
+                    {step.title}
+                  </h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
                     {step.description}
                   </p>

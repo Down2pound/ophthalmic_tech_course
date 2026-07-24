@@ -3,6 +3,7 @@ import {
   buyerConfidenceAnswers,
   foundingReleaseStatus,
   getSalesPathItemCount,
+  individualLearnerFirstMonthPlan,
   individualLearnerSalesPath,
   individualLearnerStartSteps,
   learnerValueProofPoints,
@@ -67,6 +68,24 @@ describe("sales readiness copy", () => {
     expect(combined).toMatch(/same email/i);
     expect(combined).toMatch(/supervisor/i);
     expect(combined).not.toMatch(/guarantee/i);
+  });
+
+  it("gives individual learners a safe first-month plan after purchase", () => {
+    expect(individualLearnerFirstMonthPlan.map(step => step.timeframe)).toEqual(
+      ["Days 1-3", "Days 4-10", "Days 11-20", "Days 21-30"]
+    );
+
+    const combined = individualLearnerFirstMonthPlan
+      .map(step => `${step.timeframe} ${step.title} ${step.description}`)
+      .join(" ");
+
+    expect(combined).toMatch(/checkout email/i);
+    expect(combined).toMatch(/knowledge checks/i);
+    expect(combined).toMatch(/Skills Passport/i);
+    expect(combined).toMatch(/supervisor/i);
+    expect(combined).toMatch(/without claiming independent competency/i);
+    expect(combined).not.toMatch(/guarantee/i);
+    expect(combined).not.toMatch(/certified technician/i);
   });
 
   it("answers common buyer objections without overpromising", () => {

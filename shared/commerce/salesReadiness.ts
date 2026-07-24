@@ -8,6 +8,12 @@ export interface LearnerStartStep {
   description: string;
 }
 
+export interface LearnerFirstMonthStep {
+  timeframe: string;
+  title: string;
+  description: string;
+}
+
 export interface BuyerConfidenceAnswer {
   question: string;
   answer: string;
@@ -107,6 +113,33 @@ export const individualLearnerStartSteps: LearnerStartStep[] = [
     title: "Keep hands-on skills supervised",
     description:
       "Use Skills Passport language with a supervisor, trainer, or future employer for observed practice.",
+  },
+];
+
+export const individualLearnerFirstMonthPlan: LearnerFirstMonthStep[] = [
+  {
+    timeframe: "Days 1-3",
+    title: "Get oriented",
+    description:
+      "Sign in with the checkout email, read the course limits, and complete the first Module 1 lesson without rushing.",
+  },
+  {
+    timeframe: "Days 4-10",
+    title: "Build the language",
+    description:
+      "Review ophthalmic vocabulary, clinic roles, patient communication, and knowledge checks until the words feel less unfamiliar.",
+  },
+  {
+    timeframe: "Days 11-20",
+    title: "Connect learning to practice",
+    description:
+      "Use the Skills Passport and Career Toolkit to write down what still needs supervisor observation or mentor discussion.",
+  },
+  {
+    timeframe: "Days 21-30",
+    title: "Prepare your next conversation",
+    description:
+      "Ask a supervisor, mentor, or future employer which hands-on skills should be observed next, without claiming independent competency.",
   },
 ];
 
