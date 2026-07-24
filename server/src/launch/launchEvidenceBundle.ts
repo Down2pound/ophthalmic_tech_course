@@ -35,6 +35,8 @@ function renderReadme({
     "- `production-launch-package.md`: launch handoff checklist.",
     "- `deployment-guide.md`: beginner-friendly production setup recipe.",
     "- `render-deployment-guide.md`: Render Blueprint setup recipe.",
+    "- `online-start-guide.md`: first-hour path from restored code to deployed closed checkout.",
+    "- `jeffmini-resume-guide.md`: home-PC restore and launch sequence for jeffmini.",
     "- `deployment-cutover-checklist.md`: short first-deploy to paid-launch cutover sequence.",
     "- `domain-and-sharing-guide.md`: production URL, sitemap, and shared-link setup recipe.",
     "- `github-and-source-backup-guide.md`: GitHub push, portable backup, Drive, and NotebookLM source trail.",
@@ -92,6 +94,8 @@ export async function createLaunchEvidenceBundle({
     "production-launch-package.md",
     "deployment-guide.md",
     "render-deployment-guide.md",
+    "online-start-guide.md",
+    "jeffmini-resume-guide.md",
     "deployment-cutover-checklist.md",
     "domain-and-sharing-guide.md",
     "github-and-source-backup-guide.md",
@@ -127,6 +131,14 @@ export async function createLaunchEvidenceBundle({
   );
   const renderDeploymentGuide = await readFile(
     path.resolve(projectRoot, "docs/launch/render-deployment-guide.md"),
+    "utf8"
+  );
+  const onlineStartGuide = await readFile(
+    path.resolve(projectRoot, "docs/launch/online-start-guide.md"),
+    "utf8"
+  );
+  const jeffminiResumeGuide = await readFile(
+    path.resolve(projectRoot, "docs/launch/jeffmini-resume-guide.md"),
     "utf8"
   );
   const deploymentCutoverChecklist = await readFile(
@@ -247,6 +259,14 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "render-deployment-guide.md"),
     renderDeploymentGuide
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "online-start-guide.md"),
+    onlineStartGuide
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "jeffmini-resume-guide.md"),
+    jeffminiResumeGuide
   );
   await writeFile(
     path.join(resolvedOutputDir, "deployment-cutover-checklist.md"),

@@ -33,6 +33,10 @@ For a step-by-step beginner deployment recipe, use
 `docs/launch/deployment-guide.md`.
 For a Render Blueprint deployment path, use
 `docs/launch/render-deployment-guide.md`.
+For the first-hour path from restored code to deployed closed checkout, run
+`pnpm launch:online-start` or use `docs/launch/online-start-guide.md`.
+For continuing from the home PC named `jeffmini`, run `pnpm launch:jeffmini` or
+use `docs/launch/jeffmini-resume-guide.md`.
 
 For production domain, sitemap, and shared-link setup, use
 `docs/launch/domain-and-sharing-guide.md`.
@@ -44,8 +48,11 @@ For the outside-account setup sequence, run `pnpm launch:external-setup`.
 For the simplest start-here launch board, run `pnpm launch:control`.
 For first-customer outreach, sales scripts, and feedback tracking, use
 `docs/launch/first-customers-sales-packet.md`.
+For the first-buyer control panel with safe links, starter messages, and pause
+rules, run `pnpm launch:first-buyer`.
 For first paid buyer receipt, access, and welcome checks, use
-`docs/launch/first-buyer-fulfillment-checklist.md`.
+`docs/launch/first-buyer-fulfillment-checklist.md` or run
+`pnpm launch:fulfillment`.
 For safe lead, purchase, refund, support, and weekly revenue tracking, use
 `docs/launch/revenue-and-sales-tracker-template.md`.
 For Stripe-specific setup, use `docs/launch/stripe-setup-guide.md`.
@@ -238,6 +245,8 @@ buyer, run:
 
 ```bash
 pnpm launch:first-revenue
+pnpm launch:first-buyer
+pnpm launch:fulfillment
 ```
 
 ## Google Drive Handoff
@@ -249,6 +258,8 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/deployment-guide.md`
 - `docs/launch/launch-control-checklist.md`
 - `docs/launch/render-deployment-guide.md`
+- `docs/launch/online-start-guide.md`
+- `docs/launch/jeffmini-resume-guide.md`
 - `docs/launch/deployment-cutover-checklist.md`
 - `docs/launch/domain-and-sharing-guide.md`
 - `docs/launch/github-and-source-backup-guide.md`

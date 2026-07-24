@@ -116,6 +116,8 @@ describe("createLaunchEvidenceBundle", () => {
       "production-launch-package.md",
       "deployment-guide.md",
       "render-deployment-guide.md",
+      "online-start-guide.md",
+      "jeffmini-resume-guide.md",
       "deployment-cutover-checklist.md",
       "domain-and-sharing-guide.md",
       "github-and-source-backup-guide.md",
@@ -159,6 +161,14 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const renderDeploymentGuide = await readFile(
       path.join(result.outputDir, "render-deployment-guide.md"),
+      "utf8"
+    );
+    const onlineStartGuide = await readFile(
+      path.join(result.outputDir, "online-start-guide.md"),
+      "utf8"
+    );
+    const jeffminiResumeGuide = await readFile(
+      path.join(result.outputDir, "jeffmini-resume-guide.md"),
       "utf8"
     );
     const deploymentCutoverChecklist = await readFile(
@@ -257,6 +267,14 @@ describe("createLaunchEvidenceBundle", () => {
     expect(renderDeploymentGuide).toContain("/api/checkout/availability");
     expect(renderDeploymentGuide).not.toContain("sk_test_");
     expect(renderDeploymentGuide).not.toContain("whsec_");
+    expect(onlineStartGuide).toContain("OptiTech Academy Online Start Guide");
+    expect(onlineStartGuide).toContain("pnpm launch:first-buyer");
+    expect(onlineStartGuide).toContain("pnpm launch:fulfillment");
+    expect(jeffminiResumeGuide).toContain(
+      "OptiTech Academy Jeffmini Resume Guide"
+    );
+    expect(jeffminiResumeGuide).toContain("pnpm launch:online-start");
+    expect(jeffminiResumeGuide).toContain("First Buyer Proof Commands");
     expect(deploymentCutoverChecklist).toContain(
       "OptiTech Academy Deployment Cutover Checklist"
     );
