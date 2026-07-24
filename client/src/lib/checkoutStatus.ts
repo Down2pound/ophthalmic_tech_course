@@ -44,10 +44,11 @@ export function getCheckoutStatus(search: string): CheckoutStatus | null {
       tone: "success",
       title: "Payment received",
       message:
-        "Stripe confirmed your payment. You can begin Module 1 now while we finish connecting your durable learner access.",
+        "Stripe confirmed your payment. Use the same checkout email to request a sign-in link, then open Module 1 from your learner account.",
       nextSteps: [
         "Check your email for the Stripe receipt.",
-        "Start Module 1 and save your local progress on this device.",
+        "Request a passwordless sign-in link with the email used at checkout.",
+        "Open Module 1 after your learner access is confirmed.",
         "Do not share patient information in course forms or support requests.",
       ],
     };
