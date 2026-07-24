@@ -6,6 +6,7 @@ import {
   Building2,
   Calculator,
   CheckCircle2,
+  HelpCircle,
   Mail,
   ShieldCheck,
   Users,
@@ -24,6 +25,7 @@ import {
 import { buyerSupportContact } from "@shared/commerce/policies";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
 import {
+  buyerConfidenceAnswers,
   foundingReleaseStatus,
   practiceBuyerSalesPath,
   practiceValueProofPoints,
@@ -301,6 +303,28 @@ export default function PracticePacks() {
                   <h3 className="font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
                     {item.description}
+                  </p>
+                </section>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm md:col-span-2">
+            <div className="flex items-center gap-3">
+              <HelpCircle className="h-6 w-6 text-blue-700" />
+              <h2 className="text-2xl font-bold">
+                Questions managers ask first
+              </h2>
+            </div>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {buyerConfidenceAnswers.map(answer => (
+                <section
+                  key={answer.question}
+                  className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                >
+                  <h3 className="font-semibold">{answer.question}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {answer.answer}
                   </p>
                 </section>
               ))}
