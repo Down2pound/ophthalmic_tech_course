@@ -67,8 +67,34 @@ MODULE_ONE_CLINICAL_APPROVED_VERSION=
 MODULE_ONE_CLINICAL_REVIEW_APPROVED=false
 ```
 
+## Where Each Value Comes From
+
+- `PUBLIC_APP_URL`: the real `https` URL from Render or your custom domain after
+  deploy.
+- `STRIPE_SECRET_KEY`: Stripe dashboard server-side secret key. Paste only in
+  the host dashboard.
+- `STRIPE_WEBHOOK_SECRET`: Stripe webhook endpoint signing secret for
+  `/api/stripe/webhook`.
+- `DATABASE_URL`: Render PostgreSQL or another managed PostgreSQL connection
+  string.
+- `DATABASE_SSL`: usually `true` for managed production PostgreSQL.
+- `AUTH_SESSION_SECRET`: generated with `pnpm launch:secrets` on a trusted
+  computer.
+- `TRANSACTIONAL_EMAIL_API_URL`: your email provider API endpoint. Resend uses
+  `https://api.resend.com/emails`.
+- `TRANSACTIONAL_EMAIL_API_KEY`: email provider API key. Paste only in the host
+  dashboard.
+- `SIGN_IN_FROM_EMAIL`: verified sender address at the email provider.
+- `PRACTICE_SEAT_ADMIN_TOKEN`: generated with `pnpm launch:secrets`.
+- `ALERT_ADMIN_TOKEN`: generated with `pnpm launch:secrets`.
+- `MODULE_ONE_CLINICAL_*`: clinical reviewer signoff fields from
+  `pnpm launch:clinical-review`.
+- `ENABLE_PAID_ENROLLMENT`: final launch switch. Keep `false` until all gates
+  pass.
+
 Keep `ENABLE_PAID_ENROLLMENT=false` and
 `MODULE_ONE_CLINICAL_REVIEW_APPROVED=false` until every launch gate is complete.
 
-After setting values in the host dashboard, run `pnpm launch:doctor` or open
+Before pasting generated values, run `pnpm launch:secrets` on a trusted
+computer. After setting host values, run `pnpm launch:doctor` or open
 `/api/launch/readiness` to confirm the app sees them.
