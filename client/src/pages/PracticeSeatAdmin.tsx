@@ -20,6 +20,7 @@ import {
   KeyRound,
   RefreshCw,
   ShieldCheck,
+  TicketCheck,
   UserPlus,
   Users,
 } from "lucide-react";
@@ -205,6 +206,20 @@ export default function PracticeSeatAdmin() {
       filename: "optitech-learner-leads.csv",
       csv: buildLearnerLeadCsv(pageState.learnerInterests),
     });
+  };
+
+  const prepareRevocationTarget = (
+    targetType:
+      | "enrollment"
+      | "practice-seat-assignment"
+      | "practice-seat-pack",
+    targetId: string
+  ) => {
+    setRevocationTargetType(targetType);
+    setRevocationTargetId(targetId);
+    setStatusMessage(
+      `Loaded ${targetType} ${targetId} into the revocation form. Confirm the refund or support reason before revoking access.`
+    );
   };
 
   return (
@@ -432,6 +447,198 @@ export default function PracticeSeatAdmin() {
                     </li>
                   ))}
                 </ul>
+              </section>
+
+              <section className="mt-6 border-t border-slate-200 pt-5">
+                <div className="flex items-start gap-3">
+                  <TicketCheck className="mt-1 h-5 w-5 text-blue-700" />
+                  <div>
+                    <h3 className="font-semibold">Safe support IDs</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      Use these exact IDs when checking Stripe, documenting a
+                      support case, or preparing a refund-related access
+                      revocation. Do not paste secrets, raw sign-in links,
+                      patient details, or private employee notes here.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                  <section className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <h4 className="font-semibold">Purchases</h4>
+                    {supportProfile.purchases.length === 0 ? (
+                      <p className="mt-2 text-sm text-slate-600">
+                        No purchase records found.
+                      </p>
+                    ) : (
+                      <ul className="mt-3 space-y-2">
+                        {supportProfile.purchases.map(purchase => (
+                          <li
+                            key={purchase.checkoutSessionId}
+                            className="rounded-md border border-slate-200 bg-white p-3 text-sm leading-6"
+                          >
+                            <p className="font-semibold">
+                              {purchase.offerId ?? "Unknown offer"}
+                            </p>
+                            <p className="break-all text-slate-600">
+                              Checkout session: {purchase.checkoutSessionId}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+
+                  <section className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <h4 className="font-semibold">Enrollments</h4>
+                    {supportProfile.enrollments.length === 0 ? (
+                      <p className="mt-2 text-sm text-slate-600">
+                        No enrollment records found.
+                      </p>
+                    ) : (
+                      <ul className="mt-3 space-y-2">
+                        {supportProfile.enrollments.map(enrollment => (
+                          <li
+                            key={enrollment.enrollmentId}
+                            className="rounded-md border border-slate-200 bg-white p-3 text-sm leading-6"
+                          >
+                            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                              <div>
+                                <p className="font-semibold">
+                                  {enrollment.offerId ?? "Unknown offer"}
+                                </p>
+                                <p className="break-all text-slate-600">
+                                  Enrollment ID: {enrollment.enrollmentId}
+                                </p>
+                                <p className="text-slate-600">
+                                  Status: {enrollment.status ?? "unknown"}
+                                </p>
+                                {enrollment.accessExpiresAt && (
+                                  <p className="text-slate-600">
+                                    Access ends:{" "}
+                                    {new Date(
+                                      enrollment.accessExpiresAt
+                                    ).toLocaleDateString()}
+                                  </p>
+                                )}
+                              </div>
+                              <Button
+                                variant="outline"
+                                className="shrink-0"
+                                onClick={() =>
+                                  prepareRevocationTarget(
+                                    "enrollment",
+                                    enrollment.enrollmentId
+                                  )
+                                }
+                              >
+                                Use for revocation
+                              </Button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+
+                  <section className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <h4 className="font-semibold">Practice seat packs</h4>
+                    {supportProfile.practiceSeatPacks.length === 0 ? (
+                      <p className="mt-2 text-sm text-slate-600">
+                        No practice seat packs found.
+                      </p>
+                    ) : (
+                      <ul className="mt-3 space-y-2">
+                        {supportProfile.practiceSeatPacks.map(seatPack => (
+                          <li
+                            key={seatPack.seatPackId}
+                            className="rounded-md border border-slate-200 bg-white p-3 text-sm leading-6"
+                          >
+                            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                              <div>
+                                <p className="font-semibold">
+                                  {seatPack.offerId ?? "Unknown offer"}
+                                </p>
+                                <p className="break-all text-slate-600">
+                                  Seat pack ID: {seatPack.seatPackId}
+                                </p>
+                                <p className="text-slate-600">
+                                  Seats: {seatPack.assignedSeats ?? 0} assigned
+                                  of {seatPack.totalSeats ?? "unknown"}
+                                </p>
+                                <p className="text-slate-600">
+                                  Status: {seatPack.status ?? "unknown"}
+                                </p>
+                              </div>
+                              <Button
+                                variant="outline"
+                                className="shrink-0"
+                                onClick={() =>
+                                  prepareRevocationTarget(
+                                    "practice-seat-pack",
+                                    seatPack.seatPackId
+                                  )
+                                }
+                              >
+                                Use for revocation
+                              </Button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+
+                  <section className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                    <h4 className="font-semibold">Practice assignments</h4>
+                    {supportProfile.practiceSeatAssignments.length === 0 ? (
+                      <p className="mt-2 text-sm text-slate-600">
+                        No practice seat assignments found.
+                      </p>
+                    ) : (
+                      <ul className="mt-3 space-y-2">
+                        {supportProfile.practiceSeatAssignments.map(
+                          assignment => (
+                            <li
+                              key={assignment.assignmentId}
+                              className="rounded-md border border-slate-200 bg-white p-3 text-sm leading-6"
+                            >
+                              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                <div>
+                                  <p className="font-semibold">
+                                    {assignment.learnerEmail ??
+                                      supportProfile.email}
+                                  </p>
+                                  <p className="break-all text-slate-600">
+                                    Assignment ID: {assignment.assignmentId}
+                                  </p>
+                                  <p className="break-all text-slate-600">
+                                    Seat pack ID: {assignment.seatPackId}
+                                  </p>
+                                  <p className="text-slate-600">
+                                    Status: {assignment.status ?? "unknown"}
+                                  </p>
+                                </div>
+                                <Button
+                                  variant="outline"
+                                  className="shrink-0"
+                                  onClick={() =>
+                                    prepareRevocationTarget(
+                                      "practice-seat-assignment",
+                                      assignment.assignmentId
+                                    )
+                                  }
+                                >
+                                  Use for revocation
+                                </Button>
+                              </div>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    )}
+                  </section>
+                </div>
               </section>
             </Card>
           )}
