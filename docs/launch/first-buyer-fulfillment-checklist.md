@@ -13,7 +13,10 @@ details, or private employee details into this checklist.
 
 ## Before Accepting The First Buyer
 
-- [ ] `ENABLE_PAID_ENROLLMENT=true` is active only after all go-live gates pass.
+- [ ] For automated checkout, `ENABLE_PAID_ENROLLMENT=true` is active only
+      after all go-live gates pass.
+- [ ] For controlled manual Stripe Payment Links, `ENABLE_PAID_ENROLLMENT=false`
+      may stay paused, but `manual-payment-link-checklist.md` must be complete.
 - [ ] `/api/launch/readiness` reports `readyForPaidLaunch: true`.
 - [ ] Stripe checkout and webhook were tested in test mode.
 - [ ] Passwordless sign-in email delivery was tested.
@@ -21,7 +24,10 @@ details, or private employee details into this checklist.
 - [ ] Clinical review signoff is recorded.
 - [ ] The public domain, sitemap, and smoke test evidence are saved.
 
-If any item above is not true, stop and use `go-live-checklist.md` first.
+If any item above is not true, stop and use `go-live-checklist.md` first. The
+only exception is a small approved manual-payment-link sale, which must follow
+`manual-payment-link-checklist.md` and should not be treated as broad public
+launch.
 
 ## Individual Learner Fulfillment
 

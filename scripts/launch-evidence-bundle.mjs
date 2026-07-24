@@ -77,6 +77,11 @@ const evidenceFiles = [
     description: "short practice approval memo for managers and budget decision-makers.",
   },
   {
+    source: "docs/launch/manual-payment-link-checklist.md",
+    target: "manual-payment-link-checklist.md",
+    description: "controlled first-buyer Stripe Payment Link setup and stop rules.",
+  },
+  {
     source: "docs/launch/first-buyer-fulfillment-checklist.md",
     target: "first-buyer-fulfillment-checklist.md",
     description: "first paid buyer receipt, access, and welcome checklist.",

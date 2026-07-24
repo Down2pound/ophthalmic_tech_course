@@ -126,6 +126,7 @@ describe("createLaunchEvidenceBundle", () => {
       "first-customers-sales-packet.md",
       "individual-learner-decision-one-pager.md",
       "practice-manager-approval-one-pager.md",
+      "manual-payment-link-checklist.md",
       "first-buyer-fulfillment-checklist.md",
       "revenue-and-sales-tracker-template.md",
       "stripe-setup-guide.md",
@@ -201,6 +202,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const practiceManagerApprovalOnePager = await readFile(
       path.join(result.outputDir, "practice-manager-approval-one-pager.md"),
+      "utf8"
+    );
+    const manualPaymentLinkChecklist = await readFile(
+      path.join(result.outputDir, "manual-payment-link-checklist.md"),
       "utf8"
     );
     const firstBuyerFulfillmentChecklist = await readFile(
@@ -400,6 +405,18 @@ describe("createLaunchEvidenceBundle", () => {
       practiceManagerApprovalOnePager,
       "Do not add patient names, chart details, private employee performance notes, secrets, or payment card information."
     );
+    expect(manualPaymentLinkChecklist).toContain(
+      "OptiTech Academy Manual Payment Link Checklist"
+    );
+    expect(manualPaymentLinkChecklist).toContain(
+      "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER"
+    );
+    expect(manualPaymentLinkChecklist).toContain("pnpm launch:fulfillment");
+    expect(manualPaymentLinkChecklist).toContain(
+      "Do not use manual payment links for broad public launch"
+    );
+    expect(manualPaymentLinkChecklist).not.toContain("sk_test_");
+    expect(manualPaymentLinkChecklist).not.toContain("whsec_");
     expect(firstBuyerFulfillmentChecklist).toContain(
       "OptiTech Academy First Buyer Fulfillment Checklist"
     );

@@ -477,6 +477,43 @@ describe("deployment files", () => {
     expect(livePurchaseScript).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe manual payment-link checklist command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const manualPaymentScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-manual-payment-links.mjs"),
+      "utf8"
+    );
+    const manualPaymentChecklist = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/manual-payment-link-checklist.md"
+      ),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:manual-payment-links": "node scripts/launch-manual-payment-links.mjs"'
+    );
+    expect(manualPaymentScript).toContain(
+      "manual-payment-link-checklist.md"
+    );
+    expect(manualPaymentScript).not.toContain("execSync");
+    expect(manualPaymentChecklist).toContain(
+      "OptiTech Academy Manual Payment Link Checklist"
+    );
+    expect(manualPaymentChecklist).toContain("https://buy.stripe.com/");
+    expect(manualPaymentChecklist).toContain(
+      "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER"
+    );
+    expect(manualPaymentChecklist).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(manualPaymentChecklist).toContain("pnpm launch:fulfillment");
+    expect(manualPaymentChecklist).not.toContain("sk_test_");
+    expect(manualPaymentChecklist).not.toContain("whsec_");
+  });
+
   it("keeps the jeffmini home-PC resume guide printable", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

@@ -53,6 +53,9 @@ rules, run `pnpm launch:first-buyer`.
 For first paid buyer receipt, access, and welcome checks, use
 `docs/launch/first-buyer-fulfillment-checklist.md` or run
 `pnpm launch:fulfillment`.
+For controlled first-buyer Stripe Payment Links while automated checkout is
+paused, use `docs/launch/manual-payment-link-checklist.md` or run
+`pnpm launch:manual-payment-links`.
 For safe lead, purchase, refund, support, and weekly revenue tracking, use
 `docs/launch/revenue-and-sales-tracker-template.md`.
 For Stripe-specific setup, use `docs/launch/stripe-setup-guide.md`.
@@ -269,6 +272,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/first-customers-sales-packet.md`
 - `docs/launch/individual-learner-decision-one-pager.md`
 - `docs/launch/practice-manager-approval-one-pager.md`
+- `docs/launch/manual-payment-link-checklist.md`
 - `docs/launch/first-buyer-fulfillment-checklist.md`
 - `docs/launch/revenue-and-sales-tracker-template.md`
 - `docs/launch/stripe-setup-guide.md`

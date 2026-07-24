@@ -45,6 +45,7 @@ function renderReadme({
     "- `first-customers-sales-packet.md`: first-buyer outreach scripts and feedback tracker.",
     "- `individual-learner-decision-one-pager.md`: short learner-facing fit and purchase decision handout.",
     "- `practice-manager-approval-one-pager.md`: short practice approval memo for managers and budget decision-makers.",
+    "- `manual-payment-link-checklist.md`: controlled first-buyer Stripe Payment Link setup and stop rules.",
     "- `first-buyer-fulfillment-checklist.md`: first paid buyer receipt, access, and welcome checklist.",
     "- `revenue-and-sales-tracker-template.md`: safe lead, purchase, support, and weekly revenue tracker.",
     "- `stripe-setup-guide.md`: Stripe checkout and webhook setup recipe.",
@@ -104,6 +105,7 @@ export async function createLaunchEvidenceBundle({
     "first-customers-sales-packet.md",
     "individual-learner-decision-one-pager.md",
     "practice-manager-approval-one-pager.md",
+    "manual-payment-link-checklist.md",
     "first-buyer-fulfillment-checklist.md",
     "revenue-and-sales-tracker-template.md",
     "stripe-setup-guide.md",
@@ -177,6 +179,10 @@ export async function createLaunchEvidenceBundle({
       projectRoot,
       "docs/launch/practice-manager-approval-one-pager.md"
     ),
+    "utf8"
+  );
+  const manualPaymentLinkChecklist = await readFile(
+    path.resolve(projectRoot, "docs/launch/manual-payment-link-checklist.md"),
     "utf8"
   );
   const firstBuyerFulfillmentChecklist = await readFile(
@@ -299,6 +305,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "practice-manager-approval-one-pager.md"),
     practiceManagerApprovalOnePager
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "manual-payment-link-checklist.md"),
+    manualPaymentLinkChecklist
   );
   await writeFile(
     path.join(resolvedOutputDir, "first-buyer-fulfillment-checklist.md"),

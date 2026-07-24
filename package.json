@@ -33,6 +33,7 @@
     "launch:go-no-go": "tsx server/src/launch/runLaunchGoNoGo.ts",
     "launch:jeffmini": "node scripts/launch-jeffmini-resume.mjs",
     "launch:live-purchase-test": "node scripts/launch-live-purchase-test.mjs",
+    "launch:manual-payment-links": "node scripts/launch-manual-payment-links.mjs",
     "launch:next": "tsx server/src/launch/runProductionSetupPlan.ts",
     "launch:offer-audit": "node scripts/launch-offer-audit.mjs",
     "launch:online-start": "node scripts/launch-online-start.mjs",
