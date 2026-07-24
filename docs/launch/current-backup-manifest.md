@@ -26,6 +26,7 @@ Use the newest matching pair with the same date and commit hash:
 ```text
 optitech-academy-source-YYYY-MM-DD-COMMIT.zip
 optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle
+optitech-academy-launch-evidence-YYYY-MM-DD-COMMIT.zip
 ```
 
 Example:
@@ -33,6 +34,7 @@ Example:
 ```text
 optitech-academy-source-2026-07-24-433a358.zip
 optitech-academy-branch-2026-07-24-433a358.bundle
+optitech-academy-launch-evidence-2026-07-24-433a358.zip
 ```
 
 ## Latest Confirmed Backup
@@ -44,7 +46,9 @@ Beginner translation: if the ZIP says `eeb7504`, use the bundle that also says
 `eeb7504`. Do not mix a ZIP from one commit with a bundle from another commit.
 
 GitHub is the easiest restore path when the branch is pushed. Drive is the
-backup path when GitHub, network access, or the work computer gets blocked.
+backup path when GitHub, network access, or the work computer gets blocked. The
+launch-evidence ZIP is the safe document packet to upload or share for launch
+review; it is not a full source-code restore by itself.
 
 ## What This Backup Includes
 
