@@ -6,23 +6,23 @@ saved launch work.
 Simple translation: GitHub is the easiest path. Google Drive is the backup
 drawer. Use GitHub first unless it fails.
 
-## Latest Saved Work
+## Backup Sources
 
-- Date saved: `2026-07-17`
-- Commit: `b851c92`
-- Full commit: `b851c92f3363ddff1cc45f4cf434798df1bc583f`
 - Branch: `codex/optitech-product-spec`
 - GitHub branch:
   `https://github.com/Down2pound/ophthalmic_tech_course/tree/codex/optitech-product-spec`
 - Google Drive backup folder:
   `https://drive.google.com/drive/folders/1pA_fNKEMLKnCmhn6tkM7VLrEj7fgX97T`
 
+Use GitHub first when it is available. If GitHub or work-computer networking is
+blocked, use the newest matching ZIP and bundle pair in the Drive backup folder.
+
 Google Drive backup files:
 
 - Source ZIP:
-  `optitech-academy-source-2026-07-17-b851c92.zip`
+  `optitech-academy-source-YYYY-MM-DD-COMMIT.zip`
 - Git bundle:
-  `optitech-academy-branch-2026-07-17-b851c92.bundle`
+  `optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle`
 
 ## Option A: Continue From GitHub
 
@@ -57,14 +57,14 @@ pnpm build
 
 Use this if GitHub is unavailable or the branch is missing.
 
-1. Download `optitech-academy-branch-2026-07-17-b851c92.bundle` from the Drive
+1. Download the newest `optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle` from the Drive
    backup folder.
 2. Put it in `C:\dev`.
 3. Open PowerShell in `C:\dev`.
 4. Run:
 
 ```bash
-git clone optitech-academy-branch-2026-07-17-b851c92.bundle ophthalmic_tech_course --branch codex/optitech-product-spec
+git clone optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle ophthalmic_tech_course --branch codex/optitech-product-spec
 cd ophthalmic_tech_course
 git remote set-url origin https://github.com/Down2pound/ophthalmic_tech_course.git
 git push -u origin codex/optitech-product-spec
@@ -82,7 +82,7 @@ turns it back into a normal project and reconnects it to GitHub.
 
 Use this only if Git and the bundle path are confusing.
 
-1. Download `optitech-academy-source-2026-07-17-b851c92.zip`.
+1. Download the newest `optitech-academy-source-YYYY-MM-DD-COMMIT.zip`.
 2. Extract it to `C:\dev\ophthalmic_tech_course`.
 3. Open PowerShell in that folder.
 4. Run:

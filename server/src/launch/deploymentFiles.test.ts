@@ -432,12 +432,14 @@ describe("deployment files", () => {
     expect(resumeScript).toContain("jeffmini-resume-guide.md");
     expect(resumeScript).not.toContain("execSync");
     expect(resumeGuide).toContain("codex/optitech-product-spec");
-    expect(resumeGuide).toContain("b851c92");
     expect(resumeGuide).toContain(
-      "optitech-academy-source-2026-07-17-b851c92.zip"
+      "use the newest matching ZIP and bundle pair"
     );
     expect(resumeGuide).toContain(
-      "optitech-academy-branch-2026-07-17-b851c92.bundle"
+      "optitech-academy-source-YYYY-MM-DD-COMMIT.zip"
+    );
+    expect(resumeGuide).toContain(
+      "optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle"
     );
     expect(resumeGuide).toContain("ENABLE_PAID_ENROLLMENT=false");
     expect(resumeGuide).toContain("pnpm launch:doctor");
