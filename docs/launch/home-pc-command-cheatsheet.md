@@ -116,6 +116,7 @@ pnpm launch:env-template
 pnpm launch:external-setup
 pnpm launch:first-10-customers
 pnpm launch:first-buyer
+pnpm launch:fulfillment
 pnpm launch:first-week-sales
 pnpm launch:jeffmini
 pnpm launch:live-purchase-test
@@ -156,6 +157,8 @@ Render, Stripe, email, clinical signoff, and first live purchase proof.
 `launch:first-10-customers` prints the controlled first-buyer outreach plan.
 `launch:first-buyer` prints the first-buyer control panel with link sending
 rules, starter messages, and pause rules.
+`launch:fulfillment` prints the first paid buyer receipt, access, welcome, and
+support proof checklist.
 `launch:first-week-sales` prints the day-by-day first week sales plan for
 controlled outreach after deployment.
 `launch:jeffmini` prints the exact home-PC resume guide with the July 17 GitHub
@@ -199,6 +202,7 @@ $env:PUBLIC_APP_URL="https://your-real-domain.example"
 pnpm launch:sitemap
 pnpm launch:first-sales
 pnpm launch:first-buyer
+pnpm launch:fulfillment
 pnpm launch:first-week-sales
 $env:LAUNCH_BASE_URL="https://your-real-domain.example"
 pnpm launch:owner-go-no-go
@@ -214,6 +218,8 @@ safety headers are present, and `/robots.txt` blocks private/admin-style paths.
 your real domain.
 `launch:first-buyer` turns those links into a simple first-buyer command center:
 what is safe to send, what is review-only, and when to pause outreach.
+`launch:fulfillment` is the proof checklist for the first real buyer after
+payment: receipt, webhook, access, welcome email, sign-in, and support path.
 `launch:first-week-sales` turns the first-buyer packet into daily actions and
 keeps paid checkout links gated until production proof exists.
 `launch:owner-go-no-go` uses plain Node and only reads the deployed app. It is

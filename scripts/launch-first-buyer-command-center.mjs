@@ -67,7 +67,7 @@ const lines = [
   "3. Ask one simple question: what would make starting in eye care or onboarding new techs easier?",
   "4. Send paid checkout only after readiness, smoke test, and internal live purchase proof are green.",
   "5. Watch the first buyer complete payment, sign-in, and Module 1 access.",
-  "6. Fill `first-buyer-fulfillment-checklist.csv` from `pnpm launch:sales-tracker`.",
+  "6. Run `pnpm launch:fulfillment` and fill `first-buyer-fulfillment-checklist.csv` from `pnpm launch:sales-tracker`.",
   "",
   "## 4. Individual Learner Starter Message",
   "",

@@ -26,6 +26,7 @@
     "launch:external-setup": "tsx server/src/launch/runExternalSetupWorksheet.ts",
     "launch:first-10-customers": "node scripts/launch-first-10-customers.mjs",
     "launch:first-buyer": "node scripts/launch-first-buyer-command-center.mjs",
+    "launch:fulfillment": "node scripts/launch-first-buyer-fulfillment.mjs",
     "launch:first-revenue": "node scripts/launch-first-revenue-path.mjs",
     "launch:first-sales": "node scripts/launch-first-sales-links.mjs",
     "launch:first-week-sales": "tsx server/src/launch/runFirstWeekSalesPlan.ts",

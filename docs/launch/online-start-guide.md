@@ -81,6 +81,7 @@ pnpm launch:sitemap
 pnpm launch:first-sales
 pnpm launch:owner-go-no-go
 pnpm launch:first-buyer
+pnpm launch:fulfillment
 ```
 
 Also open these URLs in a browser:
@@ -112,6 +113,7 @@ Remove-Item Env:\LAUNCH_SMOKE_ALLOW_NOT_READY -ErrorAction SilentlyContinue
 $env:LAUNCH_BASE_URL="https://your-real-domain.example"
 pnpm launch:smoke
 pnpm launch:live-purchase-test
+pnpm launch:fulfillment
 pnpm launch:first-10-customers
 ```
 

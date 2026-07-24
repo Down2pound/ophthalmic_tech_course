@@ -56,6 +56,7 @@ revenue.
 pnpm launch:jeffmini
 pnpm launch:online-start
 pnpm launch:first-buyer
+pnpm launch:fulfillment
 pnpm launch:first-revenue
 pnpm launch:bootcamp-intake
 pnpm launch:blockers
@@ -67,6 +68,8 @@ pnpm launch:blockers
   checkout safely closed.
 - `launch:first-buyer` prints the first-buyer control panel with safe links,
   starter messages, and pause rules.
+- `launch:fulfillment` prints the first paid buyer receipt, access, welcome,
+  and support proof checklist.
 - `launch:first-revenue` prints the shortest safe path from restored code to
   one controlled paid buyer.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
