@@ -4,6 +4,10 @@ import {
   createPracticeLeadFollowUpHref,
 } from "./leadFollowUpMessages";
 
+function readMailtoParams(href: string): URLSearchParams {
+  return new URLSearchParams(href.split("?")[1] ?? "");
+}
+
 describe("lead follow-up messages", () => {
   it("creates a safe learner follow-up mailto", () => {
     const href = createLearnerLeadFollowUpHref({
@@ -16,9 +20,12 @@ describe("lead follow-up messages", () => {
       },
     });
     const decoded = decodeURIComponent(href);
+    const mailtoParams = readMailtoParams(href);
 
     expect(href).toContain("mailto:learner@example.com");
-    expect(decoded).toContain("OptiTech Academy founding learner follow-up");
+    expect(mailtoParams.get("subject")).toBe(
+      "OptiTech Academy founding learner follow-up"
+    );
     expect(decoded).toContain("https://academy.example.com/preview");
     expect(decoded).toContain("https://academy.example.com/buyer-guide");
     expect(decoded).toContain("https://academy.example.com/checkout");
@@ -40,9 +47,12 @@ describe("lead follow-up messages", () => {
       },
     });
     const decoded = decodeURIComponent(href);
+    const mailtoParams = readMailtoParams(href);
 
     expect(href).toContain("mailto:manager@example.com");
-    expect(decoded).toContain("OptiTech Academy practice onboarding follow-up");
+    expect(mailtoParams.get("subject")).toBe(
+      "OptiTech Academy practice onboarding follow-up"
+    );
     expect(decoded).toContain("Example Eye");
     expect(decoded).toContain("Estimated learners: 8");
     expect(decoded).toContain("https://academy.example.com/practice-packs");

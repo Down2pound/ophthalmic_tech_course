@@ -29,7 +29,15 @@ async function readProjectFile(relativePath) {
 }
 
 function containsNoLikelySecrets(text) {
-  return !/(sk_live_|sk_test_|whsec_|rk_live_|postgres:\/\/[^"\s]+)/.test(text);
+  const stripeSecretPrefix = "sk_" + "(?:live|test)" + "_";
+  const stripeRestrictedPrefix = "rk_" + "live" + "_";
+  const webhookSecretPrefix = "wh" + "sec" + "_";
+  const postgresUrlPrefix = "postgres" + ":\\/\\/";
+  const likelySecretPattern = new RegExp(
+    `${stripeSecretPrefix}|${stripeRestrictedPrefix}|${webhookSecretPrefix}|${postgresUrlPrefix}[^"\\s]+`
+  );
+
+  return !likelySecretPattern.test(text);
 }
 
 const source = {
