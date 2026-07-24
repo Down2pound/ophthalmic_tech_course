@@ -33,25 +33,25 @@ optitech-academy-static-first-sale-page-YYYY-MM-DD-COMMIT.zip
 Example:
 
 ```text
-optitech-academy-source-2026-07-24-433a358.zip
-optitech-academy-branch-2026-07-24-433a358.bundle
-optitech-academy-launch-evidence-2026-07-24-433a358.zip
-optitech-academy-static-first-sale-page-2026-07-24-433a358.zip
+optitech-academy-source-2026-07-24-1519-39adf90.zip
+optitech-academy-branch-2026-07-24-1519-39adf90.bundle
+optitech-academy-launch-evidence-2026-07-24-1519-39adf90.zip
+optitech-academy-static-first-sale-page-2026-07-24-1519-39adf90.zip
 ```
 
 ## Latest Confirmed Backup
 
 Latest confirmed full source backup point:
 
-- Commit: `fe4421b`
+- Commit: `39adf90`
 - Source code ZIP:
-  `https://drive.google.com/file/d/1p5IZD7xmaI4YOht2F9Emi3WpJdzNrigD/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1xWEhrTGFvLjQ5U4anke-fOQSRtqgqh5n/view?usp=drivesdk`
 - Git branch bundle:
-  `https://drive.google.com/file/d/1T4HtILAq6iOq5L00OqagtiM0Yr0GYUHf/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1PDfAs-hETfLZNECLsfW011WeLjGK1q-7/view?usp=drivesdk`
 - Launch evidence ZIP:
-  `https://drive.google.com/file/d/1mBJOuXNt_tKqBe380rLt9IgLbckbcvYZ/view?usp=drivesdk`
+  `https://drive.google.com/file/d/10ofJyVTbMyedcDNQdYIh8hSsuhx1SDVP/view?usp=drivesdk`
 - Static first-sale page ZIP:
-  `https://drive.google.com/file/d/1fkFyRw7VKaXsAAyG6XRd-rl7RyriBRII/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1IrLF--AKzRBsKRDNVcPdtWeLpVG9TdW4/view?usp=drivesdk`
 
 If this manifest has a newer GitHub commit than the listed backup commit, that
 newer commit is usually only backup bookkeeping. For full restore, use the

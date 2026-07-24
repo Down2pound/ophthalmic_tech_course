@@ -45,6 +45,27 @@ describe("deployment files", () => {
     expect(gitignore).toContain("optitech-academy-branch-*.bundle");
   });
 
+  it("keeps the current backup manifest useful for home-PC restore", async () => {
+    const manifest = await readFile(
+      path.resolve(process.cwd(), "docs/launch/current-backup-manifest.md"),
+      "utf8"
+    );
+
+    expect(manifest).toContain("Latest confirmed full source backup point");
+    expect(manifest).toContain("codex/optitech-product-spec");
+    expect(manifest).toContain(
+      "https://drive.google.com/drive/folders/1pA_fNKEMLKnCmhn6tkM7VLrEj7fgX97T"
+    );
+    expect(manifest).toContain(
+      "optitech-academy-source-2026-07-24-1519-39adf90.zip"
+    );
+    expect(manifest).toContain(
+      "optitech-academy-branch-2026-07-24-1519-39adf90.bundle"
+    );
+    expect(manifest).not.toContain("sk_test_");
+    expect(manifest).not.toContain("whsec_");
+  });
+
   it("keeps the Render Blueprint aligned with the launch service", async () => {
     const renderBlueprint = await readFile(
       path.resolve(process.cwd(), "render.yaml"),
