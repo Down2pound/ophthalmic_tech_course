@@ -1,0 +1,52 @@
+import { describe, expect, it } from "vitest";
+import {
+  createLearnerLeadFollowUpHref,
+  createPracticeLeadFollowUpHref,
+} from "./leadFollowUpMessages";
+
+describe("lead follow-up messages", () => {
+  it("creates a safe learner follow-up mailto", () => {
+    const href = createLearnerLeadFollowUpHref({
+      publicAppUrl: "https://academy.example.com",
+      lead: {
+        learnerName: "Future Tech",
+        email: "learner@example.com",
+        background: "Medical assistant",
+        goal: "Learn ophthalmic vocabulary",
+      },
+    });
+    const decoded = decodeURIComponent(href);
+
+    expect(href).toContain("mailto:learner@example.com");
+    expect(decoded).toContain("OptiTech Academy founding learner follow-up");
+    expect(decoded).toContain("https://academy.example.com/preview");
+    expect(decoded).toContain("https://academy.example.com/buyer-guide");
+    expect(decoded).toContain("https://academy.example.com/checkout");
+    expect(decoded).toContain("not certification");
+    expect(decoded).not.toMatch(/guarantee/i);
+    expect(decoded).not.toMatch(/certified technician/i);
+  });
+
+  it("creates a safe practice follow-up mailto", () => {
+    const href = createPracticeLeadFollowUpHref({
+      publicAppUrl: "https://academy.example.com",
+      lead: {
+        practiceName: "Example Eye",
+        contactName: "Dr. Manager",
+        contactEmail: "manager@example.com",
+        estimatedLearnerCount: 8,
+        targetTimeline: "Next hiring class",
+      },
+    });
+    const decoded = decodeURIComponent(href);
+
+    expect(href).toContain("mailto:manager@example.com");
+    expect(decoded).toContain("OptiTech Academy practice onboarding follow-up");
+    expect(decoded).toContain("Example Eye");
+    expect(decoded).toContain("Estimated learners: 8");
+    expect(decoded).toContain("https://academy.example.com/practice-packs");
+    expect(decoded).toContain("hands-on competency signoff");
+    expect(decoded).not.toMatch(/guarantee/i);
+    expect(decoded).not.toMatch(/replaces? supervision/i);
+  });
+});

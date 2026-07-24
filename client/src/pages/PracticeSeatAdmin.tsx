@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   Download,
   KeyRound,
+  Mail,
   RefreshCw,
   ShieldCheck,
   TicketCheck,
@@ -31,6 +32,13 @@ import {
   buildPracticeLeadCsv,
   downloadCsvFile,
 } from "@/lib/leadCsvExport";
+import {
+  createLearnerLeadFollowUpHref,
+  createPracticeLeadFollowUpHref,
+} from "@shared/commerce/leadFollowUpMessages";
+
+const publicAppUrl =
+  typeof window === "undefined" ? "https://your-real-domain.example" : window.location.origin;
 
 interface PageState {
   seatPacks: PracticeSeatPackSummary[];
@@ -868,6 +876,16 @@ export default function PracticeSeatAdmin() {
                     <p className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm font-semibold leading-6 text-amber-950">
                       {inquiry.followUpPlan.nextAction}
                     </p>
+                    <a
+                      href={createPracticeLeadFollowUpHref({
+                        lead: inquiry,
+                        publicAppUrl,
+                      })}
+                      className="mt-3 inline-flex items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50"
+                    >
+                      <Mail className="h-4 w-4" />
+                      Open follow-up draft
+                    </a>
                     <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
                       {inquiry.followUpPlan.talkingPoints.map(point => (
                         <li key={point}>- {point}</li>
@@ -926,6 +944,16 @@ export default function PracticeSeatAdmin() {
                       Recommended next step: send the learner decision one-pager
                       and invite founding access when paid enrollment opens.
                     </p>
+                    <a
+                      href={createLearnerLeadFollowUpHref({
+                        lead: interest,
+                        publicAppUrl,
+                      })}
+                      className="mt-3 inline-flex items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50"
+                    >
+                      <Mail className="h-4 w-4" />
+                      Open follow-up draft
+                    </a>
                     <p className="mt-3 text-sm leading-6 text-slate-700">
                       {interest.goal}
                     </p>
