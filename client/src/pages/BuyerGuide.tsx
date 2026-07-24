@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { buyerDecisionGuides } from "@shared/commerce/buyerDecisionGuide";
+import { createMailtoHref } from "@shared/commerce/offers";
 import {
   ArrowLeft,
   ArrowRight,
@@ -8,6 +9,7 @@ import {
   CheckCircle2,
   GraduationCap,
   HelpCircle,
+  Mail,
   ShieldCheck,
 } from "lucide-react";
 
@@ -50,6 +52,11 @@ export default function BuyerGuide() {
       <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         {buyerDecisionGuides.map(guide => {
           const GuideIcon = guideIcons[guide.id];
+          const shareHref = createMailtoHref({
+            email: "",
+            subject: `OptiTech Academy ${guide.title}`,
+            body: guide.safeShareMessage,
+          });
 
           return (
             <Card
@@ -143,6 +150,13 @@ export default function BuyerGuide() {
                     <p className="mt-3 text-sm leading-6">
                       {guide.safeShareMessage}
                     </p>
+                    <a
+                      href={shareHref}
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900"
+                    >
+                      <Mail className="h-4 w-4" />
+                      Open email draft
+                    </a>
                   </div>
                   <div className="space-y-3">
                     <a href={guide.primaryCta.href}>
