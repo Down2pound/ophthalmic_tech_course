@@ -10,6 +10,7 @@ export const publicSitemapRoutes = [
   "/policies",
   "/skills-passport",
   "/career-toolkit",
+  "/certificate-preview",
   "/onboarding",
 ] as const;
 
