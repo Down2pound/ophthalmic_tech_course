@@ -80,6 +80,7 @@ $env:PUBLIC_APP_URL="https://your-real-domain.example"
 pnpm launch:sitemap
 pnpm launch:first-sales
 pnpm launch:owner-go-no-go
+pnpm launch:first-buyer
 ```
 
 Also open these URLs in a browser:
