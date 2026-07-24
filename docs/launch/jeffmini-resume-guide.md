@@ -23,12 +23,34 @@ Backup naming rules and the Drive folder link are recorded in:
 docs/launch/current-backup-manifest.md
 ```
 
+Start there if you are unsure which file is newest. The newest backup set should
+use the same short commit hash as the GitHub branch.
+
 Google Drive backup files:
 
 - Source ZIP:
   `optitech-academy-source-YYYY-MM-DD-COMMIT.zip`
 - Git bundle:
   `optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle`
+
+## First Hour On Jeffmini
+
+Use this short path before opening Stripe, Render, email, or database dashboards:
+
+```bash
+git clone https://github.com/Down2pound/ophthalmic_tech_course.git
+cd ophthalmic_tech_course
+git checkout codex/optitech-product-spec
+pnpm install
+pnpm launch:preflight
+pnpm launch:blockers
+pnpm launch:online-start
+pnpm launch:next
+```
+
+If that passes, the code copy is healthy and you can move into outside-account
+setup. If it fails, do not create live payment links yet. Fix the local issue or
+use the newest Drive bundle from `docs/launch/current-backup-manifest.md`.
 
 ## Option A: Continue From GitHub
 

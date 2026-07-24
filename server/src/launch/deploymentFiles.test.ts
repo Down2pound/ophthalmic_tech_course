@@ -580,6 +580,9 @@ describe("deployment files", () => {
     expect(resumeScript).toContain("jeffmini-resume-guide.md");
     expect(resumeScript).not.toContain("execSync");
     expect(resumeGuide).toContain("codex/optitech-product-spec");
+    expect(resumeGuide).toContain("First Hour On Jeffmini");
+    expect(resumeGuide).toContain("pnpm launch:online-start");
+    expect(resumeGuide).toContain("docs/launch/current-backup-manifest.md");
     expect(resumeGuide).toContain(
       "use the newest matching ZIP and bundle pair"
     );
