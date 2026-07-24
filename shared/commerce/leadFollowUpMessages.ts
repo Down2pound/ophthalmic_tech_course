@@ -1,5 +1,7 @@
 import { createMailtoHref } from "./offers";
 
+const fallbackPublicAppUrl = "https://your-real-domain.example";
+
 export interface LearnerFollowUpLead {
   learnerName: string;
   email: string;
@@ -16,7 +18,17 @@ export interface PracticeFollowUpLead {
 }
 
 function buildPublicUrl(publicAppUrl: string, path: string): string {
-  return new URL(path, publicAppUrl).toString();
+  try {
+    const baseUrl = new URL(publicAppUrl.trim());
+
+    if (!["http:", "https:"].includes(baseUrl.protocol)) {
+      return new URL(path, fallbackPublicAppUrl).toString();
+    }
+
+    return new URL(path, baseUrl).toString();
+  } catch {
+    return new URL(path, fallbackPublicAppUrl).toString();
+  }
 }
 
 export function createLearnerLeadFollowUpHref({

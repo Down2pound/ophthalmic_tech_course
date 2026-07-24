@@ -37,8 +37,11 @@ import {
   createPracticeLeadFollowUpHref,
 } from "@shared/commerce/leadFollowUpMessages";
 
-const publicAppUrl =
-  typeof window === "undefined" ? "https://your-real-domain.example" : window.location.origin;
+function getDefaultPublicAppUrl() {
+  return typeof window === "undefined"
+    ? "https://your-real-domain.example"
+    : window.location.origin;
+}
 
 interface PageState {
   seatPacks: PracticeSeatPackSummary[];
@@ -53,6 +56,9 @@ function getRemainingSeats(seatPack: PracticeSeatPackSummary) {
 
 export default function PracticeSeatAdmin() {
   const [adminToken, setAdminToken] = useState("");
+  const [draftPublicAppUrl, setDraftPublicAppUrl] = useState(
+    getDefaultPublicAppUrl
+  );
   const [supportLookupEmail, setSupportLookupEmail] = useState("");
   const [revocationTargetType, setRevocationTargetType] = useState<
     "enrollment" | "practice-seat-assignment" | "practice-seat-pack"
@@ -295,6 +301,23 @@ export default function PracticeSeatAdmin() {
               <RefreshCw className="mr-2 h-4 w-4" />
               {loadingAction === "load" ? "Loading..." : "Load seat packs"}
             </Button>
+
+            <div className="mt-6 border-t border-slate-200 pt-5">
+              <label className="block text-sm font-semibold text-slate-700">
+                Public app URL for follow-up drafts
+              </label>
+              <input
+                type="url"
+                value={draftPublicAppUrl}
+                onChange={event => setDraftPublicAppUrl(event.target.value)}
+                placeholder="https://your-real-domain.example"
+                className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-950 outline-none ring-blue-500 focus:ring-2"
+              />
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Use the deployed site URL here before opening learner or
+                practice follow-up drafts.
+              </p>
+            </div>
 
             {statusMessage && (
               <p className="mt-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-900">
@@ -879,7 +902,7 @@ export default function PracticeSeatAdmin() {
                     <a
                       href={createPracticeLeadFollowUpHref({
                         lead: inquiry,
-                        publicAppUrl,
+                        publicAppUrl: draftPublicAppUrl,
                       })}
                       className="mt-3 inline-flex items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50"
                     >
@@ -947,7 +970,7 @@ export default function PracticeSeatAdmin() {
                     <a
                       href={createLearnerLeadFollowUpHref({
                         lead: interest,
-                        publicAppUrl,
+                        publicAppUrl: draftPublicAppUrl,
                       })}
                       className="mt-3 inline-flex items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50"
                     >

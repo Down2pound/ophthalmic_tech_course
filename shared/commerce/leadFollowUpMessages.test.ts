@@ -49,4 +49,20 @@ describe("lead follow-up messages", () => {
     expect(decoded).not.toMatch(/guarantee/i);
     expect(decoded).not.toMatch(/replaces? supervision/i);
   });
+
+  it("falls back to a placeholder domain when the draft public URL is invalid", () => {
+    const href = createLearnerLeadFollowUpHref({
+      publicAppUrl: "not a url yet",
+      lead: {
+        learnerName: "Future Tech",
+        email: "learner@example.com",
+        background: "Student",
+        goal: "Explore eye care",
+      },
+    });
+    const decoded = decodeURIComponent(href);
+
+    expect(decoded).toContain("https://your-real-domain.example/preview");
+    expect(decoded).toContain("https://your-real-domain.example/checkout");
+  });
 });
