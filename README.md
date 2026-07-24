@@ -54,6 +54,7 @@ revenue.
 
 ```bash
 pnpm launch:jeffmini
+pnpm launch:online-start
 pnpm launch:first-revenue
 pnpm launch:bootcamp-intake
 pnpm launch:blockers
@@ -61,6 +62,8 @@ pnpm launch:blockers
 
 - `launch:jeffmini` prints the home-PC restore path, using GitHub first and
   Google Drive as the backup drawer.
+- `launch:online-start` prints the first-hour path for deploying the site with
+  checkout safely closed.
 - `launch:first-revenue` prints the shortest safe path from restored code to
   one controlled paid buyer.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
