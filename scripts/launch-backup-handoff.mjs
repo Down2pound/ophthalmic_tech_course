@@ -33,11 +33,25 @@ function countMatches(pattern) {
 }
 
 function readProjectFilenames() {
+  const filenames = [];
+
   try {
-    return readdirSync(projectRoot);
+    filenames.push(...readdirSync(projectRoot));
   } catch {
-    return [];
+    // Keep the report printable even when local file listing is restricted.
   }
+
+  try {
+    filenames.push(
+      ...readdirSync(path.join(projectRoot, "backups")).map(filename =>
+        path.join("backups", filename)
+      )
+    );
+  } catch {
+    // The backups folder is optional on a fresh clone.
+  }
+
+  return filenames;
 }
 
 function readTextFile(filePath) {
@@ -71,9 +85,13 @@ function detectGitCommit(headText) {
 function findBackupFile(filenames, prefix, extension, commit) {
   return (
     filenames.find(
-      filename =>
-        filename.startsWith(prefix) &&
-        filename.endsWith(`${commit}${extension}`)
+      filename => {
+        const baseName = path.basename(filename);
+        return (
+          baseName.startsWith(prefix) &&
+          baseName.endsWith(`${commit}${extension}`)
+        );
+      }
     ) || ""
   );
 }
@@ -101,6 +119,14 @@ const bundleArchiveName = valueOrPlaceholder(
   process.env.BACKUP_BUNDLE_ARCHIVE,
   `optitech-academy-branch-YYYY-MM-DD-${latestCommit}.bundle`
 );
+const launchEvidenceArchiveName = valueOrPlaceholder(
+  process.env.BACKUP_LAUNCH_EVIDENCE_ARCHIVE,
+  `optitech-academy-launch-evidence-YYYY-MM-DD-${latestCommit}.zip`
+);
+const staticFirstSalePageArchiveName = valueOrPlaceholder(
+  process.env.BACKUP_STATIC_FIRST_SALE_PAGE_ARCHIVE,
+  `optitech-academy-static-first-sale-page-YYYY-MM-DD-${latestCommit}.zip`
+);
 const bootcampDayCount = countMatches(/^\s*day:\s*\d+,/gm);
 const sourceAssetCount = countMatches(/^\s*storageKey:/gm);
 const projectFilenames = readProjectFilenames();
@@ -114,6 +140,18 @@ const detectedBundleBackup = findBackupFile(
   projectFilenames,
   "optitech-academy-branch-",
   ".bundle",
+  latestCommit
+);
+const detectedLaunchEvidenceBackup = findBackupFile(
+  projectFilenames,
+  "optitech-academy-launch-evidence-",
+  ".zip",
+  latestCommit
+);
+const detectedStaticFirstSalePageBackup = findBackupFile(
+  projectFilenames,
+  "optitech-academy-static-first-sale-page-",
+  ".zip",
   latestCommit
 );
 const restoreBundleName = detectedBundleBackup || bundleArchiveName;
@@ -141,10 +179,14 @@ const report = [
   "",
   `- Source ZIP: ${sourceArchiveName}`,
   `- Git bundle: ${bundleArchiveName}`,
+  `- Launch evidence ZIP: ${launchEvidenceArchiveName}`,
+  `- Static first-sale page ZIP: ${staticFirstSalePageArchiveName}`,
   `- Source ZIP status: ${formatBackupStatus(detectedSourceBackup)}`,
   `- Git bundle status: ${formatBackupStatus(detectedBundleBackup)}`,
+  `- Launch evidence ZIP status: ${formatBackupStatus(detectedLaunchEvidenceBackup)}`,
+  `- Static first-sale page ZIP status: ${formatBackupStatus(detectedStaticFirstSalePageBackup)}`,
   "",
-  "Upload the ZIP and bundle to the Google Drive handoff folder when GitHub push is blocked.",
+  "Upload the ZIP, bundle, launch evidence ZIP, and static first-sale page ZIP to the Google Drive handoff folder when GitHub push is blocked.",
   "",
   "The exact latest known backup filenames and Drive links are recorded in:",
   "",

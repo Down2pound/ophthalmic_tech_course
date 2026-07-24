@@ -27,6 +27,7 @@ Use the newest matching pair with the same date and commit hash:
 optitech-academy-source-YYYY-MM-DD-COMMIT.zip
 optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle
 optitech-academy-launch-evidence-YYYY-MM-DD-COMMIT.zip
+optitech-academy-static-first-sale-page-YYYY-MM-DD-COMMIT.zip
 ```
 
 Example:
@@ -35,9 +36,22 @@ Example:
 optitech-academy-source-2026-07-24-433a358.zip
 optitech-academy-branch-2026-07-24-433a358.bundle
 optitech-academy-launch-evidence-2026-07-24-433a358.zip
+optitech-academy-static-first-sale-page-2026-07-24-433a358.zip
 ```
 
 ## Latest Confirmed Backup
+
+Latest confirmed saved point:
+
+- Commit: `f8d59dc`
+- Source code ZIP:
+  `https://drive.google.com/file/d/1eKhQWNvpXLfm6IJ49d11JVj52s02SPeP/view?usp=drivesdk`
+- Git branch bundle:
+  `https://drive.google.com/file/d/1dnmpAUa-jbkW6kcdpSH5G0sXFrcdn7OY/view?usp=drivesdk`
+- Launch evidence ZIP:
+  `https://drive.google.com/file/d/17bPe9y3PxiWFGhuXrU0vKDDFmNhMj9Bl/view?usp=drivesdk`
+- Static first-sale page ZIP:
+  `https://drive.google.com/file/d/1rkztVhXGcy6A6atybwLshbP90MwO2aul/view?usp=drivesdk`
 
 Use the newest matching ZIP and bundle pair in the Google Drive folder. The
 date and short commit hash should match in both filenames.

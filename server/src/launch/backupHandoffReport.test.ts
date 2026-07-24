@@ -8,6 +8,10 @@ describe("renderBackupHandoffReport", () => {
       latestCommit: "abc1234",
       sourceArchiveName: "optitech-academy-source-2026-07-16-abc1234.zip",
       bundleArchiveName: "optitech-academy-branch-2026-07-16-abc1234.bundle",
+      launchEvidenceArchiveName:
+        "optitech-academy-launch-evidence-2026-07-16-abc1234.zip",
+      staticFirstSalePageArchiveName:
+        "optitech-academy-static-first-sale-page-2026-07-16-abc1234.zip",
     });
 
     expect(report).toContain("# OptiTech Academy Backup Handoff");
@@ -20,6 +24,12 @@ describe("renderBackupHandoffReport", () => {
     expect(report).toContain("optitech-academy-source-2026-07-16-abc1234.zip");
     expect(report).toContain(
       "optitech-academy-branch-2026-07-16-abc1234.bundle"
+    );
+    expect(report).toContain(
+      "optitech-academy-launch-evidence-2026-07-16-abc1234.zip"
+    );
+    expect(report).toContain(
+      "optitech-academy-static-first-sale-page-2026-07-16-abc1234.zip"
     );
     expect(report).toContain("pnpm launch:env-template");
     expect(report).toContain("pnpm launch:admin-tokens");

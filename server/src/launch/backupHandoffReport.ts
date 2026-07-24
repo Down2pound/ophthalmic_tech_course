@@ -14,6 +14,8 @@ export interface BackupHandoffReportInput {
   latestCommit?: string;
   sourceArchiveName?: string;
   bundleArchiveName?: string;
+  launchEvidenceArchiveName?: string;
+  staticFirstSalePageArchiveName?: string;
 }
 
 function valueOrPlaceholder(value: string | undefined, placeholder: string) {
@@ -26,6 +28,8 @@ export function renderBackupHandoffReport({
   latestCommit,
   sourceArchiveName,
   bundleArchiveName,
+  launchEvidenceArchiveName,
+  staticFirstSalePageArchiveName,
 }: BackupHandoffReportInput = {}): string {
   const safeBranchName = valueOrPlaceholder(
     branchName,
@@ -39,6 +43,14 @@ export function renderBackupHandoffReport({
   const safeBundleArchiveName = valueOrPlaceholder(
     bundleArchiveName,
     `optitech-academy-branch-YYYY-MM-DD-${safeCommit}.bundle`
+  );
+  const safeLaunchEvidenceArchiveName = valueOrPlaceholder(
+    launchEvidenceArchiveName,
+    `optitech-academy-launch-evidence-YYYY-MM-DD-${safeCommit}.zip`
+  );
+  const safeStaticFirstSalePageArchiveName = valueOrPlaceholder(
+    staticFirstSalePageArchiveName,
+    `optitech-academy-static-first-sale-page-YYYY-MM-DD-${safeCommit}.zip`
   );
 
   return [
@@ -64,8 +76,10 @@ export function renderBackupHandoffReport({
     "",
     `- Source ZIP: ${safeSourceArchiveName}`,
     `- Git bundle: ${safeBundleArchiveName}`,
+    `- Launch evidence ZIP: ${safeLaunchEvidenceArchiveName}`,
+    `- Static first-sale page ZIP: ${safeStaticFirstSalePageArchiveName}`,
     "",
-    "Upload the ZIP and bundle to the Google Drive handoff folder when GitHub push is blocked.",
+    "Upload the ZIP, bundle, launch evidence ZIP, and static first-sale page ZIP to the Google Drive handoff folder when GitHub push is blocked.",
     "",
     "## Production Host Settings",
     "",
