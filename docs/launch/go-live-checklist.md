@@ -9,6 +9,7 @@ until every section is complete and the deployed app says it is ready.
 - [ ] Run `pnpm launch:preflight`.
 - [ ] Confirm `pnpm launch:secret-scan` passes for the release candidate.
 - [ ] Confirm `pnpm launch:offer-audit` passes for the release candidate.
+- [ ] Confirm `pnpm launch:deployment-audit` passes for the release candidate.
 - [ ] Save the generated `launch-evidence/` folder.
 - [ ] Confirm no `.env`, secret keys, raw tokens, cookies, database passwords,
       or protected health information were saved.

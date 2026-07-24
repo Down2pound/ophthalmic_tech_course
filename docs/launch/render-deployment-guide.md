@@ -21,6 +21,15 @@ For the short copy/paste checklist, run:
 pnpm launch:render-setup
 ```
 
+Before creating or updating the Blueprint, run:
+
+```bash
+pnpm launch:deployment-audit
+```
+
+That command checks that `render.yaml`, `Dockerfile`, `Procfile`, and launch CI
+still match the safe production setup.
+
 For the full owner path from restored code to one controlled paid buyer, run:
 
 ```bash

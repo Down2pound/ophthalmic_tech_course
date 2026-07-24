@@ -37,6 +37,7 @@ docs/launch/current-backup-manifest.md
 | Code restored | Latest branch opens on `jeffmini` | `pnpm launch:jeffmini` |
 | Local app proof | TypeScript, tests, secret scan, build, and bundle pass | `pnpm launch:preflight` |
 | Clinical signoff | Module 1 reviewer approves the packet and env fields are filled | `pnpm launch:clinical-review` |
+| Deployment files | Render, Docker, Procfile, and CI settings are aligned | `pnpm launch:deployment-audit` |
 | Hosting | Public HTTPS site is deployed and health endpoint works | `pnpm launch:render-setup` |
 | Database | Managed PostgreSQL exists and tables are verified | `pnpm launch:database-setup` then `pnpm db:setup` |
 | Email | Passwordless sign-in email sends successfully | `pnpm launch:email-setup` |
@@ -59,6 +60,7 @@ pnpm check
 pnpm test
 pnpm launch:secret-scan
 pnpm launch:offer-audit
+pnpm launch:deployment-audit
 pnpm build
 pnpm launch:bundle
 pnpm launch:blockers

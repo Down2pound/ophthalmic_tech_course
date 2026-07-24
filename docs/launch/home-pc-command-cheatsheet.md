@@ -72,6 +72,7 @@ pnpm check
 pnpm test
 pnpm launch:secret-scan
 pnpm launch:offer-audit
+pnpm launch:deployment-audit
 pnpm build
 pnpm launch:bundle
 ```
@@ -86,6 +87,8 @@ pnpm launch:preflight
 without printing the secret values.
 `launch:offer-audit` checks that buyer-facing prices and app checkout prices
 still match before money is involved.
+`launch:deployment-audit` checks that Render, Docker, Procfile, and CI launch
+settings still match the safe production setup.
 
 On a locked-down work computer, use this smaller safety command:
 
@@ -94,7 +97,7 @@ pnpm launch:work-safe-preflight
 ```
 
 It skips the known-blocked Vite/Vitest/tsx runners and checks TypeScript,
-secrets, offer pricing, and current launch blockers.
+secrets, offer pricing, deployment settings, and current launch blockers.
 
 ## 4. Check Production Setup Files
 
@@ -107,6 +110,7 @@ pnpm launch:bootcamp-intake
 pnpm launch:first-revenue
 pnpm launch:clinical-review
 pnpm launch:database-setup
+pnpm launch:deployment-audit
 pnpm launch:email-setup
 pnpm launch:env-template
 pnpm launch:external-setup
@@ -140,6 +144,8 @@ controlled paid buyer.
 fields.
 `launch:database-setup` prints the production database setup and verification
 checklist.
+`launch:deployment-audit` checks deploy files before Render, Docker, or CI runs
+the app online.
 `launch:email-setup` prints the passwordless sign-in email setup and test
 checklist.
 `launch:env-template` prints the safe host settings block for Render or another

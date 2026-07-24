@@ -97,7 +97,10 @@ describe("deployment files", () => {
       '"launch:backup": "node scripts/launch-backup-handoff.mjs"'
     );
     expect(packageJson).toContain(
-      '"launch:workstation-handoff": "node scripts/launch-blockers-summary.mjs && node scripts/launch-secret-scan.mjs && node scripts/launch-backup-handoff.mjs && node scripts/launch-post-0716-handoff.mjs && node scripts/launch-first-revenue-path.mjs"'
+      '"launch:work-safe-preflight": "pnpm check && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm launch:blockers"'
+    );
+    expect(packageJson).toContain(
+      '"launch:workstation-handoff": "pnpm launch:work-safe-preflight && node scripts/launch-backup-handoff.mjs && node scripts/launch-post-0716-handoff.mjs && node scripts/launch-first-revenue-path.mjs"'
     );
     expect(backupScript).toContain('path.join(projectRoot, ".git", "HEAD")');
     expect(backupScript).toContain("formatBackupStatus");
@@ -105,8 +108,36 @@ describe("deployment files", () => {
     expect(backupScript).toContain("git remote set-url origin");
     expect(backupScript).toContain("pnpm install");
     expect(backupScript).toContain("pnpm launch:preflight");
+    expect(backupScript).toContain("pnpm launch:deployment-audit");
     expect(backupScript).toContain("pnpm launch:first-sales");
     expect(backupScript).not.toContain("execSync");
+  });
+
+  it("keeps a work-computer-safe deployment audit command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const deploymentAuditScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-deployment-audit.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:deployment-audit": "node scripts/launch-deployment-audit.mjs"'
+    );
+    expect(deploymentAuditScript).toContain(
+      "OptiTech Academy Deployment Audit"
+    );
+    expect(deploymentAuditScript).toContain("render.yaml");
+    expect(deploymentAuditScript).toContain("Dockerfile");
+    expect(deploymentAuditScript).toContain("Procfile");
+    expect(deploymentAuditScript).toContain("ENABLE_PAID_ENROLLMENT");
+    expect(deploymentAuditScript).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED");
+    expect(deploymentAuditScript).toContain("autoDeployTrigger");
+    expect(deploymentAuditScript).not.toContain("execSync");
+    expect(deploymentAuditScript).not.toContain("sk_test_");
+    expect(deploymentAuditScript).not.toContain("whsec_");
   });
 
   it("keeps a work-computer-safe launch blocker summary available", async () => {
