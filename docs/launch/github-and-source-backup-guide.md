@@ -41,6 +41,12 @@ When this work computer cannot push to GitHub, keep both files:
 Use the ZIP when you simply need the project files. Use the bundle when you want
 to preserve Git commit history for the branch.
 
+The latest exact known backup names and Google Drive links are recorded in:
+
+```text
+docs/launch/current-backup-manifest.md
+```
+
 To restore the Git bundle on a home PC:
 
 ```bash

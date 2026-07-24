@@ -24,6 +24,12 @@ optitech-academy-source-YYYY-MM-DD-COMMIT.zip
 optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle
 ```
 
+The exact latest known backup names and Drive links are in:
+
+```text
+docs/launch/current-backup-manifest.md
+```
+
 ## Money-Ready Gates
 
 | Gate | What Done Looks Like | First Command Or Guide |

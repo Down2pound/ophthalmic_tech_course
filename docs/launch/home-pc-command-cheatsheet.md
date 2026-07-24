@@ -41,6 +41,12 @@ C:\dev\ophthalmic_tech_course
 Beginner translation: GitHub is best once everything has been pushed. The Drive
 ZIP is the backup copy you can use right away from home.
 
+The newest exact backup filenames and Drive links are written here:
+
+```text
+docs/launch/current-backup-manifest.md
+```
+
 If you brought home the Git bundle instead, put the newest `.bundle` file in
 `C:\dev`, open PowerShell there, and run:
 
