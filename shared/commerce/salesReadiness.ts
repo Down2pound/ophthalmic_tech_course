@@ -14,6 +14,11 @@ export interface LearnerFirstMonthStep {
   description: string;
 }
 
+export interface BuyerHandoffStep {
+  title: string;
+  description: string;
+}
+
 export interface BuyerConfidenceAnswer {
   question: string;
   answer: string;
@@ -140,6 +145,52 @@ export const individualLearnerFirstMonthPlan: LearnerFirstMonthStep[] = [
     title: "Prepare your next conversation",
     description:
       "Ask a supervisor, mentor, or future employer which hands-on skills should be observed next, without claiming independent competency.",
+  },
+];
+
+export const individualBuyerHandoffSteps: BuyerHandoffStep[] = [
+  {
+    title: "Receipt and access email",
+    description:
+      "The buyer should see a Stripe receipt and know the same email is used for course sign-in.",
+  },
+  {
+    title: "First sign-in attempt",
+    description:
+      "The learner requests a passwordless sign-in link and confirms Module 1 opens from their own account.",
+  },
+  {
+    title: "First lesson completion",
+    description:
+      "The learner completes one short lesson or knowledge check so the purchase feels useful right away.",
+  },
+  {
+    title: "Support path saved",
+    description:
+      "The buyer knows where to ask for account, refund-review, navigation, or technical help without sharing private clinical details.",
+  },
+];
+
+export const practiceBuyerHandoffSteps: BuyerHandoffStep[] = [
+  {
+    title: "Receipt and seat pack record",
+    description:
+      "The practice buyer should see the Stripe receipt and know the purchase created a seat pack for the billing email.",
+  },
+  {
+    title: "Practice lead identified",
+    description:
+      "A manager or supervisor is named as the person who will assign learner emails and answer local onboarding questions.",
+  },
+  {
+    title: "Learner seats assigned",
+    description:
+      "Each learner gets their own email-based access, and the practice does not share one seat across multiple employees.",
+  },
+  {
+    title: "Local signoff plan confirmed",
+    description:
+      "The practice pairs online foundations with local observation, hands-on training, and practice-specific protocols.",
   },
 ];
 

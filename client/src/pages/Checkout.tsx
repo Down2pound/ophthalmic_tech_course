@@ -29,6 +29,7 @@ import {
 import {
   buyerConfidenceAnswers,
   foundingReleaseStatus,
+  individualBuyerHandoffSteps,
   individualLearnerFirstMonthPlan,
   individualLearnerSalesPath,
   individualLearnerStartSteps,
@@ -463,6 +464,30 @@ export default function Checkout() {
                   <h3 className="font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
                     {item.description}
+                  </p>
+                </section>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
+            <h2 className="text-2xl font-bold">After-payment handoff</h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              A simple handoff makes sure the purchase turns into a real first
+              learning step, not just a receipt.
+            </p>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {individualBuyerHandoffSteps.map((step, index) => (
+                <section
+                  key={step.title}
+                  className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                >
+                  <p className="text-sm font-semibold text-blue-700">
+                    Handoff {index + 1}
+                  </p>
+                  <h3 className="mt-2 font-semibold">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {step.description}
                   </p>
                 </section>
               ))}

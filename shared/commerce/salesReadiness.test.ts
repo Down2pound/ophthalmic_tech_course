@@ -3,10 +3,12 @@ import {
   buyerConfidenceAnswers,
   foundingReleaseStatus,
   getSalesPathItemCount,
+  individualBuyerHandoffSteps,
   individualLearnerFirstMonthPlan,
   individualLearnerSalesPath,
   individualLearnerStartSteps,
   learnerValueProofPoints,
+  practiceBuyerHandoffSteps,
   practiceBuyerSalesPath,
   practiceValueProofPoints,
   purchaseAssurances,
@@ -122,6 +124,37 @@ describe("sales readiness copy", () => {
     expect(combined).toMatch(/refund review/i);
     expect(combined).toMatch(/does not promise certification/i);
     expect(combined).not.toMatch(/guarantee/i);
+  });
+
+  it("gives buyers a concrete after-payment handoff without overpromising", () => {
+    expect(individualBuyerHandoffSteps.map(step => step.title)).toEqual([
+      "Receipt and access email",
+      "First sign-in attempt",
+      "First lesson completion",
+      "Support path saved",
+    ]);
+    expect(practiceBuyerHandoffSteps.map(step => step.title)).toEqual([
+      "Receipt and seat pack record",
+      "Practice lead identified",
+      "Learner seats assigned",
+      "Local signoff plan confirmed",
+    ]);
+
+    const combined = [
+      ...individualBuyerHandoffSteps,
+      ...practiceBuyerHandoffSteps,
+    ]
+      .map(step => `${step.title} ${step.description}`)
+      .join(" ");
+
+    expect(combined).toMatch(/Stripe receipt/i);
+    expect(combined).toMatch(/passwordless sign-in link/i);
+    expect(combined).toMatch(/seat pack/i);
+    expect(combined).toMatch(/local observation/i);
+    expect(combined).toMatch(/private clinical details/i);
+    expect(combined).not.toMatch(/guarantee/i);
+    expect(combined).not.toMatch(/certified technician/i);
+    expect(combined).not.toMatch(/employment/i);
   });
 
   it("states founding release status without selling planned content as complete", () => {
