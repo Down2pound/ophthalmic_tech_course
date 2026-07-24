@@ -1,5 +1,9 @@
 import { buyerSupportContact } from "../../../shared/commerce/policies";
 import {
+  individualBuyerHandoffSteps,
+  practiceBuyerHandoffSteps,
+} from "../../../shared/commerce/salesReadiness";
+import {
   sendTransactionalEmailMessage,
   type SendMagicLinkEmailResult,
   type TransactionalEmailMessage,
@@ -48,6 +52,17 @@ function getSupportReference(purchase: PurchaseEvent): string {
   ].join(" | ");
 }
 
+function renderHandoffSteps(isPracticePack: boolean): string[] {
+  const handoffSteps = isPracticePack
+    ? practiceBuyerHandoffSteps
+    : individualBuyerHandoffSteps;
+
+  return handoffSteps.map(
+    (step, index) =>
+      `Handoff ${index + 1}: ${step.title} - ${step.description}`
+  );
+}
+
 export function createPurchaseWelcomeEmailMessage({
   purchase,
   from,
@@ -94,6 +109,7 @@ export function createPurchaseWelcomeEmailMessage({
     isPracticePack
       ? "Seat assignments should use one learner email per seat. Seats should not be shared across multiple employees."
       : `If you need to request help or review enrollment later, start from the checkout page: ${checkoutUrl}`,
+    ...renderHandoffSteps(isPracticePack),
     scopeLine,
     supportReferenceLine,
     supportLine,

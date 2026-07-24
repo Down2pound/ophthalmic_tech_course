@@ -43,6 +43,10 @@ describe("createPurchaseWelcomeEmailMessage", () => {
     expect(message.text).toContain("request a passwordless sign-in link");
     expect(message.text).toContain("https://academy.example.com/buyer-guide");
     expect(message.text).toContain("foundational education");
+    expect(message.text).toContain("Handoff 1: Receipt and access email");
+    expect(message.text).toContain("Handoff 2: First sign-in attempt");
+    expect(message.text).toContain("Handoff 3: First lesson completion");
+    expect(message.text).toContain("Support path saved");
     expect(message.text).toContain("Support reference");
     expect(message.text).toContain("Checkout session: cs_test_123");
     expect(message.text).toContain("Stripe event: evt_123");
@@ -66,6 +70,10 @@ describe("createPurchaseWelcomeEmailMessage", () => {
     );
     expect(message.text).toContain("choose the learner emails");
     expect(message.text).toContain("one learner email per seat");
+    expect(message.text).toContain("Handoff 1: Receipt and seat pack record");
+    expect(message.text).toContain("Handoff 2: Practice lead identified");
+    expect(message.text).toContain("Handoff 3: Learner seats assigned");
+    expect(message.text).toContain("Handoff 4: Local signoff plan confirmed");
     expect(message.text).toContain("Checkout session: cs_test_practice");
     expect(message.text).toContain("Stripe event: evt_practice");
     expect(message.text).toContain("local protocols");
