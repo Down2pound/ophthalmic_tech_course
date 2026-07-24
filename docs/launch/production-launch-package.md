@@ -41,6 +41,7 @@ If a work computer blocks tests or launch commands, use
 For the short home-PC command list, use
 `docs/launch/home-pc-command-cheatsheet.md`.
 For the outside-account setup sequence, run `pnpm launch:external-setup`.
+For the simplest start-here launch board, run `pnpm launch:control`.
 For first-customer outreach, sales scripts, and feedback tracking, use
 `docs/launch/first-customers-sales-packet.md`.
 For first paid buyer receipt, access, and welcome checks, use
@@ -245,6 +246,7 @@ When the launch package is ready to archive, save these files together:
 - Generated `launch-evidence/` folder from `pnpm launch:bundle`
 - `docs/launch/production-launch-package.md`
 - `docs/launch/deployment-guide.md`
+- `docs/launch/launch-control-checklist.md`
 - `docs/launch/render-deployment-guide.md`
 - `docs/launch/deployment-cutover-checklist.md`
 - `docs/launch/domain-and-sharing-guide.md`

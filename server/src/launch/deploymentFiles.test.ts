@@ -134,6 +134,37 @@ describe("deployment files", () => {
     expect(blockerScript).not.toContain("execSync");
   });
 
+  it("keeps a work-computer-safe launch control checklist command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const controlScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-control-checklist.mjs"),
+      "utf8"
+    );
+    const controlChecklist = await readFile(
+      path.resolve(process.cwd(), "docs/launch/launch-control-checklist.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:control": "node scripts/launch-control-checklist.mjs"'
+    );
+    expect(controlScript).toContain("launch-control-checklist.md");
+    expect(controlScript).not.toContain("execSync");
+    expect(controlChecklist).toContain(
+      "OptiTech Academy Launch Control Checklist"
+    );
+    expect(controlChecklist).toContain("codex/optitech-product-spec");
+    expect(controlChecklist).toContain("Money-Ready Gates");
+    expect(controlChecklist).toContain("pnpm launch:preflight");
+    expect(controlChecklist).toContain("pnpm launch:live-purchase-test");
+    expect(controlChecklist).toContain("First Buyer Work");
+    expect(controlChecklist).not.toContain("sk_test_");
+    expect(controlChecklist).not.toContain("whsec_");
+  });
+
   it("keeps a work-computer-safe production env template command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

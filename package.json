@@ -18,6 +18,7 @@
     "launch:blockers": "node scripts/launch-blockers-summary.mjs",
     "launch:bootcamp-intake": "node scripts/launch-bootcamp-intake.mjs",
     "launch:clinical-review": "node scripts/launch-clinical-review.mjs",
+    "launch:control": "node scripts/launch-control-checklist.mjs",
     "launch:database-setup": "node scripts/launch-database-setup.mjs",
     "launch:email-setup": "node scripts/launch-email-setup.mjs",
     "launch:env-template": "node scripts/launch-env-template.mjs",

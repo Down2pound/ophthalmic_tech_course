@@ -82,6 +82,7 @@ without printing the secret values.
 
 ```bash
 pnpm launch:blockers
+pnpm launch:control
 pnpm launch:admin-tokens
 pnpm launch:post-0716-handoff
 pnpm launch:bootcamp-intake
@@ -105,6 +106,8 @@ pnpm launch:doctor
 
 `launch:blockers` is the simplest work-safe summary of what still prevents
 paid sales.
+`launch:control` prints the one-page cockpit checklist for going from backed-up
+code to deployed app to first paid buyer.
 `launch:admin-tokens` prints the practice-seat and alert admin token setup and
 test checklist.
 `launch:post-0716-handoff` prints the post-`07/16/2026` workspace changes that
