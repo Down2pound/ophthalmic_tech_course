@@ -53,22 +53,22 @@ Use these when resuming from the work computer or getting ready for first
 revenue.
 
 ```bash
-pnpm launch:post-0716-handoff
+pnpm launch:jeffmini
 pnpm launch:first-revenue
 pnpm launch:bootcamp-intake
 pnpm launch:blockers
 ```
 
-- `launch:post-0716-handoff` explains what changed after the latest completed
-  `07/16/2026` backup and what to commit when Git is available.
+- `launch:jeffmini` prints the home-PC restore path, using GitHub first and
+  Google Drive as the backup drawer.
 - `launch:first-revenue` prints the shortest safe path from restored code to
   one controlled paid buyer.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
 - `launch:blockers` prints the setup areas still preventing paid launch.
 
-Keep the `07/16/2026` backup label tied to commit `2efefd0` unless a new backup
-is intentionally created.
+Use `docs/launch/current-backup-manifest.md` and the newest matching ZIP and
+bundle pair in the Drive backup folder to identify the latest safe handoff.
 
 ---
 

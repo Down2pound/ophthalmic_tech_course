@@ -37,14 +37,11 @@ optitech-academy-branch-2026-07-24-433a358.bundle
 
 ## Latest Confirmed Backup
 
-- Backup date: `2026-07-24`
-- Commit: `433a358`
-- Commit message: `chore: include deployment audit in preflight`
-- Source ZIP:
-  `https://drive.google.com/file/d/12fgpNWKILHGWumVY689PT_dBA4M1DZ92/view?usp=drivesdk`
-- Git bundle:
-  `https://drive.google.com/file/d/1ojpHx9SoFIRQp69C1-k3-NcjmCq5v5Td/view?usp=drivesdk`
-- Branch status: pushed to GitHub branch `codex/optitech-product-spec`
+Use the newest matching ZIP and bundle pair in the Google Drive folder. The
+date and short commit hash should match in both filenames.
+
+Beginner translation: if the ZIP says `eeb7504`, use the bundle that also says
+`eeb7504`. Do not mix a ZIP from one commit with a bundle from another commit.
 
 GitHub is the easiest restore path when the branch is pushed. Drive is the
 backup path when GitHub, network access, or the work computer gets blocked.

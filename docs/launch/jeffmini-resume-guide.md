@@ -17,7 +17,7 @@ drawer. Use GitHub first unless it fails.
 Use GitHub first when it is available. If GitHub or work-computer networking is
 blocked, use the newest matching ZIP and bundle pair in the Drive backup folder.
 
-Current exact backup names and Drive links are recorded in:
+Backup naming rules and the Drive folder link are recorded in:
 
 ```text
 docs/launch/current-backup-manifest.md
