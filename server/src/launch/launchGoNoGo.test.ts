@@ -28,6 +28,12 @@ function makeReport(
       skippedReason:
         "Set LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true to submit a safe test inquiry.",
     },
+    learnerInterest: {
+      tested: false,
+      ok: false,
+      skippedReason:
+        "Set LAUNCH_SMOKE_TEST_LEARNER_INTEREST=true to submit a safe test learner interest.",
+    },
     readyForPaidLaunch: false,
     generatedAt: "2026-07-17T20:00:00.000Z",
     blockers: ["Stripe webhook is not configured."],
@@ -67,10 +73,18 @@ describe("getLaunchGoNoGoDecision", () => {
           inquiryId: "practice_inquiry_test",
           notificationSent: true,
         },
+        learnerInterest: {
+          tested: true,
+          ok: true,
+          status: 201,
+          interestId: "learner_interest_test",
+          notificationSent: true,
+        },
       })
     );
 
     expect(decision.publicPreviewSharing).toBe("go");
+    expect(decision.learnerInterestCollection).toBe("go");
     expect(decision.practiceInquiryCollection).toBe("go");
     expect(decision.paidCheckoutSharing).toBe("go");
   });
@@ -81,8 +95,15 @@ describe("renderLaunchGoNoGoReport", () => {
     const report = renderLaunchGoNoGoReport(makeReport());
 
     expect(report).toContain("Public preview links: GO");
+    expect(report).toContain("Learner interest collection: CAUTION");
     expect(report).toContain("Paid checkout links: NO-GO");
     expect(report).toContain("Shareable Link Buckets");
+    expect(report).toContain(
+      "First buyer page: shareable - https://example.com/first-sale"
+    );
+    expect(report).toContain(
+      "Individual enrollment and interest list: review-only - https://example.com/checkout"
+    );
     expect(report).toContain(
       "Preview: shareable - https://example.com/preview"
     );

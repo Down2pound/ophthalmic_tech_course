@@ -13,7 +13,13 @@ async function main() {
   const allowNotReady = process.env.LAUNCH_SMOKE_ALLOW_NOT_READY === "true";
   const testPracticeInquiry =
     process.env.LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY === "true";
-  const report = await runDeploymentSmokeTest({ baseUrl, testPracticeInquiry });
+  const testLearnerInterest =
+    process.env.LAUNCH_SMOKE_TEST_LEARNER_INTEREST === "true";
+  const report = await runDeploymentSmokeTest({
+    baseUrl,
+    testPracticeInquiry,
+    testLearnerInterest,
+  });
   const renderedReport = renderDeploymentSmokeReport(report);
 
   console.log(renderDeploymentSmokeConsoleSummary({ report, allowNotReady }));

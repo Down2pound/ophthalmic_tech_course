@@ -4,6 +4,7 @@ export type LaunchDecision = "go" | "caution" | "no-go";
 
 export interface LaunchGoNoGoDecision {
   publicPreviewSharing: LaunchDecision;
+  learnerInterestCollection: LaunchDecision;
   practiceInquiryCollection: LaunchDecision;
   paidCheckoutSharing: LaunchDecision;
   summary: string;
@@ -24,6 +25,12 @@ export function getLaunchGoNoGoDecision(
   report: DeploymentSmokeTestReport
 ): LaunchGoNoGoDecision {
   const deploymentOk = basicDeploymentOk(report);
+  const learnerInterestCollection: LaunchDecision = report.learnerInterest
+    .tested
+    ? report.learnerInterest.ok
+      ? "go"
+      : "no-go"
+    : "caution";
   const practiceInquiryCollection: LaunchDecision = report.practiceInquiry
     .tested
     ? report.practiceInquiry.ok
@@ -34,6 +41,10 @@ export function getLaunchGoNoGoDecision(
   if (!deploymentOk) {
     return {
       publicPreviewSharing: "no-go",
+      learnerInterestCollection:
+        learnerInterestCollection === "go"
+          ? "caution"
+          : learnerInterestCollection,
       practiceInquiryCollection:
         practiceInquiryCollection === "go"
           ? "caution"
@@ -52,6 +63,7 @@ export function getLaunchGoNoGoDecision(
   if (!report.readyForPaidLaunch) {
     return {
       publicPreviewSharing: "go",
+      learnerInterestCollection,
       practiceInquiryCollection,
       paidCheckoutSharing: "no-go",
       summary:
@@ -67,6 +79,7 @@ export function getLaunchGoNoGoDecision(
 
   return {
     publicPreviewSharing: "go",
+    learnerInterestCollection,
     practiceInquiryCollection,
     paidCheckoutSharing: "go",
     summary:
@@ -117,6 +130,12 @@ function renderShareableLinkBuckets({
       : decision.practiceInquiryCollection === "caution"
         ? "review-only"
         : "hold";
+  const learnerStatus =
+    decision.learnerInterestCollection === "go"
+      ? "shareable"
+      : decision.learnerInterestCollection === "caution"
+        ? "review-only"
+        : "hold";
   const paidStatus =
     decision.paidCheckoutSharing === "go" ? "shareable" : "do not share";
 
@@ -125,6 +144,11 @@ function renderShareableLinkBuckets({
     "",
     "Public preview links:",
     "",
+    formatShareableLink({
+      label: "First buyer page",
+      url: `${baseUrl}/first-sale`,
+      status: previewStatus,
+    }),
     formatShareableLink({
       label: "Preview",
       url: `${baseUrl}/preview`,
@@ -144,6 +168,19 @@ function renderShareableLinkBuckets({
       label: "Policies",
       url: `${baseUrl}/policies`,
       status: previewStatus,
+    }),
+    "",
+    "Individual learner interest links:",
+    "",
+    formatShareableLink({
+      label: "Individual enrollment and interest list",
+      url: `${baseUrl}/checkout`,
+      status: learnerStatus,
+    }),
+    formatShareableLink({
+      label: "First buyer page",
+      url: `${baseUrl}/first-sale`,
+      status: learnerStatus,
     }),
     "",
     "Practice outreach links:",
@@ -200,6 +237,9 @@ export function renderLaunchGoNoGoReport(
     "## Decision",
     "",
     `- Public preview links: ${renderDecision(decision.publicPreviewSharing)}`,
+    `- Learner interest collection: ${renderDecision(
+      decision.learnerInterestCollection
+    )}`,
     `- Practice inquiry collection: ${renderDecision(
       decision.practiceInquiryCollection
     )}`,
@@ -220,6 +260,13 @@ export function renderLaunchGoNoGoReport(
     `- Practice inquiry capture: ${
       report.practiceInquiry.tested
         ? report.practiceInquiry.ok
+          ? "ok"
+          : "failed"
+        : "not tested"
+    }`,
+    `- Learner interest capture: ${
+      report.learnerInterest.tested
+        ? report.learnerInterest.ok
           ? "ok"
           : "failed"
         : "not tested"

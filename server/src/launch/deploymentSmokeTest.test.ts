@@ -200,6 +200,12 @@ describe("runDeploymentSmokeTest", () => {
         skippedReason:
           "Set LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true to submit a safe test inquiry.",
       },
+      learnerInterest: {
+        tested: false,
+        ok: false,
+        skippedReason:
+          "Set LAUNCH_SMOKE_TEST_LEARNER_INTEREST=true to submit a safe test learner interest.",
+      },
       readyForPaidLaunch: false,
       generatedAt: "2026-07-13T12:00:00.000Z",
       blockers: ["Clinical content review"],
@@ -321,6 +327,91 @@ describe("runDeploymentSmokeTest", () => {
       body: {
         practiceName: "OptiTech Smoke Test Practice",
         contactEmail: "launch-smoke@example.com",
+      },
+    });
+  });
+
+  it("can submit a safe learner interest smoke check when enabled", async () => {
+    const requestedRequests: Array<{
+      url: string;
+      method?: string;
+      body?: unknown;
+    }> = [];
+    const fetcher = async (url: string | URL | Request, init?: RequestInit) => {
+      const requestedUrl = String(url);
+      requestedRequests.push({
+        url: requestedUrl,
+        method: init?.method,
+        body:
+          typeof init?.body === "string" ? JSON.parse(init.body) : undefined,
+      });
+
+      if (requestedUrl.endsWith("/api/health")) {
+        return createResponse({ ok: true });
+      }
+
+      if (requestedUrl.endsWith("/api/launch/readiness")) {
+        return createResponse({
+          readyForPaidLaunch: true,
+          staticSummary: {
+            blockers: [],
+          },
+          warnings: [],
+          launchActions: [],
+        });
+      }
+
+      if (requestedUrl.endsWith("/api/checkout/availability")) {
+        return createResponse({
+          ready: true,
+          title: "Enrollment is open",
+          message:
+            "Stripe checkout is available for individual learners and practice packs.",
+          primaryAction: "continue-to-checkout",
+        });
+      }
+
+      if (requestedUrl.endsWith("/api/learner-interests")) {
+        return createResponse(
+          {
+            interest: {
+              interestId: "learner_interest_smoke",
+            },
+            notification: {
+              sent: true,
+            },
+          },
+          { status: 201 }
+        );
+      }
+
+      if (requestedUrl.endsWith("/robots.txt")) {
+        return createRobotsResponse();
+      }
+
+      return createTextResponse();
+    };
+
+    const report = await runDeploymentSmokeTest({
+      baseUrl: "https://example.com",
+      testLearnerInterest: true,
+      fetcher: fetcher as typeof fetch,
+      now: () => "2026-07-13T12:00:00.000Z",
+    });
+
+    expect(report.learnerInterest).toEqual({
+      tested: true,
+      ok: true,
+      status: 201,
+      interestId: "learner_interest_smoke",
+      notificationSent: true,
+    });
+    expect(requestedRequests.at(-1)).toMatchObject({
+      url: "https://example.com/api/learner-interests",
+      method: "POST",
+      body: {
+        learnerName: "Launch Smoke Test Learner",
+        email: "launch-smoke-learner@example.com",
       },
     });
   });
@@ -576,6 +667,13 @@ describe("runDeploymentSmokeTest", () => {
         inquiryId: "practice_inquiry_smoke",
         notificationSent: false,
       },
+      learnerInterest: {
+        tested: true,
+        ok: true,
+        status: 201,
+        interestId: "learner_interest_smoke",
+        notificationSent: false,
+      },
       readyForPaidLaunch: false,
       generatedAt: "2026-07-13T12:00:00.000Z",
       blockers: ["Clinical content review"],
@@ -600,11 +698,13 @@ describe("runDeploymentSmokeTest", () => {
     expect(report).toContain("- Security headers: ok");
     expect(report).toContain("- Robots.txt rules: ok");
     expect(report).toContain("- Practice inquiry capture: ok");
+    expect(report).toContain("- Learner interest capture: ok");
     expect(report).toContain("/checkout: ok (HTTP 200)");
     expect(report).toContain("X-Frame-Options: ok");
     expect(report).toContain("/robots.txt: ok (HTTP 200)");
     expect(report).toContain("Disallow: /api/: ok");
     expect(report).toContain("Inquiry ID: practice_inquiry_smoke");
+    expect(report).toContain("Interest ID: learner_interest_smoke");
     expect(report).toContain("- Paid launch readiness: not ready");
     expect(report).toContain("Create and initialize hosted PostgreSQL");
     expect(report).not.toContain("sk_test_");
@@ -648,6 +748,11 @@ describe("runDeploymentSmokeTest", () => {
           { path: "/checkout", ok: true, status: 200 },
         ],
         practiceInquiry: {
+          tested: false,
+          ok: false,
+          skippedReason: "not requested",
+        },
+        learnerInterest: {
           tested: false,
           ok: false,
           skippedReason: "not requested",
@@ -706,6 +811,11 @@ describe("runDeploymentSmokeTest", () => {
         ok: false,
         skippedReason: "not requested",
       },
+      learnerInterest: {
+        tested: false,
+        ok: false,
+        skippedReason: "not requested",
+      },
       readyForPaidLaunch: false,
       generatedAt: "2026-07-13T12:00:00.000Z",
       blockers: [],
@@ -745,6 +855,11 @@ describe("runDeploymentSmokeTest", () => {
             ok: false,
             skippedReason: "not requested",
           },
+          learnerInterest: {
+            tested: false,
+            ok: false,
+            skippedReason: "not requested",
+          },
           readyForPaidLaunch: false,
           generatedAt: "2026-07-13T12:00:00.000Z",
           blockers: [],
@@ -774,6 +889,49 @@ describe("runDeploymentSmokeTest", () => {
           },
           publicPages: [],
           practiceInquiry: {
+            tested: true,
+            ok: false,
+            status: 500,
+          },
+          learnerInterest: {
+            tested: false,
+            ok: false,
+            skippedReason: "not requested",
+          },
+          readyForPaidLaunch: true,
+          generatedAt: "2026-07-13T12:00:00.000Z",
+          blockers: [],
+          warnings: [],
+          launchActions: [],
+        },
+        { allowNotReady: true }
+      )
+    ).toBe(1);
+  });
+
+  it("fails when the optional learner interest smoke check is requested and broken", () => {
+    expect(
+      getDeploymentSmokeExitCode(
+        {
+          baseUrl: "https://academy.spindeleye.com",
+          healthOk: true,
+          publicPagesOk: true,
+          checkoutAvailabilityOk: true,
+          securityHeadersOk: true,
+          securityHeaders: [],
+          robotsTxtOk: true,
+          robotsTxt: {
+            ok: true,
+            status: 200,
+            requiredRules: [],
+          },
+          publicPages: [],
+          practiceInquiry: {
+            tested: false,
+            ok: false,
+            skippedReason: "not requested",
+          },
+          learnerInterest: {
             tested: true,
             ok: false,
             status: 500,

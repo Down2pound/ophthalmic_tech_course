@@ -9,7 +9,13 @@ async function main() {
     process.env.LAUNCH_BASE_URL || process.env.PUBLIC_APP_URL || "";
   const testPracticeInquiry =
     process.env.LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY === "true";
-  const report = await runDeploymentSmokeTest({ baseUrl, testPracticeInquiry });
+  const testLearnerInterest =
+    process.env.LAUNCH_SMOKE_TEST_LEARNER_INTEREST === "true";
+  const report = await runDeploymentSmokeTest({
+    baseUrl,
+    testPracticeInquiry,
+    testLearnerInterest,
+  });
 
   console.log(renderLaunchGoNoGoReport(report));
 

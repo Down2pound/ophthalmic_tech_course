@@ -12,6 +12,7 @@ export interface DeploymentSmokeTestReport {
   robotsTxt: DeploymentSmokeRobotsTxtResult;
   publicPages: DeploymentSmokePublicPageResult[];
   practiceInquiry: DeploymentSmokePracticeInquiryResult;
+  learnerInterest: DeploymentSmokeLearnerInterestResult;
   readyForPaidLaunch: boolean;
   generatedAt: string;
   blockers: string[];
@@ -22,6 +23,7 @@ export interface DeploymentSmokeTestReport {
 export interface DeploymentSmokeTestInput {
   baseUrl: string;
   testPracticeInquiry?: boolean;
+  testLearnerInterest?: boolean;
   fetcher?: typeof fetch;
   now?: () => string;
 }
@@ -55,6 +57,15 @@ export interface DeploymentSmokePracticeInquiryResult {
   ok: boolean;
   status?: number;
   inquiryId?: string;
+  notificationSent?: boolean;
+  skippedReason?: string;
+}
+
+export interface DeploymentSmokeLearnerInterestResult {
+  tested: boolean;
+  ok: boolean;
+  status?: number;
+  interestId?: string;
   notificationSent?: boolean;
   skippedReason?: string;
 }
@@ -230,9 +241,47 @@ async function submitPracticeInquirySmoke({
   };
 }
 
+async function submitLearnerInterestSmoke({
+  fetcher,
+  baseUrl,
+}: {
+  fetcher: typeof fetch;
+  baseUrl: string;
+}): Promise<DeploymentSmokeLearnerInterestResult> {
+  const response = await fetcher(`${baseUrl}/api/learner-interests`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      learnerName: "Launch Smoke Test Learner",
+      email: "launch-smoke-learner@example.com",
+      background: "career-changer",
+      goal: "Safe deployment smoke test learner interest. No patient information, card data, secrets, private employer details, or private learner history.",
+    }),
+  });
+  const payload = (await response.json().catch(() => ({}))) as {
+    interest?: {
+      interestId?: string;
+    };
+    notification?: {
+      sent?: boolean;
+    };
+  };
+
+  return {
+    tested: true,
+    ok: response.ok && Boolean(payload.interest?.interestId),
+    status: response.status,
+    ...(payload.interest?.interestId
+      ? { interestId: payload.interest.interestId }
+      : {}),
+    notificationSent: Boolean(payload.notification?.sent),
+  };
+}
+
 export async function runDeploymentSmokeTest({
   baseUrl,
   testPracticeInquiry = false,
+  testLearnerInterest = false,
   fetcher = fetch,
   now = () => new Date().toISOString(),
 }: DeploymentSmokeTestInput): Promise<DeploymentSmokeTestReport> {
@@ -287,6 +336,17 @@ export async function runDeploymentSmokeTest({
         skippedReason:
           "Set LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true to submit a safe test inquiry.",
       };
+  const learnerInterest = testLearnerInterest
+    ? await submitLearnerInterestSmoke({
+        fetcher,
+        baseUrl: normalizedBaseUrl,
+      })
+    : {
+        tested: false,
+        ok: false,
+        skippedReason:
+          "Set LAUNCH_SMOKE_TEST_LEARNER_INTEREST=true to submit a safe test learner interest.",
+      };
 
   return {
     baseUrl: normalizedBaseUrl,
@@ -299,6 +359,7 @@ export async function runDeploymentSmokeTest({
     robotsTxt,
     publicPages,
     practiceInquiry,
+    learnerInterest,
     readyForPaidLaunch: readiness.readyForPaidLaunch,
     generatedAt: now(),
     blockers: readiness.staticSummary.blockers,
@@ -321,6 +382,7 @@ export function getDeploymentSmokeExitCode(
     return 1;
   }
   if (report.practiceInquiry.tested && !report.practiceInquiry.ok) return 1;
+  if (report.learnerInterest.tested && !report.learnerInterest.ok) return 1;
   if (!allowNotReady && !report.readyForPaidLaunch) return 1;
 
   return 0;
@@ -353,6 +415,13 @@ export function renderDeploymentSmokeReport(
     `- Practice inquiry capture: ${
       report.practiceInquiry.tested
         ? report.practiceInquiry.ok
+          ? "ok"
+          : "failed"
+        : "not tested"
+    }`,
+    `- Learner interest capture: ${
+      report.learnerInterest.tested
+        ? report.learnerInterest.ok
           ? "ok"
           : "failed"
         : "not tested"
@@ -390,6 +459,18 @@ export function renderDeploymentSmokeReport(
       : []),
     `- Notification email: ${
       report.practiceInquiry.notificationSent ? "sent" : "not confirmed"
+    }`,
+    "",
+    "## Learner Interest Check",
+    "",
+    report.learnerInterest.tested
+      ? `- Test learner interest: ${report.learnerInterest.ok ? "ok" : "failed"} (HTTP ${report.learnerInterest.status ?? "unknown"})`
+      : `- Test learner interest: not tested. ${report.learnerInterest.skippedReason}`,
+    ...(report.learnerInterest.interestId
+      ? [`- Interest ID: ${report.learnerInterest.interestId}`]
+      : []),
+    `- Notification email: ${
+      report.learnerInterest.notificationSent ? "sent" : "not confirmed"
     }`,
     "",
     "## Blockers",
@@ -452,10 +533,21 @@ export function renderDeploymentSmokeConsoleSummary({
           : "failed"
         : "not tested"
     }`,
+    `- Learner interest capture: ${
+      report.learnerInterest.tested
+        ? report.learnerInterest.ok
+          ? "ok"
+          : "failed"
+        : "not tested"
+    }`,
   ];
 
   if (report.practiceInquiry.inquiryId) {
     lines.push(`  - Inquiry ID: ${report.practiceInquiry.inquiryId}`);
+  }
+
+  if (report.learnerInterest.interestId) {
+    lines.push(`  - Interest ID: ${report.learnerInterest.interestId}`);
   }
 
   if (allowNotReady && !report.readyForPaidLaunch) {

@@ -96,6 +96,13 @@ outreach:
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
 
+Run one deployed smoke test with individual learner interest capture enabled
+before learner outreach:
+
+```bash
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_SMOKE_TEST_LEARNER_INTEREST=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
+```
+
 Do not use `LAUNCH_SMOKE_ALLOW_NOT_READY=true` for the final go-live check.
 
 Generate the production sitemap after `PUBLIC_APP_URL` is set to the real

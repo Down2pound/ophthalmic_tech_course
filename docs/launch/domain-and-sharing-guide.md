@@ -56,6 +56,7 @@ Open these in a private browser window:
 
 ```text
 https://your-real-domain.example/
+https://your-real-domain.example/first-sale
 https://your-real-domain.example/preview
 https://your-real-domain.example/buyer-guide
 https://your-real-domain.example/checkout
@@ -91,6 +92,13 @@ with:
 
 ```bash
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY=true LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
+```
+
+To also prove individual learner interest capture after deployment, run one
+smoke test with:
+
+```bash
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_SMOKE_TEST_LEARNER_INTEREST=true LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
 ```
 
 If the command is blocked on a work computer, run it later from your home PC and
@@ -171,6 +179,7 @@ Use only these public links in emails, social posts, flyers, and direct messages
 ```text
 Individual learners: https://your-real-domain.example/checkout
 Practice buyers: https://your-real-domain.example/practice-packs
+First-buyer overview: https://your-real-domain.example/first-sale
 Course overview: https://your-real-domain.example/
 Free lesson preview: https://your-real-domain.example/preview
 Buyer decision guide: https://your-real-domain.example/buyer-guide
