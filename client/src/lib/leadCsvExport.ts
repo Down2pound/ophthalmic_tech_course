@@ -1,4 +1,5 @@
 import type {
+  BuyerSupportProfile,
   LearnerInterestSummary,
   PracticeInquirySummary,
 } from "./practiceSeatAdminClient";
@@ -76,6 +77,71 @@ export function buildLearnerLeadCsv(
       ])
     ),
   ].join("\n");
+}
+
+export function buildBuyerSupportCsv(profile: BuyerSupportProfile): string {
+  const rows = [
+    csvRow(["Section", "Type", "ID", "Offer", "Status", "Notes"]),
+    ...profile.purchases.map(purchase =>
+      csvRow([
+        "Buyer support",
+        "purchase",
+        purchase.checkoutSessionId,
+        purchase.offerId ?? "",
+        "",
+        `Lookup email: ${profile.email}`,
+      ])
+    ),
+    ...profile.enrollments.map(enrollment =>
+      csvRow([
+        "Buyer support",
+        "enrollment",
+        enrollment.enrollmentId,
+        enrollment.offerId ?? "",
+        enrollment.status ?? "",
+        enrollment.accessExpiresAt
+          ? `Access expires: ${enrollment.accessExpiresAt}`
+          : "",
+      ])
+    ),
+    ...profile.practiceSeatPacks.map(seatPack =>
+      csvRow([
+        "Buyer support",
+        "practice-seat-pack",
+        seatPack.seatPackId,
+        seatPack.offerId ?? "",
+        seatPack.status ?? "",
+        `Seats assigned: ${seatPack.assignedSeats ?? 0} of ${
+          seatPack.totalSeats ?? "unknown"
+        }`,
+      ])
+    ),
+    ...profile.practiceSeatAssignments.map(assignment =>
+      csvRow([
+        "Buyer support",
+        "practice-seat-assignment",
+        assignment.assignmentId,
+        "",
+        assignment.status ?? "",
+        `Learner: ${
+          assignment.learnerEmail ?? profile.email
+        }; seat pack: ${assignment.seatPackId}`,
+      ])
+    ),
+    ...profile.recommendedActions.map(action =>
+      csvRow(["Buyer support", "recommended-action", "", "", "", action])
+    ),
+    csvRow([
+      "Buyer support",
+      "safety-note",
+      "",
+      "",
+      "",
+      "Do not save secrets, raw sign-in links, card data, patient details, protected health information, or private employee notes in support records.",
+    ]),
+  ];
+
+  return rows.join("\n");
 }
 
 export function downloadCsvFile({

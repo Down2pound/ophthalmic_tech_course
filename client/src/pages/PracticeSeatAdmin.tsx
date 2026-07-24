@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
+  buildBuyerSupportCsv,
   buildLearnerLeadCsv,
   buildPracticeLeadCsv,
   downloadCsvFile,
@@ -208,6 +209,15 @@ export default function PracticeSeatAdmin() {
     });
   };
 
+  const exportBuyerSupportSnapshot = () => {
+    if (!supportProfile) return;
+
+    downloadCsvFile({
+      filename: `optitech-buyer-support-${supportProfile.email}.csv`,
+      csv: buildBuyerSupportCsv(supportProfile),
+    });
+  };
+
   const prepareRevocationTarget = (
     targetType:
       | "enrollment"
@@ -385,10 +395,20 @@ export default function PracticeSeatAdmin() {
                     {supportProfile.email}
                   </h2>
                 </div>
-                <div className="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm font-semibold text-green-950">
-                  {supportProfile.summary.hasActiveEnrollment
-                    ? "Active access"
-                    : "No active access"}
+                <div className="flex flex-col gap-3 md:items-end">
+                  <div className="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm font-semibold text-green-950">
+                    {supportProfile.summary.hasActiveEnrollment
+                      ? "Active access"
+                      : "No active access"}
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="w-full md:w-auto"
+                    onClick={exportBuyerSupportSnapshot}
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Export support snapshot
+                  </Button>
                 </div>
               </div>
 

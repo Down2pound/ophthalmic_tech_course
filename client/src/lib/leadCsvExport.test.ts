@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  buildBuyerSupportCsv,
   buildLearnerLeadCsv,
   buildPracticeLeadCsv,
   downloadCsvFile,
@@ -51,6 +52,61 @@ describe("lead CSV export", () => {
     expect(csv).toContain('"learner@example.com"');
     expect(csv).toContain("learner decision one-pager");
     expect(csv).toContain('"learner_interest_123"');
+  });
+
+  it("builds a buyer support CSV with safe record IDs and actions", () => {
+    const csv = buildBuyerSupportCsv({
+      email: "learner@example.com",
+      purchases: [
+        {
+          checkoutSessionId: "cs_test_123",
+          offerId: "founding-learner",
+        },
+      ],
+      enrollments: [
+        {
+          enrollmentId: "enrollment_cs_test_123",
+          offerId: "founding-learner",
+          status: "active",
+          accessExpiresAt: "2027-07-24T12:00:00.000Z",
+        },
+      ],
+      practiceSeatPacks: [
+        {
+          seatPackId: "seatpack_cs_test_practice",
+          offerId: "practice-five-seat-pack",
+          totalSeats: 5,
+          assignedSeats: 2,
+          status: "active",
+        },
+      ],
+      practiceSeatAssignments: [
+        {
+          assignmentId: "assignment_123",
+          seatPackId: "seatpack_cs_test_practice",
+          learnerEmail: "newtech@example.com",
+          status: "active",
+        },
+      ],
+      summary: {
+        hasPurchase: true,
+        hasActiveEnrollment: true,
+        hasPracticeSeatPack: true,
+        hasPracticeSeatAssignment: true,
+        remainingPracticeSeats: 3,
+      },
+      recommendedActions: [
+        "Ask the learner to request a fresh passwordless sign-in link.",
+      ],
+    });
+
+    expect(csv).toContain('"cs_test_123"');
+    expect(csv).toContain('"enrollment_cs_test_123"');
+    expect(csv).toContain('"seatpack_cs_test_practice"');
+    expect(csv).toContain('"assignment_123"');
+    expect(csv).toContain("recommended-action");
+    expect(csv).toContain("Do not save secrets");
+    expect(csv).not.toContain("raw-sign-in-token");
   });
 
   it("downloads CSV without sending lead data to a server", () => {
