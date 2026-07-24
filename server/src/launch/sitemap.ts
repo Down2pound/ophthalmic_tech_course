@@ -3,6 +3,7 @@ import { isUnsafeLaunchEnvironmentValue } from "../config/environment";
 export const publicSitemapRoutes = [
   "/",
   "/preview",
+  "/first-sale",
   "/buyer-guide",
   "/curriculum",
   "/checkout",

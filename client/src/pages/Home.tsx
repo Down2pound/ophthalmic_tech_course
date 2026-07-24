@@ -94,6 +94,12 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-8">
             <a
+              href="/first-sale"
+              className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
+            >
+              First Sale
+            </a>
+            <a
               href="/buyer-guide"
               className="text-sm text-gray-300 hover:text-blue-400 transition-colors"
             >
@@ -168,6 +174,14 @@ export default function Home() {
                 technician role.
               </p>
               <div className="grid gap-4 pt-4 sm:grid-cols-2">
+                <a href="/first-sale">
+                  <Button
+                    size="lg"
+                    className="w-full bg-white text-slate-950 hover:bg-slate-200 text-base"
+                  >
+                    Start Here <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </a>
                 <a href="/checkout">
                   <Button
                     size="lg"

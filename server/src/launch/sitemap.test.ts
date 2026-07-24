@@ -21,6 +21,9 @@ describe("renderLaunchSitemap", () => {
       "<loc>https://academy.spindeleye.com/preview</loc>"
     );
     expect(sitemap).toContain(
+      "<loc>https://academy.spindeleye.com/first-sale</loc>"
+    );
+    expect(sitemap).toContain(
       "<loc>https://academy.spindeleye.com/buyer-guide</loc>"
     );
     expect(sitemap).toContain(

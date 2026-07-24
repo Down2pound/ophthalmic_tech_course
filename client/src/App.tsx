@@ -9,6 +9,7 @@ const Home = lazy(() => import("./pages/Home"));
 const Curriculum = lazy(() => import("./pages/Curriculum"));
 const FreePreview = lazy(() => import("./pages/FreePreview"));
 const BuyerGuide = lazy(() => import("./pages/BuyerGuide"));
+const FirstSale = lazy(() => import("./pages/FirstSale"));
 const Learn = lazy(() => import("./pages/Learn"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const Policies = lazy(() => import("./pages/Policies"));
@@ -39,6 +40,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/preview"} component={FreePreview} />
       <Route path={"/buyer-guide"} component={BuyerGuide} />
+      <Route path={"/first-sale"} component={FirstSale} />
       <Route path={"/curriculum"} component={Curriculum} />
       <Route path={"/learn"} component={Learn} />
       <Route path={"/checkout"} component={Checkout} />
