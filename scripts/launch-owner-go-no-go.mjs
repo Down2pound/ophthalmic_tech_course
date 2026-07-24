@@ -137,6 +137,48 @@ function renderDecision({ basicOk, readyForPaidLaunch, blockers, warnings }) {
   };
 }
 
+function formatLink(label, url, status) {
+  return `- ${label}: ${status} - ${url}`;
+}
+
+function renderShareableLinks({ baseUrl, decision }) {
+  const previewStatus = decision.preview === "GO" ? "shareable" : "hold";
+  const practiceStatus =
+    decision.practice === "GO"
+      ? "shareable"
+      : decision.practice === "CAUTION"
+        ? "review-only"
+        : "hold";
+  const paidStatus = decision.paid === "GO" ? "shareable" : "do not share";
+
+  return [
+    "## Shareable Link Buckets",
+    "",
+    "Public preview links:",
+    "",
+    formatLink("Preview", `${baseUrl}/preview`, previewStatus),
+    formatLink("Curriculum", `${baseUrl}/curriculum`, previewStatus),
+    formatLink("Buyer guide", `${baseUrl}/buyer-guide`, previewStatus),
+    formatLink("Policies", `${baseUrl}/policies`, previewStatus),
+    "",
+    "Practice outreach links:",
+    "",
+    formatLink("Practice packs", `${baseUrl}/practice-packs`, practiceStatus),
+    formatLink("Onboarding overview", `${baseUrl}/onboarding`, practiceStatus),
+    formatLink("Skills passport", `${baseUrl}/skills-passport`, practiceStatus),
+    "",
+    "Paid checkout links:",
+    "",
+    formatLink("Individual checkout", `${baseUrl}/checkout`, paidStatus),
+    formatLink("Practice pack checkout", `${baseUrl}/practice-packs`, paidStatus),
+    "",
+    decision.paid === "GO"
+      ? "Paid links are marked shareable only because paid readiness is green. Still run one controlled internal live purchase before broad outreach."
+      : "Paid links are listed for convenience, but they should not be sent to buyers until paid readiness is green and one internal live purchase works.",
+    "",
+  ];
+}
+
 async function run() {
   const baseUrl = trimBaseUrl(
     process.env.LAUNCH_BASE_URL || process.env.PUBLIC_APP_URL || ""
@@ -260,6 +302,7 @@ async function run() {
     "",
     decision.summary,
     "",
+    ...renderShareableLinks({ baseUrl, decision }),
     "## Basic Evidence",
     "",
     listResult("Health endpoint", healthOk),
