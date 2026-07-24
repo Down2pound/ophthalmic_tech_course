@@ -40,6 +40,7 @@ cd ophthalmic_tech_course
 git checkout codex/optitech-product-spec
 pnpm install
 pnpm launch:preflight
+pnpm launch:online-start
 ```
 
 If the repo already exists on `jeffmini`:
@@ -51,6 +52,7 @@ git checkout codex/optitech-product-spec
 git pull
 pnpm install
 pnpm launch:preflight
+pnpm launch:online-start
 ```
 
 ## Option B: Continue From The Drive Bundle
@@ -70,6 +72,7 @@ git remote set-url origin https://github.com/Down2pound/ophthalmic_tech_course.g
 git push -u origin codex/optitech-product-spec
 pnpm install
 pnpm launch:preflight
+pnpm launch:online-start
 ```
 
 Beginner translation: the bundle is the travel version of the Git branch. This
@@ -98,6 +101,7 @@ Run these command helpers before touching real payment settings:
 
 ```bash
 pnpm launch:blockers
+pnpm launch:online-start
 pnpm launch:next
 pnpm launch:external-setup
 pnpm launch:render-setup
@@ -141,8 +145,27 @@ pnpm launch:smoke
 $env:PUBLIC_APP_URL="https://your-real-domain.example"
 pnpm launch:sitemap
 pnpm launch:first-sales
+pnpm launch:owner-go-no-go
+pnpm launch:first-buyer
 pnpm launch:go-no-go
 ```
+
+## First Buyer Proof Commands
+
+Use these only after the deployed app, Stripe, email, database, clinical review,
+and admin tokens are ready:
+
+```powershell
+$env:LAUNCH_BASE_URL="https://your-real-domain.example"
+pnpm launch:live-purchase-test
+pnpm launch:fulfillment
+pnpm launch:sales-tracker
+pnpm launch:first-10-customers
+```
+
+Beginner translation: this is where you prove the first real buyer paid,
+received access, could sign in, and could open Module 1 before you invite more
+people.
 
 ## Paid Launch Is Still Blocked Until
 
