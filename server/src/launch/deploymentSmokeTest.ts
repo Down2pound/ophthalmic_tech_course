@@ -104,6 +104,9 @@ export const deploymentSmokePublicPaths = [
   "/policies",
   "/curriculum",
   "/onboarding",
+  "/skills-passport",
+  "/career-toolkit",
+  "/certificate-preview",
 ] as const;
 
 function trimBaseUrl(baseUrl: string): string {

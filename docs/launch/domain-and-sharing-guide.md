@@ -62,6 +62,9 @@ https://your-real-domain.example/checkout
 https://your-real-domain.example/practice-packs
 https://your-real-domain.example/curriculum
 https://your-real-domain.example/onboarding
+https://your-real-domain.example/skills-passport
+https://your-real-domain.example/career-toolkit
+https://your-real-domain.example/certificate-preview
 https://your-real-domain.example/policies
 ```
 
@@ -172,6 +175,9 @@ Course overview: https://your-real-domain.example/
 Free lesson preview: https://your-real-domain.example/preview
 Buyer decision guide: https://your-real-domain.example/buyer-guide
 Curriculum: https://your-real-domain.example/curriculum
+Skills Passport: https://your-real-domain.example/skills-passport
+Career Toolkit: https://your-real-domain.example/career-toolkit
+Certificate Preview: https://your-real-domain.example/certificate-preview
 Policies: https://your-real-domain.example/policies
 ```
 

@@ -65,7 +65,8 @@ LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 The smoke test checks the health endpoint, launch readiness endpoint, browser
 safety headers, `/robots.txt`, and the public buyer pages for home, checkout,
 free preview, buyer guide, individual checkout return states, practice packs,
-practice checkout return states, policies, curriculum, and onboarding.
+practice checkout return states, policies, curriculum, onboarding, Skills
+Passport, Career Toolkit, and Certificate Preview.
 
 Before the paid launch switch is enabled, the same smoke test can confirm the
 deployed health endpoint, buyer pages, safety headers, and robots rules while

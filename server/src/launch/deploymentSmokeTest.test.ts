@@ -189,6 +189,9 @@ describe("runDeploymentSmokeTest", () => {
         { path: "/policies", ok: true, status: 200 },
         { path: "/curriculum", ok: true, status: 200 },
         { path: "/onboarding", ok: true, status: 200 },
+        { path: "/skills-passport", ok: true, status: 200 },
+        { path: "/career-toolkit", ok: true, status: 200 },
+        { path: "/certificate-preview", ok: true, status: 200 },
       ],
       practiceInquiry: {
         tested: false,
@@ -227,6 +230,9 @@ describe("runDeploymentSmokeTest", () => {
       "https://example.com/policies",
       "https://example.com/curriculum",
       "https://example.com/onboarding",
+      "https://example.com/skills-passport",
+      "https://example.com/career-toolkit",
+      "https://example.com/certificate-preview",
       "https://example.com/",
       "https://example.com/robots.txt",
     ]);
