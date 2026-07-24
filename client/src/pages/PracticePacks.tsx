@@ -464,6 +464,37 @@ export default function PracticePacks() {
               </section>
             </div>
 
+            {practiceValueEstimate.recommendedOffer && (
+              <div className="mt-4 grid gap-4 md:grid-cols-2">
+                <section className="rounded-md border border-blue-100 bg-blue-50 p-4">
+                  <h3 className="text-sm font-semibold text-blue-900">
+                    Estimated cost per learner
+                  </h3>
+                  <p className="mt-2 text-2xl font-bold text-blue-950">
+                    {formatPracticeValueCurrency(
+                      practiceValueEstimate.estimatedCostPerLearner ?? 0
+                    )}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-blue-900">
+                    Based on the selected learner count and the suggested pack
+                    price.
+                  </p>
+                </section>
+                <section className="rounded-md border border-blue-100 bg-blue-50 p-4">
+                  <h3 className="text-sm font-semibold text-blue-900">
+                    Unused seats in suggested pack
+                  </h3>
+                  <p className="mt-2 text-2xl font-bold text-blue-950">
+                    {practiceValueEstimate.unusedSeatCount}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-blue-900">
+                    Extra seats can help if another learner joins the same
+                    onboarding group.
+                  </p>
+                </section>
+              </div>
+            )}
+
             <p className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-950">
               This tool estimates possible planning value only. It does not
               guarantee saved time, staffing outcomes, employee retention,

@@ -30,6 +30,8 @@ describe("calculatePracticeValueEstimate", () => {
     expect(estimate.estimatedSupervisorTimeValue).toBe(900);
     expect(estimate.estimatedNetPlanningValue).toBe(101);
     expect(estimate.estimatedValueMultiple).toBeCloseTo(1.1264, 4);
+    expect(estimate.estimatedCostPerLearner).toBeCloseTo(159.8, 1);
+    expect(estimate.unusedSeatCount).toBe(0);
     expect(estimate.needsCustomConversation).toBe(false);
   });
 
@@ -43,6 +45,8 @@ describe("calculatePracticeValueEstimate", () => {
     expect(estimate.recommendedOffer).toBeUndefined();
     expect(estimate.needsCustomConversation).toBe(true);
     expect(estimate.estimatedValueMultiple).toBeNull();
+    expect(estimate.estimatedCostPerLearner).toBeNull();
+    expect(estimate.unusedSeatCount).toBeNull();
   });
 
   it("clamps unrealistic inputs into safe planning ranges", () => {

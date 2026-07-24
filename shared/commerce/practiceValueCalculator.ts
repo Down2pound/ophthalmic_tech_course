@@ -13,6 +13,8 @@ export interface PracticeValueEstimate {
   estimatedSupervisorTimeValue: number;
   estimatedNetPlanningValue: number;
   estimatedValueMultiple: number | null;
+  estimatedCostPerLearner: number | null;
+  unusedSeatCount: number | null;
 }
 
 function clampNumber(value: number, min: number, max: number): number {
@@ -46,6 +48,12 @@ export function calculatePracticeValueEstimate({
   const estimatedSupervisorTimeValue =
     normalizedLearnerCount * normalizedHourlyCost * normalizedHoursSaved;
   const offerPrice = recommendedOffer ? recommendedOffer.priceCents / 100 : 0;
+  const estimatedCostPerLearner = recommendedOffer
+    ? offerPrice / normalizedLearnerCount
+    : null;
+  const unusedSeatCount = recommendedOffer
+    ? recommendedOffer.seatCount - normalizedLearnerCount
+    : null;
   const estimatedNetPlanningValue = recommendedOffer
     ? estimatedSupervisorTimeValue - offerPrice
     : estimatedSupervisorTimeValue;
@@ -61,6 +69,8 @@ export function calculatePracticeValueEstimate({
     estimatedSupervisorTimeValue,
     estimatedNetPlanningValue,
     estimatedValueMultiple,
+    estimatedCostPerLearner,
+    unusedSeatCount,
   };
 }
 
