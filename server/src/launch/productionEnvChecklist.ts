@@ -116,6 +116,27 @@ export const productionEnvironmentChecklist: ProductionEnvironmentChecklistItem[
       launchNote: "Turns paid checkout on only after readiness is proven.",
     },
     {
+      variableName: "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER",
+      source: "Optional Stripe dashboard Payment Link.",
+      validationRule: "Leave blank or use a https://buy.stripe.com URL.",
+      launchNote:
+        "Shows a controlled manual payment link for first individual buyers.",
+    },
+    {
+      variableName: "PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS",
+      source: "Optional Stripe dashboard Payment Link.",
+      validationRule: "Leave blank or use a https://buy.stripe.com URL.",
+      launchNote:
+        "Shows a controlled manual payment link for the five-seat practice pack.",
+    },
+    {
+      variableName: "PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS",
+      source: "Optional Stripe dashboard Payment Link.",
+      validationRule: "Leave blank or use a https://buy.stripe.com URL.",
+      launchNote:
+        "Shows a controlled manual payment link for the fifteen-seat practice pack.",
+    },
+    {
       variableName: "VITE_ANALYTICS_ENDPOINT",
       source: "Optional analytics provider.",
       validationRule: "Leave blank to disable analytics.",
@@ -179,6 +200,9 @@ export function renderProductionEnvChecklist({
     "MODULE_ONE_CLINICAL_REVIEW_DATE=",
     "MODULE_ONE_CLINICAL_APPROVED_VERSION=",
     "MODULE_ONE_CLINICAL_REVIEW_APPROVED=false",
+    "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER=",
+    "PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS=",
+    "PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS=",
     "```",
     "",
     "## Where Each Value Comes From",
@@ -196,6 +220,7 @@ export function renderProductionEnvChecklist({
     "- `ALERT_ADMIN_TOKEN`: generated with `pnpm launch:secrets`.",
     "- `MODULE_ONE_CLINICAL_*`: clinical reviewer signoff fields from `pnpm launch:clinical-review`.",
     "- `ENABLE_PAID_ENROLLMENT`: final launch switch. Keep `false` until all gates pass.",
+    "- `PUBLIC_STRIPE_PAYMENT_LINK_*`: optional public Stripe Payment Links for controlled first buyers while automated checkout stays paused.",
     "",
     "Keep `ENABLE_PAID_ENROLLMENT=false` and `MODULE_ONE_CLINICAL_REVIEW_APPROVED=false` until every launch gate is complete.",
     "",

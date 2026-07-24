@@ -36,6 +36,31 @@ pnpm launch:stripe-products
 That command lists the exact offer ids, prices, optional Stripe lookup keys, and
 webhook event without printing any secret values.
 
+## Optional Controlled First-Buyer Payment Links
+
+If the full automated checkout and webhook flow is not ready yet, you may create
+Stripe Payment Links in the Stripe dashboard for a small controlled first-buyer
+test. These links are public URLs, not secret keys, but they should still be
+shared carefully because a buyer can pay through them.
+
+Optional host variables:
+
+```text
+PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER=
+PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS=
+PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS=
+```
+
+Only `https://buy.stripe.com/...` URLs are accepted by the app. When one of
+these is configured, the buyer page still says automated checkout is paused, but
+it can show an approved manual payment-link button after the buyer enters an
+email and accepts the course terms.
+
+Manual payment links do not prove webhook fulfillment. After a manual payment,
+use `pnpm launch:fulfillment` and the first-buyer checklist to manually confirm
+receipt, grant access, and send the welcome instructions. Do not use this as a
+broad public launch substitute.
+
 Before creating products or sending checkout links, run:
 
 ```bash

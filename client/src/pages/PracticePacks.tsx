@@ -90,6 +90,12 @@ export default function PracticePacks() {
     supervisorHourlyCost: Number(practiceValueHourlyCost),
     estimatedHoursSavedPerLearner: Number(practiceValueHoursSaved),
   });
+  const manualPaymentLinksByOfferId: Record<string, string | undefined> = {
+    "practice-five-seat-pack":
+      checkoutAvailability?.manualPaymentLinks.practiceFiveSeatPack,
+    "practice-fifteen-seat-pack":
+      checkoutAvailability?.manualPaymentLinks.practiceFifteenSeatPack,
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -533,6 +539,12 @@ export default function PracticePacks() {
                 getOfferEmailState(offer.id);
               const acceptedTerms = Boolean(acceptedTermsByOfferId[offer.id]);
               const emailHelpId = `${offer.id}-email-help`;
+              const manualPaymentLink = manualPaymentLinksByOfferId[offer.id];
+              const canUseManualPaymentLink =
+                checkoutUnavailable &&
+                Boolean(manualPaymentLink) &&
+                Boolean(normalizedEmail) &&
+                acceptedTerms;
 
               return (
                 <Card
@@ -660,6 +672,34 @@ export default function PracticePacks() {
                           : "Buy with Stripe"}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
+                    {checkoutUnavailable && manualPaymentLink && (
+                      <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-950">
+                        <p className="font-semibold">
+                          Approved first-buyer payment link
+                        </p>
+                        <p className="mt-1">
+                          Automated seat setup is still paused. Use this only
+                          if Jeff has approved manual fulfillment for this
+                          practice pack.
+                        </p>
+                        <Button
+                          className="mt-3 w-full bg-amber-700 text-white hover:bg-amber-800"
+                          disabled={!canUseManualPaymentLink}
+                          onClick={() => {
+                            window.location.href = manualPaymentLink;
+                          }}
+                        >
+                          Open manual Stripe payment link
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                        {!canUseManualPaymentLink && (
+                          <p className="mt-2 text-xs leading-5">
+                            Enter the billing email and accept the practice-pack
+                            terms before opening the payment link.
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </Card>
               );

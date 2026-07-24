@@ -118,6 +118,7 @@ describe("fetchCheckoutAvailability", () => {
       message:
         "The course can collect interest, but payment is paused until the final launch checks are complete.",
       primaryAction: "join-interest-list",
+      manualPaymentLinks: {},
     };
     const fetcher = vi.fn().mockResolvedValue({
       ok: true,

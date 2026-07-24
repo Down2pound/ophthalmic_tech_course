@@ -87,6 +87,13 @@ export default function Checkout() {
   const emailHasText = email.trim().length > 0;
   const showEmailValidation = emailHasText && !normalizedEmail;
   const checkoutUnavailable = checkoutAvailability?.ready === false;
+  const manualPaymentLink =
+    checkoutAvailability?.manualPaymentLinks.foundingLearner;
+  const canUseManualPaymentLink =
+    checkoutUnavailable &&
+    Boolean(manualPaymentLink) &&
+    Boolean(normalizedEmail) &&
+    acceptedTerms;
   const learnerReadinessResult = getLearnerReadinessResult(
     learnerReadinessCheckedIds
   );
@@ -703,6 +710,33 @@ export default function Checkout() {
                   ? "Enrollment not open yet"
                   : "Continue to Stripe"}
             </Button>
+            {checkoutUnavailable && manualPaymentLink && (
+              <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-950">
+                <p className="font-semibold">
+                  Approved first-buyer payment link
+                </p>
+                <p className="mt-1">
+                  Automated access is still paused. Use this only if Jeff has
+                  approved manual fulfillment for your purchase.
+                </p>
+                <Button
+                  className="mt-3 w-full bg-amber-700 text-white hover:bg-amber-800"
+                  disabled={!canUseManualPaymentLink}
+                  onClick={() => {
+                    window.location.href = manualPaymentLink;
+                  }}
+                >
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Use manual Stripe payment link
+                </Button>
+                {!canUseManualPaymentLink && (
+                  <p className="mt-2 text-xs leading-5">
+                    Enter your email and accept the course terms before opening
+                    the payment link.
+                  </p>
+                )}
+              </div>
+            )}
             <p className="mt-4 text-sm leading-6 text-slate-600">
               Payment details are handled securely by Stripe Checkout, not by
               this app.

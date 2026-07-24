@@ -11,7 +11,15 @@ export interface CheckoutAvailabilityReport {
   ready: boolean;
   title: string;
   message: string;
-  primaryAction: "continue-to-checkout" | "join-interest-list";
+  primaryAction:
+    | "continue-to-checkout"
+    | "use-manual-payment-link"
+    | "join-interest-list";
+  manualPaymentLinks: {
+    foundingLearner?: string;
+    practiceFiveSeatPack?: string;
+    practiceFifteenSeatPack?: string;
+  };
 }
 
 interface CheckoutAvailabilityErrorResponse {

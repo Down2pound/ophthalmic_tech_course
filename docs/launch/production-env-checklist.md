@@ -33,11 +33,14 @@ keys, generated session secrets, or admin tokens into this checklist.
 
 ## Optional Values
 
-| Set? | Variable                    | Source                        | Validation                                       | Launch note                                                         |
-| ---- | --------------------------- | ----------------------------- | ------------------------------------------------ | ------------------------------------------------------------------- |
-| [ ]  | `VITE_ANALYTICS_ENDPOINT`   | Optional analytics provider.  | Leave blank to disable analytics.                | Only needed if you want browser analytics at launch.                |
-| [ ]  | `VITE_ANALYTICS_WEBSITE_ID` | Optional analytics provider.  | Leave blank to disable analytics.                | Pairs with `VITE_ANALYTICS_ENDPOINT` when analytics is used.        |
-| [ ]  | `LAUNCH_SITEMAP_PATH`       | Local launch command setting. | Optional; defaults to `dist/public/sitemap.xml`. | Used by `pnpm launch:sitemap` when saving a generated sitemap file. |
+| Set? | Variable                                      | Source                                | Validation                                       | Launch note                                                                  |
+| ---- | --------------------------------------------- | ------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------- |
+| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER` | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for first individual buyers.           |
+| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS` | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for the five-seat practice pack.       |
+| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS` | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for the fifteen-seat practice pack.    |
+| [ ]  | `VITE_ANALYTICS_ENDPOINT`                     | Optional analytics provider.          | Leave blank to disable analytics.                | Only needed if you want browser analytics at launch.                         |
+| [ ]  | `VITE_ANALYTICS_WEBSITE_ID`                   | Optional analytics provider.          | Leave blank to disable analytics.                | Pairs with `VITE_ANALYTICS_ENDPOINT` when analytics is used.                 |
+| [ ]  | `LAUNCH_SITEMAP_PATH`                         | Local launch command setting.         | Optional; defaults to `dist/public/sitemap.xml`. | Used by `pnpm launch:sitemap` when saving a generated sitemap file.          |
 
 ## Host Dashboard Paste Template
 
@@ -65,6 +68,9 @@ MODULE_ONE_CLINICAL_REVIEWER_ROLE=
 MODULE_ONE_CLINICAL_REVIEW_DATE=
 MODULE_ONE_CLINICAL_APPROVED_VERSION=
 MODULE_ONE_CLINICAL_REVIEW_APPROVED=false
+PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER=
+PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS=
+PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS=
 ```
 
 ## Where Each Value Comes From
@@ -91,6 +97,8 @@ MODULE_ONE_CLINICAL_REVIEW_APPROVED=false
   `pnpm launch:clinical-review`.
 - `ENABLE_PAID_ENROLLMENT`: final launch switch. Keep `false` until all gates
   pass.
+- `PUBLIC_STRIPE_PAYMENT_LINK_*`: optional public Stripe Payment Links for
+  controlled first buyers while automated checkout stays paused.
 
 Keep `ENABLE_PAID_ENROLLMENT=false` and
 `MODULE_ONE_CLINICAL_REVIEW_APPROVED=false` until every launch gate is complete.
