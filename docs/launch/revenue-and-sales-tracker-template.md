@@ -115,6 +115,34 @@ Outreach decision ideas:
 - Fix first: one specific page, email, checkout setting, webhook, or support
   step needs correction before more outreach.
 
+## First Buyer Fulfillment Checklist
+
+Run `pnpm launch:sales-tracker` to create
+`first-buyer-fulfillment-checklist.csv` with the other sales tracker templates.
+
+Use that CSV like a simple launch clipboard for the first real buyer. It helps
+you check payment, webhook delivery, buyer lookup, welcome email, sign-in, and
+Module 1 access without saving unsafe private data.
+
+For individual learners, the green light is:
+
+- Payment is paid.
+- Checkout webhook delivered.
+- Buyer lookup shows an active enrollment.
+- Welcome email or safe skip reason is recorded.
+- The buyer can request sign-in with the checkout email.
+- The buyer can open Module 1.
+
+For practice buyers, the green light is:
+
+- Practice seat pack exists.
+- Seat count and remaining seats are correct.
+- Manager can assign learner seats.
+- Assigned learner can request sign-in.
+
+If any row fails, pause broad outreach and fix that one issue before sending
+more checkout links.
+
 ## Weekly Business Review
 
 Answer these once a week. Think of it like checking the course dashboard, but
