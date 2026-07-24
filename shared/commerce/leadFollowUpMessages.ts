@@ -17,6 +17,10 @@ export interface PracticeFollowUpLead {
   targetTimeline: string;
 }
 
+interface FollowUpDraftOptions {
+  paidEnrollmentReady?: boolean;
+}
+
 function buildPublicUrl(publicAppUrl: string, path: string): string {
   try {
     const baseUrl = new URL(publicAppUrl.trim());
@@ -34,14 +38,21 @@ function buildPublicUrl(publicAppUrl: string, path: string): string {
 export function createLearnerLeadFollowUpHref({
   lead,
   publicAppUrl,
+  paidEnrollmentReady = false,
 }: {
   lead: LearnerFollowUpLead;
   publicAppUrl: string;
-}): string {
+} & FollowUpDraftOptions): string {
   const checkoutUrl = buildPublicUrl(publicAppUrl, "/checkout");
   const previewUrl = buildPublicUrl(publicAppUrl, "/preview");
   const buyerGuideUrl = buildPublicUrl(publicAppUrl, "/buyer-guide");
   const policiesUrl = buildPublicUrl(publicAppUrl, "/policies");
+  const accessLine = paidEnrollmentReady
+    ? `Individual access: ${checkoutUrl}`
+    : `Interest and access page: ${checkoutUrl}`;
+  const readinessLine = paidEnrollmentReady
+    ? "Paid enrollment is open, so you can use the individual access page when you are ready."
+    : "Paid enrollment may still be paused, so start with the free preview and buyer guide unless I confirm checkout is open.";
 
   return createMailtoHref({
     email: lead.email,
@@ -58,8 +69,9 @@ export function createLearnerLeadFollowUpHref({
       "",
       `Free preview: ${previewUrl}`,
       `Buyer guide: ${buyerGuideUrl}`,
-      `Individual access: ${checkoutUrl}`,
+      accessLine,
       `Policies: ${policiesUrl}`,
+      readinessLine,
       "",
       "Quick reminder: OptiTech Academy supports foundational learning and supervised practice preparation. It is not certification, employment, or hands-on competency signoff.",
       "",
@@ -71,14 +83,18 @@ export function createLearnerLeadFollowUpHref({
 export function createPracticeLeadFollowUpHref({
   lead,
   publicAppUrl,
+  paidEnrollmentReady = false,
 }: {
   lead: PracticeFollowUpLead;
   publicAppUrl: string;
-}): string {
+} & FollowUpDraftOptions): string {
   const practicePacksUrl = buildPublicUrl(publicAppUrl, "/practice-packs");
   const buyerGuideUrl = buildPublicUrl(publicAppUrl, "/buyer-guide");
   const policiesUrl = buildPublicUrl(publicAppUrl, "/policies");
   const previewUrl = buildPublicUrl(publicAppUrl, "/preview");
+  const readinessLine = paidEnrollmentReady
+    ? "Paid enrollment is open, so the practice-pack page can be used for purchase when your team is ready."
+    : "Paid enrollment may still be paused, so use the practice-pack page for review or inquiry until I confirm checkout is open.";
 
   return createMailtoHref({
     email: lead.contactEmail,
@@ -97,6 +113,7 @@ export function createPracticeLeadFollowUpHref({
       `Buyer guide: ${buyerGuideUrl}`,
       `Free preview: ${previewUrl}`,
       `Policies: ${policiesUrl}`,
+      readinessLine,
       "",
       "The course does not replace practice-specific protocols, clinical supervision, employer policy, or hands-on signoff.",
       "",

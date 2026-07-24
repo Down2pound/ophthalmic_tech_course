@@ -59,6 +59,8 @@ export default function PracticeSeatAdmin() {
   const [draftPublicAppUrl, setDraftPublicAppUrl] = useState(
     getDefaultPublicAppUrl
   );
+  const [draftPaidEnrollmentReady, setDraftPaidEnrollmentReady] =
+    useState(false);
   const [supportLookupEmail, setSupportLookupEmail] = useState("");
   const [revocationTargetType, setRevocationTargetType] = useState<
     "enrollment" | "practice-seat-assignment" | "practice-seat-pack"
@@ -317,6 +319,21 @@ export default function PracticeSeatAdmin() {
                 Use the deployed site URL here before opening learner or
                 practice follow-up drafts.
               </p>
+              <label className="mt-4 flex gap-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-950">
+                <input
+                  type="checkbox"
+                  checked={draftPaidEnrollmentReady}
+                  onChange={event =>
+                    setDraftPaidEnrollmentReady(event.target.checked)
+                  }
+                  className="mt-1 h-4 w-4 flex-shrink-0"
+                />
+                <span>
+                  Paid enrollment is fully ready. Only check this after launch
+                  readiness, production smoke testing, and one internal live
+                  purchase are proven.
+                </span>
+              </label>
             </div>
 
             {statusMessage && (
@@ -903,6 +920,7 @@ export default function PracticeSeatAdmin() {
                       href={createPracticeLeadFollowUpHref({
                         lead: inquiry,
                         publicAppUrl: draftPublicAppUrl,
+                        paidEnrollmentReady: draftPaidEnrollmentReady,
                       })}
                       className="mt-3 inline-flex items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50"
                     >
@@ -971,6 +989,7 @@ export default function PracticeSeatAdmin() {
                       href={createLearnerLeadFollowUpHref({
                         lead: interest,
                         publicAppUrl: draftPublicAppUrl,
+                        paidEnrollmentReady: draftPaidEnrollmentReady,
                       })}
                       className="mt-3 inline-flex items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50"
                     >

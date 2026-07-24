@@ -22,6 +22,7 @@ describe("lead follow-up messages", () => {
     expect(decoded).toContain("https://academy.example.com/preview");
     expect(decoded).toContain("https://academy.example.com/buyer-guide");
     expect(decoded).toContain("https://academy.example.com/checkout");
+    expect(decoded).toContain("Paid enrollment may still be paused");
     expect(decoded).toContain("not certification");
     expect(decoded).not.toMatch(/guarantee/i);
     expect(decoded).not.toMatch(/certified technician/i);
@@ -45,9 +46,27 @@ describe("lead follow-up messages", () => {
     expect(decoded).toContain("Example Eye");
     expect(decoded).toContain("Estimated learners: 8");
     expect(decoded).toContain("https://academy.example.com/practice-packs");
+    expect(decoded).toContain("Paid enrollment may still be paused");
     expect(decoded).toContain("hands-on competency signoff");
     expect(decoded).not.toMatch(/guarantee/i);
     expect(decoded).not.toMatch(/replaces? supervision/i);
+  });
+
+  it("can mark learner follow-up drafts as paid-enrollment ready", () => {
+    const href = createLearnerLeadFollowUpHref({
+      publicAppUrl: "https://academy.example.com",
+      paidEnrollmentReady: true,
+      lead: {
+        learnerName: "Future Tech",
+        email: "learner@example.com",
+        background: "Medical assistant",
+        goal: "Learn ophthalmic vocabulary",
+      },
+    });
+    const decoded = decodeURIComponent(href);
+
+    expect(decoded).toContain("Paid enrollment is open");
+    expect(decoded).toContain("Individual access: https://academy.example.com/checkout");
   });
 
   it("falls back to a placeholder domain when the draft public URL is invalid", () => {
