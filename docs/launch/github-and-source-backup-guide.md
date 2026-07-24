@@ -72,9 +72,18 @@ stopping:
 pnpm launch:workstation-handoff
 ```
 
-It runs the plain-Node blocker summary, runs the secret scan, and then prints
-the backup handoff report, the post-`07/16/2026` workspace handoff, and the
-first-revenue path.
+It runs the work-safe preflight checks, then prints the backup handoff report,
+the post-`07/16/2026` workspace handoff, and the first-revenue path.
+
+The work-safe preflight command is:
+
+```bash
+pnpm launch:work-safe-preflight
+```
+
+It runs TypeScript checking, secret scan, offer audit, and blocker summary
+without using the Vite/Vitest/tsx commands that may be blocked by work-computer
+security.
 
 If you continued working after the `07/16/2026` backup, also review:
 

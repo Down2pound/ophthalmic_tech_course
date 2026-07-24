@@ -71,6 +71,7 @@ Run each command by itself first, so errors are easier to understand:
 pnpm check
 pnpm test
 pnpm launch:secret-scan
+pnpm launch:offer-audit
 pnpm build
 pnpm launch:bundle
 ```
@@ -83,6 +84,17 @@ pnpm launch:preflight
 
 `launch:secret-scan` checks the project for likely private keys or passwords
 without printing the secret values.
+`launch:offer-audit` checks that buyer-facing prices and app checkout prices
+still match before money is involved.
+
+On a locked-down work computer, use this smaller safety command:
+
+```bash
+pnpm launch:work-safe-preflight
+```
+
+It skips the known-blocked Vite/Vitest/tsx runners and checks TypeScript,
+secrets, offer pricing, and current launch blockers.
 
 ## 4. Check Production Setup Files
 

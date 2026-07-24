@@ -58,6 +58,7 @@ pnpm install
 pnpm check
 pnpm test
 pnpm launch:secret-scan
+pnpm launch:offer-audit
 pnpm build
 pnpm launch:bundle
 pnpm launch:blockers
@@ -67,6 +68,12 @@ If all of that passes, run:
 
 ```bash
 pnpm launch:preflight
+```
+
+On this work computer, where Vite/Vitest/tsx commands may be blocked, run:
+
+```bash
+pnpm launch:work-safe-preflight
 ```
 
 ## Outside Account Setup Order
