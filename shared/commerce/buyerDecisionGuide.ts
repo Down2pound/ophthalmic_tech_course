@@ -3,6 +3,12 @@ export interface BuyerDecisionPrompt {
   whyItMatters: string;
 }
 
+export interface BuyerObjectionResponse {
+  concern: string;
+  safeAnswer: string;
+  nextStep: string;
+}
+
 export interface BuyerDecisionGuide {
   id: "individual-learner" | "practice-manager";
   title: string;
@@ -16,6 +22,7 @@ export interface BuyerDecisionGuide {
     whyItHelps: string;
   }>;
   decisionPrompts: BuyerDecisionPrompt[];
+  objectionResponses: BuyerObjectionResponse[];
   safeShareMessage: string;
   primaryCta: {
     label: string;
@@ -94,6 +101,32 @@ export const individualLearnerDecisionGuide: BuyerDecisionGuide = {
         "Online learning supports practice, but it does not replace supervised observation.",
     },
   ],
+  objectionResponses: [
+    {
+      concern: "I am brand new to eye care.",
+      safeAnswer:
+        "That is the intended learner. The course starts with plain-language ophthalmic foundations before moving into clinic habits and knowledge checks.",
+      nextStep: "Try the free preview, then review individual access.",
+    },
+    {
+      concern: "Is this a certification course?",
+      safeAnswer:
+        "No. It is foundational education for ophthalmic vocabulary, clinic flow, patient communication, and supervised practice preparation.",
+      nextStep: "Read the policies page before deciding.",
+    },
+    {
+      concern: "I need to ask my manager first.",
+      safeAnswer:
+        "That is a good idea if you want the course to support your current or future supervised training.",
+      nextStep: "Use the safe share message or send the buyer guide.",
+    },
+    {
+      concern: "What if it is not a fit?",
+      safeAnswer:
+        "The course has posted policies and a support path for account, navigation, purchase, and refund-review questions.",
+      nextStep: "Review policies and support expectations before checkout.",
+    },
+  ],
   safeShareMessage:
     "I am considering OptiTech Academy, a self-paced ophthalmic technician foundations course. It focuses on beginner ophthalmic vocabulary, clinic flow, patient communication, knowledge checks, and supervised practice preparation. It is not certification and does not replace employer training or hands-on competency signoff. Would this be useful before or during supervised training?",
   primaryCta: {
@@ -166,6 +199,32 @@ export const practiceManagerDecisionGuide: BuyerDecisionGuide = {
     {
       question: "Which start date or hiring class is this for?",
       whyItMatters: "A clear timeline makes the purchase easier to approve.",
+    },
+  ],
+  objectionResponses: [
+    {
+      concern: "Can this replace in-office training?",
+      safeAnswer:
+        "No. It can make the first layer of onboarding more consistent, but local protocols, observation, and hands-on signoff still belong with the practice.",
+      nextStep: "Use the practice-pack page or a custom practice conversation.",
+    },
+    {
+      concern: "How do I justify this to an owner?",
+      safeAnswer:
+        "The practice-pack page includes a planning tool that compares seat-pack cost with supervisor time spent repeating basic onboarding foundations. It is an estimate, not a promise.",
+      nextStep: "Send the practice-pack page and buyer guide.",
+    },
+    {
+      concern: "What if we need more than 15 seats?",
+      safeAnswer:
+        "Larger rollouts should start with a custom practice conversation so seat count, timeline, and onboarding goals are clear before purchase.",
+      nextStep: "Use the custom practice inquiry form.",
+    },
+    {
+      concern: "Can we add our doctor-specific protocols?",
+      safeAnswer:
+        "Practice-specific workflows and doctor protocols should stay in the private Spindel/practice onboarding layer, not the national public course.",
+      nextStep: "Discuss private onboarding needs separately from public course checkout.",
     },
   ],
   safeShareMessage:

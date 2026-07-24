@@ -124,6 +124,30 @@ export default function BuyerGuide() {
                       ))}
                     </div>
                   </section>
+
+                  <section className="mt-6">
+                    <h3 className="text-xl font-bold">
+                      If you are hesitating
+                    </h3>
+                    <div className="mt-4 grid gap-3 md:grid-cols-2">
+                      {guide.objectionResponses.map(response => (
+                        <section
+                          key={response.concern}
+                          className="rounded-md border border-slate-200 bg-slate-50 p-4"
+                        >
+                          <p className="text-sm font-semibold text-slate-950">
+                            {response.concern}
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-slate-600">
+                            {response.safeAnswer}
+                          </p>
+                          <p className="mt-3 rounded-md border border-blue-100 bg-blue-50 p-3 text-xs font-semibold leading-5 text-blue-950">
+                            {response.nextStep}
+                          </p>
+                        </section>
+                      ))}
+                    </div>
+                  </section>
                 </section>
 
                 <aside className="space-y-4">
