@@ -1,14 +1,14 @@
 # OptiTech Academy Current Backup Manifest
 
-Use this file to identify the newest known safe handoff point for GitHub and
-Google Drive.
+Use this file to identify where the newest safe handoff point lives in GitHub
+and Google Drive.
 
-Simple translation: this is the label on the latest packed suitcase.
+Simple translation: this is the luggage tag. The actual newest suitcase is the
+newest matching ZIP and bundle pair in Drive, or the latest pushed GitHub
+branch.
 
-## Latest Known Backup
+## Primary Backup Sources
 
-- Backup date: `2026-07-24`
-- Commit: `7f65eea`
 - Branch: `codex/optitech-product-spec`
 - GitHub repo:
   `https://github.com/Down2pound/ophthalmic_tech_course`
@@ -19,16 +19,24 @@ Simple translation: this is the label on the latest packed suitcase.
 - Google Drive folder:
   `https://drive.google.com/drive/folders/1pA_fNKEMLKnCmhn6tkM7VLrEj7fgX97T`
 
-## Drive Backup Files
+## Drive Backup File Pattern
 
-- Source ZIP:
-  `optitech-academy-source-2026-07-24-7f65eea.zip`
-- Source ZIP URL:
-  `https://drive.google.com/file/d/1XccAW3Jnly3uxNXi2bkKfBEUdqfU_j8K/view?usp=drivesdk`
-- Git bundle:
-  `optitech-academy-branch-2026-07-24-7f65eea.bundle`
-- Git bundle URL:
-  `https://drive.google.com/file/d/1SoY8BaZ88sCOxSWSLQkkp-0sP_tU9Fc-/view?usp=drivesdk`
+Use the newest matching pair with the same date and commit hash:
+
+```text
+optitech-academy-source-YYYY-MM-DD-COMMIT.zip
+optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle
+```
+
+Example:
+
+```text
+optitech-academy-source-2026-07-24-2551025.zip
+optitech-academy-branch-2026-07-24-2551025.bundle
+```
+
+GitHub is the easiest restore path when the branch is pushed. Drive is the
+backup path when GitHub, network access, or the work computer gets blocked.
 
 ## What This Backup Includes
 
