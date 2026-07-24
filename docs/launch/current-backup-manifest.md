@@ -31,9 +31,20 @@ optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle
 Example:
 
 ```text
-optitech-academy-source-2026-07-24-2551025.zip
-optitech-academy-branch-2026-07-24-2551025.bundle
+optitech-academy-source-2026-07-24-433a358.zip
+optitech-academy-branch-2026-07-24-433a358.bundle
 ```
+
+## Latest Confirmed Backup
+
+- Backup date: `2026-07-24`
+- Commit: `433a358`
+- Commit message: `chore: include deployment audit in preflight`
+- Source ZIP:
+  `https://drive.google.com/file/d/12fgpNWKILHGWumVY689PT_dBA4M1DZ92/view?usp=drivesdk`
+- Git bundle:
+  `https://drive.google.com/file/d/1ojpHx9SoFIRQp69C1-k3-NcjmCq5v5Td/view?usp=drivesdk`
+- Branch status: pushed to GitHub branch `codex/optitech-product-spec`
 
 GitHub is the easiest restore path when the branch is pushed. Drive is the
 backup path when GitHub, network access, or the work computer gets blocked.

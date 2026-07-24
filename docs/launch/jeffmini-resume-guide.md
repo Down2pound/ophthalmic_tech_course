@@ -39,10 +39,7 @@ git clone https://github.com/Down2pound/ophthalmic_tech_course.git
 cd ophthalmic_tech_course
 git checkout codex/optitech-product-spec
 pnpm install
-pnpm check
-pnpm test
-pnpm launch:secret-scan
-pnpm build
+pnpm launch:preflight
 ```
 
 If the repo already exists on `jeffmini`:
@@ -53,10 +50,7 @@ git fetch origin
 git checkout codex/optitech-product-spec
 git pull
 pnpm install
-pnpm check
-pnpm test
-pnpm launch:secret-scan
-pnpm build
+pnpm launch:preflight
 ```
 
 ## Option B: Continue From The Drive Bundle
@@ -75,10 +69,7 @@ cd ophthalmic_tech_course
 git remote set-url origin https://github.com/Down2pound/ophthalmic_tech_course.git
 git push -u origin codex/optitech-product-spec
 pnpm install
-pnpm check
-pnpm test
-pnpm launch:secret-scan
-pnpm build
+pnpm launch:preflight
 ```
 
 Beginner translation: the bundle is the travel version of the Git branch. This
@@ -95,10 +86,7 @@ Use this only if Git and the bundle path are confusing.
 
 ```bash
 pnpm install
-pnpm check
-pnpm test
-pnpm launch:secret-scan
-pnpm build
+pnpm launch:preflight
 ```
 
 The ZIP has the files, but the bundle and GitHub branch are better because they
@@ -109,6 +97,7 @@ preserve Git history.
 Run these command helpers before touching real payment settings:
 
 ```bash
+pnpm launch:blockers
 pnpm launch:next
 pnpm launch:external-setup
 pnpm launch:render-setup
