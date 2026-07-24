@@ -42,6 +42,7 @@ docs/launch/current-backup-manifest.md
 | Email | Passwordless sign-in email sends successfully | `pnpm launch:email-setup` |
 | Stripe | Live products, checkout, and webhook are configured | `pnpm launch:stripe-products` |
 | Admin safety | Practice seat and alert admin tokens are set | `pnpm launch:admin-tokens` |
+| Owner traffic light | Preview, practice inquiry, and paid checkout sharing decisions are clear | `pnpm launch:owner-go-no-go` |
 | Smoke test | Live site passes deployment checks | `pnpm launch:smoke` |
 | First live purchase | One low-risk internal buyer pays and receives access | `pnpm launch:live-purchase-test` |
 
@@ -90,6 +91,7 @@ Replace the example domain with the real site URL.
 ```bash
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:smoke
 PUBLIC_APP_URL=https://your-real-domain.example pnpm launch:sitemap
+LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:owner-go-no-go
 LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:go-no-go
 ```
 

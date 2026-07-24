@@ -31,6 +31,16 @@ This check should prove the deployed site, health endpoint, launch readiness
 endpoint, buyer pages, checkout return pages, security headers, and robots.txt
 load before real paid enrollment is turned on.
 
+You can also run this read-only owner traffic-light report:
+
+```bash
+LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:owner-go-no-go
+```
+
+It tells you whether preview links, practice inquiry links, and paid checkout
+links are GO, CAUTION, or NO-GO without creating buyers, sending email, or
+submitting a practice inquiry.
+
 Do not use this command as final launch approval. It allows the app to be "not
 ready" while you are still setting up Stripe, email, clinical review, and live
 mode.

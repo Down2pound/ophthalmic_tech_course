@@ -31,6 +31,7 @@
     "launch:jeffmini": "node scripts/launch-jeffmini-resume.mjs",
     "launch:live-purchase-test": "node scripts/launch-live-purchase-test.mjs",
     "launch:next": "tsx server/src/launch/runProductionSetupPlan.ts",
+    "launch:owner-go-no-go": "node scripts/launch-owner-go-no-go.mjs",
     "launch:post-0716-handoff": "node scripts/launch-post-0716-handoff.mjs",
     "launch:render-setup": "node scripts/launch-render-setup.mjs",
     "launch:sales-tracker": "node scripts/launch-sales-tracker.mjs",

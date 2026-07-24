@@ -92,6 +92,14 @@ To print only the current paid-launch blocker summary, run:
 pnpm launch:blockers
 ```
 
+To print a plain-Node owner traffic-light report for a deployed site, run:
+
+```bash
+LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:owner-go-no-go
+```
+
+This is useful on computers where TypeScript runner commands are blocked.
+
 Safe Drive backup rule: upload only the ZIP, bundle, and generated
 `launch-evidence/` folder. Do not upload `.env`, Stripe secret keys, webhook
 secrets, email API keys, database passwords, raw sign-in links, session cookies,

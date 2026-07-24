@@ -103,6 +103,7 @@ pnpm launch:first-week-sales
 pnpm launch:jeffmini
 pnpm launch:live-purchase-test
 pnpm launch:next
+pnpm launch:owner-go-no-go
 pnpm launch:render-setup
 pnpm launch:spindel-onboarding
 pnpm launch:stripe-products
@@ -141,6 +142,8 @@ branch, Google Drive backup files, and production setup order.
 rehearsal checklist.
 `launch:next` prints one beginner-friendly command center with your current
 launch phase, blocked gates, next best actions, and exact smoke-test commands.
+`launch:owner-go-no-go` prints a work-computer-safe traffic-light report for
+public preview links, practice inquiry links, and paid checkout links.
 `launch:render-setup` prints the Render Blueprint deployment order and live URL
 checks.
 `launch:spindel-onboarding` prints the private Spindel Eye Technician
@@ -173,6 +176,7 @@ pnpm launch:sitemap
 pnpm launch:first-sales
 pnpm launch:first-week-sales
 $env:LAUNCH_BASE_URL="https://your-real-domain.example"
+pnpm launch:owner-go-no-go
 pnpm launch:go-no-go
 pnpm launch:sales-tracker
 ```
@@ -185,6 +189,8 @@ safety headers are present, and `/robots.txt` blocks private/admin-style paths.
 your real domain.
 `launch:first-week-sales` turns the first-buyer packet into daily actions and
 keeps paid checkout links gated until production proof exists.
+`launch:owner-go-no-go` uses plain Node and only reads the deployed app. It is
+useful when `tsx` commands are blocked by work-computer security.
 `launch:go-no-go` is the owner-friendly live-site decision report: GO, CAUTION,
 or NO-GO for preview sharing, practice inquiries, and paid checkout sharing.
 `launch:sales-tracker` creates CSV tracker templates for leads, purchases,
