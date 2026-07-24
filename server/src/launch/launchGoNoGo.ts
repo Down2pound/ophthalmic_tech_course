@@ -90,6 +90,100 @@ function renderList(items: string[], emptyText: string): string[] {
   return items.map(item => `- ${item}`);
 }
 
+function formatShareableLink({
+  label,
+  url,
+  status,
+}: {
+  label: string;
+  url: string;
+  status: string;
+}): string {
+  return `- ${label}: ${status} - ${url}`;
+}
+
+function renderShareableLinkBuckets({
+  baseUrl,
+  decision,
+}: {
+  baseUrl: string;
+  decision: LaunchGoNoGoDecision;
+}): string[] {
+  const previewStatus =
+    decision.publicPreviewSharing === "go" ? "shareable" : "hold";
+  const practiceStatus =
+    decision.practiceInquiryCollection === "go"
+      ? "shareable"
+      : decision.practiceInquiryCollection === "caution"
+        ? "review-only"
+        : "hold";
+  const paidStatus =
+    decision.paidCheckoutSharing === "go" ? "shareable" : "do not share";
+
+  return [
+    "## Shareable Link Buckets",
+    "",
+    "Public preview links:",
+    "",
+    formatShareableLink({
+      label: "Preview",
+      url: `${baseUrl}/preview`,
+      status: previewStatus,
+    }),
+    formatShareableLink({
+      label: "Curriculum",
+      url: `${baseUrl}/curriculum`,
+      status: previewStatus,
+    }),
+    formatShareableLink({
+      label: "Buyer guide",
+      url: `${baseUrl}/buyer-guide`,
+      status: previewStatus,
+    }),
+    formatShareableLink({
+      label: "Policies",
+      url: `${baseUrl}/policies`,
+      status: previewStatus,
+    }),
+    "",
+    "Practice outreach links:",
+    "",
+    formatShareableLink({
+      label: "Practice packs",
+      url: `${baseUrl}/practice-packs`,
+      status: practiceStatus,
+    }),
+    formatShareableLink({
+      label: "Onboarding overview",
+      url: `${baseUrl}/onboarding`,
+      status: practiceStatus,
+    }),
+    formatShareableLink({
+      label: "Skills passport",
+      url: `${baseUrl}/skills-passport`,
+      status: practiceStatus,
+    }),
+    "",
+    "Paid checkout links:",
+    "",
+    formatShareableLink({
+      label: "Individual checkout",
+      url: `${baseUrl}/checkout`,
+      status: paidStatus,
+    }),
+    formatShareableLink({
+      label: "Practice pack checkout",
+      url: `${baseUrl}/practice-packs`,
+      status: paidStatus,
+    }),
+    "",
+    decision.paidCheckoutSharing === "go"
+      ? "Paid links are marked shareable only because paid readiness is green. Still run one controlled internal live purchase before broad outreach."
+      : "Paid links are listed for convenience, but they should not be sent to buyers until paid readiness is green and one internal live purchase works.",
+    "",
+  ];
+}
+
 export function renderLaunchGoNoGoReport(
   report: DeploymentSmokeTestReport
 ): string {
@@ -113,6 +207,7 @@ export function renderLaunchGoNoGoReport(
     "",
     decision.summary,
     "",
+    ...renderShareableLinkBuckets({ baseUrl: report.baseUrl, decision }),
     "## Evidence",
     "",
     `- Health endpoint: ${report.healthOk ? "ok" : "failed"}`,

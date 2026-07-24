@@ -82,6 +82,19 @@ describe("renderLaunchGoNoGoReport", () => {
 
     expect(report).toContain("Public preview links: GO");
     expect(report).toContain("Paid checkout links: NO-GO");
+    expect(report).toContain("Shareable Link Buckets");
+    expect(report).toContain(
+      "Preview: shareable - https://example.com/preview"
+    );
+    expect(report).toContain(
+      "Practice packs: review-only - https://example.com/practice-packs"
+    );
+    expect(report).toContain(
+      "Individual checkout: do not share - https://example.com/checkout"
+    );
+    expect(report).toContain(
+      "Paid links are listed for convenience, but they should not be sent to buyers"
+    );
     expect(report).toContain("Stripe webhook is not configured.");
     expect(report).toContain("free preview");
     expect(report).not.toContain("sk_test_");
