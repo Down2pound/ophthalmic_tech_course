@@ -2,10 +2,12 @@ import { Card } from "@/components/ui/card";
 import {
   Award,
   ArrowRight,
+  BriefcaseBusiness,
   Building2,
   CheckCircle2,
   Clock,
   Eye,
+  FileBadge2,
   Sparkles,
   Users,
 } from "lucide-react";
@@ -46,6 +48,30 @@ export default function Home() {
     { number: "3", label: "Module 1 starter lessons" },
     { number: "80%", label: "Target passing score" },
     { number: "12 mo", label: "Founding learner access" },
+  ];
+
+  const supportResources = [
+    {
+      href: "/skills-passport",
+      icon: CheckCircle2,
+      title: "Skills Passport",
+      description:
+        "Show learners and supervisors how online study connects to future observed practice without claiming hands-on competency.",
+    },
+    {
+      href: "/career-toolkit",
+      icon: BriefcaseBusiness,
+      title: "Career Toolkit",
+      description:
+        "Help career changers and medical assistants explain their learning path clearly when preparing for eye-care roles.",
+    },
+    {
+      href: "/certificate-preview",
+      icon: FileBadge2,
+      title: "Certificate Preview",
+      description:
+        "Let buyers see what completion recognition looks like while keeping the limits honest and easy to understand.",
+    },
   ];
 
   return (
@@ -404,6 +430,45 @@ export default function Home() {
                 </h3>
                 <p className="text-gray-300">{item.desc}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Learner Support Resources */}
+      <section className="relative z-10 py-20 px-4">
+        <div className="container">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Built-In Support For Starting Out
+              </span>
+            </h2>
+            <p className="text-gray-300 text-lg">
+              Extra tools help learners, supervisors, and managers connect the
+              course to real onboarding conversations.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {supportResources.map(resource => (
+              <a
+                key={resource.href}
+                href={resource.href}
+                className="glass-card block p-8 transition-all hover:bg-white/10"
+              >
+                <resource.icon className="h-10 w-10 text-cyan-300" />
+                <h3 className="mt-5 text-xl font-semibold text-white">
+                  {resource.title}
+                </h3>
+                <p className="mt-3 leading-7 text-gray-300">
+                  {resource.description}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300">
+                  Open resource
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </a>
             ))}
           </div>
         </div>
