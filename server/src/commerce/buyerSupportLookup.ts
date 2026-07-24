@@ -27,6 +27,13 @@ export interface BuyerSupportLookupResult {
     remainingPracticeSeats: number;
   };
   recommendedActions: string[];
+  supportNote: {
+    issueCategories: string[];
+    safeSummary: string;
+    nextStep: string;
+    evidenceToSave: string[];
+    neverSave: string[];
+  };
 }
 
 function getRemainingPracticeSeats(
@@ -114,6 +121,135 @@ function getRecommendedSupportActions({
   return actions;
 }
 
+function getSupportIssueCategories({
+  purchases,
+  enrollments,
+  practiceSeatPacks,
+  practiceSeatAssignments,
+  remainingPracticeSeats,
+}: {
+  purchases: VerifiedPurchaseRecord[];
+  enrollments: EnrollmentRecord[];
+  practiceSeatPacks: PracticeSeatPackRecord[];
+  practiceSeatAssignments: PracticeSeatAssignmentRecord[];
+  remainingPracticeSeats: number;
+}): string[] {
+  const activeEnrollment = hasActiveEnrollment(enrollments);
+  const categories: string[] = [];
+
+  if (purchases.length === 0 && practiceSeatAssignments.length === 0) {
+    categories.push("payment-or-seat-not-found");
+  }
+
+  if (
+    purchases.length > 0 &&
+    enrollments.length === 0 &&
+    practiceSeatPacks.length === 0
+  ) {
+    categories.push("payment-succeeded-access-missing");
+  }
+
+  if (enrollments.length > 0 && !activeEnrollment) {
+    categories.push("inactive-or-expired-access");
+  }
+
+  if (activeEnrollment) {
+    categories.push("sign-in-help");
+  }
+
+  if (practiceSeatPacks.length > 0 && remainingPracticeSeats > 0) {
+    categories.push("practice-seat-assignment-ready");
+  }
+
+  if (practiceSeatPacks.length > 0 && remainingPracticeSeats === 0) {
+    categories.push("practice-seat-pack-full");
+  }
+
+  if (practiceSeatAssignments.length > 0 && !activeEnrollment) {
+    categories.push("practice-seat-provisioning-check");
+  }
+
+  return categories.length > 0 ? categories : ["general-support"];
+}
+
+function getSafeSupportSummary({
+  email,
+  purchases,
+  enrollments,
+  practiceSeatPacks,
+  practiceSeatAssignments,
+  remainingPracticeSeats,
+}: {
+  email: string;
+  purchases: VerifiedPurchaseRecord[];
+  enrollments: EnrollmentRecord[];
+  practiceSeatPacks: PracticeSeatPackRecord[];
+  practiceSeatAssignments: PracticeSeatAssignmentRecord[];
+  remainingPracticeSeats: number;
+}): string {
+  return [
+    `Lookup email: ${email}.`,
+    `Purchases: ${purchases.length}.`,
+    `Enrollments: ${enrollments.length}.`,
+    `Practice seat packs: ${practiceSeatPacks.length}.`,
+    `Practice seat assignments: ${practiceSeatAssignments.length}.`,
+    `Remaining practice seats for buyer-owned packs: ${remainingPracticeSeats}.`,
+  ].join(" ");
+}
+
+function buildSupportNote({
+  email,
+  purchases,
+  enrollments,
+  practiceSeatPacks,
+  practiceSeatAssignments,
+  remainingPracticeSeats,
+  recommendedActions,
+}: {
+  email: string;
+  purchases: VerifiedPurchaseRecord[];
+  enrollments: EnrollmentRecord[];
+  practiceSeatPacks: PracticeSeatPackRecord[];
+  practiceSeatAssignments: PracticeSeatAssignmentRecord[];
+  remainingPracticeSeats: number;
+  recommendedActions: string[];
+}): BuyerSupportLookupResult["supportNote"] {
+  return {
+    issueCategories: getSupportIssueCategories({
+      purchases,
+      enrollments,
+      practiceSeatPacks,
+      practiceSeatAssignments,
+      remainingPracticeSeats,
+    }),
+    safeSummary: getSafeSupportSummary({
+      email,
+      purchases,
+      enrollments,
+      practiceSeatPacks,
+      practiceSeatAssignments,
+      remainingPracticeSeats,
+    }),
+    nextStep:
+      recommendedActions[0] ??
+      "No app-side support action is recommended from this lookup alone. Check the first-sale support runbook before changing access.",
+    evidenceToSave: [
+      "Buyer or learner email.",
+      "Checkout session ID or Stripe event ID when available.",
+      "App support IDs shown in this lookup.",
+      "Public error message or support request theme.",
+      "Action taken and follow-up date.",
+    ],
+    neverSave: [
+      "Card numbers.",
+      "Stripe secret keys or webhook secrets.",
+      "Raw passwordless sign-in links or session cookies.",
+      "Database passwords or connection strings.",
+      "Patient information, protected health information, or private employee notes.",
+    ],
+  };
+}
+
 export async function lookupBuyerSupportProfile({
   email,
   stores,
@@ -145,6 +281,14 @@ export async function lookupBuyerSupportProfile({
   );
   const remainingPracticeSeats = getRemainingPracticeSeats(practiceSeatPacks);
 
+  const recommendedActions = getRecommendedSupportActions({
+    purchases,
+    enrollments,
+    practiceSeatPacks,
+    practiceSeatAssignments,
+    remainingPracticeSeats,
+  });
+
   return {
     email: normalizedEmail,
     purchases,
@@ -158,12 +302,15 @@ export async function lookupBuyerSupportProfile({
       hasPracticeSeatAssignment: practiceSeatAssignments.length > 0,
       remainingPracticeSeats,
     },
-    recommendedActions: getRecommendedSupportActions({
+    recommendedActions,
+    supportNote: buildSupportNote({
+      email: normalizedEmail,
       purchases,
       enrollments,
       practiceSeatPacks,
       practiceSeatAssignments,
       remainingPracticeSeats,
+      recommendedActions,
     }),
   };
 }

@@ -98,6 +98,14 @@ describe("lead CSV export", () => {
       recommendedActions: [
         "Ask the learner to request a fresh passwordless sign-in link.",
       ],
+      supportNote: {
+        issueCategories: ["sign-in-help"],
+        safeSummary:
+          "Lookup email: learner@example.com. Purchases: 1. Enrollments: 1.",
+        nextStep: "Ask the learner to request a fresh passwordless sign-in link.",
+        evidenceToSave: ["Buyer or learner email."],
+        neverSave: ["Raw passwordless sign-in links or session cookies."],
+      },
     });
 
     expect(csv).toContain('"cs_test_123"');
@@ -105,6 +113,9 @@ describe("lead CSV export", () => {
     expect(csv).toContain('"seatpack_cs_test_practice"');
     expect(csv).toContain('"assignment_123"');
     expect(csv).toContain("recommended-action");
+    expect(csv).toContain("safe-support-note");
+    expect(csv).toContain("evidence-to-save");
+    expect(csv).toContain("never-save");
     expect(csv).toContain("Do not save secrets");
     expect(csv).not.toContain("raw-sign-in-token");
   });

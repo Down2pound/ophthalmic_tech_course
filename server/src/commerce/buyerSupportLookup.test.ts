@@ -77,6 +77,11 @@ describe("lookupBuyerSupportProfile", () => {
       recommendedActions: [
         "Active enrollment exists. Ask the learner to request a fresh passwordless sign-in link with this same email.",
       ],
+      supportNote: {
+        issueCategories: ["sign-in-help"],
+        nextStep:
+          "Active enrollment exists. Ask the learner to request a fresh passwordless sign-in link with this same email.",
+      },
     });
   });
 
@@ -183,6 +188,10 @@ describe("lookupBuyerSupportProfile", () => {
       recommendedActions: [
         "A purchase exists, but no enrollment or practice seat pack was found. Check Stripe webhook delivery and fulfillment logs before retrying.",
       ],
+      supportNote: {
+        issueCategories: ["payment-succeeded-access-missing"],
+        safeSummary: expect.stringContaining("Purchases: 1."),
+      },
     });
   });
 

@@ -92,6 +92,13 @@ export interface BuyerSupportProfile {
     remainingPracticeSeats: number;
   };
   recommendedActions: string[];
+  supportNote: {
+    issueCategories: string[];
+    safeSummary: string;
+    nextStep: string;
+    evidenceToSave: string[];
+    neverSave: string[];
+  };
 }
 
 export type AccessRevocationTarget =

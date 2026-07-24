@@ -131,6 +131,32 @@ export function buildBuyerSupportCsv(profile: BuyerSupportProfile): string {
     ...profile.recommendedActions.map(action =>
       csvRow(["Buyer support", "recommended-action", "", "", "", action])
     ),
+    ...(profile.supportNote
+      ? [
+          csvRow([
+            "Buyer support",
+            "safe-support-note",
+            "",
+            "",
+            profile.supportNote.issueCategories.join("; "),
+            profile.supportNote.safeSummary,
+          ]),
+          csvRow([
+            "Buyer support",
+            "next-step",
+            "",
+            "",
+            "",
+            profile.supportNote.nextStep,
+          ]),
+          ...profile.supportNote.evidenceToSave.map(item =>
+            csvRow(["Buyer support", "evidence-to-save", "", "", "", item])
+          ),
+          ...profile.supportNote.neverSave.map(item =>
+            csvRow(["Buyer support", "never-save", "", "", "", item])
+          ),
+        ]
+      : []),
     csvRow([
       "Buyer support",
       "safety-note",

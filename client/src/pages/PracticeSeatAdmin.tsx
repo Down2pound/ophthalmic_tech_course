@@ -565,6 +565,31 @@ export default function PracticeSeatAdmin() {
                 </ul>
               </section>
 
+              <section className="mt-5 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
+                <h3 className="font-semibold">Safe support note</h3>
+                <p className="mt-2">{supportProfile.supportNote.safeSummary}</p>
+                <p className="mt-3 font-semibold">Next step</p>
+                <p>{supportProfile.supportNote.nextStep}</p>
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  <div>
+                    <p className="font-semibold">Save</p>
+                    <ul className="mt-1 space-y-1">
+                      {supportProfile.supportNote.evidenceToSave.map(item => (
+                        <li key={item}>- {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Never save</p>
+                    <ul className="mt-1 space-y-1">
+                      {supportProfile.supportNote.neverSave.map(item => (
+                        <li key={item}>- {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </section>
+
               <section className="mt-6 border-t border-slate-200 pt-5">
                 <div className="flex items-start gap-3">
                   <TicketCheck className="mt-1 h-5 w-5 text-blue-700" />

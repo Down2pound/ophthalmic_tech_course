@@ -19,6 +19,9 @@ staff details, or protected health information into support notes.
   `GET /api/support/buyer-lookup?email=buyer@example.com` with the private admin
   token, to check app-side purchases, enrollments, practice packs, practice-seat
   assignments, and recommended next support actions.
+- Use the lookup's safe support note in the admin page or exported CSV so the
+  case record includes the issue category, safe summary, next step, evidence to
+  save, and information that should never be saved.
 - Check `/api/launch/readiness` before making system changes.
 - If access did not appear after payment, check the Stripe webhook delivery
   status before retrying anything.
