@@ -36,6 +36,16 @@ pnpm launch:stripe-products
 That command lists the exact offer ids, prices, optional Stripe lookup keys, and
 webhook event without printing any secret values.
 
+Before creating products or sending checkout links, run:
+
+```bash
+pnpm launch:offer-audit
+```
+
+That command checks that the offer ids, prices, lookup keys, access length, and
+seat counts still match across the shared app offer list, Stripe checklist, and
+buyer-facing launch docs.
+
 ## Test Mode First
 
 1. Keep `ENABLE_PAID_ENROLLMENT=false`.

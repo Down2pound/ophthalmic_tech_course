@@ -47,6 +47,8 @@ Detailed guides:
 - `docs/launch/email-setup-guide.md`
 
 - [ ] Stripe test secret key is configured.
+- [ ] `pnpm launch:offer-audit` passes so public prices, app checkout prices,
+      and Stripe setup notes match.
 - [ ] Stripe webhook endpoint points to `/api/stripe/webhook`.
 - [ ] Webhook listens for `checkout.session.completed`.
 - [ ] Webhook signing secret is configured.

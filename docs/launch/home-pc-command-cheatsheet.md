@@ -103,6 +103,7 @@ pnpm launch:first-week-sales
 pnpm launch:jeffmini
 pnpm launch:live-purchase-test
 pnpm launch:next
+pnpm launch:offer-audit
 pnpm launch:owner-go-no-go
 pnpm launch:render-setup
 pnpm launch:spindel-onboarding
@@ -142,6 +143,8 @@ branch, Google Drive backup files, and production setup order.
 rehearsal checklist.
 `launch:next` prints one beginner-friendly command center with your current
 launch phase, blocked gates, next best actions, and exact smoke-test commands.
+`launch:offer-audit` checks that the public offer prices, app checkout prices,
+Stripe helper, and launch docs still agree before you sell.
 `launch:owner-go-no-go` prints a work-computer-safe traffic-light report for
 public preview links, practice inquiry links, and paid checkout links.
 `launch:render-setup` prints the Render Blueprint deployment order and live URL

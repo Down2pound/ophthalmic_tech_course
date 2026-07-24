@@ -40,6 +40,7 @@ docs/launch/current-backup-manifest.md
 | Hosting | Public HTTPS site is deployed and health endpoint works | `pnpm launch:render-setup` |
 | Database | Managed PostgreSQL exists and tables are verified | `pnpm launch:database-setup` then `pnpm db:setup` |
 | Email | Passwordless sign-in email sends successfully | `pnpm launch:email-setup` |
+| Offer audit | Public prices, checkout prices, and Stripe setup notes agree | `pnpm launch:offer-audit` |
 | Stripe | Live products, checkout, and webhook are configured | `pnpm launch:stripe-products` |
 | Admin safety | Practice seat and alert admin tokens are set | `pnpm launch:admin-tokens` |
 | Owner traffic light | Preview, practice inquiry, and paid checkout sharing decisions are clear | `pnpm launch:owner-go-no-go` |
