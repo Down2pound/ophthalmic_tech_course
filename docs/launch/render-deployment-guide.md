@@ -66,6 +66,9 @@ dashboard, not in code:
 PUBLIC_APP_URL=https://your-render-or-custom-domain.example
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER=
+PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS=
+PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS=
 TRANSACTIONAL_EMAIL_API_URL=https://api.resend.com/emails
 TRANSACTIONAL_EMAIL_API_KEY=
 SIGN_IN_FROM_EMAIL=
@@ -98,6 +101,10 @@ DATABASE_SSL=true
 ```
 
 Leave paid enrollment off until every launch gate passes.
+
+The `PUBLIC_STRIPE_PAYMENT_LINK_*` values are optional. Add them only when you
+are using approved Stripe Payment Links for controlled first buyers while
+automated checkout stays paused. They must start with `https://buy.stripe.com/`.
 
 ## Database Tables
 

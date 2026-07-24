@@ -61,6 +61,15 @@ describe("deployment files", () => {
     expect(renderBlueprint).toContain("sync: false");
     expect(renderBlueprint).toContain("generateValue: true");
     expect(renderBlueprint).toContain("ALERT_ADMIN_TOKEN");
+    expect(renderBlueprint).toContain(
+      "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER"
+    );
+    expect(renderBlueprint).toContain(
+      "PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS"
+    );
+    expect(renderBlueprint).toContain(
+      "PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS"
+    );
     expect(renderBlueprint).not.toContain("sk_test_");
     expect(renderBlueprint).not.toContain("whsec_");
   });
@@ -137,6 +146,9 @@ describe("deployment files", () => {
     expect(deploymentAuditScript).toContain("Procfile");
     expect(deploymentAuditScript).toContain("ENABLE_PAID_ENROLLMENT");
     expect(deploymentAuditScript).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED");
+    expect(deploymentAuditScript).toContain(
+      "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER"
+    );
     expect(deploymentAuditScript).toContain("autoDeployTrigger");
     expect(deploymentAuditScript).not.toContain("execSync");
     expect(deploymentAuditScript).not.toContain("sk_test_");

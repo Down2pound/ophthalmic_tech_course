@@ -166,6 +166,16 @@ addCheck(
 );
 addCheck(
   checks,
+  "Render exposes optional manual Stripe Payment Link settings",
+  [
+    "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER",
+    "PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS",
+    "PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS",
+  ].every(key => source.render.includes(`key: ${key}`)),
+  files.render
+);
+addCheck(
+  checks,
   "Render generates private admin/session values",
   ["AUTH_SESSION_SECRET", "PRACTICE_SEAT_ADMIN_TOKEN", "ALERT_ADMIN_TOKEN"].every(
     key => source.render.includes(`key: ${key}`)

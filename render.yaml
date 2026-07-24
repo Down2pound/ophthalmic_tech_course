@@ -30,6 +30,12 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+      - key: PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER
+        sync: false
+      - key: PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS
+        sync: false
+      - key: PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS
+        sync: false
       - key: AUTH_SESSION_SECRET
         generateValue: true
       - key: TRANSACTIONAL_EMAIL_API_URL

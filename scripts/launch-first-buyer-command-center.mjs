@@ -16,6 +16,7 @@ const previewUrl = `${baseUrl}/preview`;
 const curriculumUrl = `${baseUrl}/curriculum`;
 const buyerGuideUrl = `${baseUrl}/buyer-guide`;
 const policiesUrl = `${baseUrl}/policies`;
+const firstSaleUrl = `${baseUrl}/first-sale`;
 const individualCheckoutUrl = `${baseUrl}/checkout`;
 const practicePacksUrl = `${baseUrl}/practice-packs`;
 const readinessUrl = `${baseUrl}/api/launch/readiness`;
@@ -53,11 +54,12 @@ const lines = [
   "| Link | URL | When to send |",
   "| ---- | --- | ------------ |",
   linkLine("Free preview", previewUrl, "Safe when owner go/no-go says public preview is GO."),
+  linkLine("First-buyer overview", firstSaleUrl, "Safe when owner go/no-go says public preview is GO."),
   linkLine("Curriculum", curriculumUrl, "Safe when owner go/no-go says public preview is GO."),
   linkLine("Buyer guide", buyerGuideUrl, "Safe when someone asks what this is for or whether it fits them."),
   linkLine("Policies", policiesUrl, "Safe when someone asks about refunds, limits, certification, or supervision."),
   linkLine("Practice packs", practicePacksUrl, "Use as review-only until practice outreach is GO."),
-  linkLine("Individual checkout", individualCheckoutUrl, "Do not send until paid checkout links are GO and one internal live purchase works."),
+  linkLine("Individual checkout or learner interest", individualCheckoutUrl, "Use for interest-list collection before paid checkout is GO. Do not request payment until the right payment path is approved."),
   linkLine("Checkout availability API", availabilityUrl, "Use for your own verification, not buyer outreach."),
   linkLine("Launch readiness API", readinessUrl, "Use for your own verification, not buyer outreach."),
   "",
@@ -65,11 +67,13 @@ const lines = [
   "",
   "1. Choose one friendly internal or warm buyer.",
   "2. Send preview, curriculum, buyer guide, or practice-pack review links first.",
-  "3. Ask one simple question: what would make starting in eye care or onboarding new techs easier?",
-  "4. Send paid checkout only after readiness, smoke test, and internal live purchase proof are green.",
-  "5. If automated checkout is not ready but an approved first buyer will use a Stripe Payment Link, run `pnpm launch:manual-payment-links` first.",
-  "6. Watch the first buyer complete payment, sign-in, and Module 1 access.",
-  "7. Run `pnpm launch:fulfillment` and fill `first-buyer-fulfillment-checklist.csv` from `pnpm launch:sales-tracker`.",
+  "3. Send the first-buyer overview if the person needs one clear starting page.",
+  "4. Ask one simple question: what would make starting in eye care or onboarding new techs easier?",
+  "5. Use the learner interest list or practice inquiry path while paid checkout is closed.",
+  "6. Send paid checkout only after readiness, smoke test, and internal live purchase proof are green.",
+  "7. If automated checkout is not ready but an approved first buyer will use a Stripe Payment Link, run `pnpm launch:manual-payment-links` first.",
+  "8. Watch the first buyer complete payment, sign-in, and Module 1 access.",
+  "9. Run `pnpm launch:fulfillment` and fill `first-buyer-fulfillment-checklist.csv` from `pnpm launch:sales-tracker`.",
   "",
   "## 4. Individual Learner Starter Message",
   "",
@@ -81,6 +85,7 @@ const lines = [
   "It helps with eye-care vocabulary, clinic flow, patient communication, and knowledge checks before hands-on supervised practice. It is education, not certification.",
   "",
   `Free preview: ${previewUrl}`,
+  `First-buyer overview: ${firstSaleUrl}`,
   `Buyer guide: ${buyerGuideUrl}`,
   "",
   "Would you be open to looking at it and telling me what feels clear or confusing?",
@@ -96,6 +101,7 @@ const lines = [
   "The course is meant to support shared language and supervised practice preparation. Local protocols, hands-on training, and competency signoff still stay with the practice.",
   "",
   `Practice pack review page: ${practicePacksUrl}`,
+  `First-buyer overview: ${firstSaleUrl}`,
   `Buyer guide: ${buyerGuideUrl}`,
   "",
   "Would this help reduce repeated starter explanations for your new hires?",
