@@ -2,6 +2,34 @@
 
 A full-stack, ten-module ophthalmic technician education platform built with React, TypeScript, Vite, and Express.
 
+## One-click Render deployment
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Down2pound/ophthalmic_tech_course)
+
+The repository includes a production `render.yaml` Blueprint. Select the button above, authorize Render to access the GitHub repository, review the Blueprint, enter the secret environment values requested by Render, and approve deployment.
+
+The current production configuration requires these secret values before the service can start:
+
+```env
+STRIPE_SECRET_KEY=
+STRIPE_STANDARD_PRICE_ID=
+STRIPE_WEBHOOK_SECRET=
+RESEND_API_KEY=
+EMAIL_FROM=
+SUPPORT_EMAIL=
+SALES_NOTIFICATION_EMAIL=
+BUSINESS_LEGAL_NAME=
+BUSINESS_ADDRESS=
+SPINDEL_MANAGER_EMAIL=
+SPINDEL_MANAGER_PASSWORD=
+```
+
+Render automatically generates `SESSION_SECRET`, assigns `PUBLIC_APP_URL`, and configures the persistent `DATA_FILE`. The manager name defaults to `Spindel Administrator`, and the seat limit defaults to `100` unless changed in Render.
+
+The manager password should be unique, at least 12 characters long, and must not be committed to GitHub or sent through ordinary email or chat.
+
+The internal portal is available at `/spindel` after a successful deployment. See [`SPINDEL_ONBOARDING_SETUP.md`](SPINDEL_ONBOARDING_SETUP.md) for employee invitation and testing instructions.
+
 ## Included Features
 
 - Public course and curriculum pages
@@ -14,6 +42,7 @@ A full-stack, ten-module ophthalmic technician education platform built with Rea
 - Ten instructional modules with practice checklists and clinical safety notes
 - End-of-module quizzes with saved scores
 - Practice-manager invitation links and team progress
+- Private Spindel Eye Associates employee onboarding portal
 - Printable certificate of course completion
 - Persistent local account/progress data
 - GitHub Actions type-check and production-build validation
@@ -53,11 +82,19 @@ pnpm start
 PUBLIC_APP_URL=https://course.example.com
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_STANDARD_PRICE_ID=price_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 SESSION_SECRET=a-long-random-secret
-DATA_FILE=/var/data/optitech/course-data.json
+DATA_FILE=/var/data/course-data.json
+RESEND_API_KEY=re_...
+EMAIL_FROM=OptiTech Academy <course@example.com>
+SUPPORT_EMAIL=support@example.com
+BUSINESS_LEGAL_NAME=Your legal business name
+BUSINESS_ADDRESS=Your business mailing address
 ```
 
 The Stripe Price must be configured as a **one-time $699 payment**. Practice enrollment uses the selected number of seats as the Stripe Checkout quantity.
+
+The public paid course requires the Stripe, email, support, and legal-business values before production startup. The Spindel manager bootstrap values are documented in `SPINDEL_ONBOARDING_SETUP.md`.
 
 ## Persistent Storage Requirement
 
