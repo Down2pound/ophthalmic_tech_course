@@ -8,17 +8,25 @@ A full-stack, ten-module ophthalmic technician education platform built with Rea
 
 The repository includes a production `render.yaml` Blueprint. Select the button above, authorize Render to access the GitHub repository, review the Blueprint, enter the secret environment values requested by Render, and approve deployment.
 
-For the internal Spindel Eye Associates portal, the minimum required values are:
+The current production configuration requires these secret values before the service can start:
 
 ```env
-SPINDEL_MANAGER_EMAIL=
-SPINDEL_MANAGER_PASSWORD=
+STRIPE_SECRET_KEY=
+STRIPE_STANDARD_PRICE_ID=
+STRIPE_WEBHOOK_SECRET=
+RESEND_API_KEY=
+EMAIL_FROM=
 SUPPORT_EMAIL=
+SALES_NOTIFICATION_EMAIL=
 BUSINESS_LEGAL_NAME=
 BUSINESS_ADDRESS=
+SPINDEL_MANAGER_EMAIL=
+SPINDEL_MANAGER_PASSWORD=
 ```
 
-The manager password should be unique, at least 12 characters long, and must not be committed to GitHub or sent through ordinary email or chat. The manager name defaults to `Spindel Administrator`, and the seat limit defaults to `100` unless changed in Render.
+Render automatically generates `SESSION_SECRET`, assigns `PUBLIC_APP_URL`, and configures the persistent `DATA_FILE`. The manager name defaults to `Spindel Administrator`, and the seat limit defaults to `100` unless changed in Render.
+
+The manager password should be unique, at least 12 characters long, and must not be committed to GitHub or sent through ordinary email or chat.
 
 The internal portal is available at `/spindel` after a successful deployment. See [`SPINDEL_ONBOARDING_SETUP.md`](SPINDEL_ONBOARDING_SETUP.md) for employee invitation and testing instructions.
 
