@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SpindelLogo } from "@/components/SpindelLogo";
 import { spindelOnboardingModules } from "@/data/spindelOnboarding";
-import { ArrowRight, Building2, CheckCircle2, Eye, LockKeyhole, MapPin, ShieldCheck, Users } from "lucide-react";
+import { ArrowRight, CheckCircle2, LockKeyhole, MapPin, ShieldCheck, Users } from "lucide-react";
 
 const locations = ["Derry", "Windham", "Londonderry", "Raymond", "Bedford"];
 
@@ -11,11 +12,8 @@ export default function SpindelWelcome() {
       <header className="border-b border-white/15 bg-slate-950/35 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5">
           <a href="/spindel" className="flex items-center gap-3">
-            <span className="rounded-full bg-white p-2 text-blue-800"><Eye className="h-7 w-7" /></span>
-            <span>
-              <strong className="block text-lg">Spindel Eye Associates</strong>
-              <span className="text-xs uppercase tracking-[0.22em] text-cyan-200">Employee Onboarding</span>
-            </span>
+            <SpindelLogo className="h-12 w-48 shadow-lg" />
+            <span className="hidden text-xs uppercase tracking-[0.22em] text-cyan-200 sm:block">Employee Onboarding</span>
           </a>
           <a href="/spindel/login"><Button className="bg-white text-blue-900 hover:bg-cyan-50">Employee Sign In</Button></a>
         </div>
@@ -39,7 +37,7 @@ export default function SpindelWelcome() {
             </div>
 
             <Card className="border-white/15 bg-white/10 p-8 text-white shadow-2xl backdrop-blur">
-              <Building2 className="h-12 w-12 text-cyan-200" />
+              <SpindelLogo variant="stacked" className="h-32 w-32 shadow-xl" />
               <h2 className="mt-5 text-3xl font-bold">Everything you need to get oriented</h2>
               <ul className="mt-6 space-y-4 text-blue-50">
                 {["Private manager-issued invitation links", "Saved quiz scores and completion progress", "Manager team-progress dashboard", "Spindel-branded onboarding certificate", "Clinical content reinforced by supervised training"].map((item) => (
@@ -88,4 +86,3 @@ export default function SpindelWelcome() {
     </div>
   );
 }
-

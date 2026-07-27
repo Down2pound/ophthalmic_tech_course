@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SpindelLogo } from "@/components/SpindelLogo";
 import { apiRequest, type CourseUser } from "@/lib/api";
 import { isSpindelOrganization } from "@/data/spindelOnboarding";
-import { AlertCircle, Eye, Loader2, LogIn } from "lucide-react";
+import { AlertCircle, Loader2, LogIn } from "lucide-react";
 import { useState } from "react";
 
 export default function SpindelLogin() {
@@ -36,8 +37,8 @@ export default function SpindelLogin() {
     <div className="min-h-screen bg-gradient-to-br from-sky-950 via-blue-900 to-cyan-900 px-4 py-16">
       <Card className="mx-auto w-full max-w-md bg-white p-8 shadow-2xl">
         <div className="mb-8 text-center">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-blue-800"><Eye className="h-9 w-9" /></span>
-          <p className="mt-5 text-sm font-bold uppercase tracking-[0.22em] text-blue-700">Spindel Eye Associates</p>
+          <SpindelLogo variant="stacked" className="mx-auto h-32 w-32 border border-blue-100 shadow-lg" />
+          <p className="mt-5 text-sm font-bold uppercase tracking-[0.22em] text-blue-700">Employee Onboarding</p>
           <h1 className="mt-2 text-3xl font-bold text-slate-900">Employee Onboarding Sign In</h1>
           <p className="mt-2 text-slate-600">Use the account created from your manager's private invitation link.</p>
         </div>

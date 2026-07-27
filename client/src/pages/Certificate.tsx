@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { SpindelLogo } from "@/components/SpindelLogo";
 import { Card } from "@/components/ui/card";
 import { isSpindelOrganization } from "@/data/spindelOnboarding";
 import { ApiError, apiRequest, type CourseUser } from "@/lib/api";
-import { Award, Eye, Loader2, Printer } from "lucide-react";
+import { Award, Loader2, Printer } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 export default function Certificate() {
@@ -71,8 +72,8 @@ export default function Certificate() {
       </div>
 
       <Card className={`mx-auto flex min-h-[700px] max-w-5xl flex-col items-center justify-center border-[12px] border-double ${spindel ? "border-cyan-800" : "border-blue-900"} bg-white px-10 py-16 text-center shadow-2xl print:min-h-screen print:max-w-none print:shadow-none`}>
-        {spindel ? <Eye className="mb-7 h-20 w-20 text-blue-800" /> : <Award className="mb-7 h-20 w-20 text-amber-500" />}
-        <p className="text-lg font-semibold uppercase tracking-[0.3em] text-blue-800">{spindel ? "Spindel Eye Associates" : "OptiTech Academy"}</p>
+        {spindel ? <SpindelLogo className="mb-7 h-20 w-72" /> : <Award className="mb-7 h-20 w-20 text-amber-500" />}
+        <p className="text-lg font-semibold uppercase tracking-[0.3em] text-blue-800">{spindel ? "Employee Onboarding" : "OptiTech Academy"}</p>
         <h1 className="mt-5 font-serif text-6xl font-bold text-slate-900">Certificate of Completion</h1>
         <p className="mt-9 text-xl text-slate-600">This certifies that</p>
         <p className="mt-4 border-b-2 border-slate-400 px-12 pb-3 font-serif text-5xl font-semibold text-blue-950">

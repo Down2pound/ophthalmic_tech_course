@@ -1,4 +1,5 @@
 import { EnrollmentForm } from "@/components/EnrollmentForm";
+import { SpindelLogo } from "@/components/SpindelLogo";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { curriculumModules, getTotalCourseDuration } from "@/data/curriculum";
@@ -169,6 +170,7 @@ export default function Home() {
             <Card className="flex flex-col border border-white/10 bg-gradient-to-br from-blue-950 to-cyan-900 p-8 text-left text-white shadow-2xl">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-200">For onboarding employees</p>
+                <SpindelLogo variant="stacked" className="mt-5 h-28 w-28 shadow-xl" />
                 <h3 className="mt-3 text-2xl font-bold">Spindel Employee Onboarding</h3>
                 <p className="mt-2 text-blue-100">Private staff education covering culture, privacy, workflows, safety, and readiness.</p>
               </div>
@@ -214,4 +216,3 @@ export default function Home() {
     </div>
   );
 }
-

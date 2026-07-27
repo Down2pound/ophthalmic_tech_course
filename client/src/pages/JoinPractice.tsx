@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SpindelLogo } from "@/components/SpindelLogo";
 import { apiRequest } from "@/lib/api";
-import { AlertCircle, Eye, Loader2, Users } from "lucide-react";
+import { AlertCircle, Loader2, Users } from "lucide-react";
 import { useState } from "react";
 import { useRoute } from "wouter";
 
@@ -54,8 +55,8 @@ export default function JoinPractice() {
     <div className={`min-h-screen bg-gradient-to-br ${spindel ? "from-sky-950 via-blue-900 to-cyan-900" : "from-slate-950 via-blue-950 to-slate-900"} px-4 py-16`}>
       <Card className="mx-auto w-full max-w-xl bg-white p-8 shadow-2xl">
         <div className="mb-8 text-center">
-          {spindel ? <Eye className="mx-auto mb-4 h-12 w-12 text-blue-700" /> : <Users className="mx-auto mb-4 h-12 w-12 text-blue-600" />}
-          {spindel && <p className="mb-2 text-sm font-bold uppercase tracking-[0.2em] text-blue-700">Spindel Eye Associates</p>}
+          {spindel ? <SpindelLogo className="mx-auto mb-4 h-16 w-56" /> : <Users className="mx-auto mb-4 h-12 w-12 text-blue-600" />}
+          {spindel && <p className="mb-2 text-sm font-bold uppercase tracking-[0.2em] text-blue-700">Employee Onboarding</p>}
           <h1 className="text-3xl font-bold text-slate-900">{spindel ? "Create Your Employee Onboarding Account" : "Join Your Practice Team"}</h1>
           <p className="mt-2 text-slate-600">{spindel ? "This private invitation assigns your onboarding seat and saves your progress." : "Create your individual course account using the purchased team seat."}</p>
         </div>

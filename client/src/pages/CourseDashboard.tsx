@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SpindelLogo } from "@/components/SpindelLogo";
 import { curriculumModules } from "@/data/curriculum";
 import { isSpindelOrganization, spindelOnboardingModules } from "@/data/spindelOnboarding";
 import { ApiError, apiRequest, type CourseUser } from "@/lib/api";
@@ -90,9 +91,11 @@ export default function CourseDashboard() {
       <header className="border-b border-white/10 bg-slate-950/70 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5">
           <a href="/course" className="flex items-center gap-3 font-bold">
-            <span className={spindel ? "rounded-full bg-white p-2 text-blue-800" : "text-cyan-400"}><Eye className="h-6 w-6" /></span>
+            {spindel
+              ? <SpindelLogo className="h-11 w-40 shadow" />
+              : <span className="text-cyan-400"><Eye className="h-6 w-6" /></span>}
             <span>
-              <span className="block">{brandName}</span>
+              {!spindel && <span className="block">{brandName}</span>}
               {spindel && <span className="block text-[10px] uppercase tracking-[0.2em] text-cyan-200">Employee Onboarding</span>}
             </span>
           </a>
@@ -244,4 +247,3 @@ export default function CourseDashboard() {
     </div>
   );
 }
-
