@@ -100,6 +100,7 @@ function requireProductionConfiguration(): void {
     "PUBLIC_APP_URL",
     "STRIPE_SECRET_KEY",
     "STRIPE_STANDARD_PRICE_ID",
+    "STRIPE_PRACTICE_PRICE_ID",
     "STRIPE_WEBHOOK_SECRET",
     "SESSION_SECRET",
     "DATA_FILE",
@@ -422,9 +423,10 @@ async function startServer() {
 
   app.post("/api/enrollment/checkout", checkoutLimiter, async (req, res) => {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
-    const stripePriceId = process.env.STRIPE_STANDARD_PRICE_ID?.trim();
+    const individualPriceId = process.env.STRIPE_STANDARD_PRICE_ID?.trim();
+    const practicePriceId = process.env.STRIPE_PRACTICE_PRICE_ID?.trim();
 
-    if (!stripeSecretKey || !stripePriceId) {
+    if (!stripeSecretKey || !individualPriceId) {
       return res.status(503).json({
         error: "Enrollment checkout is not configured yet. Please contact support.",
       });
@@ -439,8 +441,8 @@ async function startServer() {
     const goal = readString(body.goal, 500);
     const enrollmentType = body.type === "practice" ? "practice" : "individual";
     const organizationName = readString(body.organizationName, 160);
-    const requestedSeats = readInteger(body.seats);
-    const seats = enrollmentType === "practice" ? requestedSeats : 1;
+    const seats = enrollmentType === "practice" ? 5 : 1;
+    const stripePriceId = enrollmentType === "practice" ? practicePriceId : individualPriceId;
 
     if (!firstName || !lastName || !email || !phone || !goal) {
       return res.status(400).json({ error: "Please complete all required enrollment fields." });
@@ -451,8 +453,10 @@ async function startServer() {
     if (enrollmentType === "practice" && !organizationName) {
       return res.status(400).json({ error: "Please enter the practice or clinic name." });
     }
-    if (!Number.isInteger(seats) || seats < 1 || seats > 50) {
-      return res.status(400).json({ error: "Practice enrollments must include between 1 and 50 seats." });
+    if (!stripePriceId) {
+      return res.status(503).json({
+        error: "The selected enrollment package is not configured yet. Please contact support.",
+      });
     }
 
     try {
@@ -465,7 +469,7 @@ async function startServer() {
         success_url: `${baseUrl}/enrollment/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/?enrollment=cancelled`,
         "line_items[0][price]": stripePriceId,
-        "line_items[0][quantity]": String(seats),
+        "line_items[0][quantity]": "1",
         "metadata[courseId]": COURSE_ID,
         "metadata[firstName]": firstName,
         "metadata[lastName]": lastName,
@@ -869,3 +873,4 @@ startServer().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+

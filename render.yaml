@@ -28,6 +28,8 @@ services:
         sync: false
       - key: STRIPE_STANDARD_PRICE_ID
         sync: false
+      - key: STRIPE_PRACTICE_PRICE_ID
+        sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
       - key: STRIPE_ALLOW_PROMOTION_CODES
@@ -56,3 +58,4 @@ services:
         value: Administrator
       - key: SPINDEL_SEAT_LIMIT
         value: "100"
+

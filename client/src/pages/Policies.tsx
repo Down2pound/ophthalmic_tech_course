@@ -51,7 +51,7 @@ export function Terms() {
       <section>
         <h2>Purchases and access</h2>
         <ul className="mt-2 list-disc space-y-2 pl-6">
-          <li>Course access is sold for the price shown at checkout, currently ${config.pricePerSeat} per seat unless a promotion applies.</li>
+          <li>Individual course access is currently ${config.pricePerSeat}. The five-seat practice package is currently $1,200 unless a promotion applies.</li>
           <li>Payments are processed by Stripe. We do not store complete payment-card information.</li>
           <li>Each seat is for one named learner. Account sharing, resale, publication, scraping, and credential sharing are prohibited.</li>
           <li>Practice managers may distribute only the number of seats purchased.</li>
@@ -75,7 +75,7 @@ export function Terms() {
       </section>
       <section>
         <h2>Disclaimers and limitation</h2>
-        <p className="mt-2">The course is provided for education on an “as available” basis. To the fullest extent permitted by law, we disclaim implied warranties and are not responsible for employment outcomes, examination results, clinical decisions, or indirect or consequential losses. Any liability that cannot legally be excluded is limited to the amount paid for the affected seat.</p>
+        <p className="mt-2">The course is provided for education on an â€œas availableâ€ basis. To the fullest extent permitted by law, we disclaim implied warranties and are not responsible for employment outcomes, examination results, clinical decisions, or indirect or consequential losses. Any liability that cannot legally be excluded is limited to the amount paid for the affected seat.</p>
       </section>
       <section>
         <h2>Changes to these terms</h2>
@@ -144,7 +144,7 @@ export function Refunds() {
       </section>
       <section>
         <h2>How to request a refund</h2>
-        <p className="mt-2">Submit the purchaser’s name, checkout email, purchase date, and reason through Support. Approved refunds are returned to the original payment method. Financial institutions may require additional processing time.</p>
+        <p className="mt-2">Submit the purchaserâ€™s name, checkout email, purchase date, and reason through Support. Approved refunds are returned to the original payment method. Financial institutions may require additional processing time.</p>
       </section>
       <section>
         <h2>Non-refundable circumstances</h2>
@@ -168,7 +168,7 @@ export function Disclaimer() {
     <PolicyLayout title="Training and Clinical Disclaimer">
       <section>
         <h2>Not medical advice</h2>
-        <p className="mt-2">Course material is educational and is not medical advice, diagnosis, treatment guidance for a specific patient, or a substitute for a licensed clinician’s judgment.</p>
+        <p className="mt-2">Course material is educational and is not medical advice, diagnosis, treatment guidance for a specific patient, or a substitute for a licensed clinicianâ€™s judgment.</p>
       </section>
       <section>
         <h2>Supervision and scope</h2>
@@ -185,3 +185,4 @@ export function Disclaimer() {
     </PolicyLayout>
   );
 }
+

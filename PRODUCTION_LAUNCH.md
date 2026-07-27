@@ -17,14 +17,15 @@ The site will refuse to start in production when required identity, payment, ema
 
 ## 2. Configure Stripe in test mode
 
-1. Create a product named **OptiTech Academy — Ophthalmic Technician Foundations**.
+1. Create a product named **OptiTech Academy â€” Ophthalmic Technician Foundations**.
 2. Create a **one-time** price of **$699 USD**.
-3. Copy the test secret key and test Price ID.
-4. After the Render service exists, create a Stripe webhook endpoint:
+3. Create a second **one-time** price of **$1,200 USD** for the five-seat practice package.
+4. Copy the test secret key and both test Price IDs.
+5. After the Render service exists, create a Stripe webhook endpoint:
    - URL: `https://YOUR-DOMAIN/api/stripe/webhook`
    - events: `checkout.session.completed` and `checkout.session.async_payment_succeeded`
-5. Copy the webhook signing secret.
-6. Leave Stripe in test mode until the complete smoke test below passes.
+6. Copy the webhook signing secret.
+7. Leave Stripe in test mode until the complete smoke test below passes.
 
 Promotion codes are enabled by default. Stripe automatic tax remains disabled unless `STRIPE_AUTOMATIC_TAX=true` and the Stripe account is configured for it.
 
@@ -66,7 +67,7 @@ Use a new email address and complete each step:
 11. Pass one quiz and confirm the dashboard saves the score.
 12. Submit the support form and confirm delivery.
 
-Repeat with a two-seat practice purchase and confirm the manager receives one teammate invitation.
+Repeat with the $1,200 five-seat practice package and confirm the manager receives four teammate invitations.
 
 ## 6. Validate recovery and duplicate protection
 
@@ -77,7 +78,7 @@ Repeat with a two-seat practice purchase and confirm the manager receives one te
 
 ## 7. Switch to live revenue
 
-1. Create or confirm the live-mode $699 Price.
+1. Create or confirm the live-mode $699 individual Price and $1,200 five-seat practice Price.
 2. Replace the Stripe test key, Price ID, and webhook secret with live values.
 3. Create the live webhook endpoint at the same `/api/stripe/webhook` path.
 4. Redeploy.
@@ -97,3 +98,4 @@ Repeat with a two-seat practice purchase and confirm the manager receives one te
 ## Scaling note
 
 The included JSON data store is suitable for a small, single-instance launch. Move accounts and progress to a managed database before adding multiple application instances or substantial volume.
+
