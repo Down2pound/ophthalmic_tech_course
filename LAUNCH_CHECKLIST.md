@@ -3,14 +3,14 @@
 ## Required accounts
 
 - [ ] Stripe account activated for live payments
-- [ ] One-time Stripe product and price created at $699 per seat
+- [ ] One-time Stripe prices created at $699 for an individual and $1,200 for the five-seat practice package
 - [ ] Resend account created and sending domain verified
 - [ ] Render account connected to this GitHub repository
 - [ ] Business checking account connected to Stripe payouts
 
 ## Render deployment
 
-1. In Render, choose **New + → Blueprint** and select this repository.
+1. In Render, choose **New + â†’ Blueprint** and select this repository.
 2. Render will read `render.yaml` and create the web service plus a persistent disk.
 3. Enter every secret value marked `sync: false`.
 4. Deploy and verify that `/api/health` reports `status: ok`.
@@ -19,6 +19,7 @@
 
 - `STRIPE_SECRET_KEY`: Stripe live secret key for production
 - `STRIPE_STANDARD_PRICE_ID`: one-time $699 Price ID
+- `STRIPE_PRACTICE_PRICE_ID`: one-time $1,200 five-seat package Price ID
 - `STRIPE_WEBHOOK_SECRET`: signing secret for the production webhook
 - `RESEND_API_KEY`: transactional-email API key
 - `EMAIL_FROM`: verified sender, such as `OptiTech Academy <course@example.com>`
@@ -66,3 +67,4 @@ Copy its signing secret into `STRIPE_WEBHOOK_SECRET`.
 - [ ] Review conversion, checkout abandonment, refunds, and support weekly
 
 The product should not be advertised as professional certification, licensure, guaranteed employment, or a substitute for supervised clinical training.
+
