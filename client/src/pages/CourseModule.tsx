@@ -1,6 +1,7 @@
 import CourseQuiz from "@/components/CourseQuiz";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SpindelLogo } from "@/components/SpindelLogo";
 import { getCourseContent } from "@/data/courseContent";
 import { getCourseQuizByDay } from "@/data/courseQuizzes";
 import { curriculumModules } from "@/data/curriculum";
@@ -11,7 +12,7 @@ import {
   spindelOnboardingModules,
 } from "@/data/spindelOnboarding";
 import { ApiError, apiRequest, type CourseUser } from "@/lib/api";
-import { AlertTriangle, ArrowLeft, CheckCircle2, Clock, Eye, Loader2 } from "lucide-react";
+import { AlertTriangle, ArrowLeft, CheckCircle2, Clock, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRoute } from "wouter";
 
@@ -86,7 +87,7 @@ export default function CourseModule() {
             <a href="/course" className="inline-flex items-center text-sm text-blue-100 hover:text-white">
               <ArrowLeft className="mr-2 h-4 w-4" /> {spindel ? "Onboarding Dashboard" : "Course Dashboard"}
             </a>
-            {spindel && <div className="flex items-center gap-2 text-sm font-semibold"><Eye className="h-5 w-5" /> Spindel Eye Associates</div>}
+            {spindel && <SpindelLogo className="h-11 w-44 shadow" />}
           </div>
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
             <div className="text-6xl">{module.icon}</div>
@@ -177,4 +178,3 @@ export default function CourseModule() {
     </div>
   );
 }
-
