@@ -60,6 +60,21 @@ The internal portal is available at `/spindel` after a successful deployment. Se
 9. Clinical Documentation & EHR Proficiency
 10. Professional Development & Career Pathways
 
+## Course Context Engineering
+
+The educational content is governed by a reusable context system in
+[\`docs/context\`](docs/context). Start with:
+
+- [Academy-wide course context](docs/context/COURSE_CONTEXT.md)
+- [Ten-module context registry](docs/context/MODULE_CONTEXTS.md)
+- [Module context template](docs/context/MODULE_CONTEXT_TEMPLATE.md)
+- [Content generation template](docs/context/CONTENT_GENERATION_TEMPLATE.md)
+- [Publication quality checklist](docs/context/QUALITY_CHECKLIST.md)
+
+These documents keep lessons, assessments, job aids, and practice-specific
+variants consistent while preserving clinical-review, privacy, and scope
+boundaries.
+
 ## Local Development
 
 ```bash
