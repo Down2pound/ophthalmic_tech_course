@@ -60,6 +60,28 @@ The internal portal is available at `/spindel` after a successful deployment. Se
 9. Clinical Documentation & EHR Proficiency
 10. Professional Development & Career Pathways
 
+## Standardized Module Data
+
+The ten ophthalmic modules use one consistent data structure for learning
+objectives, lesson topics, technician scope, escalation conditions, hands-on
+competencies, assessments, and clinical-review status.
+
+- [Module data](docs/module-data/OPTITECH_MODULES.json)
+- [Module data schema](docs/module-data/MODULE_DATA_SCHEMA.json)
+
+An optional internal standardizer uses the OpenAI Responses API with GPT-5.6
+Sol and strict Structured Outputs to convert one de-identified ophthalmic module
+draft into this schema. It is not part of the learner experience.
+
+\`\`\`bash
+# Set OPENAI_API_KEY in your local secret environment first.
+node scripts/standardize-module.mjs path/to/de-identified-module.json > standardized-module.json
+\`\`\`
+
+Use \`--dry-run\` to inspect the request without calling the API. Never submit PHI,
+patient identifiers, credentials, or secrets. Every generated module remains a
+draft until clinical review.
+
 ## Local Development
 
 ```bash

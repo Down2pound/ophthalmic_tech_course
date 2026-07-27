@@ -1,0 +1,584 @@
+{
+  "schema_version": "1.0",
+  "course_id": "optitech-academy",
+  "passing_score_percent": 80,
+  "modules": [
+    {
+      "id": "module-01",
+      "order": 1,
+      "slug": "ophthalmic-foundations-patient-communication",
+      "title": "Ophthalmic Foundations & Patient Communication",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [],
+      "purpose": "Establish foundational ocular terminology, patient-centered communication, privacy, safety, and technician role boundaries.",
+      "learning_objectives": [
+        "Use foundational ophthalmic terminology appropriately.",
+        "Communicate respectfully with patients and coworkers.",
+        "Protect patient privacy and recognize when to escalate a concern."
+      ],
+      "lesson_topics": [
+        "Basic ocular terminology",
+        "Technician responsibilities and boundaries",
+        "Patient identification and communication",
+        "Privacy, hand hygiene, and escalation"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Perform assigned support tasks under practice policy and supervision.",
+          "Document patient-reported information and staff observations accurately."
+        ],
+        "technician_must_not": [
+          "Diagnose a patient or independently direct treatment."
+        ],
+        "stop_repeat_or_escalate": [
+          "Patient identification cannot be confirmed.",
+          "The patient reports an urgent symptom or the technician is uncertain how to proceed."
+        ]
+      },
+      "patient_communication_required": true,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Patient identification",
+          "Room preparation",
+          "Hand hygiene",
+          "Professional communication",
+          "Escalation workflow"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-02",
+      "order": 2,
+      "slug": "refraction-lensometry",
+      "title": "Refraction & Lensometry",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01"
+      ],
+      "purpose": "Introduce refractive notation, optical terminology, lens measurement, documentation, and the technician's supervised role.",
+      "learning_objectives": [
+        "Recognize sphere, cylinder, axis, prism, and add notation.",
+        "Explain the purpose of refraction and lensometry.",
+        "Record measurements accurately and identify questionable results."
+      ],
+      "lesson_topics": [
+        "Refractive terminology",
+        "Prescription notation",
+        "Lensometry fundamentals",
+        "Measurement repeatability and documentation"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Perform assigned measurements using practice-approved methods.",
+          "Repeat and document measurements according to practice policy."
+        ],
+        "technician_must_not": [
+          "Independently prescribe or finalize an eyeglass prescription."
+        ],
+        "stop_repeat_or_escalate": [
+          "Measurements are inconsistent or unreliable.",
+          "An unexpected change or equipment error is identified."
+        ]
+      },
+      "patient_communication_required": true,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Instrument setup",
+          "Lens measurement",
+          "Result transcription",
+          "Equipment cleaning",
+          "Measurement repeatability"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-03",
+      "order": 3,
+      "slug": "tonometry-intraocular-pressure",
+      "title": "Tonometry & Intraocular Pressure Measurement",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01",
+        "module-02"
+      ],
+      "purpose": "Teach intraocular pressure measurement, common tonometry methods, infection control, documentation, and reliability factors.",
+      "learning_objectives": [
+        "Explain why intraocular pressure is measured.",
+        "Prepare the patient and equipment using approved procedures.",
+        "Document the method and result and recognize when to repeat or escalate."
+      ],
+      "lesson_topics": [
+        "Purpose of intraocular pressure measurement",
+        "Tonometry methods",
+        "Patient positioning and instruction",
+        "Infection control",
+        "Reliability and documentation"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Operate an approved tonometer after device-specific training.",
+          "Document the method, eye, time, and result."
+        ],
+        "technician_must_not": [
+          "Diagnose a condition from a pressure measurement.",
+          "Invent emergency thresholds or device settings."
+        ],
+        "stop_repeat_or_escalate": [
+          "The measurement is unreliable or cannot be obtained safely.",
+          "The result or patient response meets practice-defined escalation criteria."
+        ]
+      },
+      "patient_communication_required": true,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Device operation",
+          "Patient positioning",
+          "Disinfection",
+          "Documentation",
+          "Response to difficult measurements"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-04",
+      "order": 4,
+      "slug": "slit-lamp-anterior-segment-imaging",
+      "title": "Slit Lamp Examination & Anterior Segment Imaging",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01",
+        "module-02",
+        "module-03"
+      ],
+      "purpose": "Introduce slit-lamp components, safe positioning, illumination, anterior-segment image acquisition, documentation, and equipment care.",
+      "learning_objectives": [
+        "Identify major slit-lamp controls and their basic purpose.",
+        "Prepare and position the patient safely.",
+        "Acquire and label images according to practice protocol."
+      ],
+      "lesson_topics": [
+        "Slit-lamp components",
+        "Patient positioning",
+        "Illumination and focus",
+        "Anterior-segment imaging",
+        "Equipment care"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Prepare the instrument and patient.",
+          "Acquire assigned images and describe technical observations."
+        ],
+        "technician_must_not": [
+          "Represent online completion as independent examination competency.",
+          "Diagnose anterior-segment disease."
+        ],
+        "stop_repeat_or_escalate": [
+          "The patient cannot be positioned safely.",
+          "The equipment is damaged, unstable, or functioning incorrectly."
+        ]
+      },
+      "patient_communication_required": true,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Positioning",
+          "Focus and illumination",
+          "Image labeling",
+          "Cleaning",
+          "Safe shutdown"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-05",
+      "order": 5,
+      "slug": "retinal-imaging-oct",
+      "title": "Retinal Imaging & OCT Interpretation",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01",
+        "module-02",
+        "module-03",
+        "module-04"
+      ],
+      "purpose": "Teach safe retinal and OCT image acquisition, quality recognition, basic terminology, and the boundary between technical observation and provider interpretation.",
+      "learning_objectives": [
+        "Prepare the patient and select the assigned imaging protocol.",
+        "Recognize common artifacts and poor-quality scans.",
+        "Label and save images correctly and escalate uncertainty."
+      ],
+      "lesson_topics": [
+        "Retinal imaging purpose",
+        "OCT terminology",
+        "Patient alignment and focus",
+        "Image quality and artifacts",
+        "Laterality and data handling"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Acquire assigned retinal and OCT images.",
+          "Recognize and document technical image-quality concerns."
+        ],
+        "technician_must_not": [
+          "Diagnose retinal disease.",
+          "Independently interpret OCT for treatment decisions."
+        ],
+        "stop_repeat_or_escalate": [
+          "Image quality remains unacceptable after approved troubleshooting.",
+          "The assigned protocol or laterality is unclear."
+        ]
+      },
+      "patient_communication_required": true,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Device-specific acquisition",
+          "Alignment and focus",
+          "Laterality",
+          "Scan selection",
+          "Image-quality review"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-06",
+      "order": 6,
+      "slug": "visual-field-testing",
+      "title": "Visual Field Testing & Interpretation",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01",
+        "module-02",
+        "module-03",
+        "module-04",
+        "module-05"
+      ],
+      "purpose": "Teach visual-field test preparation, patient coaching, reliability monitoring, artifact recognition, documentation, and escalation.",
+      "learning_objectives": [
+        "Prepare and coach the patient for visual-field testing.",
+        "Follow the assigned testing strategy and monitor reliability.",
+        "Recognize and document factors that may make a test unreliable."
+      ],
+      "lesson_topics": [
+        "Purpose of visual-field testing",
+        "Patient instruction and positioning",
+        "Lens placement and occlusion",
+        "Fixation and reliability",
+        "Documentation and cleaning"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Perform the assigned test and monitor reliability indicators.",
+          "Document deviations and technical concerns."
+        ],
+        "technician_must_not": [
+          "Diagnose visual-field loss.",
+          "Independently alter the provider's testing strategy."
+        ],
+        "stop_repeat_or_escalate": [
+          "The patient cannot understand or complete the test reliably.",
+          "The order, strategy, lens, or laterality is unclear."
+        ]
+      },
+      "patient_communication_required": true,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Patient instruction",
+          "Positioning",
+          "Lens placement",
+          "Reliability monitoring",
+          "Saving and cleaning"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-07",
+      "order": 7,
+      "slug": "advanced-imaging-specialized-procedures",
+      "title": "Advanced Imaging & Specialized Procedures",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01",
+        "module-02",
+        "module-03",
+        "module-04",
+        "module-05",
+        "module-06"
+      ],
+      "purpose": "Provide a safe framework for learning practice-approved specialized tests without treating devices or procedures as interchangeable.",
+      "learning_objectives": [
+        "Confirm the order, patient, device, and assigned protocol.",
+        "Follow manufacturer and practice instructions.",
+        "Document completion and escalate contraindications or uncertainty."
+      ],
+      "lesson_topics": [
+        "Order and protocol verification",
+        "Device-specific preparation",
+        "Manufacturer instructions",
+        "Documentation",
+        "Procedure-specific escalation"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Perform a specialized procedure only after procedure-specific training and authorization."
+        ],
+        "technician_must_not": [
+          "Invent device settings, contraindications, medication directions, or universal protocols."
+        ],
+        "stop_repeat_or_escalate": [
+          "A contraindication, uncertainty, equipment issue, or protocol conflict is identified."
+        ]
+      },
+      "patient_communication_required": true,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Separate supervisor validation for each specialized device or procedure"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-08",
+      "order": 8,
+      "slug": "patient-communication-soft-skills",
+      "title": "Patient Communication & Soft Skills",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01"
+      ],
+      "purpose": "Strengthen empathy, plain-language explanations, de-escalation, accessibility, teamwork, and professional boundaries.",
+      "learning_objectives": [
+        "Explain procedures without making unauthorized promises.",
+        "Respond professionally to frustration or confusion.",
+        "Use teach-back and escalate concerns appropriately."
+      ],
+      "lesson_topics": [
+        "Empathy and active listening",
+        "Plain-language explanations",
+        "Teach-back",
+        "De-escalation",
+        "Accessibility and teamwork"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Explain assigned procedures within approved scripts and practice policy.",
+          "Document and escalate patient concerns."
+        ],
+        "technician_must_not": [
+          "Promise clinical outcomes.",
+          "Disclose confidential employee information.",
+          "Make clinical, financial, or scheduling promises beyond assigned authority."
+        ],
+        "stop_repeat_or_escalate": [
+          "The patient requests medical advice or an exception outside the technician's authority.",
+          "The interaction becomes threatening or cannot be safely de-escalated."
+        ]
+      },
+      "patient_communication_required": true,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Role-play difficult encounters",
+          "Plain-language procedure explanation",
+          "Teach-back",
+          "Escalation and documentation"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-09",
+      "order": 9,
+      "slug": "clinical-documentation-ehr",
+      "title": "Clinical Documentation & EHR Proficiency",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01",
+        "module-02",
+        "module-03",
+        "module-04",
+        "module-05",
+        "module-06",
+        "module-07",
+        "module-08"
+      ],
+      "purpose": "Teach timely, accurate, objective documentation and safe use of practice systems.",
+      "learning_objectives": [
+        "Document patient statements, observations, actions, and escalation accurately.",
+        "Distinguish patient-reported information from staff observations.",
+        "Protect credentials and patient information."
+      ],
+      "lesson_topics": [
+        "Objective documentation",
+        "Patient-reported versus observed information",
+        "Error correction",
+        "Credential security",
+        "Practice-system workflow"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Document assigned work accurately and correct errors according to practice policy."
+        ],
+        "technician_must_not": [
+          "Alter documentation to support a preferred billing level or clinical conclusion.",
+          "Share credentials or include real credentials in training."
+        ],
+        "stop_repeat_or_escalate": [
+          "A documentation error cannot be corrected using the approved workflow.",
+          "Unauthorized access, credential exposure, or a privacy concern is suspected."
+        ]
+      },
+      "patient_communication_required": false,
+      "hands_on_validation": {
+        "required": true,
+        "competencies": [
+          "Approved training-data workflow",
+          "Objective documentation",
+          "Error correction",
+          "Credential protection"
+        ]
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    },
+    {
+      "id": "module-10",
+      "order": 10,
+      "slug": "professional-development-career-pathways",
+      "title": "Professional Development & Career Pathways",
+      "audience": "Entry-level ophthalmic technician",
+      "prerequisites": [
+        "module-01",
+        "module-02",
+        "module-03",
+        "module-04",
+        "module-05",
+        "module-06",
+        "module-07",
+        "module-08",
+        "module-09"
+      ],
+      "purpose": "Consolidate professional expectations, continuing learning, competency development, feedback, and career planning.",
+      "learning_objectives": [
+        "Create a supervised professional-development plan.",
+        "Distinguish course completion from certification and clinical competency.",
+        "Use feedback and reliable continuing-education resources appropriately."
+      ],
+      "lesson_topics": [
+        "Professional expectations",
+        "Supervised competency development",
+        "Feedback",
+        "Continuing education",
+        "Certification and career pathways"
+      ],
+      "clinical_scope": {
+        "technician_may": [
+          "Use course completion as evidence of completed education.",
+          "Seek supervised practice and additional training."
+        ],
+        "technician_must_not": [
+          "Represent the OptiTech certificate as licensure, JCAHPO certification, or proof of independent clinical competency."
+        ],
+        "stop_repeat_or_escalate": [
+          "Certification, scope, or eligibility information is unclear or may have changed."
+        ]
+      },
+      "patient_communication_required": false,
+      "hands_on_validation": {
+        "required": false,
+        "competencies": []
+      },
+      "assessment": {
+        "knowledge_check_required": true,
+        "objectives_must_be_assessed": true,
+        "answer_explanations_required": true
+      },
+      "review": {
+        "clinical_review_required": true,
+        "status": "draft"
+      }
+    }
+  ]
+}
