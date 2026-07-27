@@ -7,7 +7,12 @@ import { useState } from "react";
 
 export default function Home() {
   const [showEnrollmentForm, setShowEnrollmentForm] = useState(false);
+  const [enrollmentType, setEnrollmentType] = useState<"individual" | "practice">("individual");
   const totalDuration = getTotalCourseDuration();
+  const openEnrollment = (type: "individual" | "practice") => {
+    setEnrollmentType(type);
+    setShowEnrollmentForm(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white">
@@ -28,7 +33,7 @@ export default function Home() {
                 <LogIn className="mr-2 h-4 w-4" /> Sign In
               </Button>
             </a>
-            <Button onClick={() => setShowEnrollmentForm(true)} className="hidden bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 sm:inline-flex">
+            <Button onClick={() => openEnrollment("individual")} className="hidden bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 sm:inline-flex">
               Enroll
             </Button>
           </div>
@@ -53,7 +58,7 @@ export default function Home() {
                 Learn core anatomy, history taking, lensometry, tonometry, slit lamp workflow, imaging, visual fields, documentation, communication, and professional development.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" onClick={() => setShowEnrollmentForm(true)} className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600">
+                <Button size="lg" onClick={() => openEnrollment("individual")} className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600">
                   Enroll for $699 <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <a href="/curriculum"><Button size="lg" variant="outline" className="border-white/20 bg-transparent text-white hover:bg-white/10">Preview Curriculum</Button></a>
@@ -119,28 +124,68 @@ export default function Home() {
         </section>
 
         <section id="pricing" className="bg-slate-950/40 px-4 py-20">
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="mx-auto max-w-7xl text-center">
             <p className="text-sm font-semibold uppercase tracking-wider text-cyan-300">Pricing</p>
-            <h2 className="mt-2 text-4xl font-bold">One course. One clear price.</h2>
-            <Card className="mt-10 border-2 border-cyan-400/40 bg-white p-8 text-left text-slate-900 shadow-2xl">
-              <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
-                <div>
-                  <h3 className="text-2xl font-bold">Ophthalmic Technician Foundations</h3>
-                  <p className="mt-2 text-slate-600">Complete course access for one student.</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-5xl font-bold text-blue-700">$699</span>
-                  <p className="text-sm text-slate-500">one-time, per seat</p>
-                </div>
+            <h2 className="mt-2 text-4xl font-bold">Choose the path that fits.</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-slate-300">Learn independently, enroll a five-person practice team, or enter the private employee-onboarding portal.</p>
+            <div className="mt-10 grid gap-6 lg:grid-cols-3">
+            <Card className="flex flex-col border-2 border-cyan-400/40 bg-white p-8 text-left text-slate-900 shadow-2xl">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-700">For individuals</p>
+                <h3 className="mt-3 text-2xl font-bold">Ophthalmic Technician Foundations</h3>
+                <p className="mt-2 text-slate-600">Complete course access for one learner building a strong clinical foundation.</p>
               </div>
-              <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                {["All ten modules", "All module quizzes", "Progress tracking", "Completion certificate", "Individual enrollment", "Practice team seats"].map((item) => (
+              <div className="mt-7">
+                <span className="text-5xl font-bold text-blue-700">$699</span>
+                <p className="text-sm text-slate-500">one-time Â· one seat</p>
+              </div>
+              <div className="mt-7 space-y-3">
+                {["All ten modules", "Knowledge checks and explanations", "Saved progress", "Completion certificate"].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-slate-700"><CheckCircle2 className="h-4 w-4 text-green-600" /> {item}</div>
                 ))}
               </div>
-              <Button onClick={() => setShowEnrollmentForm(true)} className="mt-8 w-full bg-blue-600 py-6 text-white hover:bg-blue-700">Continue to Enrollment</Button>
-              <p className="mt-4 text-center text-xs text-slate-500">Practice managers may select up to 50 seats. The checkout quantity is charged at the per-seat price.</p>
+              <Button onClick={() => openEnrollment("individual")} className="mt-8 w-full bg-blue-600 py-6 text-white hover:bg-blue-700">Enroll as an Individual</Button>
             </Card>
+
+            <Card className="relative flex flex-col border-2 border-amber-400 bg-white p-8 text-left text-slate-900 shadow-2xl">
+              <span className="absolute right-5 top-5 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">Save $2,295</span>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-700">For practices</p>
+                <h3 className="mt-3 text-2xl font-bold">Practice Starter Package</h3>
+                <p className="mt-2 text-slate-600">Train a small team together with manager visibility and private seat invitations.</p>
+              </div>
+              <div className="mt-7">
+                <span className="text-5xl font-bold text-blue-700">$1,200</span>
+                <p className="text-sm text-slate-500">one-time Â· five seats ($240 each)</p>
+              </div>
+              <div className="mt-7 space-y-3">
+                {["Five complete course seats", "Manager progress dashboard", "Private employee invitations", "Five completion certificates"].map((item) => (
+                  <div key={item} className="flex items-center gap-2 text-slate-700"><CheckCircle2 className="h-4 w-4 text-green-600" /> {item}</div>
+                ))}
+              </div>
+              <Button onClick={() => openEnrollment("practice")} className="mt-8 w-full bg-amber-500 py-6 text-slate-950 hover:bg-amber-400">Enroll a Practice Team</Button>
+            </Card>
+
+            <Card className="flex flex-col border border-white/10 bg-gradient-to-br from-blue-950 to-cyan-900 p-8 text-left text-white shadow-2xl">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-200">For onboarding employees</p>
+                <h3 className="mt-3 text-2xl font-bold">Spindel Employee Onboarding</h3>
+                <p className="mt-2 text-blue-100">Private staff education covering culture, privacy, workflows, safety, and readiness.</p>
+              </div>
+              <div className="mt-7">
+                <span className="text-3xl font-bold text-white">Manager-issued access</span>
+                <p className="mt-2 text-sm text-blue-200">No public purchase required</p>
+              </div>
+              <div className="mt-7 space-y-3">
+                {["Ten Spindel onboarding modules", "80% knowledge-check standard", "Employee progress tracking", "Supervisor validation reminders"].map((item) => (
+                  <div key={item} className="flex items-center gap-2 text-blue-50"><CheckCircle2 className="h-4 w-4 text-cyan-300" /> {item}</div>
+                ))}
+              </div>
+              <a href="/spindel" className="mt-8 block">
+                <Button className="w-full bg-white py-6 text-blue-950 hover:bg-cyan-50">Open Employee Onboarding</Button>
+              </a>
+            </Card>
+            </div>
           </div>
         </section>
 
@@ -165,7 +210,8 @@ export default function Home() {
         OptiTech Academy is an independent educational course. It does not award licensure or JCAHPO certification.
       </footer>
 
-      {showEnrollmentForm && <EnrollmentForm tier="standard" onClose={() => setShowEnrollmentForm(false)} />}
+      {showEnrollmentForm && <EnrollmentForm tier={enrollmentType} defaultType={enrollmentType} onClose={() => setShowEnrollmentForm(false)} />}
     </div>
   );
 }
+
