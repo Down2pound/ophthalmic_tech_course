@@ -28,9 +28,9 @@ export default function SpindelWelcome() {
               <p className="inline-flex items-center rounded-full border border-cyan-200/30 bg-cyan-100/10 px-4 py-2 text-sm font-semibold text-cyan-100">
                 <ShieldCheck className="mr-2 h-4 w-4" /> Private staff education portal
               </p>
-              <h1 className="mt-6 text-5xl font-bold leading-tight sm:text-7xl">Start strong. Protect patients. Work as one team.</h1>
+              <h1 className="mt-6 text-5xl font-bold leading-tight sm:text-7xl">A clearer start to your Spindel career.</h1>
               <p className="mt-6 max-w-3xl text-xl leading-8 text-blue-100">
-                Complete the ten-part Spindel Eye Associates onboarding program covering culture, privacy, patient arrival, Veradigm acknowledgement, clinical workflow, safety, referrals, urgent calls, quality, and readiness.
+                Ten focused modules. One shared standard. Build the judgment, habits, and team connections that help every patient experience feel safe, respectful, and unmistakably Spindel.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <a href="/spindel/login"><Button size="lg" className="bg-white px-7 text-blue-900 hover:bg-cyan-50">Continue Onboarding <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
@@ -40,7 +40,7 @@ export default function SpindelWelcome() {
 
             <Card className="border-white/15 bg-white/10 p-8 text-white shadow-2xl backdrop-blur">
               <Building2 className="h-12 w-12 text-cyan-200" />
-              <h2 className="mt-5 text-3xl font-bold">For Spindel employees</h2>
+              <h2 className="mt-5 text-3xl font-bold">Everything you need to get oriented</h2>
               <ul className="mt-6 space-y-4 text-blue-50">
                 {["Private manager-issued invitation links", "Saved quiz scores and completion progress", "Manager team-progress dashboard", "Spindel-branded onboarding certificate", "Clinical content reinforced by supervised training"].map((item) => (
                   <li key={item} className="flex items-start gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-cyan-200" /> {item}</li>
@@ -65,8 +65,8 @@ export default function SpindelWelcome() {
           <div className="mx-auto max-w-7xl">
             <div className="text-center">
               <p className="text-sm font-bold uppercase tracking-[0.25em] text-blue-700">Onboarding Path</p>
-              <h2 className="mt-3 text-4xl font-bold">Ten required learning modules</h2>
-              <p className="mx-auto mt-4 max-w-3xl text-slate-600">Employees must score at least 80% on every module. Hands-on clinical tasks still require direct training and supervisor validation.</p>
+              <h2 className="mt-3 text-4xl font-bold">Your ten-module learning path</h2>
+              <p className="mx-auto mt-4 max-w-3xl text-slate-600">Move at a thoughtful pace, score at least 80% on each knowledge check, and bring questions to your supervisor. Hands-on clinical tasks still require direct training and validation.</p>
             </div>
             <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-5">
               {spindelOnboardingModules.map((module) => (
@@ -83,8 +83,9 @@ export default function SpindelWelcome() {
       </main>
 
       <footer className="border-t border-white/10 px-4 py-8 text-center text-sm text-blue-100">
-        Spindel Eye Associates Employee Onboarding · Internal education and supervised training support
+        Spindel Eye Associates Employee Onboarding Â· Internal education and supervised training support
       </footer>
     </div>
   );
 }
+
