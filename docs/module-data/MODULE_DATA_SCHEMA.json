@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OptiTech Academy Module Data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "course_id",
+    "passing_score_percent",
+    "modules"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "course_id": {
+      "type": "string",
+      "const": "optitech-academy"
+    },
+    "passing_score_percent": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/$defs/module"
+      }
+    }
+  },
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "order",
+        "slug",
+        "title",
+        "audience",
+        "prerequisites",
+        "purpose",
+        "learning_objectives",
+        "lesson_topics",
+        "clinical_scope",
+        "patient_communication_required",
+        "hands_on_validation",
+        "assessment",
+        "review"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^module-[0-9]{2}$"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "prerequisites": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "learning_objectives": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "lesson_topics": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "clinical_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "technician_may",
+            "technician_must_not",
+            "stop_repeat_or_escalate"
+          ],
+          "properties": {
+            "technician_may": {
+              "$ref": "#/$defs/stringArray"
+            },
+            "technician_must_not": {
+              "$ref": "#/$defs/stringArray"
+            },
+            "stop_repeat_or_escalate": {
+              "$ref": "#/$defs/stringArray"
+            }
+          }
+        },
+        "patient_communication_required": {
+          "type": "boolean"
+        },
+        "hands_on_validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "competencies"
+          ],
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "competencies": {
+              "$ref": "#/$defs/stringArray"
+            }
+          }
+        },
+        "assessment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "knowledge_check_required",
+            "objectives_must_be_assessed",
+            "answer_explanations_required"
+          ],
+          "properties": {
+            "knowledge_check_required": {
+              "type": "boolean"
+            },
+            "objectives_must_be_assessed": {
+              "type": "boolean"
+            },
+            "answer_explanations_required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "review": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "clinical_review_required",
+            "status"
+          ],
+          "properties": {
+            "clinical_review_required": {
+              "type": "boolean"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "in_review",
+                "approved",
+                "retired"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
