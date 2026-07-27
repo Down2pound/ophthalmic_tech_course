@@ -53,7 +53,7 @@ export default function Curriculum() {
                     <h2 className="mt-2 text-xl font-bold text-slate-900">{module.title}</h2>
                     <p className="mt-2 text-slate-600">{module.description}</p>
                   </div>
-                  <span className="text-2xl font-light text-blue-600">{expanded ? "−" : "+"}</span>
+                  <span className="text-2xl font-light text-blue-600">{expanded ? "âˆ’" : "+"}</span>
                 </button>
 
                 {expanded && (
@@ -88,7 +88,7 @@ export default function Curriculum() {
         <Card className="mt-10 border-blue-200 bg-gradient-to-r from-blue-50 to-cyan-50 p-8 text-center">
           <h2 className="text-3xl font-bold text-slate-900">Ready to begin?</h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-600">
-            Enrollment is $699 per student seat and includes all lessons, quizzes, saved progress, and the course completion certificate.
+            Individual enrollment is $699. Practices can enroll five learners for $1,200. Both options include all lessons, quizzes, saved progress, and course completion certificates.
           </p>
           <a href="/#pricing">
             <Button className="mt-6 bg-blue-600 px-8 py-6 text-white hover:bg-blue-700">View Pricing and Enroll</Button>
@@ -98,3 +98,4 @@ export default function Curriculum() {
     </div>
   );
 }
+
