@@ -49,7 +49,7 @@ export default function CourseQuiz({ quiz, onComplete, onContinue }: CourseQuizP
   return (
     <Card className="p-6 shadow-lg sm:p-8">
       <div className="mb-6">
-        <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">Module Assessment</p>
+        <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">Knowledge Check</p>
         <h2 className="mt-1 text-3xl font-bold text-slate-900">{quiz.title}</h2>
         <p className="mt-2 text-slate-600">{quiz.description}</p>
         <p className="mt-2 text-sm font-medium text-slate-500">Passing score: {quiz.passingScore}%</p>
@@ -60,7 +60,7 @@ export default function CourseQuiz({ quiz, onComplete, onContinue }: CourseQuizP
           <div className="flex items-center gap-3">
             {passed ? <CheckCircle2 className="h-8 w-8 text-green-600" /> : <XCircle className="h-8 w-8 text-amber-600" />}
             <div>
-              <h3 className="text-xl font-bold text-slate-900">{passed ? "Quiz Passed" : "Review and Retake"}</h3>
+              <h3 className="text-xl font-bold text-slate-900">{passed ? "Nicely focusedâ€”knowledge check passed" : "Take another look, then try again"}</h3>
               <p className="text-slate-700">Score: {score}%</p>
             </div>
           </div>
@@ -140,12 +140,12 @@ export default function CourseQuiz({ quiz, onComplete, onContinue }: CourseQuizP
             disabled={Object.keys(answers).length !== quiz.questions.length || saving}
             className="w-full bg-blue-600 py-6 text-white hover:bg-blue-700"
           >
-            Submit Quiz
+            Check My Answers
           </Button>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2">
             <Button type="button" variant="outline" onClick={reset}>
-              <RotateCcw className="mr-2 h-4 w-4" /> Retake Quiz
+              <RotateCcw className="mr-2 h-4 w-4" /> Review & Retake
             </Button>
             <Button type="button" disabled={!passed || saving} onClick={onContinue} className="bg-green-600 text-white hover:bg-green-700">
               Continue to Next Module
@@ -156,3 +156,4 @@ export default function CourseQuiz({ quiz, onComplete, onContinue }: CourseQuizP
     </Card>
   );
 }
+

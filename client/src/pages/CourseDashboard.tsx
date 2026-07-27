@@ -109,10 +109,10 @@ export default function CourseDashboard() {
         <section className="grid gap-6 lg:grid-cols-[2fr_1fr]">
           <Card className="border-white/10 bg-white/10 p-8 text-white backdrop-blur">
             <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-cyan-300">{spindel ? "Employee Dashboard" : "Student Dashboard"}</p>
-            <h1 className="text-4xl font-bold">Welcome back, {user.firstName}</h1>
+            <h1 className="text-4xl font-bold">{spindel ? `Good to see you, ${user.firstName}.` : `Welcome back, ${user.firstName}`}</h1>
             <p className="mt-3 max-w-2xl text-slate-200">
               {spindel
-                ? `Complete each onboarding lesson and earn at least ${passingScore}% on every knowledge assessment. Hands-on duties still require supervisor validation.`
+                ? `Your onboarding path is ready. Complete each lesson and earn at least ${passingScore}% on every knowledge check; hands-on duties still require supervisor validation.`
                 : `Complete each lesson and earn at least ${passingScore}% on every module quiz to receive the course completion certificate.`}
             </p>
             <div className="mt-7">
@@ -144,7 +144,7 @@ export default function CourseDashboard() {
 
         {spindel && (
           <section className="rounded-2xl border border-cyan-200/20 bg-cyan-100/10 p-6 text-sm leading-7 text-cyan-50">
-            <strong>Training reminder:</strong> Do not enter patient information into course exercises. Current written policies, physician instructions, and supervisor direction take priority over examples in this onboarding program.
+            <strong>Keep the learning lens clear:</strong> Use fictional examples onlyâ€”never patient information. Current written policies, physician instructions, and supervisor direction always take priority over course examples.
           </section>
         )}
 
@@ -152,7 +152,7 @@ export default function CourseDashboard() {
           <div className="mb-5 flex items-end justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-wider text-cyan-300">{spindel ? "Required Onboarding" : "Course Modules"}</p>
-              <h2 className="text-3xl font-bold">{spindel ? "Spindel New-Hire Learning Path" : "10-Day Learning Path"}</h2>
+              <h2 className="text-3xl font-bold">{spindel ? "Bring the full picture into focus" : "10-Day Learning Path"}</h2>
             </div>
           </div>
 
@@ -239,8 +239,9 @@ export default function CourseDashboard() {
       </main>
 
       <footer className="border-t border-white/10 px-4 py-7 text-center text-sm text-slate-300">
-        {spindel ? `${brandName} · ${programName} · Internal use` : `${brandName} · ${programName}`}
+        {spindel ? `${brandName} Â· ${programName} Â· Internal use` : `${brandName} Â· ${programName}`}
       </footer>
     </div>
   );
 }
+
