@@ -2,14 +2,19 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { apiRequest } from "@/lib/api";
 import { AlertCircle, Loader2, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 interface EnrollmentFormProps {
   tier: string;
+  defaultType?: "individual" | "practice";
   onClose: () => void;
 }
 
-export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
+const INDIVIDUAL_PRICE = 699;
+const PRACTICE_PRICE = 1200;
+const PRACTICE_SEATS = 5;
+
+export function EnrollmentForm({ tier, defaultType = "individual", onClose }: EnrollmentFormProps) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,25 +22,26 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
     phone: "",
     experience: "beginner",
     goal: "",
-    type: "individual",
+    type: defaultType,
     organizationName: "",
-    seats: "1",
+    seats: defaultType === "practice" ? String(PRACTICE_SEATS) : "1",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const seatCount = useMemo(() => {
-    if (formData.type !== "practice") return 1;
-    const value = Number.parseInt(formData.seats, 10);
-    return Number.isFinite(value) ? Math.min(Math.max(value, 1), 50) : 1;
-  }, [formData.seats, formData.type]);
-  const total = seatCount * 699;
+  const isPractice = formData.type === "practice";
+  const seatCount = isPractice ? PRACTICE_SEATS : 1;
+  const total = isPractice ? PRACTICE_PRICE : INDIVIDUAL_PRICE;
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.target;
-    setFormData((current) => ({ ...current, [name]: value }));
+    setFormData((current) => ({
+      ...current,
+      [name]: value,
+      ...(name === "type" ? { seats: value === "practice" ? String(PRACTICE_SEATS) : "1" } : {}),
+    }));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -60,7 +66,9 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
       <Card className="my-8 w-full max-w-2xl bg-white p-6 shadow-2xl sm:p-8">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900">Enroll in OptiTech Academy</h2>
+            <h2 className="text-3xl font-bold text-slate-900">
+              {isPractice ? "Enroll Your Practice Team" : "Enroll in OptiTech Academy"}
+            </h2>
             <p className="mt-2 text-sm text-slate-600">
               ${total.toLocaleString()} one-time total for {seatCount} student seat{seatCount === 1 ? "" : "s"}.
             </p>
@@ -98,7 +106,7 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
             <label className="block text-sm font-medium text-slate-700">
               Experience Level *
               <select name="experience" value={formData.experience} onChange={handleChange} className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3">
-                <option value="beginner">Beginner — no ophthalmic experience</option>
+                <option value="beginner">Beginner â€” no ophthalmic experience</option>
                 <option value="some">Some experience in eye care</option>
                 <option value="experienced">Experienced technician seeking additional training</option>
               </select>
@@ -111,16 +119,15 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
               </select>
             </label>
 
-            {formData.type === "practice" && (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="text-sm font-medium text-slate-700">
+            {isPractice && (
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-slate-700">
                   Practice or Clinic Name *
                   <input name="organizationName" value={formData.organizationName} onChange={handleChange} required className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3" />
                 </label>
-                <label className="text-sm font-medium text-slate-700">
-                  Number of Seats *
-                  <input type="number" name="seats" value={formData.seats} onChange={handleChange} min="1" max="50" required className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3" />
-                </label>
+                <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-950">
+                  <strong>Practice Starter Package:</strong> five course seats, manager invitation links, and team-progress visibility for $1,200 total.
+                </div>
               </div>
             )}
 
@@ -134,7 +141,7 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
             <label className="flex items-start gap-3 text-sm text-slate-700">
               <input type="checkbox" required className="mt-1 h-4 w-4" />
               <span>
-                I understand the price is $699 per student seat, the course is self-paced, supervised hands-on training may still be required, and the completion certificate is not licensure or professional certification.
+                I understand the price is {isPractice ? "$1,200 for five course seats" : "$699 for one course seat"}, the course is self-paced, supervised hands-on training may still be required, and the completion certificate is not licensure or professional certification.
               </span>
             </label>
           </div>
@@ -149,7 +156,7 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button type="submit" disabled={isSubmitting} className="flex-1 bg-blue-600 py-6 text-white hover:bg-blue-700">
               {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              {isSubmitting ? "Opening Secure Checkout" : `Continue to Stripe — $${total.toLocaleString()}`}
+              {isSubmitting ? "Opening Secure Checkout" : `Continue to Stripe â€” $${total.toLocaleString()}`}
             </Button>
             <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting} className="flex-1 py-6">Cancel</Button>
           </div>
@@ -158,3 +165,4 @@ export function EnrollmentForm({ tier, onClose }: EnrollmentFormProps) {
     </div>
   );
 }
+
