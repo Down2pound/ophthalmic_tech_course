@@ -1,4 +1,4 @@
-# OptiTech Academy — Ophthalmic Technician Foundations
+# OptiTech Academy â€” Ophthalmic Technician Foundations
 
 A full-stack, ten-module ophthalmic technician education platform built with React, TypeScript, Vite, and Express.
 
@@ -34,7 +34,7 @@ The internal portal is available at `/spindel` after a successful deployment. Se
 
 - Public course and curriculum pages
 - Individual and practice-team enrollment
-- One-time Stripe Checkout at $699 per student seat
+- One-time Stripe Checkout at $699 for an individual seat or $1,200 for a five-seat practice package
 - Stripe payment verification before account activation
 - Password hashing with Node `scrypt`
 - Signed, HTTP-only login sessions
@@ -92,7 +92,7 @@ BUSINESS_LEGAL_NAME=Your legal business name
 BUSINESS_ADDRESS=Your business mailing address
 ```
 
-The Stripe Price must be configured as a **one-time $699 payment**. Practice enrollment uses the selected number of seats as the Stripe Checkout quantity.
+Configure two one-time Stripe Prices: **$699 for individual enrollment** and **$1,200 for the five-seat practice package**.
 
 The public paid course requires the Stripe, email, support, and legal-business values before production startup. The Spindel manager bootstrap values are documented in `SPINDEL_ONBOARDING_SETUP.md`.
 
@@ -104,7 +104,7 @@ The data file is written with restricted file permissions and is ignored by Git.
 
 ## Stripe Test Checklist
 
-1. Create a one-time test Price for $699.
+1. Create one-time test Prices for $699 individual enrollment and the $1,200 five-seat practice package.
 2. Add the test secret key and Price ID to the deployment.
 3. Complete an individual purchase with a Stripe test card.
 4. Confirm that the payment-success page creates a password and signs in.
@@ -115,3 +115,4 @@ The data file is written with restricted file permissions and is ignored by Git.
 ## Certificate Scope
 
 The generated certificate confirms completion of this independent educational course. It is not licensure, JCAHPO certification, or proof of independent clinical competency. Students and employers must verify current certification eligibility and scope requirements with the appropriate official organizations and applicable regulations.
+
