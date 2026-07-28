@@ -1,6 +1,11 @@
 import type { Request, Response, Router } from "express";
+import { randomUUID } from "node:crypto";
 import { COOKIE_NAME } from "../../../shared/const";
 import { consumeMagicLink } from "../auth/consumeMagicLink";
+import {
+  createLocalDemoEnrollment,
+  isLocalDemoAccessAllowed,
+} from "../auth/localDemoAccess";
 import { sendMagicLinkEmail } from "../auth/magicLinkEmail";
 import {
   createInMemoryMagicLinkStore,
@@ -13,6 +18,8 @@ import {
 } from "../auth/postgresAuthStore";
 import { authorizeLearnerSession } from "../auth/sessionAccess";
 import {
+  createAuthSession,
+  createRawSessionToken,
   createInMemoryAuthSessionStore,
   type AuthSessionStore,
 } from "../auth/sessionStore";
@@ -160,6 +167,46 @@ function authorizePracticeSeatAdminRequest(
 }
 
 export function setupAuthRoutes(router: Router) {
+  router.get("/dev/demo-learner/start", async (req: Request, res: Response) => {
+    if (
+      !isLocalDemoAccessAllowed({
+        env: process.env,
+        host: req.get("host"),
+      })
+    ) {
+      res.status(404).json({
+        error: "Local demo learner access is not enabled.",
+      });
+      return;
+    }
+
+    const email =
+      typeof req.query.email === "string" && req.query.email.trim()
+        ? req.query.email
+        : "jeff.demo@example.com";
+    const now = new Date().toISOString();
+    const rawSessionToken = createRawSessionToken();
+    const session = createAuthSession({
+      email,
+      rawSessionToken,
+      id: `demo_session_${randomUUID()}`,
+      createdAt: now,
+    });
+    const enrollment = createLocalDemoEnrollment({ email, now });
+
+    await sessionStore.storeSession(session);
+    await getEnrollmentStore().provisionEnrollment(enrollment);
+
+    res.cookie(COOKIE_NAME, rawSessionToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+      sameSite: "lax",
+      secure: false,
+      path: "/",
+    });
+    res.redirect("/learn");
+  });
+
   router.post(
     "/auth/passwordless/start",
     passwordlessStartRateLimit,

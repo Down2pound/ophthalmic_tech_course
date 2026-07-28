@@ -98,6 +98,33 @@ pnpm launch:blockers
 Use `docs/launch/current-backup-manifest.md` and the newest matching ZIP and
 bundle pair in the Drive backup folder to identify the latest safe handoff.
 
+## Test The Course Locally
+
+Use this when you want to click through the course yourself before Stripe,
+email, and production hosting are fully connected.
+
+1. Build the app.
+2. Start the local server with `ENABLE_LOCAL_COURSE_DEMO=true`.
+3. Open this local demo learner link:
+
+```text
+http://localhost:3000/api/dev/demo-learner/start?email=jeff.demo@example.com
+```
+
+That link creates a temporary local-only learner session and redirects to
+`/learn`, where Module 1 can be reviewed like a signed-in student. It only works
+when the local demo flag is enabled and the request host is `localhost`.
+
+Public pages that do not need demo access:
+
+```text
+http://localhost:3000/
+http://localhost:3000/preview
+http://localhost:3000/curriculum
+http://localhost:3000/first-sale
+http://localhost:3000/practice-packs
+```
+
 ## Deploy To Render
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2FDown2pound%2Fophthalmic_tech_course%2Ftree%2Fcodex%2Foptitech-product-spec)
