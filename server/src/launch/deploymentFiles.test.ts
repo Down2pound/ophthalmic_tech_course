@@ -641,9 +641,41 @@ describe("deployment files", () => {
     expect(livePurchaseScript).toContain("/api/checkout/availability");
     expect(livePurchaseScript).toContain("checkout.session.completed");
     expect(livePurchaseScript).toContain("turn paid enrollment back off");
+    expect(livePurchaseScript).toContain("pnpm launch:emergency-stop");
     expect(livePurchaseScript).not.toContain("execSync");
     expect(livePurchaseScript).not.toContain("sk_test_");
     expect(livePurchaseScript).not.toContain("whsec_");
+  });
+
+  it("keeps a work-computer-safe paid launch emergency stop command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const emergencyStopScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-emergency-stop.mjs"),
+      "utf8"
+    );
+    const emergencyStopGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/paid-launch-emergency-stop.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:emergency-stop": "node scripts/launch-emergency-stop.mjs"'
+    );
+    expect(emergencyStopScript).toContain("paid-launch-emergency-stop.md");
+    expect(emergencyStopScript).not.toContain("execSync");
+    expect(emergencyStopGuide).toContain(
+      "OptiTech Academy Paid Launch Emergency Stop"
+    );
+    expect(emergencyStopGuide).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(emergencyStopGuide).toContain("/api/checkout/availability");
+    expect(emergencyStopGuide).toContain("Pause or deactivate");
+    expect(emergencyStopGuide).toContain("protected buyer lookup");
+    expect(emergencyStopGuide).toContain("pnpm launch:live-purchase-test");
+    expect(emergencyStopGuide).not.toContain("sk_test_");
+    expect(emergencyStopGuide).not.toContain("whsec_");
   });
 
   it("keeps a work-computer-safe manual payment-link checklist command available", async () => {

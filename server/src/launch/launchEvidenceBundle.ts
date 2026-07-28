@@ -60,6 +60,7 @@ function renderReadme({
     "- `manual-launch-qa-evidence.md`: safe template for Stripe, learner-flow, practice-pack, browser, and accessibility QA notes.",
     "- `runtime-readiness-snapshot-guide.md`: how to save and interpret the deployed readiness endpoint.",
     "- `first-sale-support-runbook.md`: safe support checklist for buyer, learner, practice-seat, and refund issues.",
+    "- `paid-launch-emergency-stop.md`: red-button checklist for pausing paid checkout safely.",
     "- `bootcamp-content-migration-checklist.md`: source-to-course checklist for Drive and NotebookLM Bootcamp assets.",
     "- `module-1-clinical-review-packet.md`: clinical reviewer packet.",
     "- `runtime-readiness-snapshot.json`: safe readiness report with missing variable names, not secret values.",
@@ -122,6 +123,7 @@ export async function createLaunchEvidenceBundle({
     "manual-launch-qa-evidence.md",
     "runtime-readiness-snapshot-guide.md",
     "first-sale-support-runbook.md",
+    "paid-launch-emergency-stop.md",
     "bootcamp-content-migration-checklist.md",
     "module-1-clinical-review-packet.md",
     "runtime-readiness-snapshot.json",
@@ -248,6 +250,10 @@ export async function createLaunchEvidenceBundle({
   );
   const firstSaleSupportRunbook = await readFile(
     path.resolve(projectRoot, "docs/launch/first-sale-support-runbook.md"),
+    "utf8"
+  );
+  const paidLaunchEmergencyStop = await readFile(
+    path.resolve(projectRoot, "docs/launch/paid-launch-emergency-stop.md"),
     "utf8"
   );
   const bootcampContentMigrationChecklist = await readFile(
@@ -377,6 +383,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "first-sale-support-runbook.md"),
     firstSaleSupportRunbook
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "paid-launch-emergency-stop.md"),
+    paidLaunchEmergencyStop
   );
   await writeFile(
     path.join(resolvedOutputDir, "bootcamp-content-migration-checklist.md"),

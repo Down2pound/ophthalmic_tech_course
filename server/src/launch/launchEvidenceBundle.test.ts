@@ -141,6 +141,7 @@ describe("createLaunchEvidenceBundle", () => {
       "manual-launch-qa-evidence.md",
       "runtime-readiness-snapshot-guide.md",
       "first-sale-support-runbook.md",
+      "paid-launch-emergency-stop.md",
       "bootcamp-content-migration-checklist.md",
       "module-1-clinical-review-packet.md",
       "runtime-readiness-snapshot.json",
@@ -256,6 +257,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const supportRunbook = await readFile(
       path.join(result.outputDir, "first-sale-support-runbook.md"),
+      "utf8"
+    );
+    const emergencyStopGuide = await readFile(
+      path.join(result.outputDir, "paid-launch-emergency-stop.md"),
       "utf8"
     );
     const bootcampContentMigrationChecklist = await readFile(
@@ -532,6 +537,12 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(supportRunbook).toContain("Payment Succeeded But Access Is Missing");
     expect(supportRunbook).toContain("recommended next support actions");
+    expect(emergencyStopGuide).toContain(
+      "OptiTech Academy Paid Launch Emergency Stop"
+    );
+    expect(emergencyStopGuide).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(emergencyStopGuide).toContain("/api/checkout/availability");
+    expect(emergencyStopGuide).toContain("Pause or deactivate");
     expect(bootcampContentMigrationChecklist).toContain(
       "OptiTech Academy Bootcamp Content Migration Checklist"
     );
@@ -543,6 +554,8 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(supportRunbook).not.toContain("sk_test_");
     expect(supportRunbook).not.toContain("whsec_");
+    expect(emergencyStopGuide).not.toContain("sk_test_");
+    expect(emergencyStopGuide).not.toContain("whsec_");
     expect(bootcampContentMigrationChecklist).not.toContain("sk_test_");
     expect(bootcampContentMigrationChecklist).not.toContain("whsec_");
     expect(readinessSnapshot).toContain("STRIPE_SECRET_KEY");

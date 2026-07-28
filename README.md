@@ -59,6 +59,7 @@ pnpm launch:first-render-deploy
 pnpm launch:first-buyer
 pnpm launch:fulfillment
 pnpm launch:first-revenue
+pnpm launch:emergency-stop
 pnpm launch:bootcamp-intake
 pnpm launch:blockers
 ```
@@ -75,6 +76,8 @@ pnpm launch:blockers
   and support proof checklist.
 - `launch:first-revenue` prints the shortest safe path from restored code to
   one controlled paid buyer.
+- `launch:emergency-stop` prints the red-button checklist for pausing paid
+  checkout safely if a live launch issue appears.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
 - `launch:blockers` prints the setup areas still preventing paid launch.

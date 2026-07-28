@@ -147,6 +147,11 @@ const evidenceFiles = [
     description: "safe support checklist for buyer, learner, practice-seat, and refund issues.",
   },
   {
+    source: "docs/launch/paid-launch-emergency-stop.md",
+    target: "paid-launch-emergency-stop.md",
+    description: "red-button checklist for pausing paid checkout safely.",
+  },
+  {
     source: "docs/launch/bootcamp-content-migration-checklist.md",
     target: "bootcamp-content-migration-checklist.md",
     description: "source-to-course checklist for Drive and NotebookLM Bootcamp assets.",

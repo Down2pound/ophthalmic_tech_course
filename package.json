@@ -22,6 +22,7 @@
     "launch:database-setup": "node scripts/launch-database-setup.mjs",
     "launch:deployment-audit": "node scripts/launch-deployment-audit.mjs",
     "launch:email-setup": "node scripts/launch-email-setup.mjs",
+    "launch:emergency-stop": "node scripts/launch-emergency-stop.mjs",
     "launch:env-template": "node scripts/launch-env-template.mjs",
     "launch:external-setup": "tsx server/src/launch/runExternalSetupWorksheet.ts",
     "launch:first-10-customers": "node scripts/launch-first-10-customers.mjs",

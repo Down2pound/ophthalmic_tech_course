@@ -106,5 +106,6 @@ Follow-up needed:
 ## Related Tools
 
 - `pnpm launch:live-purchase-test`
+- `pnpm launch:emergency-stop`
 - `pnpm launch:sales-tracker`
 - `pnpm launch:first-10-customers`

@@ -113,6 +113,8 @@ Only after every earlier section passes:
 - [ ] Confirm live purchase creates durable access.
 
 If any live check fails, set `ENABLE_PAID_ENROLLMENT=false` before debugging.
+Then run `pnpm launch:emergency-stop` and follow
+`docs/launch/paid-launch-emergency-stop.md` before trying another live payment.
 
 ## 8. Archive The Launch Record
 
