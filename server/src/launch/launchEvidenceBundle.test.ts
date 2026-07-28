@@ -116,6 +116,7 @@ describe("createLaunchEvidenceBundle", () => {
       "production-launch-package.md",
       "deployment-guide.md",
       "render-deployment-guide.md",
+      "first-render-deploy-evidence.md",
       "online-start-guide.md",
       "jeffmini-resume-guide.md",
       "deployment-cutover-checklist.md",
@@ -163,6 +164,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const renderDeploymentGuide = await readFile(
       path.join(result.outputDir, "render-deployment-guide.md"),
+      "utf8"
+    );
+    const firstRenderDeployEvidence = await readFile(
+      path.join(result.outputDir, "first-render-deploy-evidence.md"),
       "utf8"
     );
     const onlineStartGuide = await readFile(
@@ -277,6 +282,18 @@ describe("createLaunchEvidenceBundle", () => {
     expect(renderDeploymentGuide).toContain("/api/checkout/availability");
     expect(renderDeploymentGuide).not.toContain("sk_test_");
     expect(renderDeploymentGuide).not.toContain("whsec_");
+    expect(firstRenderDeployEvidence).toContain(
+      "OptiTech Academy First Render Deploy Evidence"
+    );
+    expect(firstRenderDeployEvidence).toContain("pnpm launch:preflight");
+    expect(firstRenderDeployEvidence).toContain("99` files passed");
+    expect(firstRenderDeployEvidence).toContain("377` tests passed");
+    expect(firstRenderDeployEvidence).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(firstRenderDeployEvidence).toContain(
+      "LAUNCH_SMOKE_ALLOW_NOT_READY"
+    );
+    expect(firstRenderDeployEvidence).not.toContain("sk_test_");
+    expect(firstRenderDeployEvidence).not.toContain("whsec_");
     expect(onlineStartGuide).toContain("OptiTech Academy Online Start Guide");
     expect(onlineStartGuide).toContain("pnpm launch:first-buyer");
     expect(onlineStartGuide).toContain("pnpm launch:fulfillment");

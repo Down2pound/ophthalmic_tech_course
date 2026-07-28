@@ -35,6 +35,7 @@ function renderReadme({
     "- `production-launch-package.md`: launch handoff checklist.",
     "- `deployment-guide.md`: beginner-friendly production setup recipe.",
     "- `render-deployment-guide.md`: Render Blueprint setup recipe.",
+    "- `first-render-deploy-evidence.md`: concise preflight proof and first Render deploy checks.",
     "- `online-start-guide.md`: first-hour path from restored code to deployed closed checkout.",
     "- `jeffmini-resume-guide.md`: home-PC restore and launch sequence for jeffmini.",
     "- `deployment-cutover-checklist.md`: short first-deploy to paid-launch cutover sequence.",
@@ -96,6 +97,7 @@ export async function createLaunchEvidenceBundle({
     "production-launch-package.md",
     "deployment-guide.md",
     "render-deployment-guide.md",
+    "first-render-deploy-evidence.md",
     "online-start-guide.md",
     "jeffmini-resume-guide.md",
     "deployment-cutover-checklist.md",
@@ -135,6 +137,10 @@ export async function createLaunchEvidenceBundle({
   );
   const renderDeploymentGuide = await readFile(
     path.resolve(projectRoot, "docs/launch/render-deployment-guide.md"),
+    "utf8"
+  );
+  const firstRenderDeployEvidence = await readFile(
+    path.resolve(projectRoot, "docs/launch/first-render-deploy-evidence.md"),
     "utf8"
   );
   const onlineStartGuide = await readFile(
@@ -271,6 +277,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "render-deployment-guide.md"),
     renderDeploymentGuide
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "first-render-deploy-evidence.md"),
+    firstRenderDeployEvidence
   );
   await writeFile(
     path.join(resolvedOutputDir, "online-start-guide.md"),

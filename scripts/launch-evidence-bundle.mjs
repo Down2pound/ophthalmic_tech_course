@@ -27,6 +27,11 @@ const evidenceFiles = [
     description: "Render Blueprint setup recipe.",
   },
   {
+    source: "docs/launch/first-render-deploy-evidence.md",
+    target: "first-render-deploy-evidence.md",
+    description: "concise preflight proof and first Render deploy checks.",
+  },
+  {
     source: "docs/launch/online-start-guide.md",
     target: "online-start-guide.md",
     description: "first-hour path from restored code to deployed closed checkout.",
