@@ -51,7 +51,7 @@ describe("deployment files", () => {
       "utf8"
     );
 
-    expect(manifest).toContain("Latest confirmed full source backup point");
+    expect(manifest).toContain("Latest confirmed backup point");
     expect(manifest).toContain("codex/optitech-product-spec");
     expect(manifest).toContain(
       "https://drive.google.com/drive/folders/1pA_fNKEMLKnCmhn6tkM7VLrEj7fgX97T"
@@ -60,22 +60,22 @@ describe("deployment files", () => {
     expect(backupCommit).toBeTruthy();
     expect(manifest).toMatch(
       new RegExp(
-        `optitech-academy-source-\\d{4}-\\d{2}-\\d{2}-\\d{4}-${backupCommit}\\.zip`
+        `optitech-academy-source-\\d{4}-\\d{2}-\\d{2}-${backupCommit}-tracked\\.zip`
       )
     );
     expect(manifest).toMatch(
       new RegExp(
-        `optitech-academy-branch-\\d{4}-\\d{2}-\\d{2}-\\d{4}-${backupCommit}\\.bundle`
+        `optitech-academy-branch-\\d{4}-\\d{2}-\\d{2}-${backupCommit}\\.bundle`
       )
     );
     expect(manifest).toMatch(
       new RegExp(
-        `optitech-academy-launch-evidence-\\d{4}-\\d{2}-\\d{2}-\\d{4}-${backupCommit}\\.zip`
+        `optitech-academy-launch-evidence-\\d{4}-\\d{2}-\\d{2}-${backupCommit}\\.zip`
       )
     );
     expect(manifest).toMatch(
       new RegExp(
-        `optitech-academy-static-first-sale-page-\\d{4}-\\d{2}-\\d{2}-\\d{4}-${backupCommit}\\.zip`
+        `optitech-academy-static-first-sale-page-\\d{4}-\\d{2}-\\d{2}-${backupCommit}\\.zip`
       )
     );
     expect(manifest).not.toContain("sk_test_");
@@ -274,6 +274,37 @@ describe("deployment files", () => {
     expect(blockerScript).toContain("pnpm db:setup");
     expect(blockerScript).toContain("LAUNCH_BASE_URL");
     expect(blockerScript).not.toContain("execSync");
+  });
+
+  it("keeps the next-step command center runnable without tsx", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const nextScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-next.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:next": "node scripts/launch-next.mjs"'
+    );
+    expect(packageJson).not.toContain(
+      '"launch:next": "tsx server/src/launch/runProductionSetupPlan.ts"'
+    );
+    expect(nextScript).toContain(
+      "OptiTech Academy Launch Next-Step Command Center"
+    );
+    expect(nextScript).toContain("work-computer-safe");
+    expect(nextScript).toContain("pnpm launch:clinical-review-request");
+    expect(nextScript).toContain("pnpm launch:database-setup");
+    expect(nextScript).toContain("pnpm launch:stripe-products");
+    expect(nextScript).toContain("pnpm launch:email-setup");
+    expect(nextScript).toContain("pnpm launch:admin-tokens");
+    expect(nextScript).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(nextScript).not.toContain("execSync");
+    expect(nextScript).not.toContain("sk_test_");
+    expect(nextScript).not.toContain("whsec_");
   });
 
   it("keeps a work-computer-safe launch control checklist command available", async () => {
