@@ -31,6 +31,8 @@ describe("renderBackupHandoffReport", () => {
     expect(report).toContain(
       "optitech-academy-static-first-sale-page-2026-07-16-abc1234.zip"
     );
+    expect(report).toContain("Beginner restore rule: use GitHub first");
+    expect(report).toContain("latest confirmed full source backup set");
     expect(report).toContain("pnpm launch:env-template");
     expect(report).toContain("pnpm launch:admin-tokens");
     expect(report).toContain("pnpm launch:database-setup");
