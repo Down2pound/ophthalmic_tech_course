@@ -500,6 +500,32 @@ describe("deployment files", () => {
     expect(renderSetupScript).not.toContain("whsec_");
   });
 
+  it("keeps deploy guides aligned with the first-sale buyer front door", async () => {
+    const onlineStartGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/online-start-guide.md"),
+      "utf8"
+    );
+    const renderDeploymentGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/render-deployment-guide.md"),
+      "utf8"
+    );
+
+    expect(onlineStartGuide).toContain(
+      "https://your-real-domain.example/first-sale"
+    );
+    expect(renderDeploymentGuide).toContain(
+      "https://your-render-or-custom-domain.example/first-sale"
+    );
+    expect(renderDeploymentGuide).toContain("main buyer front door");
+    expect(renderDeploymentGuide).toContain(
+      "learners or practices reach checkout"
+    );
+    expect(onlineStartGuide).not.toContain("sk_test_");
+    expect(renderDeploymentGuide).not.toContain("sk_test_");
+    expect(onlineStartGuide).not.toContain("whsec_");
+    expect(renderDeploymentGuide).not.toContain("whsec_");
+  });
+
   it("keeps the owner go/no-go report aligned with the first-buyer front door", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

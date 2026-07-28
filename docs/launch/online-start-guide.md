@@ -90,6 +90,7 @@ Also open these URLs in a browser:
 https://your-real-domain.example/api/health
 https://your-real-domain.example/api/launch/readiness
 https://your-real-domain.example/api/checkout/availability
+https://your-real-domain.example/first-sale
 https://your-real-domain.example/checkout
 https://your-real-domain.example/practice-packs
 ```
