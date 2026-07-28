@@ -292,6 +292,12 @@ describe("createLaunchEvidenceBundle", () => {
     expect(firstRenderDeployEvidence).toContain(
       "LAUNCH_SMOKE_ALLOW_NOT_READY"
     );
+    expect(firstRenderDeployEvidence).toContain(
+      "LAUNCH_SMOKE_REPORT_PATH"
+    );
+    expect(firstRenderDeployEvidence).toContain(
+      "launch-evidence/first-render-smoke-report.md"
+    );
     expect(firstRenderDeployEvidence).not.toContain("sk_test_");
     expect(firstRenderDeployEvidence).not.toContain("whsec_");
     expect(onlineStartGuide).toContain("OptiTech Academy Online Start Guide");

@@ -543,6 +543,10 @@ describe("deployment files", () => {
       "OptiTech Academy First Render Deploy Evidence"
     );
     expect(firstRenderDeployEvidence).toContain("pnpm launch:preflight");
+    expect(firstRenderDeployEvidence).toContain("LAUNCH_SMOKE_REPORT_PATH");
+    expect(firstRenderDeployEvidence).toContain(
+      "launch-evidence/first-render-smoke-report.md"
+    );
     expect(firstRenderDeployEvidence).not.toContain("sk_test_");
     expect(firstRenderDeployEvidence).not.toContain("whsec_");
     expect(renderSetupScript).toContain(

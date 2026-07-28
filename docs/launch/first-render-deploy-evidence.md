@@ -67,16 +67,21 @@ https://your-real-domain.example/practice-packs
 
 ## First Smoke Test
 
-Run this while paid enrollment is still closed:
+Run this while paid enrollment is still closed. It also saves a Markdown smoke
+report in `launch-evidence/first-render-smoke-report.md`:
 
 ```powershell
 $env:LAUNCH_SMOKE_ALLOW_NOT_READY="true"
 $env:LAUNCH_BASE_URL="https://your-real-domain.example"
+$env:LAUNCH_SMOKE_REPORT_PATH="launch-evidence/first-render-smoke-report.md"
 pnpm launch:smoke
 ```
 
 Expected result: the deployed site and public buyer pages load, but paid launch
 readiness can still say `not ready`.
+
+After it passes, save `launch-evidence/first-render-smoke-report.md` with the
+rest of the launch evidence backup.
 
 ## Before Taking Real Money
 
