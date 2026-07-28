@@ -72,6 +72,11 @@ const evidenceFiles = [
     description: "first-buyer outreach scripts and feedback tracker.",
   },
   {
+    source: "docs/launch/first-lead-qualification-card.md",
+    target: "first-lead-qualification-card.md",
+    description: "safe first-lead fit score and next-link decision card.",
+  },
+  {
     source: "docs/launch/individual-learner-decision-one-pager.md",
     target: "individual-learner-decision-one-pager.md",
     description: "short learner-facing fit and purchase decision handout.",

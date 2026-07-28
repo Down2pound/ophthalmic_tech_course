@@ -39,6 +39,7 @@ const lines = [
   "pnpm launch:owner-go-no-go",
   "pnpm launch:first-sales",
   "pnpm launch:first-10-customers",
+  "pnpm launch:lead-qualifier",
   "pnpm launch:manual-payment-links",
   "pnpm launch:sales-tracker",
   "```",

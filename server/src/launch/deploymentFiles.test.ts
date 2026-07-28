@@ -348,6 +348,41 @@ describe("deployment files", () => {
     expect(firstSalesScript).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe first lead qualification command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const leadQualifierScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-lead-qualifier.mjs"),
+      "utf8"
+    );
+    const leadQualificationCard = await readFile(
+      path.resolve(process.cwd(), "docs/launch/first-lead-qualification-card.md"),
+      "utf8"
+    );
+    const firstBuyerScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-buyer-command-center.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:lead-qualifier": "node scripts/launch-lead-qualifier.mjs"'
+    );
+    expect(leadQualifierScript).toContain("first-lead-qualification-card.md");
+    expect(leadQualifierScript).not.toContain("execSync");
+    expect(firstBuyerScript).toContain("pnpm launch:lead-qualifier");
+    expect(leadQualificationCard).toContain(
+      "OptiTech Academy First Lead Qualification Card"
+    );
+    expect(leadQualificationCard).toContain("Quick Fit Score");
+    expect(leadQualificationCard).toContain("Individual Learner Next Action");
+    expect(leadQualificationCard).toContain("Practice Buyer Next Action");
+    expect(leadQualificationCard).toContain("Only send the paid checkout path");
+    expect(leadQualificationCard).not.toContain("sk_test_");
+    expect(leadQualificationCard).not.toContain("whsec_");
+  });
+
   it("keeps a work-computer-safe first 10 customers launch command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

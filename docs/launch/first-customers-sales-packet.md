@@ -43,6 +43,16 @@ For a day-by-day first week outreach plan, run:
 pnpm launch:first-week-sales
 ```
 
+Before sending a payment path to an interested person, run:
+
+```bash
+pnpm launch:lead-qualifier
+```
+
+Beginner translation: use this quick scorecard to decide whether to send the
+free preview, buyer guide, practice-pack page, inquiry path, or paid checkout
+path.
+
 ```text
 First buyer overview: https://your-real-domain.example/first-sale
 Individual learners: https://your-real-domain.example/first-sale
