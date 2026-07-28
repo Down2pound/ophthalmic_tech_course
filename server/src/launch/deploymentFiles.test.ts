@@ -410,6 +410,34 @@ describe("deployment files", () => {
     expect(firstCustomersScript).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe first week sales plan command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const firstWeekScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-week-sales.mjs"),
+      "utf8"
+    );
+    const firstWeekPlan = await readFile(
+      path.resolve(process.cwd(), "docs/launch/first-week-sales-plan.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:first-week-sales": "node scripts/launch-first-week-sales.mjs"'
+    );
+    expect(firstWeekScript).toContain("first-week-sales-plan.md");
+    expect(firstWeekScript).not.toContain("execSync");
+    expect(firstWeekPlan).toContain("OptiTech Academy First Week Sales Plan");
+    expect(firstWeekPlan).toContain("Day 1: Prepare the warm list");
+    expect(firstWeekPlan).toContain("Day 7: Choose next week's focus");
+    expect(firstWeekPlan).toContain("pnpm launch:lead-qualifier");
+    expect(firstWeekPlan).toContain("One internal live purchase");
+    expect(firstWeekPlan).not.toContain("sk_test_");
+    expect(firstWeekPlan).not.toContain("whsec_");
+  });
+
   it("keeps a work-computer-safe sales tracker export command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

@@ -31,7 +31,7 @@
     "launch:fulfillment": "node scripts/launch-first-buyer-fulfillment.mjs",
     "launch:first-revenue": "node scripts/launch-first-revenue-path.mjs",
     "launch:first-sales": "node scripts/launch-first-sales-links.mjs",
-    "launch:first-week-sales": "tsx server/src/launch/runFirstWeekSalesPlan.ts",
+    "launch:first-week-sales": "node scripts/launch-first-week-sales.mjs",
     "launch:go-no-go": "tsx server/src/launch/runLaunchGoNoGo.ts",
     "launch:jeffmini": "node scripts/launch-jeffmini-resume.mjs",
     "launch:lead-qualifier": "node scripts/launch-lead-qualifier.mjs",

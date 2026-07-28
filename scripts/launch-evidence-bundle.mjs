@@ -77,6 +77,11 @@ const evidenceFiles = [
     description: "safe first-lead fit score and next-link decision card.",
   },
   {
+    source: "docs/launch/first-week-sales-plan.md",
+    target: "first-week-sales-plan.md",
+    description: "seven-day controlled outreach plan for early buyers.",
+  },
+  {
     source: "docs/launch/individual-learner-decision-one-pager.md",
     target: "individual-learner-decision-one-pager.md",
     description: "short learner-facing fit and purchase decision handout.",

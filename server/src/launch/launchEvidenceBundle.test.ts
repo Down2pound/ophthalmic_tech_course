@@ -126,6 +126,7 @@ describe("createLaunchEvidenceBundle", () => {
       "home-pc-command-cheatsheet.md",
       "first-customers-sales-packet.md",
       "first-lead-qualification-card.md",
+      "first-week-sales-plan.md",
       "individual-learner-decision-one-pager.md",
       "practice-manager-approval-one-pager.md",
       "manual-payment-link-checklist.md",
@@ -206,6 +207,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const firstLeadQualificationCard = await readFile(
       path.join(result.outputDir, "first-lead-qualification-card.md"),
+      "utf8"
+    );
+    const firstWeekSalesPlan = await readFile(
+      path.join(result.outputDir, "first-week-sales-plan.md"),
       "utf8"
     );
     const individualLearnerDecisionOnePager = await readFile(
@@ -394,6 +399,11 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(firstLeadQualificationCard).toContain("Quick Fit Score");
     expect(firstLeadQualificationCard).toContain("Only send the paid checkout path");
+    expect(firstWeekSalesPlan).toContain(
+      "OptiTech Academy First Week Sales Plan"
+    );
+    expect(firstWeekSalesPlan).toContain("Day 1: Prepare the warm list");
+    expect(firstWeekSalesPlan).toContain("pnpm launch:lead-qualifier");
     expect(firstCustomersSalesPacket).toContain(
       "Links To Send When The Site Is Live"
     );
@@ -424,6 +434,8 @@ describe("createLaunchEvidenceBundle", () => {
     expect(firstCustomersSalesPacket).toContain("certification advice.");
     expect(firstLeadQualificationCard).not.toContain("sk_test_");
     expect(firstLeadQualificationCard).not.toContain("whsec_");
+    expect(firstWeekSalesPlan).not.toContain("sk_test_");
+    expect(firstWeekSalesPlan).not.toContain("whsec_");
     expect(individualLearnerDecisionOnePager).toContain(
       "OptiTech Academy Individual Learner Decision One-Pager"
     );
