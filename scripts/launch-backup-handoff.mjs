@@ -19,7 +19,7 @@ const githubRepoUrl =
 const bootcampSourceFolderUrl =
   "https://drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q";
 const bootcampNotebookLmUrl =
-  "https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1";
+  "https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1";
 const bootcampSiteCourseDataUrl =
   "https://drive.google.com/file/d/1TudG-Dq6Fgdl3-TFTQSeMKHahAe5leuI";
 

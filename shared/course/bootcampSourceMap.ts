@@ -28,6 +28,9 @@ export const bootcampSourceFolderUrl =
   "https://drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q";
 
 export const bootcampNotebookLmUrl =
+  "https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1";
+
+export const legacyBootcampNotebookLmUrl =
   "https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1";
 
 export const bootcampSiteCourseDataUrl =

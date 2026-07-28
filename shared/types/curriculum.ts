@@ -72,7 +72,7 @@ export interface CurriculumOverview {
 export const CURRICULUM_CONFIG = {
   TOTAL_DAYS: 10,
   NOTEBOOKLM_URL:
-    "https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1",
+    "https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1",
   MODULES: [
     {
       day: 1,

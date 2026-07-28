@@ -372,7 +372,7 @@ describe("createLaunchEvidenceBundle", () => {
       "Bootcamp Drive folder: https://drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q"
     );
     expect(githubAndSourceBackupGuide).toContain(
-      "NotebookLM workspace: https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1"
+      "NotebookLM workspace: https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1"
     );
     expect(githubAndSourceBackupGuide).toContain(
       "git clone optitech-academy-branch"

@@ -19,7 +19,7 @@ export const courseSources: CourseSource[] = [
     id: "notebooklm-bootcamp-course-materials",
     title: "NotebookLM Bootcamp Course Materials",
     sourceType: "notebooklm",
-    url: "https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1",
+    url: "https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1",
     classification: "public-course-candidate",
   },
   {

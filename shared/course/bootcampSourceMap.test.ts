@@ -25,7 +25,7 @@ describe("bootcampSourceMap", () => {
       "drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q"
     );
     expect(bootcampNotebookLmUrl).toContain(
-      "notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1"
+      "notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1"
     );
     expect(bootcampSiteCourseDataUrl).toContain(
       "drive.google.com/file/d/1TudG-Dq6Fgdl3-TFTQSeMKHahAe5leuI"

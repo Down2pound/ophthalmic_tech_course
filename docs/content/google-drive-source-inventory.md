@@ -39,7 +39,8 @@ pnpm launch:spindel-onboarding
 
 - Type: NotebookLM notebook
 - ID: `a4bc6fed-4059-4597-a60f-a43aa78ff3e1`
-- URL: https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1
+- URL: https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1
+- Legacy URL: https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1
 - Classification: Public-course candidate source workspace, pending export and review
 - User note: All course materials can also be found here.
 - Access note: NotebookLM may require the owner's logged-in Google session; external fetch may not expose the notebook contents.
