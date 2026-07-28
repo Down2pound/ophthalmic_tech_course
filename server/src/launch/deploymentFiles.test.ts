@@ -56,11 +56,27 @@ describe("deployment files", () => {
     expect(manifest).toContain(
       "https://drive.google.com/drive/folders/1pA_fNKEMLKnCmhn6tkM7VLrEj7fgX97T"
     );
-    expect(manifest).toContain(
-      "optitech-academy-source-2026-07-24-1519-39adf90.zip"
+    const backupCommit = manifest.match(/- Commit: `([0-9a-f]{7})`/)?.[1];
+    expect(backupCommit).toBeTruthy();
+    expect(manifest).toMatch(
+      new RegExp(
+        `optitech-academy-source-\\d{4}-\\d{2}-\\d{2}-\\d{4}-${backupCommit}\\.zip`
+      )
     );
-    expect(manifest).toContain(
-      "optitech-academy-branch-2026-07-24-1519-39adf90.bundle"
+    expect(manifest).toMatch(
+      new RegExp(
+        `optitech-academy-branch-\\d{4}-\\d{2}-\\d{2}-\\d{4}-${backupCommit}\\.bundle`
+      )
+    );
+    expect(manifest).toMatch(
+      new RegExp(
+        `optitech-academy-launch-evidence-\\d{4}-\\d{2}-\\d{2}-\\d{4}-${backupCommit}\\.zip`
+      )
+    );
+    expect(manifest).toMatch(
+      new RegExp(
+        `optitech-academy-static-first-sale-page-\\d{4}-\\d{2}-\\d{2}-\\d{4}-${backupCommit}\\.zip`
+      )
     );
     expect(manifest).not.toContain("sk_test_");
     expect(manifest).not.toContain("whsec_");
