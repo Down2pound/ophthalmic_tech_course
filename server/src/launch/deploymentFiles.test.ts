@@ -168,6 +168,36 @@ describe("deployment files", () => {
     expect(dbSetupScript).not.toContain("whsec_");
   });
 
+  it("keeps the deployment smoke test runnable without tsx", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const smokeScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-smoke.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:smoke": "node scripts/launch-smoke.mjs"'
+    );
+    expect(packageJson).not.toContain(
+      '"launch:smoke": "tsx server/src/launch/runDeploymentSmokeTest.ts"'
+    );
+    expect(smokeScript).toContain("A deployed base URL is required.");
+    expect(smokeScript).toContain("/api/health");
+    expect(smokeScript).toContain("/api/launch/readiness");
+    expect(smokeScript).toContain("/api/checkout/availability");
+    expect(smokeScript).toContain("LAUNCH_SMOKE_ALLOW_NOT_READY");
+    expect(smokeScript).toContain("LAUNCH_SMOKE_REPORT_PATH");
+    expect(smokeScript).toContain("LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY");
+    expect(smokeScript).toContain("LAUNCH_SMOKE_TEST_LEARNER_INTEREST");
+    expect(smokeScript).toContain("OptiTech Academy Deployment Smoke Test");
+    expect(smokeScript).not.toContain("execSync");
+    expect(smokeScript).not.toContain("sk_test_");
+    expect(smokeScript).not.toContain("whsec_");
+  });
+
   it("keeps the backup handoff command runnable without tsx", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
