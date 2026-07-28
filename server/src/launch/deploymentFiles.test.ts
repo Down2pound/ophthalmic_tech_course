@@ -842,6 +842,11 @@ describe("deployment files", () => {
       "OptiTech Academy Production Environment Checklist"
     );
     expect(checklist).toContain("Host Dashboard Paste Template");
+    expect(checklist).toContain("Render Blueprint Auto-Filled Values");
+    expect(checklist).toContain(
+      "`DATABASE_URL`: connected from the managed Render PostgreSQL database"
+    );
+    expect(checklist).toContain("blank value from the paste template");
     expect(checklist).toContain("PUBLIC_APP_URL=https://your-domain.example");
     expect(checklist).toContain("ENABLE_PAID_ENROLLMENT=false");
     expect(checklist).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED=false");
