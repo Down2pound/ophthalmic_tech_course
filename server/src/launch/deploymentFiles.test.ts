@@ -498,14 +498,53 @@ describe("deployment files", () => {
       path.resolve(process.cwd(), "package.json"),
       "utf8"
     );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const onlineStartGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/online-start-guide.md"),
+      "utf8"
+    );
     const renderSetupScript = await readFile(
       path.resolve(process.cwd(), "scripts/launch-render-setup.mjs"),
+      "utf8"
+    );
+    const firstRenderDeployScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-render-deploy.mjs"),
+      "utf8"
+    );
+    const firstRevenueScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-revenue-path.mjs"),
+      "utf8"
+    );
+    const firstRenderDeployEvidence = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/first-render-deploy-evidence.md"
+      ),
       "utf8"
     );
 
     expect(packageJson).toContain(
       '"launch:render-setup": "node scripts/launch-render-setup.mjs"'
     );
+    expect(packageJson).toContain(
+      '"launch:first-render-deploy": "node scripts/launch-first-render-deploy.mjs"'
+    );
+    expect(readme).toContain("pnpm launch:first-render-deploy");
+    expect(onlineStartGuide).toContain("pnpm launch:first-render-deploy");
+    expect(firstRevenueScript).toContain("pnpm launch:first-render-deploy");
+    expect(firstRenderDeployScript).toContain(
+      "first-render-deploy-evidence.md"
+    );
+    expect(firstRenderDeployScript).not.toContain("execSync");
+    expect(firstRenderDeployEvidence).toContain(
+      "OptiTech Academy First Render Deploy Evidence"
+    );
+    expect(firstRenderDeployEvidence).toContain("pnpm launch:preflight");
+    expect(firstRenderDeployEvidence).not.toContain("sk_test_");
+    expect(firstRenderDeployEvidence).not.toContain("whsec_");
     expect(renderSetupScript).toContain(
       "OptiTech Academy Render Deployment Setup"
     );

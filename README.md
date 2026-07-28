@@ -55,6 +55,7 @@ revenue.
 ```bash
 pnpm launch:jeffmini
 pnpm launch:online-start
+pnpm launch:first-render-deploy
 pnpm launch:first-buyer
 pnpm launch:fulfillment
 pnpm launch:first-revenue
@@ -66,6 +67,8 @@ pnpm launch:blockers
   Google Drive as the backup drawer.
 - `launch:online-start` prints the first-hour path for deploying the site with
   checkout safely closed.
+- `launch:first-render-deploy` prints the short Render deploy evidence card
+  with preflight proof, closed-checkout settings, and first live URL checks.
 - `launch:first-buyer` prints the first-buyer control panel with safe links,
   starter messages, and pause rules.
 - `launch:fulfillment` prints the first paid buyer receipt, access, welcome,

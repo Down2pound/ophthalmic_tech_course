@@ -46,6 +46,7 @@ Run these commands on the home PC:
 ```bash
 pnpm launch:blockers
 pnpm launch:env-template
+pnpm launch:first-render-deploy
 pnpm launch:render-setup
 pnpm launch:database-setup
 pnpm launch:email-setup

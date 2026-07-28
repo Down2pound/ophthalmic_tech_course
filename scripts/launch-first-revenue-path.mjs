@@ -37,6 +37,7 @@ const lines = [
   "```bash",
   "pnpm launch:env-template",
   "pnpm launch:external-setup",
+  "pnpm launch:first-render-deploy",
   "pnpm launch:render-setup",
   "pnpm launch:database-setup",
   "pnpm launch:email-setup",
