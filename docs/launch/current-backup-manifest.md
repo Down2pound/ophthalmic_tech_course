@@ -24,7 +24,7 @@ branch.
 Use the newest matching pair with the same date and commit hash:
 
 ```text
-optitech-academy-source-YYYY-MM-DD-COMMIT.zip
+optitech-academy-source-YYYY-MM-DD-COMMIT-tracked.zip
 optitech-academy-branch-YYYY-MM-DD-COMMIT.bundle
 optitech-academy-launch-evidence-YYYY-MM-DD-COMMIT.zip
 optitech-academy-static-first-sale-page-YYYY-MM-DD-COMMIT.zip
@@ -33,29 +33,29 @@ optitech-academy-static-first-sale-page-YYYY-MM-DD-COMMIT.zip
 Example:
 
 ```text
-optitech-academy-source-2026-07-28-1439-297f107.zip
-optitech-academy-branch-2026-07-28-1439-297f107.bundle
-optitech-academy-launch-evidence-2026-07-28-1439-297f107.zip
-optitech-academy-static-first-sale-page-2026-07-28-1439-297f107.zip
+optitech-academy-source-2026-07-28-8c4db9f-tracked.zip
+optitech-academy-branch-2026-07-28-8c4db9f.bundle
+optitech-academy-launch-evidence-2026-07-28-8c4db9f.zip
+optitech-academy-static-first-sale-page-2026-07-28-8c4db9f.zip
 ```
 
 ## Latest Confirmed Backup
 
-Latest confirmed full source backup point:
+Latest confirmed backup point:
 
-- Commit: `297f107`
-- Source code ZIP:
-  `https://drive.google.com/file/d/1G_p-LqNY4u61EEJ9CTmNr6TOQ06Qq5jo/view?usp=drivesdk`
+- Commit: `8c4db9f`
+- Source code ZIP, tracked repo files only:
+  `https://drive.google.com/file/d/1zGkdD-DFGMXQVuuGEIxybiyvRLbYaW4W/view?usp=drivesdk`
 - Git branch bundle:
-  `https://drive.google.com/file/d/1twbKTxrgr2q1HFpVTKtcrat6-L-V4Ntm/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1O-GVJzZdIMDb65Y855fQKu4770MjuCDP/view?usp=drivesdk`
 - Launch evidence ZIP:
-  `https://drive.google.com/file/d/1XpcjafFoFLrfuJSt_jZvp27KpSsBz34k/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1QRR6vPURXMptFaqqMIL1SzSiZorYCdQ7/view?usp=drivesdk`
 - Static first-sale page ZIP:
-  `https://drive.google.com/file/d/1peAeeT-MZOT8MHUy648epgbnlDh7Ya0M/view?usp=drivesdk`
+  `https://drive.google.com/file/d/15-uFch0XtISip5Ns7bOTpoj10iYlrOWH/view?usp=drivesdk`
 
-If this manifest has a newer GitHub commit than the listed backup commit, that
-newer commit is usually only backup bookkeeping. For full restore, use the
-newest matching source ZIP and Git bundle in the Drive folder.
+The source ZIP was created from Git-tracked files only so it stays small enough
+for Google Drive upload. It does not include installed packages such as
+`node_modules`; run `pnpm install` after restoring on a home PC.
 
 Use the newest matching ZIP and bundle pair in the Google Drive folder. The
 date and short commit hash should match in both filenames.
