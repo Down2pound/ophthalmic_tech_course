@@ -3,6 +3,7 @@ export interface ExternalSetupStep {
   title: string;
   accountOrTool: string;
   whyItMatters: string;
+  openFirst: string[];
   valuesToSetInRender: string[];
   proofToSave: string[];
   safeCommand: string;
@@ -15,6 +16,10 @@ export const externalSetupSteps: ExternalSetupStep[] = [
     accountOrTool: "GitHub",
     whyItMatters:
       "Render deploys from GitHub, so the newest course store code has to be backed up there before hosting.",
+    openFirst: [
+      "https://github.com/Down2pound/ophthalmic_tech_course/tree/codex/optitech-product-spec",
+      "https://github.com/Down2pound/ophthalmic_tech_course/pull/10",
+    ],
     valuesToSetInRender: [],
     proofToSave: [
       "GitHub branch contains the post-07/16 work.",
@@ -28,6 +33,11 @@ export const externalSetupSteps: ExternalSetupStep[] = [
     accountOrTool: "Render",
     whyItMatters:
       "This puts the app online and gives it a managed PostgreSQL database for purchases, sign-ins, progress, and practice seats.",
+    openFirst: [
+      "https://dashboard.render.com/",
+      "docs/launch/render-deployment-guide.md",
+      "docs/launch/online-start-guide.md",
+    ],
     valuesToSetInRender: [
       "PUBLIC_APP_URL",
       "DATABASE_URL",
@@ -47,6 +57,11 @@ export const externalSetupSteps: ExternalSetupStep[] = [
     accountOrTool: "Stripe",
     whyItMatters:
       "Stripe is the cash register. Checkout collects payment, and the webhook tells the app who should receive access.",
+    openFirst: [
+      "https://dashboard.stripe.com/test/dashboard",
+      "https://dashboard.stripe.com/test/webhooks",
+      "docs/launch/stripe-setup-guide.md",
+    ],
     valuesToSetInRender: ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
     proofToSave: [
       "Webhook endpoint is set to /api/stripe/webhook.",
@@ -61,6 +76,11 @@ export const externalSetupSteps: ExternalSetupStep[] = [
     accountOrTool: "Resend or another transactional email provider",
     whyItMatters:
       "Buyers need email to receive sign-in links and purchase welcome messages.",
+    openFirst: [
+      "https://resend.com/domains",
+      "https://resend.com/api-keys",
+      "docs/launch/email-setup-guide.md",
+    ],
     valuesToSetInRender: [
       "TRANSACTIONAL_EMAIL_API_URL",
       "TRANSACTIONAL_EMAIL_API_KEY",
@@ -80,6 +100,11 @@ export const externalSetupSteps: ExternalSetupStep[] = [
     accountOrTool: "Render environment variables",
     whyItMatters:
       "Practice seat assignment and alert administration need private tokens before the app is public.",
+    openFirst: [
+      "https://dashboard.render.com/",
+      "docs/launch/production-env-checklist.md",
+      "docs/launch/go-live-checklist.md",
+    ],
     valuesToSetInRender: ["PRACTICE_SEAT_ADMIN_TOKEN", "ALERT_ADMIN_TOKEN"],
     proofToSave: [
       "Private tokens are generated and stored only in Render.",
@@ -94,6 +119,11 @@ export const externalSetupSteps: ExternalSetupStep[] = [
     accountOrTool: "Clinical reviewer plus Render environment variables",
     whyItMatters:
       "Paid clinical education should not open until the reviewed content version is documented.",
+    openFirst: [
+      "docs/launch/module-1-clinical-review-packet.md",
+      "docs/launch/clinical-review-guide.md",
+      "docs/launch/spindel-onboarding-checklist.md",
+    ],
     valuesToSetInRender: [
       "MODULE_ONE_CLINICAL_REVIEWER_NAME",
       "MODULE_ONE_CLINICAL_REVIEWER_ROLE",
@@ -115,6 +145,11 @@ export const externalSetupSteps: ExternalSetupStep[] = [
     accountOrTool: "Stripe, Render, and the deployed app",
     whyItMatters:
       "The first real buyer should prove payment, webhook access, sign-in, and learning flow before broad outreach.",
+    openFirst: [
+      "https://dashboard.stripe.com/payments",
+      "docs/launch/first-buyer-fulfillment-checklist.md",
+      "docs/launch/revenue-and-sales-tracker-template.md",
+    ],
     valuesToSetInRender: ["ENABLE_PAID_ENROLLMENT"],
     proofToSave: [
       "Live checkout completed with a low-risk internal buyer.",
@@ -149,6 +184,10 @@ export function renderExternalSetupWorksheet(): string {
       `Account or tool: ${step.accountOrTool}`,
       "",
       step.whyItMatters,
+      "",
+      "Open first:",
+      "",
+      ...renderChecklist(step.openFirst, "No outside tab required for this step."),
       "",
       "Render values involved:",
       "",

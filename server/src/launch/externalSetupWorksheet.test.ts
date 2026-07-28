@@ -24,6 +24,14 @@ describe("externalSetupWorksheet", () => {
     expect(worksheet).toContain("Render");
     expect(worksheet).toContain("Stripe");
     expect(worksheet).toContain("Resend");
+    expect(worksheet).toContain("Open first");
+    expect(worksheet).toContain("https://dashboard.render.com/");
+    expect(worksheet).toContain("https://dashboard.stripe.com/test/webhooks");
+    expect(worksheet).toContain("https://resend.com/api-keys");
+    expect(worksheet).toContain("docs/launch/render-deployment-guide.md");
+    expect(worksheet).toContain(
+      "docs/launch/first-buyer-fulfillment-checklist.md"
+    );
     expect(worksheet).toContain("Proof to save");
     expect(worksheet).toContain("ENABLE_PAID_ENROLLMENT=true");
     expect(worksheet).toContain("pnpm launch:go-no-go");
