@@ -45,6 +45,8 @@ const lines = [
   "pnpm launch:clinical-review",
   "```",
   "",
+  "`pnpm launch:external-setup` prints the dashboard and document links to open first for GitHub, Render, Stripe, Resend/email, admin tokens, clinical review, and the first live purchase.",
+  "",
   "Set real secret values only inside the production host dashboard, not in GitHub, Codex, Google Drive, or notes.",
   "",
   "## 4. Keep Paid Enrollment Closed For The First Deploy",

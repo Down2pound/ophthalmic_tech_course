@@ -162,6 +162,28 @@ describe("deployment files", () => {
     expect(backupScript).not.toContain("execSync");
   });
 
+  it("keeps the first-revenue path tied to outside dashboard setup", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const firstRevenueScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-revenue-path.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:first-revenue": "node scripts/launch-first-revenue-path.mjs"'
+    );
+    expect(firstRevenueScript).toContain("pnpm launch:external-setup");
+    expect(firstRevenueScript).toContain("dashboard and document links");
+    expect(firstRevenueScript).toContain("Render, Stripe, Resend/email");
+    expect(firstRevenueScript).toContain("pnpm launch:live-purchase-test");
+    expect(firstRevenueScript).not.toContain("execSync");
+    expect(firstRevenueScript).not.toContain("sk_test_");
+    expect(firstRevenueScript).not.toContain("whsec_");
+  });
+
   it("keeps a work-computer-safe deployment audit command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
