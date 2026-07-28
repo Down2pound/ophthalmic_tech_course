@@ -184,6 +184,43 @@ describe("deployment files", () => {
     expect(firstRevenueScript).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe external setup worksheet command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const externalSetupScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-external-setup.mjs"),
+      "utf8"
+    );
+    const externalSetupWorksheet = await readFile(
+      path.resolve(process.cwd(), "docs/launch/external-setup-worksheet.md"),
+      "utf8"
+    );
+    const readme = await readFile(path.resolve(process.cwd(), "README.md"), "utf8");
+
+    expect(packageJson).toContain(
+      '"launch:external-setup": "node scripts/launch-external-setup.mjs"'
+    );
+    expect(packageJson).not.toContain(
+      '"launch:external-setup": "tsx server/src/launch/runExternalSetupWorksheet.ts"'
+    );
+    expect(externalSetupScript).toContain("external-setup-worksheet.md");
+    expect(externalSetupScript).not.toContain("execSync");
+    expect(readme).toContain("pnpm launch:external-setup");
+    expect(externalSetupWorksheet).toContain(
+      "OptiTech Academy External Setup Worksheet"
+    );
+    expect(externalSetupWorksheet).toContain("Create the Render web service");
+    expect(externalSetupWorksheet).toContain("Connect Stripe checkout and webhook");
+    expect(externalSetupWorksheet).toContain("Connect passwordless sign-in email");
+    expect(externalSetupWorksheet).toContain("Record Module 1 clinical review signoff");
+    expect(externalSetupWorksheet).toContain("Run one controlled live purchase");
+    expect(externalSetupWorksheet).toContain("pnpm launch:clinical-review-request");
+    expect(externalSetupWorksheet).not.toContain("sk_test_");
+    expect(externalSetupWorksheet).not.toContain("whsec_");
+  });
+
   it("keeps a work-computer-safe deployment audit command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

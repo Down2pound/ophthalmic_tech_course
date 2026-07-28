@@ -25,7 +25,7 @@
     "launch:email-setup": "node scripts/launch-email-setup.mjs",
     "launch:emergency-stop": "node scripts/launch-emergency-stop.mjs",
     "launch:env-template": "node scripts/launch-env-template.mjs",
-    "launch:external-setup": "tsx server/src/launch/runExternalSetupWorksheet.ts",
+    "launch:external-setup": "node scripts/launch-external-setup.mjs",
     "launch:first-10-customers": "node scripts/launch-first-10-customers.mjs",
     "launch:first-buyer": "node scripts/launch-first-buyer-command-center.mjs",
     "launch:first-render-deploy": "node scripts/launch-first-render-deploy.mjs",

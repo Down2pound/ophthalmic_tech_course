@@ -55,6 +55,7 @@ revenue.
 ```bash
 pnpm launch:jeffmini
 pnpm launch:online-start
+pnpm launch:external-setup
 pnpm launch:first-render-deploy
 pnpm launch:clinical-review-request
 pnpm launch:first-buyer
@@ -71,6 +72,9 @@ pnpm launch:blockers
   Google Drive as the backup drawer.
 - `launch:online-start` prints the first-hour path for deploying the site with
   checkout safely closed.
+- `launch:external-setup` prints the outside-account worksheet for GitHub,
+  Render, Stripe, email, admin protection, clinical review, and live purchase
+  proof.
 - `launch:first-render-deploy` prints the short Render deploy evidence card
   with preflight proof, closed-checkout settings, and first live URL checks.
 - `launch:clinical-review-request` prints a ready-to-send Module 1 reviewer

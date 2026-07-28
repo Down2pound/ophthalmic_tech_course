@@ -36,6 +36,7 @@ function renderReadme({
     "- `deployment-guide.md`: beginner-friendly production setup recipe.",
     "- `render-deployment-guide.md`: Render Blueprint setup recipe.",
     "- `first-render-deploy-evidence.md`: concise preflight proof and first Render deploy checks.",
+    "- `external-setup-worksheet.md`: outside-account setup worksheet for GitHub, Render, Stripe, email, admin tokens, clinical review, and live purchase proof.",
     "- `online-start-guide.md`: first-hour path from restored code to deployed closed checkout.",
     "- `jeffmini-resume-guide.md`: home-PC restore and launch sequence for jeffmini.",
     "- `deployment-cutover-checklist.md`: short first-deploy to paid-launch cutover sequence.",
@@ -102,6 +103,7 @@ export async function createLaunchEvidenceBundle({
     "deployment-guide.md",
     "render-deployment-guide.md",
     "first-render-deploy-evidence.md",
+    "external-setup-worksheet.md",
     "online-start-guide.md",
     "jeffmini-resume-guide.md",
     "deployment-cutover-checklist.md",
@@ -149,6 +151,10 @@ export async function createLaunchEvidenceBundle({
   );
   const firstRenderDeployEvidence = await readFile(
     path.resolve(projectRoot, "docs/launch/first-render-deploy-evidence.md"),
+    "utf8"
+  );
+  const externalSetupWorksheet = await readFile(
+    path.resolve(projectRoot, "docs/launch/external-setup-worksheet.md"),
     "utf8"
   );
   const onlineStartGuide = await readFile(
@@ -305,6 +311,10 @@ export async function createLaunchEvidenceBundle({
   await writeFile(
     path.join(resolvedOutputDir, "first-render-deploy-evidence.md"),
     firstRenderDeployEvidence
+  );
+  await writeFile(
+    path.join(resolvedOutputDir, "external-setup-worksheet.md"),
+    externalSetupWorksheet
   );
   await writeFile(
     path.join(resolvedOutputDir, "online-start-guide.md"),

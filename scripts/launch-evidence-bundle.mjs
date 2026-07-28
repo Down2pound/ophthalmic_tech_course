@@ -32,6 +32,11 @@ const evidenceFiles = [
     description: "concise preflight proof and first Render deploy checks.",
   },
   {
+    source: "docs/launch/external-setup-worksheet.md",
+    target: "external-setup-worksheet.md",
+    description: "outside-account setup worksheet for GitHub, Render, Stripe, email, admin tokens, clinical review, and live purchase proof.",
+  },
+  {
     source: "docs/launch/online-start-guide.md",
     target: "online-start-guide.md",
     description: "first-hour path from restored code to deployed closed checkout.",

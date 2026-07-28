@@ -117,6 +117,7 @@ describe("createLaunchEvidenceBundle", () => {
       "deployment-guide.md",
       "render-deployment-guide.md",
       "first-render-deploy-evidence.md",
+      "external-setup-worksheet.md",
       "online-start-guide.md",
       "jeffmini-resume-guide.md",
       "deployment-cutover-checklist.md",
@@ -172,6 +173,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const firstRenderDeployEvidence = await readFile(
       path.join(result.outputDir, "first-render-deploy-evidence.md"),
+      "utf8"
+    );
+    const externalSetupWorksheet = await readFile(
+      path.join(result.outputDir, "external-setup-worksheet.md"),
       "utf8"
     );
     const onlineStartGuide = await readFile(
@@ -320,6 +325,13 @@ describe("createLaunchEvidenceBundle", () => {
     );
     expect(firstRenderDeployEvidence).not.toContain("sk_test_");
     expect(firstRenderDeployEvidence).not.toContain("whsec_");
+    expect(externalSetupWorksheet).toContain(
+      "OptiTech Academy External Setup Worksheet"
+    );
+    expect(externalSetupWorksheet).toContain("Connect Stripe checkout and webhook");
+    expect(externalSetupWorksheet).toContain("pnpm launch:clinical-review-request");
+    expect(externalSetupWorksheet).not.toContain("sk_test_");
+    expect(externalSetupWorksheet).not.toContain("whsec_");
     expect(onlineStartGuide).toContain("OptiTech Academy Online Start Guide");
     expect(onlineStartGuide).toContain("pnpm launch:first-buyer");
     expect(onlineStartGuide).toContain("pnpm launch:fulfillment");
