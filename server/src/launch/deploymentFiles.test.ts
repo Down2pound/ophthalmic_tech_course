@@ -132,6 +132,42 @@ describe("deployment files", () => {
     expect(workflow).toContain("actions/upload-artifact@v4");
   });
 
+  it("keeps production database setup runnable without tsx", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const dbSetupScript = await readFile(
+      path.resolve(process.cwd(), "scripts/db-setup.mjs"),
+      "utf8"
+    );
+    const renderBlueprint = await readFile(
+      path.resolve(process.cwd(), "render.yaml"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"db:setup": "node scripts/db-setup.mjs"'
+    );
+    expect(packageJson).not.toContain(
+      '"db:setup": "tsx server/src/db/runSetup.ts"'
+    );
+    expect(renderBlueprint).toContain("preDeployCommand: pnpm db:setup");
+    expect(dbSetupScript).toContain("DATABASE_URL is required");
+    expect(dbSetupScript).toContain("CREATE TABLE IF NOT EXISTS commerce_purchases");
+    expect(dbSetupScript).toContain("CREATE TABLE IF NOT EXISTS auth_sessions");
+    expect(dbSetupScript).toContain(
+      "CREATE TABLE IF NOT EXISTS learning_lesson_completions"
+    );
+    expect(dbSetupScript).toContain(
+      "CREATE TABLE IF NOT EXISTS assessment_attempts"
+    );
+    expect(dbSetupScript).toContain("Launch database setup complete.");
+    expect(dbSetupScript).not.toContain("execSync");
+    expect(dbSetupScript).not.toContain("sk_test_");
+    expect(dbSetupScript).not.toContain("whsec_");
+  });
+
   it("keeps the backup handoff command runnable without tsx", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

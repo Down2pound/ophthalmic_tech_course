@@ -11,7 +11,7 @@
     "check": "tsc --noEmit",
     "test": "vitest run --root .",
     "test:watch": "vitest --root .",
-    "db:setup": "tsx server/src/db/runSetup.ts",
+    "db:setup": "node scripts/db-setup.mjs",
     "launch:smoke": "tsx server/src/launch/runDeploymentSmokeTest.ts",
     "launch:doctor": "tsx server/src/launch/runLaunchDoctor.ts",
     "launch:admin-tokens": "node scripts/launch-admin-tokens.mjs",
