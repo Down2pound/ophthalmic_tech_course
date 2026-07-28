@@ -56,6 +56,7 @@ revenue.
 pnpm launch:jeffmini
 pnpm launch:online-start
 pnpm launch:first-render-deploy
+pnpm launch:clinical-review-request
 pnpm launch:first-buyer
 pnpm launch:fulfillment
 pnpm launch:first-revenue
@@ -72,6 +73,8 @@ pnpm launch:blockers
   checkout safely closed.
 - `launch:first-render-deploy` prints the short Render deploy evidence card
   with preflight proof, closed-checkout settings, and first live URL checks.
+- `launch:clinical-review-request` prints a ready-to-send Module 1 reviewer
+  request so clinical signoff can move before paid launch.
 - `launch:first-buyer` prints the first-buyer control panel with safe links,
   starter messages, and pause rules.
 - `launch:fulfillment` prints the first paid buyer receipt, access, welcome,

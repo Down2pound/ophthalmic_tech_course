@@ -307,8 +307,14 @@ describe("deployment files", () => {
     expect(packageJson).toContain(
       '"launch:clinical-review": "node scripts/launch-clinical-review.mjs"'
     );
+    expect(packageJson).toContain(
+      '"launch:clinical-review-request": "node scripts/launch-clinical-review-request.mjs"'
+    );
     expect(clinicalReviewScript).toContain(
       "OptiTech Academy Clinical Review Checklist"
+    );
+    expect(clinicalReviewScript).toContain(
+      "pnpm launch:clinical-review-request"
     );
     expect(clinicalReviewScript).toContain(
       "MODULE_ONE_CLINICAL_REVIEW_APPROVED=false"
@@ -319,6 +325,33 @@ describe("deployment files", () => {
     expect(clinicalReviewScript).not.toContain("execSync");
     expect(clinicalReviewScript).not.toContain("sk_test_");
     expect(clinicalReviewScript).not.toContain("whsec_");
+  });
+
+  it("keeps a work-computer-safe clinical review request command available", async () => {
+    const requestScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-clinical-review-request.mjs"),
+      "utf8"
+    );
+    const requestTemplate = await readFile(
+      path.resolve(process.cwd(), "docs/launch/clinical-review-request-template.md"),
+      "utf8"
+    );
+    const clinicalGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/clinical-review-guide.md"),
+      "utf8"
+    );
+
+    expect(requestScript).toContain("clinical-review-request-template.md");
+    expect(requestScript).not.toContain("execSync");
+    expect(clinicalGuide).toContain("pnpm launch:clinical-review-request");
+    expect(requestTemplate).toContain(
+      "OptiTech Academy Clinical Review Request Template"
+    );
+    expect(requestTemplate).toContain("Approved as written");
+    expect(requestTemplate).toContain("Not approved yet");
+    expect(requestTemplate).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED=true");
+    expect(requestTemplate).not.toContain("sk_test_");
+    expect(requestTemplate).not.toContain("whsec_");
   });
 
   it("keeps a work-computer-safe first-sales link packet command available", async () => {

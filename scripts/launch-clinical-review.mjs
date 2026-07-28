@@ -11,6 +11,7 @@ const lines = [
   "- Live packet after deployment: `/api/launch/clinical-review-packet.md`",
   "- Launch evidence file: `module-1-clinical-review-packet.md`",
   "- Guide: `docs/launch/clinical-review-guide.md`",
+  "- Reviewer request: run `pnpm launch:clinical-review-request`",
   "",
   "The reviewer should check lesson outcomes, lesson body, clinic context, patient-friendly script, scenario, common mistakes, scope note, sources, and review questions.",
   "",

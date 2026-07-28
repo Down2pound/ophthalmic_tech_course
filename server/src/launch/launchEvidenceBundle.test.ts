@@ -137,6 +137,7 @@ describe("createLaunchEvidenceBundle", () => {
       "email-setup-guide.md",
       "database-setup-guide.md",
       "clinical-review-guide.md",
+      "clinical-review-request-template.md",
       "go-live-checklist.md",
       "production-env-checklist.md",
       "launch-doctor-report.md",
@@ -251,6 +252,10 @@ describe("createLaunchEvidenceBundle", () => {
     );
     const clinicalReviewGuide = await readFile(
       path.join(result.outputDir, "clinical-review-guide.md"),
+      "utf8"
+    );
+    const clinicalReviewRequestTemplate = await readFile(
+      path.join(result.outputDir, "clinical-review-request-template.md"),
       "utf8"
     );
     const goLiveChecklist = await readFile(
@@ -533,6 +538,13 @@ describe("createLaunchEvidenceBundle", () => {
     expect(clinicalReviewGuide).toContain(
       "MODULE_ONE_CLINICAL_REVIEW_APPROVED=true"
     );
+    expect(clinicalReviewRequestTemplate).toContain(
+      "OptiTech Academy Clinical Review Request Template"
+    );
+    expect(clinicalReviewRequestTemplate).toContain("Approved as written");
+    expect(clinicalReviewRequestTemplate).toContain("Not approved yet");
+    expect(clinicalReviewRequestTemplate).not.toContain("sk_test_");
+    expect(clinicalReviewRequestTemplate).not.toContain("whsec_");
     expect(goLiveChecklist).toContain("OptiTech Academy Go-Live Checklist");
     expect(goLiveChecklist).toContain("ENABLE_PAID_ENROLLMENT=true");
     expect(goLiveChecklist).toContain("/api/checkout/availability");

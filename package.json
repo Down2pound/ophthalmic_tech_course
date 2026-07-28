@@ -18,6 +18,7 @@
     "launch:blockers": "node scripts/launch-blockers-summary.mjs",
     "launch:bootcamp-intake": "node scripts/launch-bootcamp-intake.mjs",
     "launch:clinical-review": "node scripts/launch-clinical-review.mjs",
+    "launch:clinical-review-request": "node scripts/launch-clinical-review-request.mjs",
     "launch:control": "node scripts/launch-control-checklist.mjs",
     "launch:database-setup": "node scripts/launch-database-setup.mjs",
     "launch:deployment-audit": "node scripts/launch-deployment-audit.mjs",

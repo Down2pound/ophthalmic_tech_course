@@ -132,6 +132,11 @@ const evidenceFiles = [
     description: "Module 1 review and signoff recipe.",
   },
   {
+    source: "docs/launch/clinical-review-request-template.md",
+    target: "clinical-review-request-template.md",
+    description: "ready-to-send request for a qualified Module 1 reviewer.",
+  },
+  {
     source: "docs/launch/go-live-checklist.md",
     target: "go-live-checklist.md",
     description: "final launch-day sequence.",

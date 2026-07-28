@@ -12,6 +12,15 @@ Download or generate the Module 1 review packet:
 docs/launch/module-1-clinical-review-packet.md
 ```
 
+Print a ready-to-send reviewer request with:
+
+```bash
+pnpm launch:clinical-review-request
+```
+
+Beginner translation: this gives you the message to send to the doctor,
+optometrist, senior tech, trainer, or other qualified reviewer.
+
 After deployment, the same packet is also available at:
 
 ```text
