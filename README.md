@@ -79,6 +79,14 @@ pnpm launch:blockers
 Use `docs/launch/current-backup-manifest.md` and the newest matching ZIP and
 bundle pair in the Drive backup folder to identify the latest safe handoff.
 
+## Deploy To Render
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2FDown2pound%2Fophthalmic_tech_course%2Ftree%2Fcodex%2Foptitech-product-spec)
+
+This button opens Render with the `codex/optitech-product-spec` branch selected.
+Keep `ENABLE_PAID_ENROLLMENT=false` for the first deploy, then follow
+`docs/launch/render-deployment-guide.md` before accepting real buyers.
+
 ---
 
 ## Project Structure

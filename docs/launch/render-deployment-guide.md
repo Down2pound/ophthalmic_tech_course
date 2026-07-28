@@ -21,6 +21,15 @@ For the short copy/paste checklist, run:
 pnpm launch:render-setup
 ```
 
+Direct branch-specific Render deploy link:
+
+```text
+https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2FDown2pound%2Fophthalmic_tech_course%2Ftree%2Fcodex%2Foptitech-product-spec
+```
+
+This link points Render at the `codex/optitech-product-spec` branch. Beginner
+translation: it tells Render which copy of the project to put online.
+
 Before creating or updating the Blueprint, run:
 
 ```bash

@@ -511,6 +511,8 @@ describe("deployment files", () => {
     );
     expect(renderSetupScript).toContain("render.yaml");
     expect(renderSetupScript).toContain("optitech-academy");
+    expect(renderSetupScript).toContain("https://render.com/deploy?repo=");
+    expect(renderSetupScript).toContain("codex%2Foptitech-product-spec");
     expect(renderSetupScript).toContain("pnpm build");
     expect(renderSetupScript).toContain("pnpm db:setup");
     expect(renderSetupScript).toContain("node dist/index.js");
@@ -535,6 +537,10 @@ describe("deployment files", () => {
     expect(onlineStartGuide).toContain(
       "https://your-real-domain.example/first-sale"
     );
+    expect(onlineStartGuide).toContain("https://render.com/deploy?repo=");
+    expect(onlineStartGuide).toContain("codex%2Foptitech-product-spec");
+    expect(renderDeploymentGuide).toContain("https://render.com/deploy?repo=");
+    expect(renderDeploymentGuide).toContain("codex%2Foptitech-product-spec");
     expect(renderDeploymentGuide).toContain(
       "https://your-render-or-custom-domain.example/first-sale"
     );

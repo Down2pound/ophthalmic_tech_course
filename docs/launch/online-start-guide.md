@@ -60,8 +60,9 @@ password manager.
 ## 4. Deploy The Closed Store
 
 1. Open Render or your chosen host.
-2. Create a Blueprint or web service from the GitHub repo.
-3. Select branch `codex/optitech-product-spec`.
+2. Use the branch-specific Render deploy link:
+   `https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2FDown2pound%2Fophthalmic_tech_course%2Ftree%2Fcodex%2Foptitech-product-spec`
+3. Review the Blueprint or web service from the GitHub repo.
 4. Let the host read `render.yaml`.
 5. Add the required environment values from `pnpm launch:env-template`.
 6. Deploy with paid enrollment still closed.
