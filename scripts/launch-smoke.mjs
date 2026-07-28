@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 const publicPaths = [
   "/",
@@ -141,7 +142,7 @@ async function submitLearnerInterest(baseUrl) {
   };
 }
 
-async function runSmokeTest({
+export async function runSmokeTest({
   baseUrl,
   testPracticeInquiry,
   testLearnerInterest,
@@ -207,7 +208,7 @@ async function runSmokeTest({
   };
 }
 
-function getExitCode(report, { allowNotReady }) {
+export function getExitCode(report, { allowNotReady }) {
   if (
     !report.healthOk ||
     !report.publicPagesOk ||
@@ -229,7 +230,7 @@ function renderList(items, emptyText) {
   return items.map(item => `- ${item}`);
 }
 
-function renderReport(report) {
+export function renderReport(report) {
   return [
     "# OptiTech Academy Deployment Smoke Test",
     "",
@@ -340,7 +341,7 @@ function renderReport(report) {
   ].join("\n");
 }
 
-function renderConsoleSummary({ report, allowNotReady }) {
+export function renderConsoleSummary({ report, allowNotReady }) {
   const lines = [
     `Deployment smoke test for ${report.baseUrl}`,
     `- Health: ${report.healthOk ? "ok" : "failed"}`,
@@ -443,9 +444,11 @@ async function main() {
   process.exitCode = getExitCode(report, { allowNotReady });
 }
 
-main().catch(error => {
-  const message =
-    error instanceof Error ? error.message : "Deployment smoke test failed.";
-  console.error(message);
-  process.exitCode = 1;
-});
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch(error => {
+    const message =
+      error instanceof Error ? error.message : "Deployment smoke test failed.";
+    console.error(message);
+    process.exitCode = 1;
+  });
+}

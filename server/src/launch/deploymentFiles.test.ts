@@ -198,6 +198,31 @@ describe("deployment files", () => {
     expect(smokeScript).not.toContain("whsec_");
   });
 
+  it("keeps the launch go/no-go report runnable without tsx", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const goNoGoScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-go-no-go.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:go-no-go": "node scripts/launch-go-no-go.mjs"'
+    );
+    expect(packageJson).not.toContain(
+      '"launch:go-no-go": "tsx server/src/launch/runLaunchGoNoGo.ts"'
+    );
+    expect(goNoGoScript).toContain("Launch Go/No-Go Report");
+    expect(goNoGoScript).toContain("runSmokeTest");
+    expect(goNoGoScript).toContain("Paid checkout links");
+    expect(goNoGoScript).toContain("Safe Outreach Rule");
+    expect(goNoGoScript).not.toContain("execSync");
+    expect(goNoGoScript).not.toContain("sk_test_");
+    expect(goNoGoScript).not.toContain("whsec_");
+  });
+
   it("keeps the backup handoff command runnable without tsx", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
