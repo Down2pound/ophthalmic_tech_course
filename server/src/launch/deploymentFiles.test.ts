@@ -484,6 +484,28 @@ describe("deployment files", () => {
     expect(renderSetupScript).not.toContain("whsec_");
   });
 
+  it("keeps the owner go/no-go report aligned with the first-buyer front door", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const ownerGoNoGoScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-owner-go-no-go.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:owner-go-no-go": "node scripts/launch-owner-go-no-go.mjs"'
+    );
+    expect(ownerGoNoGoScript).toContain("/first-sale");
+    expect(ownerGoNoGoScript).toContain("First buyer overview");
+    expect(ownerGoNoGoScript).toContain("/api/launch/readiness");
+    expect(ownerGoNoGoScript).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(ownerGoNoGoScript).not.toContain("execSync");
+    expect(ownerGoNoGoScript).not.toContain("sk_test_");
+    expect(ownerGoNoGoScript).not.toContain("whsec_");
+  });
+
   it("keeps a work-computer-safe live purchase rehearsal command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

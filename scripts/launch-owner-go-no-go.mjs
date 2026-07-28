@@ -2,6 +2,7 @@
 
 const publicPaths = [
   "/",
+  "/first-sale",
   "/preview",
   "/buyer-guide",
   "/checkout",
@@ -156,6 +157,7 @@ function renderShareableLinks({ baseUrl, decision }) {
     "",
     "Public preview links:",
     "",
+    formatLink("First buyer overview", `${baseUrl}/first-sale`, previewStatus),
     formatLink("Preview", `${baseUrl}/preview`, previewStatus),
     formatLink("Curriculum", `${baseUrl}/curriculum`, previewStatus),
     formatLink("Buyer guide", `${baseUrl}/buyer-guide`, previewStatus),
