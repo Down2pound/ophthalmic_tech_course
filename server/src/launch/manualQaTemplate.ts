@@ -216,10 +216,23 @@ export function renderManualQaTemplate({
       "Production database setup completed with `pnpm db:setup`"
     ),
     renderChecklistItem("Production host environment variables are configured"),
+    renderChecklistItem("Production build passed with `pnpm build`"),
     renderChecklistItem("`/api/health` returns ok"),
     renderChecklistItem(
       "`/api/launch/readiness` shows the expected launch status"
     ),
+    "",
+    "### Production Build Proof",
+    "",
+    "Why it matters: Render runs the same production build before the online app can start.",
+    "",
+    "Command run:",
+    "",
+    "Result:",
+    "",
+    "Build environment:",
+    "",
+    "Notes:",
     "",
     ...manualQaActions.flatMap(renderEvidenceSection),
     ...renderPaidLaunchEvidencePrompts(),

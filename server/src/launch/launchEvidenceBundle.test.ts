@@ -359,7 +359,10 @@ describe("createLaunchEvidenceBundle", () => {
       "Links To Send When The Site Is Live"
     );
     expect(firstCustomersSalesPacket).toContain(
-      "Individual learners: https://your-real-domain.example/checkout"
+      "Individual learners: https://your-real-domain.example/first-sale"
+    );
+    expect(firstCustomersSalesPacket).toContain(
+      "Individual checkout or interest list: https://your-real-domain.example/checkout"
     );
     expect(firstCustomersSalesPacket).toContain(
       "Practice buyers: https://your-real-domain.example/practice-packs"
@@ -495,6 +498,11 @@ describe("createLaunchEvidenceBundle", () => {
     expect(manualQaEvidence).toContain(
       "Individual checkout success return URL:"
     );
+    expect(manualQaEvidence).toContain("Production Build Proof");
+    expect(manualQaEvidence).toContain(
+      "Production build passed with `pnpm build`"
+    );
+    expect(manualQaEvidence).toContain("Build environment:");
     expect(manualQaEvidence).toContain("Practice checkout success return URL:");
     expect(supportRunbook).toContain(
       "OptiTech Academy First Sale Support Runbook"

@@ -27,8 +27,22 @@ QA date:
 - [ ] Clinical review signoff is saved with launch records.
 - [ ] Production database setup completed with `pnpm db:setup`.
 - [ ] Production host environment variables are configured.
+- [ ] Production build passed with `pnpm build`.
 - [ ] `/api/health` returns ok.
 - [ ] `/api/launch/readiness` shows the expected launch status.
+
+### Production Build Proof
+
+Why it matters: Render runs the same production build before the online app can
+start.
+
+Command run:
+
+Result:
+
+Build environment:
+
+Notes:
 
 ## Stripe Checkout And Webhook Fulfillment
 

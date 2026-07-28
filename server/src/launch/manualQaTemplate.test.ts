@@ -41,6 +41,12 @@ describe("renderManualQaTemplate", () => {
     expect(template).toContain("Do not paste card numbers");
     expect(template).toContain("Deployment URL:");
     expect(template).toContain("Commit SHA:");
+    expect(template).toContain("Production build passed with `pnpm build`");
+    expect(template).toContain("Production Build Proof");
+    expect(template).toContain(
+      "Render runs the same production build before the online app can start"
+    );
+    expect(template).toContain("Build environment:");
     expect(template).not.toContain("sk_test_");
     expect(template).not.toContain("whsec_");
   });
