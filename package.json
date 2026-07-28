@@ -34,6 +34,7 @@
     "launch:first-week-sales": "tsx server/src/launch/runFirstWeekSalesPlan.ts",
     "launch:go-no-go": "tsx server/src/launch/runLaunchGoNoGo.ts",
     "launch:jeffmini": "node scripts/launch-jeffmini-resume.mjs",
+    "launch:live-url": "node scripts/launch-live-url-card.mjs",
     "launch:live-purchase-test": "node scripts/launch-live-purchase-test.mjs",
     "launch:manual-payment-links": "node scripts/launch-manual-payment-links.mjs",
     "launch:next": "tsx server/src/launch/runProductionSetupPlan.ts",

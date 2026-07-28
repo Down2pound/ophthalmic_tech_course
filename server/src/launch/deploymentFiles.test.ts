@@ -619,6 +619,44 @@ describe("deployment files", () => {
     expect(ownerGoNoGoScript).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe live URL command card available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const liveUrlScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-live-url-card.mjs"),
+      "utf8"
+    );
+    const readme = await readFile(path.resolve(process.cwd(), "README.md"), "utf8");
+    const domainGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/domain-and-sharing-guide.md"),
+      "utf8"
+    );
+    const renderGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/render-deployment-guide.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:live-url": "node scripts/launch-live-url-card.mjs"'
+    );
+    expect(readme).toContain("pnpm launch:live-url");
+    expect(domainGuide).toContain("pnpm launch:live-url");
+    expect(renderGuide).toContain("pnpm launch:live-url");
+    expect(liveUrlScript).toContain("OptiTech Academy Live URL Command Card");
+    expect(liveUrlScript).toContain("LAUNCH_SMOKE_ALLOW_NOT_READY");
+    expect(liveUrlScript).toContain("pnpm launch:sitemap");
+    expect(liveUrlScript).toContain("pnpm launch:owner-go-no-go");
+    expect(liveUrlScript).toContain("pnpm launch:first-sales");
+    expect(liveUrlScript).toContain("pnpm launch:emergency-stop");
+    expect(liveUrlScript).toContain("Do not use localhost");
+    expect(liveUrlScript).toContain("Replace the example URL");
+    expect(liveUrlScript).not.toContain("execSync");
+    expect(liveUrlScript).not.toContain("sk_test_");
+    expect(liveUrlScript).not.toContain("whsec_");
+  });
+
   it("keeps a work-computer-safe live purchase rehearsal command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

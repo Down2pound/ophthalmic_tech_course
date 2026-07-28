@@ -60,6 +60,7 @@ pnpm launch:first-buyer
 pnpm launch:fulfillment
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
+pnpm launch:live-url https://your-real-domain.example
 pnpm launch:bootcamp-intake
 pnpm launch:blockers
 ```
@@ -78,6 +79,8 @@ pnpm launch:blockers
   one controlled paid buyer.
 - `launch:emergency-stop` prints the red-button checklist for pausing paid
   checkout safely if a live launch issue appears.
+- `launch:live-url` turns the real Render or custom domain into the exact
+  smoke-test, sitemap, go/no-go, and first-buyer commands.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
 - `launch:blockers` prints the setup areas still preventing paid launch.

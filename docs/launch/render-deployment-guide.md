@@ -140,6 +140,12 @@ The setup is safe to rerun because it uses `CREATE TABLE IF NOT EXISTS`.
 
 ## After The First Deploy
 
+After Render gives you the live URL, print the URL-specific command card:
+
+```bash
+pnpm launch:live-url https://your-render-or-custom-domain.example
+```
+
 Open the deployed URL and check:
 
 ```text

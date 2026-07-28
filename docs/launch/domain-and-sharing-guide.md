@@ -37,6 +37,17 @@ Use the same URL everywhere:
 Avoid switching between several URLs. For example, do not send one buyer to a
 temporary host URL and another buyer to a custom domain unless you are testing.
 
+After you know the real Render or custom domain, print a ready-to-run command
+card with:
+
+```bash
+pnpm launch:live-url https://your-real-domain.example
+```
+
+Beginner translation: paste the live website address once, and the command card
+prints the health links, smoke test, sitemap, owner go/no-go, and first-buyer
+commands with that address filled in.
+
 ## Set The Host Environment Variable
 
 In the production host dashboard, set:
