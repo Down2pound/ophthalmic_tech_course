@@ -345,6 +345,10 @@ describe("deployment files", () => {
     expect(deploymentAuditScript).toContain("Dockerfile");
     expect(deploymentAuditScript).toContain("Procfile");
     expect(deploymentAuditScript).toContain("ENABLE_PAID_ENROLLMENT");
+    expect(deploymentAuditScript).toContain("ENABLE_LOCAL_COURSE_DEMO");
+    expect(deploymentAuditScript).toContain(
+      "Render does not enable local demo learner access"
+    );
     expect(deploymentAuditScript).toContain(
       "MODULE_ONE_CLINICAL_REVIEW_APPROVED"
     );

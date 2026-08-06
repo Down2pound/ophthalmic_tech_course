@@ -130,6 +130,12 @@ addCheck(
 );
 addCheck(
   checks,
+  "Render does not enable local demo learner access",
+  !source.render.includes("ENABLE_LOCAL_COURSE_DEMO"),
+  files.render
+);
+addCheck(
+  checks,
   "Render clinical approval starts closed",
   source.render.includes("key: MODULE_ONE_CLINICAL_REVIEW_APPROVED") &&
     source.render.includes('value: "false"'),
@@ -177,9 +183,12 @@ addCheck(
 addCheck(
   checks,
   "Render generates private admin/session values",
-  ["AUTH_SESSION_SECRET", "PRACTICE_SEAT_ADMIN_TOKEN", "ALERT_ADMIN_TOKEN"].every(
-    key => source.render.includes(`key: ${key}`)
-  ) && source.render.includes("generateValue: true"),
+  [
+    "AUTH_SESSION_SECRET",
+    "PRACTICE_SEAT_ADMIN_TOKEN",
+    "ALERT_ADMIN_TOKEN",
+  ].every(key => source.render.includes(`key: ${key}`)) &&
+    source.render.includes("generateValue: true"),
   files.render
 );
 addCheck(

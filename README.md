@@ -123,6 +123,8 @@ http://localhost:3000/api/dev/demo-learner/start?email=jeff.demo@example.com
 That link creates a temporary local-only learner session and redirects to
 `/learn`, where Module 1 can be reviewed like a signed-in student. It only works
 when the local demo flag is enabled and the request host is `localhost`.
+The deployment audit checks that `ENABLE_LOCAL_COURSE_DEMO` is not present in
+the live Render Blueprint.
 
 Public pages that do not need demo access:
 
