@@ -61,7 +61,7 @@
     "launch:sitemap": "node scripts/launch-sitemap.mjs",
     "launch:static-first-sale-page": "node scripts/launch-static-first-sale-page.mjs",
     "launch:bundle": "node scripts/launch-evidence-bundle.mjs",
-    "launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:bundle",
+    "launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:local-course-smoke && pnpm launch:bundle",
     "format": "prettier --write ."
   },
   "dependencies": {

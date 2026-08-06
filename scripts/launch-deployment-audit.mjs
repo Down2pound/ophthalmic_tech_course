@@ -199,9 +199,9 @@ addCheck(
 );
 addCheck(
   checks,
-  "Launch preflight includes offer audit",
+  "Launch preflight includes offer audit and local course smoke test",
   source.packageJson.includes(
-    "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:bundle"
+    "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:local-course-smoke && pnpm launch:bundle"
   ),
   files.packageJson
 );

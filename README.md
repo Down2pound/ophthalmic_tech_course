@@ -577,11 +577,13 @@ Or run the full local preflight before a launch candidate:
 pnpm launch:preflight
 ```
 
-The generated `launch-evidence/` folder is ignored by Git and should not
-contain `.env`, live secrets, raw tokens, cookies, database passwords, or Stripe
-secret keys. It includes the production launch package, clinical review packet,
-production environment checklist, launch doctor report, manual launch QA
-evidence template, and runtime readiness snapshot.
+The preflight also runs `pnpm launch:local-course-smoke`, so it proves the built
+local app can create a demo learner and open protected Module 1 lessons before
+you move on to paid setup. The generated `launch-evidence/` folder is ignored
+by Git and should not contain `.env`, live secrets, raw tokens, cookies,
+database passwords, or Stripe secret keys. It includes the production launch
+package, clinical review packet, production environment checklist, launch doctor
+report, manual launch QA evidence template, and runtime readiness snapshot.
 
 After the app is deployed, save the live readiness scoreboard:
 

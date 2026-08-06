@@ -111,7 +111,7 @@ describe("deployment files", () => {
     expect(renderBlueprint).not.toContain("whsec_");
   });
 
-  it("runs the launch secret scan in GitHub launch CI", async () => {
+  it("runs the launch secret scan and local course smoke check in GitHub launch CI", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
       "utf8"
@@ -125,7 +125,10 @@ describe("deployment files", () => {
       '"launch:secret-scan": "node scripts/launch-secret-scan.mjs"'
     );
     expect(packageJson).toContain(
-      '"launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:bundle"'
+      '"launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:local-course-smoke && pnpm launch:bundle"'
+    );
+    expect(packageJson).toContain(
+      '"launch:local-course-smoke": "node scripts/launch-local-course-smoke.mjs"'
     );
     expect(workflow).toContain("pnpm launch:preflight");
     expect(workflow).toContain("pnpm launch:secret-scan");
