@@ -5,6 +5,8 @@ import {
   fetchPracticeSeatPacks,
   lookupBuyerSupportProfile,
   revokeAccessTarget,
+  updateLearnerInterestStatus,
+  updatePracticeInquiryStatus,
 } from "./practiceSeatAdminClient";
 
 describe("fetchPracticeSeatPacks", () => {
@@ -148,6 +150,84 @@ describe("lookupBuyerSupportProfile", () => {
           "Content-Type": "application/json",
           "x-admin-token": "admin-token",
         },
+      }
+    );
+  });
+});
+
+describe("lead status updates", () => {
+  it("patches a protected practice inquiry status", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        inquiry: {
+          inquiryId: "practice_inquiry_123",
+          practiceName: "Example Eye Care",
+          status: "contacted",
+        },
+      }),
+    });
+
+    await expect(
+      updatePracticeInquiryStatus({
+        adminToken: "admin-token",
+        inquiryId: "practice_inquiry_123",
+        status: "contacted",
+        fetcher,
+      })
+    ).resolves.toMatchObject({
+      inquiry: {
+        inquiryId: "practice_inquiry_123",
+        status: "contacted",
+      },
+    });
+    expect(fetcher).toHaveBeenCalledWith(
+      "/api/support/practice-inquiries/practice_inquiry_123/status",
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-token": "admin-token",
+        },
+        body: JSON.stringify({ status: "contacted" }),
+      }
+    );
+  });
+
+  it("patches a protected learner interest status", async () => {
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        interest: {
+          interestId: "learner_interest_123",
+          learnerName: "Future Tech",
+          status: "closed",
+        },
+      }),
+    });
+
+    await expect(
+      updateLearnerInterestStatus({
+        adminToken: "admin-token",
+        interestId: "learner_interest_123",
+        status: "closed",
+        fetcher,
+      })
+    ).resolves.toMatchObject({
+      interest: {
+        interestId: "learner_interest_123",
+        status: "closed",
+      },
+    });
+    expect(fetcher).toHaveBeenCalledWith(
+      "/api/support/learner-interests/learner_interest_123/status",
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-token": "admin-token",
+        },
+        body: JSON.stringify({ status: "closed" }),
       }
     );
   });

@@ -29,6 +29,10 @@ export interface LearnerInterestStore {
   recordLearnerInterest(
     interest: LearnerInterestRecord
   ): LearnerInterestRecord | Promise<LearnerInterestRecord>;
+  updateLearnerInterestStatus(
+    interestId: string,
+    status: LearnerInterestStatus
+  ): LearnerInterestRecord | null | Promise<LearnerInterestRecord | null>;
   listLearnerInterests():
     | LearnerInterestRecord[]
     | Promise<LearnerInterestRecord[]>;
@@ -114,6 +118,19 @@ export function createInMemoryLearnerInterestStore(): LearnerInterestStore {
       interestsById.set(interest.interestId, interest);
       return interest;
     },
+    updateLearnerInterestStatus(interestId, status) {
+      const existing = interestsById.get(interestId);
+
+      if (!existing) return null;
+
+      const updated = {
+        ...existing,
+        status,
+      };
+      interestsById.set(interestId, updated);
+
+      return updated;
+    },
     listLearnerInterests() {
       return Array.from(interestsById.values()).sort((left, right) =>
         right.createdAt.localeCompare(left.createdAt)
@@ -147,6 +164,19 @@ export function createPostgresLearnerInterestStore(
       );
 
       return mapLearnerInterest(result.rows[0]);
+    },
+    async updateLearnerInterestStatus(interestId, status) {
+      const result = await db.query<LearnerInterestRow>(
+        `
+        UPDATE commerce_learner_interests
+        SET status = $2
+        WHERE id = $1
+        RETURNING *
+        `,
+        [interestId, status]
+      );
+
+      return result.rows[0] ? mapLearnerInterest(result.rows[0]) : null;
     },
     async listLearnerInterests() {
       const result = await db.query<LearnerInterestRow>(

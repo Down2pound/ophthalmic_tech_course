@@ -7,10 +7,13 @@ import {
   lookupBuyerSupportProfile,
   revokeAccessTarget,
   type BuyerSupportProfile,
+  type LeadStatus,
   type LearnerInterestSummary,
   type PracticeInquirySummary,
   type PracticeSeatAssignmentSummary,
   type PracticeSeatPackSummary,
+  updateLearnerInterestStatus,
+  updatePracticeInquiryStatus,
 } from "@/lib/practiceSeatAdminClient";
 import {
   fetchCheckoutAvailability,
@@ -266,6 +269,76 @@ export default function PracticeSeatAdmin() {
       filename: `optitech-buyer-support-${supportProfile.email}.csv`,
       csv: buildBuyerSupportCsv(supportProfile),
     });
+  };
+
+  const updatePracticeLeadStatus = async (
+    inquiryId: string,
+    status: LeadStatus
+  ) => {
+    setLoadingAction(`practice-lead-${inquiryId}-${status}`);
+    setErrorMessage(null);
+    setStatusMessage(null);
+
+    try {
+      const result = await updatePracticeInquiryStatus({
+        adminToken: adminToken.trim(),
+        inquiryId,
+        status,
+      });
+
+      setPageState(current => ({
+        ...current,
+        inquiries: current.inquiries.map(inquiry =>
+          inquiry.inquiryId === inquiryId ? result.inquiry : inquiry
+        ),
+      }));
+      setStatusMessage(
+        `${result.inquiry.practiceName} marked ${result.inquiry.status}.`
+      );
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Practice lead status could not be updated."
+      );
+    } finally {
+      setLoadingAction(null);
+    }
+  };
+
+  const updateLearnerLeadStatus = async (
+    interestId: string,
+    status: LeadStatus
+  ) => {
+    setLoadingAction(`learner-lead-${interestId}-${status}`);
+    setErrorMessage(null);
+    setStatusMessage(null);
+
+    try {
+      const result = await updateLearnerInterestStatus({
+        adminToken: adminToken.trim(),
+        interestId,
+        status,
+      });
+
+      setPageState(current => ({
+        ...current,
+        learnerInterests: current.learnerInterests.map(interest =>
+          interest.interestId === interestId ? result.interest : interest
+        ),
+      }));
+      setStatusMessage(
+        `${result.interest.learnerName} marked ${result.interest.status}.`
+      );
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Learner lead status could not be updated."
+      );
+    } finally {
+      setLoadingAction(null);
+    }
   };
 
   const prepareRevocationTarget = (
@@ -961,6 +1034,9 @@ export default function PracticeSeatAdmin() {
                         <p className="mt-1 text-sm text-slate-600">
                           {inquiry.contactName} - {inquiry.contactEmail}
                         </p>
+                        <p className="mt-2 text-sm font-semibold text-slate-700">
+                          Status: {inquiry.status}
+                        </p>
                       </div>
                       <div className="rounded-md border border-blue-100 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-950">
                         {inquiry.estimatedLearnerCount ?? "Unknown"} learners
@@ -1000,6 +1076,39 @@ export default function PracticeSeatAdmin() {
                       <Mail className="h-4 w-4" />
                       Open follow-up draft
                     </a>
+                    <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                      <Button
+                        variant="outline"
+                        className="border-blue-200 bg-white text-blue-700 hover:bg-blue-50"
+                        disabled={
+                          adminToken.trim() === "" ||
+                          loadingAction ===
+                            `practice-lead-${inquiry.inquiryId}-contacted`
+                        }
+                        onClick={() =>
+                          updatePracticeLeadStatus(
+                            inquiry.inquiryId,
+                            "contacted"
+                          )
+                        }
+                      >
+                        Mark contacted
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="border-slate-300 bg-white text-slate-900 hover:bg-slate-50"
+                        disabled={
+                          adminToken.trim() === "" ||
+                          loadingAction ===
+                            `practice-lead-${inquiry.inquiryId}-closed`
+                        }
+                        onClick={() =>
+                          updatePracticeLeadStatus(inquiry.inquiryId, "closed")
+                        }
+                      >
+                        Close lead
+                      </Button>
+                    </div>
                     <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
                       {inquiry.followUpPlan.talkingPoints.map(point => (
                         <li key={point}>- {point}</li>
@@ -1054,6 +1163,9 @@ export default function PracticeSeatAdmin() {
                     <p className="mt-1 text-sm text-slate-600">
                       {interest.email}
                     </p>
+                    <p className="mt-2 text-sm font-semibold text-slate-700">
+                      Status: {interest.status}
+                    </p>
                     <p className="mt-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm leading-6 text-green-950">
                       Recommended next step: send the learner decision one-pager
                       and invite founding access when paid enrollment opens.
@@ -1069,6 +1181,39 @@ export default function PracticeSeatAdmin() {
                       <Mail className="h-4 w-4" />
                       Open follow-up draft
                     </a>
+                    <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                      <Button
+                        variant="outline"
+                        className="border-blue-200 bg-white text-blue-700 hover:bg-blue-50"
+                        disabled={
+                          adminToken.trim() === "" ||
+                          loadingAction ===
+                            `learner-lead-${interest.interestId}-contacted`
+                        }
+                        onClick={() =>
+                          updateLearnerLeadStatus(
+                            interest.interestId,
+                            "contacted"
+                          )
+                        }
+                      >
+                        Mark contacted
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="border-slate-300 bg-white text-slate-900 hover:bg-slate-50"
+                        disabled={
+                          adminToken.trim() === "" ||
+                          loadingAction ===
+                            `learner-lead-${interest.interestId}-closed`
+                        }
+                        onClick={() =>
+                          updateLearnerLeadStatus(interest.interestId, "closed")
+                        }
+                      >
+                        Close lead
+                      </Button>
+                    </div>
                     <p className="mt-3 text-sm leading-6 text-slate-700">
                       {interest.goal}
                     </p>

@@ -75,6 +75,16 @@ describe("createInMemoryPracticeInquiryStore", () => {
     await store.recordPracticeInquiry(second);
 
     expect(await store.listPracticeInquiries()).toEqual([second, first]);
+
+    expect(
+      await store.updatePracticeInquiryStatus(first.inquiryId, "contacted")
+    ).toMatchObject({
+      inquiryId: first.inquiryId,
+      status: "contacted",
+    });
+    expect(
+      await store.updatePracticeInquiryStatus("missing-inquiry", "closed")
+    ).toBeNull();
   });
 });
 

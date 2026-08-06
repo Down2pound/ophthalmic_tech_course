@@ -69,6 +69,16 @@ describe("createInMemoryLearnerInterestStore", () => {
     await store.recordLearnerInterest(second);
 
     expect(await store.listLearnerInterests()).toEqual([second, first]);
+
+    expect(
+      await store.updateLearnerInterestStatus(first.interestId, "contacted")
+    ).toMatchObject({
+      interestId: first.interestId,
+      status: "contacted",
+    });
+    expect(
+      await store.updateLearnerInterestStatus("missing-interest", "closed")
+    ).toBeNull();
   });
 });
 

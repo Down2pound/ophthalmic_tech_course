@@ -44,6 +44,10 @@ export interface PracticeInquiryStore {
   recordPracticeInquiry(
     inquiry: PracticeInquiryRecord
   ): PracticeInquiryRecord | Promise<PracticeInquiryRecord>;
+  updatePracticeInquiryStatus(
+    inquiryId: string,
+    status: PracticeInquiryStatus
+  ): PracticeInquiryRecord | null | Promise<PracticeInquiryRecord | null>;
   listPracticeInquiries():
     | PracticeInquiryRecord[]
     | Promise<PracticeInquiryRecord[]>;
@@ -149,6 +153,19 @@ export function createInMemoryPracticeInquiryStore(): PracticeInquiryStore {
       inquiriesById.set(inquiry.inquiryId, inquiry);
       return inquiry;
     },
+    updatePracticeInquiryStatus(inquiryId, status) {
+      const existing = inquiriesById.get(inquiryId);
+
+      if (!existing) return null;
+
+      const updated = {
+        ...existing,
+        status,
+      };
+      inquiriesById.set(inquiryId, updated);
+
+      return updated;
+    },
     listPracticeInquiries() {
       return Array.from(inquiriesById.values()).sort((left, right) =>
         right.createdAt.localeCompare(left.createdAt)
@@ -185,6 +202,19 @@ export function createPostgresPracticeInquiryStore(
       );
 
       return mapPracticeInquiry(result.rows[0]);
+    },
+    async updatePracticeInquiryStatus(inquiryId, status) {
+      const result = await db.query<PracticeInquiryRow>(
+        `
+        UPDATE commerce_practice_inquiries
+        SET status = $2
+        WHERE id = $1
+        RETURNING *
+        `,
+        [inquiryId, status]
+      );
+
+      return result.rows[0] ? mapPracticeInquiry(result.rows[0]) : null;
     },
     async listPracticeInquiries() {
       const result = await db.query<PracticeInquiryRow>(

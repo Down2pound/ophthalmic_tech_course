@@ -62,6 +62,16 @@ export interface PracticeInquiryListResponse {
   learnerInterests: LearnerInterestSummary[];
 }
 
+export type LeadStatus = "new" | "contacted" | "closed";
+
+export interface PracticeInquiryStatusResponse {
+  inquiry: PracticeInquirySummary;
+}
+
+export interface LearnerInterestStatusResponse {
+  interest: LearnerInterestSummary;
+}
+
 export interface BuyerSupportProfile {
   email: string;
   purchases: Array<{ checkoutSessionId: string; offerId?: string }>;
@@ -271,6 +281,74 @@ export async function revokeAccessTarget({
   }
 
   return payload as AccessRevocationResponse;
+}
+
+export async function updatePracticeInquiryStatus({
+  adminToken,
+  inquiryId,
+  status,
+  fetcher = fetch,
+}: {
+  adminToken: string;
+  inquiryId: string;
+  status: LeadStatus;
+  fetcher?: Fetcher;
+}): Promise<PracticeInquiryStatusResponse> {
+  const response = await fetcher(
+    `/api/support/practice-inquiries/${encodeURIComponent(inquiryId)}/status`,
+    {
+      method: "PATCH",
+      headers: getAdminHeaders(adminToken),
+      body: JSON.stringify({ status }),
+    }
+  );
+  const payload = (await response.json()) as
+    | PracticeInquiryStatusResponse
+    | ApiErrorResponse;
+
+  if (!response.ok) {
+    throw new Error(
+      "error" in payload && payload.error
+        ? payload.error
+        : "Practice inquiry status could not be updated."
+    );
+  }
+
+  return payload as PracticeInquiryStatusResponse;
+}
+
+export async function updateLearnerInterestStatus({
+  adminToken,
+  interestId,
+  status,
+  fetcher = fetch,
+}: {
+  adminToken: string;
+  interestId: string;
+  status: LeadStatus;
+  fetcher?: Fetcher;
+}): Promise<LearnerInterestStatusResponse> {
+  const response = await fetcher(
+    `/api/support/learner-interests/${encodeURIComponent(interestId)}/status`,
+    {
+      method: "PATCH",
+      headers: getAdminHeaders(adminToken),
+      body: JSON.stringify({ status }),
+    }
+  );
+  const payload = (await response.json()) as
+    | LearnerInterestStatusResponse
+    | ApiErrorResponse;
+
+  if (!response.ok) {
+    throw new Error(
+      "error" in payload && payload.error
+        ? payload.error
+        : "Learner interest status could not be updated."
+    );
+  }
+
+  return payload as LearnerInterestStatusResponse;
 }
 
 export async function assignPracticeSeat({

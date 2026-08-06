@@ -65,6 +65,10 @@ interface AccessRevocationRequestBody {
   seatPackId?: string;
 }
 
+interface LeadStatusRequestBody {
+  status?: string;
+}
+
 type PracticeSeatAdminAuthorization =
   | { authorized: true }
   | { authorized: false; status: number; payload: Record<string, unknown> };
@@ -164,6 +168,12 @@ function authorizePracticeSeatAdminRequest(
   }
 
   return { authorized: true };
+}
+
+function isLeadStatus(
+  status: string
+): status is "new" | "contacted" | "closed" {
+  return status === "new" || status === "contacted" || status === "closed";
 }
 
 export function setupAuthRoutes(router: Router) {
@@ -420,6 +430,74 @@ export function setupAuthRoutes(router: Router) {
         learnerInterests:
           await getLearnerInterestStore().listLearnerInterests(),
       });
+    }
+  );
+
+  router.patch(
+    "/support/practice-inquiries/:inquiryId/status",
+    async (req: Request, res: Response) => {
+      const authorization = authorizePracticeSeatAdminRequest(req);
+
+      if (!authorization.authorized) {
+        res.status(authorization.status).json(authorization.payload);
+        return;
+      }
+
+      const { status } = (req.body ?? {}) as LeadStatusRequestBody;
+
+      if (!status || !isLeadStatus(status)) {
+        res.status(400).json({
+          error: "Lead status must be new, contacted, or closed.",
+        });
+        return;
+      }
+
+      const inquiry =
+        await getPracticeInquiryStore().updatePracticeInquiryStatus(
+          req.params.inquiryId,
+          status
+        );
+
+      if (!inquiry) {
+        res.status(404).json({ error: "Practice inquiry was not found." });
+        return;
+      }
+
+      res.json({ inquiry: preparePracticeInquiryLeadRecord(inquiry) });
+    }
+  );
+
+  router.patch(
+    "/support/learner-interests/:interestId/status",
+    async (req: Request, res: Response) => {
+      const authorization = authorizePracticeSeatAdminRequest(req);
+
+      if (!authorization.authorized) {
+        res.status(authorization.status).json(authorization.payload);
+        return;
+      }
+
+      const { status } = (req.body ?? {}) as LeadStatusRequestBody;
+
+      if (!status || !isLeadStatus(status)) {
+        res.status(400).json({
+          error: "Lead status must be new, contacted, or closed.",
+        });
+        return;
+      }
+
+      const interest =
+        await getLearnerInterestStore().updateLearnerInterestStatus(
+          req.params.interestId,
+          status
+        );
+
+      if (!interest) {
+        res.status(404).json({ error: "Learner interest was not found." });
+        return;
+      }
+
+      res.json({ interest });
     }
   );
 }
