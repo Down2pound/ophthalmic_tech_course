@@ -65,6 +65,7 @@ pnpm launch:fulfillment
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
 pnpm launch:lead-qualifier
+pnpm launch:local-course-smoke
 pnpm launch:local-demo
 pnpm launch:live-url https://your-real-domain.example
 pnpm launch:bootcamp-intake
@@ -97,6 +98,9 @@ pnpm launch:blockers
   checkout safely if a live launch issue appears.
 - `launch:lead-qualifier` prints the first-lead fit card for deciding whether
   to send preview, buyer-guide, practice-pack, inquiry, or paid-checkout links.
+- `launch:local-course-smoke` starts the built app locally, creates a demo
+  learner session, and checks that protected lessons, progress, quiz, and
+  `/learn` load before you test by hand.
 - `launch:local-demo` prints the exact local testing commands and demo learner
   link for clicking through the protected course before paid launch.
 - `launch:live-url` turns the real Render or custom domain into the exact
@@ -119,6 +123,13 @@ Print the local testing recipe:
 
 ```bash
 pnpm launch:local-demo
+```
+
+Run the automatic local learner-access check:
+
+```bash
+pnpm build
+pnpm launch:local-course-smoke
 ```
 
 1. Build the app.

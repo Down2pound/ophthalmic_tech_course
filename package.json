@@ -38,6 +38,7 @@
     "launch:go-no-go": "node scripts/launch-go-no-go.mjs",
     "launch:jeffmini": "node scripts/launch-jeffmini-resume.mjs",
     "launch:lead-qualifier": "node scripts/launch-lead-qualifier.mjs",
+    "launch:local-course-smoke": "node scripts/launch-local-course-smoke.mjs",
     "launch:local-demo": "node scripts/launch-local-demo.mjs",
     "launch:live-url": "node scripts/launch-live-url-card.mjs",
     "launch:live-purchase-test": "node scripts/launch-live-purchase-test.mjs",

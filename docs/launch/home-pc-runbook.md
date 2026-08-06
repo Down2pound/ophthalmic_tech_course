@@ -119,6 +119,7 @@ pnpm check
 pnpm test
 pnpm launch:secret-scan
 pnpm build
+pnpm launch:local-course-smoke
 pnpm launch:bundle
 ```
 
@@ -132,6 +133,11 @@ pnpm launch:preflight
 webhook secrets, database passwords, and similar values before you package or
 push the project. Beginner translation: it checks that private keys did not
 accidentally get mixed into the public project files.
+
+`launch:local-course-smoke` starts the built app on your own computer, creates
+a safe demo learner, and checks that the protected lessons, learner progress,
+quiz, and course page work. Beginner translation: it checks that the course
+door opens before you invite real students in.
 
 ## If You See `spawn EPERM`
 
