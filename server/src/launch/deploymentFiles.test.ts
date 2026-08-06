@@ -415,9 +415,15 @@ describe("deployment files", () => {
     );
     expect(readme).toContain("pnpm launch:readiness-snapshot");
     expect(snapshotGuide).toContain("pnpm launch:readiness-snapshot");
+    expect(snapshotGuide).toContain("checkout-availability.json");
+    expect(snapshotGuide).toContain("Link-Sharing Traffic Light");
     expect(snapshotScript).toContain("/api/launch/readiness");
+    expect(snapshotScript).toContain("/api/checkout/availability");
     expect(snapshotScript).toContain("runtime-readiness-snapshot.json");
+    expect(snapshotScript).toContain("checkout-availability.json");
     expect(snapshotScript).toContain("runtime-readiness-summary.md");
+    expect(snapshotScript).toContain("Link-Sharing Traffic Light");
+    expect(snapshotScript).toContain("Manual Stripe payment links");
     expect(snapshotScript).not.toContain("sk_test_");
     expect(snapshotScript).not.toContain("whsec_");
     expect(snapshotScript).not.toContain("DATABASE_URL=");

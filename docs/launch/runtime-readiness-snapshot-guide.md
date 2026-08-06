@@ -1,7 +1,8 @@
 # OptiTech Academy Runtime Readiness Snapshot Guide
 
 Use this after the app is deployed. It tells you what to copy from the live
-readiness endpoint before opening paid enrollment.
+readiness endpoint and the buyer checkout endpoint before opening paid
+enrollment.
 
 Simple translation: this is the scoreboard. If the scoreboard does not say the
 store is ready, do not invite real buyers yet.
@@ -23,8 +24,15 @@ The easiest way to save it is:
 pnpm launch:readiness-snapshot https://your-domain.example
 ```
 
-That command also writes `runtime-readiness-summary.md` so the decision is easy
-to read without opening raw JSON.
+That command also writes:
+
+- `runtime-readiness-summary.md`: the plain-English traffic light.
+- `runtime-readiness-snapshot.json`: the raw launch readiness response.
+- `checkout-availability.json`: the raw buyer checkout availability response.
+
+Simple translation: readiness is the mechanic checking the whole car.
+Checkout availability is the sign on the store door telling buyers whether they
+can pay, join the interest list, or use a controlled manual Stripe Payment Link.
 
 Do not paste Stripe secret keys, webhook secrets, email API keys, database
 passwords, raw sign-in links, cookies, card numbers, patient information,
@@ -36,6 +44,9 @@ status, not secret values.
 ## Must Be True Before Paid Links Go Broadly Public
 
 - [ ] `readyForPaidLaunch` is `true`.
+- [ ] `checkout-availability.json` says `ready` is `true`.
+- [ ] `checkout-availability.json` says `primaryAction` is
+      `continue-to-checkout`.
 - [ ] `salesChannels.individualLearner.ready` is `true`.
 - [ ] `salesChannels.practicePacks.ready` is `true`.
 - [ ] `commerce.checkoutConfigured` is `true`.
@@ -91,11 +102,18 @@ Decision:
 ## If The Scoreboard Is Not Ready
 
 1. Keep `ENABLE_PAID_ENROLLMENT=false`.
-2. Read the `warnings`, `nextSetupSteps`, and `launchActions` sections.
-3. Fix the missing setup area using the matching launch guide.
-4. Redeploy or restart if host settings changed.
-5. Reopen `/api/launch/readiness`.
-6. Save a fresh snapshot only after the output changes.
+2. Read the `Link-Sharing Traffic Light` section in
+   `runtime-readiness-summary.md`.
+3. Read the `warnings`, `nextSetupSteps`, and `launchActions` sections.
+4. Fix the missing setup area using the matching launch guide.
+5. Redeploy or restart if host settings changed.
+6. Reopen `/api/launch/readiness` and `/api/checkout/availability`.
+7. Save a fresh snapshot only after the output changes.
+
+If the summary says manual Stripe Payment Links are available, use them only for
+controlled first-buyer testing. Run `pnpm launch:manual-payment-links`,
+`pnpm launch:fulfillment`, and `pnpm launch:sales-tracker` before sending those
+links beyond a tiny approved test group.
 
 ## Matching Guides
 

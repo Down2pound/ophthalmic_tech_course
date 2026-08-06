@@ -135,7 +135,8 @@ pnpm launch:blockers
   and first-buyer commands.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
-- `launch:readiness-snapshot` saves the deployed readiness scoreboard into
+- `launch:readiness-snapshot` saves the deployed readiness scoreboard, checkout
+  availability, and plain-English link-sharing traffic light into
   `launch-evidence/` for launch proof.
 - `launch:blockers` prints the setup areas still preventing paid launch.
 
