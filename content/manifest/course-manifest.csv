@@ -1,0 +1,13 @@
+day,module_id,lesson_id,lesson_title,minutes,assets,objectives,optional,repo_path
+1,module-01-foundations, , ,150,"Notebook: https://notebook.google.com/notebook/882bd207-e382-4fcd-b6ab-e72a309edeb5","Understand anatomy; Master history taking; Develop empathic communication",false,content/modules/day-01/
+2,module-02-refraction,lesson-01,lensometry-basics,25,"video: DRIVE/lensometry-overview.mp4;slides: DRIVE/lensometry-slides.pdf;transcript: DRIVE/lensometry.vtt","Perform manual and automated lensometry; Read lens powers",false,content/modules/day-02/lesson-01/
+2,module-02-refraction,lesson-02,phoropter-basics,35,"video: DRIVE/phoropter-demo.mp4;slides: DRIVE/phoropter-slides.pdf;transcript: DRIVE/phoropter.vtt","Operate phoropter for subjective refraction; Troubleshoot basic issues",false,content/modules/day-02/lesson-02/
+2,module-02-refraction,lesson-03,practicum-and-troubleshooting,60,"checklist: content/modules/day-02/lesson-03-checklist.md;quiz: content/modules/day-02/lesson-03-quiz.json","Perform end-to-day practical lensometry and refraction tasks to competency",false,content/modules/day-02/lesson-03/
+3,module-03-tonometry, , ,90,"Notebook","Master Goldmann Applanation Tonometry; IOP interpretation",false,content/modules/day-03/
+4,module-04-slit-lamp, , ,150,"Notebook","Perform slit lamp exams; Identify anterior pathology",false,content/modules/day-04/
+5,module-05-retinal-imaging, , ,180,"Notebook","Acquire OCT and fundus images; Interpret common retinal pathology",false,content/modules/day-05/
+6,module-06-visual-field, , ,120,"Notebook","Perform and interpret visual fields",false,content/modules/day-06/
+7,module-07-advanced-imaging, , ,150,"Notebook","B-scan, Pentacam basics; surgical assisting fundamentals",false,content/modules/day-07/
+8,module-08-soft-skills, , ,120,"Notebook","Therapeutic communication; conflict resolution",false,content/modules/day-08/
+9,module-09-documentation, , ,90,"Notebook","EHR proficiency; HIPAA-compliant documentation",false,content/modules/day-09/
+10,module-10-professional-development, , ,120,"Notebook","Certification prep; career pathways",false,content/modules/day-10/
