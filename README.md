@@ -56,7 +56,7 @@ revenue.
 pnpm launch:jeffmini
 pnpm launch:online-start
 pnpm launch:external-setup
-pnpm launch:first-render-deploy
+LAUNCH_FIRST_RENDER_REPORT_PATH=launch-evidence/first-render-deploy-evidence.md pnpm launch:first-render-deploy https://your-real-domain.example
 pnpm launch:clinical-review-request
 LAUNCH_CLINICAL_SIGNOFF_REPORT_PATH=launch-evidence/module-1-clinical-signoff-packet.md pnpm launch:clinical-signoff -- --reviewer-name="Dr. Reviewer" --reviewer-role="Ophthalmologist" --review-date="2026-08-06" --approved-version="module-one-v1"
 pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding-learner https://your-real-domain.example
@@ -91,8 +91,9 @@ pnpm launch:blockers
 - `launch:external-setup` prints the outside-account worksheet for GitHub,
   Render, Stripe, email, admin protection, clinical review, and live purchase
   proof.
-- `launch:first-render-deploy` prints the short Render deploy evidence card
-  with preflight proof, closed-checkout settings, and first live URL checks.
+- `launch:first-render-deploy` prints and can save the short Render deploy
+  evidence card with the current branch, commit, closed-checkout settings, and
+  first live URL checks.
 - `launch:clinical-review-request` prints a ready-to-send Module 1 reviewer
   request so clinical signoff can move before paid launch.
 - `launch:clinical-signoff` prints and can save the final Module 1 approval

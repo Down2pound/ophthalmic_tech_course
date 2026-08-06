@@ -21,6 +21,12 @@ For the short copy/paste checklist, run:
 pnpm launch:render-setup
 ```
 
+For a saveable first-deploy evidence packet, run:
+
+```bash
+LAUNCH_FIRST_RENDER_REPORT_PATH=launch-evidence/first-render-deploy-evidence.md pnpm launch:first-render-deploy https://your-render-or-custom-domain.example
+```
+
 Direct branch-specific Render deploy link:
 
 ```text

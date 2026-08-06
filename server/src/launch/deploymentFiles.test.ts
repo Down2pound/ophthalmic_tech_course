@@ -1068,9 +1068,15 @@ describe("deployment files", () => {
     expect(firstRenderDeployScript).toContain(
       "first-render-deploy-evidence.md"
     );
+    expect(firstRenderDeployScript).toContain("LAUNCH_FIRST_RENDER_REPORT_PATH");
+    expect(firstRenderDeployScript).toContain("Commit to deploy");
+    expect(firstRenderDeployScript).toContain("pnpm launch:live-url");
     expect(firstRenderDeployScript).not.toContain("execSync");
     expect(firstRenderDeployEvidence).toContain(
       "OptiTech Academy First Render Deploy Evidence"
+    );
+    expect(firstRenderDeployEvidence).toContain(
+      "pnpm launch:first-render-deploy"
     );
     expect(firstRenderDeployEvidence).toContain("pnpm launch:preflight");
     expect(firstRenderDeployEvidence).toContain("LAUNCH_SMOKE_REPORT_PATH");

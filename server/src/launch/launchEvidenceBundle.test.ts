@@ -310,9 +310,13 @@ describe("createLaunchEvidenceBundle", () => {
     expect(firstRenderDeployEvidence).toContain(
       "OptiTech Academy First Render Deploy Evidence"
     );
+    expect(firstRenderDeployEvidence).toContain("pnpm launch:first-render-deploy");
     expect(firstRenderDeployEvidence).toContain("pnpm launch:preflight");
-    expect(firstRenderDeployEvidence).toContain("99` files passed");
-    expect(firstRenderDeployEvidence).toContain("377` tests passed");
+    expect(firstRenderDeployEvidence).toContain("Branch: [fill branch]");
+    expect(firstRenderDeployEvidence).toContain("Commit checked: [fill commit]");
+    expect(firstRenderDeployEvidence).toContain(
+      "Test suite: [passed / not passed yet]"
+    );
     expect(firstRenderDeployEvidence).toContain("ENABLE_PAID_ENROLLMENT=false");
     expect(firstRenderDeployEvidence).toContain(
       "LAUNCH_SMOKE_ALLOW_NOT_READY"

@@ -13,17 +13,32 @@ file.
 
 ## Preflight Proof
 
-- Branch: `codex/optitech-product-spec`
-- Commit checked: `9b3a89e`
-- Preflight date: `2026-07-28`
-- Command: `pnpm launch:preflight`
-- TypeScript check: passed
-- Test suite: `99` files passed, `377` tests passed
-- Secret scan: passed, no likely live secrets found
-- Offer audit: passed, `35/35`
-- Deployment audit: passed, `23/23`
-- Production build: passed
-- Launch evidence bundle: regenerated
+Create a fresh URL-aware packet with:
+
+```bash
+LAUNCH_FIRST_RENDER_REPORT_PATH=launch-evidence/first-render-deploy-evidence.md pnpm launch:first-render-deploy https://your-real-domain.example
+```
+
+Run this immediately before clicking deploy, then keep the passing terminal
+result with launch evidence:
+
+```bash
+pnpm launch:preflight
+```
+
+Record the result here after it passes:
+
+- Branch: [fill branch]
+- Commit checked: [fill commit]
+- Preflight date: [fill date]
+- TypeScript check: [passed / not passed yet]
+- Test suite: [passed / not passed yet]
+- Secret scan: [passed / not passed yet]
+- Offer audit: [passed / not passed yet]
+- Deployment audit: [passed / not passed yet]
+- Production build: [passed / not passed yet]
+- Local course smoke: [passed / not passed yet]
+- Launch evidence bundle: [regenerated / not regenerated yet]
 
 ## Render Deploy Link
 
