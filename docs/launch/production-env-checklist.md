@@ -33,14 +33,14 @@ keys, generated session secrets, or admin tokens into this checklist.
 
 ## Optional Values
 
-| Set? | Variable                                      | Source                                | Validation                                       | Launch note                                                                  |
-| ---- | --------------------------------------------- | ------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------- |
-| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER` | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for first individual buyers.           |
-| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS` | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for the five-seat practice pack.       |
-| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS` | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for the fifteen-seat practice pack.    |
-| [ ]  | `VITE_ANALYTICS_ENDPOINT`                     | Optional analytics provider.          | Leave blank to disable analytics.                | Only needed if you want browser analytics at launch.                         |
-| [ ]  | `VITE_ANALYTICS_WEBSITE_ID`                   | Optional analytics provider.          | Leave blank to disable analytics.                | Pairs with `VITE_ANALYTICS_ENDPOINT` when analytics is used.                 |
-| [ ]  | `LAUNCH_SITEMAP_PATH`                         | Local launch command setting.         | Optional; defaults to `dist/public/sitemap.xml`. | Used by `pnpm launch:sitemap` when saving a generated sitemap file.          |
+| Set? | Variable                                       | Source                                  | Validation                                         | Launch note                                                                |
+| ---- | ---------------------------------------------- | --------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------- |
+| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER`  | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for first individual buyers.        |
+| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS`  | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for the five-seat practice pack.    |
+| [ ]  | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS` | Optional Stripe dashboard Payment Link. | Leave blank or use a `https://buy.stripe.com` URL. | Shows a controlled manual payment link for the fifteen-seat practice pack. |
+| [ ]  | `VITE_ANALYTICS_ENDPOINT`                      | Optional analytics provider.            | Leave blank to disable analytics.                  | Only needed if you want browser analytics at launch.                       |
+| [ ]  | `VITE_ANALYTICS_WEBSITE_ID`                    | Optional analytics provider.            | Leave blank to disable analytics.                  | Pairs with `VITE_ANALYTICS_ENDPOINT` when analytics is used.               |
+| [ ]  | `LAUNCH_SITEMAP_PATH`                          | Local launch command setting.           | Optional; defaults to `dist/public/sitemap.xml`.   | Used by `pnpm launch:sitemap` when saving a generated sitemap file.        |
 
 ## Host Dashboard Paste Template
 
@@ -121,5 +121,6 @@ Keep `ENABLE_PAID_ENROLLMENT=false` and
 `MODULE_ONE_CLINICAL_REVIEW_APPROVED=false` until every launch gate is complete.
 
 Before pasting generated values, run `pnpm launch:secrets` on a trusted
-computer. After setting host values, run `pnpm launch:doctor` or open
+computer. After setting host values, run `pnpm launch:dashboard-proof` without
+printing secrets, then run `pnpm launch:doctor` or open
 `/api/launch/readiness` to confirm the app sees them.

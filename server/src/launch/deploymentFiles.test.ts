@@ -424,9 +424,68 @@ describe("deployment files", () => {
     expect(blockerScript).toContain("pnpm launch:preflight");
     expect(blockerScript).toContain("pnpm launch:clinical-review");
     expect(blockerScript).toContain("pnpm launch:env-template");
+    expect(blockerScript).toContain("pnpm launch:dashboard-proof");
     expect(blockerScript).toContain("pnpm db:setup");
     expect(blockerScript).toContain("LAUNCH_BASE_URL");
     expect(blockerScript).not.toContain("execSync");
+  });
+
+  it("keeps a work-computer-safe host dashboard proof command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const onlineStartGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/online-start-guide.md"),
+      "utf8"
+    );
+    const productionEnvChecklist = await readFile(
+      path.resolve(
+        process.cwd(),
+        "server/src/launch/productionEnvChecklist.ts"
+      ),
+      "utf8"
+    );
+    const productionEnvChecklistDoc = await readFile(
+      path.resolve(process.cwd(), "docs/launch/production-env-checklist.md"),
+      "utf8"
+    );
+    const dashboardProofScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-dashboard-proof.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:dashboard-proof": "node scripts/launch-dashboard-proof.mjs"'
+    );
+    expect(readme).toContain("pnpm launch:dashboard-proof");
+    expect(onlineStartGuide).toContain("pnpm launch:dashboard-proof");
+    expect(onlineStartGuide).toContain("pnpm launch:dashboard-proof -- --paid");
+    expect(productionEnvChecklist).toContain("pnpm launch:dashboard-proof");
+    expect(productionEnvChecklistDoc).toContain("pnpm launch:dashboard-proof");
+    expect(dashboardProofScript).toContain(
+      "OptiTech Academy Host Dashboard Proof"
+    );
+    expect(dashboardProofScript).toContain(
+      "LAUNCH_DASHBOARD_PROOF_REPORT_PATH"
+    );
+    expect(dashboardProofScript).toContain("LAUNCH_DASHBOARD_PROOF_MODE");
+    expect(dashboardProofScript).toContain("paid-launch");
+    expect(dashboardProofScript).toContain("closed-store");
+    expect(dashboardProofScript).toContain("sk_live_");
+    expect(dashboardProofScript).toContain("whsec_");
+    expect(dashboardProofScript).toContain("PUBLIC_APP_URL");
+    expect(dashboardProofScript).toContain("ENABLE_PAID_ENROLLMENT");
+    expect(dashboardProofScript).toContain(
+      "without printing the private values"
+    );
+    expect(dashboardProofScript).not.toContain("execSync");
+    expect(dashboardProofScript).not.toContain("console.log(process.env");
+    expect(dashboardProofScript).not.toContain("sk_test_");
   });
 
   it("keeps a work-computer-safe deployed readiness snapshot command available", async () => {

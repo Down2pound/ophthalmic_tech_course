@@ -119,15 +119,18 @@ lines.push(
 );
 lines.push("4. Print host settings with `pnpm launch:env-template`.");
 lines.push("5. Deploy the app and set `PUBLIC_APP_URL` to the real HTTPS URL.");
-lines.push("6. Configure the hosted database, then run `pnpm db:setup`.");
 lines.push(
-  "7. Configure Stripe checkout, Stripe webhook, passwordless email, and admin tokens."
+  "6. Run `pnpm launch:dashboard-proof` from a trusted shell after host values are set."
+);
+lines.push("7. Configure the hosted database, then run `pnpm db:setup`.");
+lines.push(
+  "8. Configure Stripe checkout, Stripe webhook, passwordless email, and admin tokens."
 );
 lines.push(
-  "8. Run `LAUNCH_BASE_URL=https://your-domain.example pnpm launch:smoke` against production."
+  "9. Run `LAUNCH_BASE_URL=https://your-domain.example pnpm launch:smoke` against production."
 );
 lines.push(
-  "9. Run `pnpm launch:live-purchase-test`, then complete one low-risk internal live-mode purchase."
+  "10. Run `pnpm launch:dashboard-proof -- --paid` and `pnpm launch:live-purchase-test`, then complete one low-risk internal live-mode purchase."
 );
 lines.push("");
 
@@ -135,6 +138,9 @@ lines.push("## Final Go-Live Proof");
 lines.push("");
 lines.push("- Run `pnpm launch:preflight` from a home PC.");
 lines.push("- Deploy to the production host.");
+lines.push(
+  "- Run `pnpm launch:dashboard-proof` without printing secret values."
+);
 lines.push("- Run `pnpm db:setup` against the production database.");
 lines.push("- Run the deployment smoke test against the real production URL.");
 lines.push(

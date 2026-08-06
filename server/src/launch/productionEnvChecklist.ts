@@ -238,7 +238,7 @@ export function renderProductionEnvChecklist({
     "",
     "Keep `ENABLE_PAID_ENROLLMENT=false` and `MODULE_ONE_CLINICAL_REVIEW_APPROVED=false` until every launch gate is complete.",
     "",
-    "Before pasting generated values, run `pnpm launch:secrets` on a trusted computer. After setting host values, run `pnpm launch:doctor` or open `/api/launch/readiness` to confirm the app sees them.",
+    "Before pasting generated values, run `pnpm launch:secrets` on a trusted computer. After setting host values, run `pnpm launch:dashboard-proof` without printing secrets, then run `pnpm launch:doctor` or open `/api/launch/readiness` to confirm the app sees them.",
     "",
   ].join("\n");
 }

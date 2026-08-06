@@ -75,6 +75,7 @@ LAUNCH_ACCESS_REVOCATION_REPORT_PATH=launch-evidence/access-revocation-packet.md
 LAUNCH_SOURCE_AUDIT_REPORT_PATH=launch-evidence/course-source-audit.md pnpm launch:source-audit
 pnpm launch:env-checklist
 LAUNCH_ENV_TEMPLATE_REPORT_PATH=launch-evidence/host-dashboard-env-template.md pnpm launch:env-template https://your-real-domain.example
+LAUNCH_DASHBOARD_PROOF_REPORT_PATH=launch-evidence/host-dashboard-proof.md pnpm launch:dashboard-proof
 pnpm launch:lead-qualifier
 pnpm launch:lead-pipeline-smoke
 pnpm launch:local-course-smoke
@@ -139,6 +140,9 @@ pnpm launch:blockers
 - `launch:env-template` prints a safe host dashboard paste template, can fill
   `PUBLIC_APP_URL` from the deployed URL, and can save the template to
   `launch-evidence/` without storing secret values.
+- `launch:dashboard-proof` checks the host dashboard environment values from
+  the current shell without printing secrets, and can run in closed-store or
+  paid-launch mode.
 - `launch:lead-qualifier` prints the first-lead fit card for deciding whether
   to send preview, buyer-guide, practice-pack, inquiry, or paid-checkout links.
 - `launch:lead-pipeline-smoke` submits safe test leads to a deployed app,

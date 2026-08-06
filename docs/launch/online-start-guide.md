@@ -46,6 +46,7 @@ Run these commands on the home PC:
 ```bash
 pnpm launch:blockers
 pnpm launch:env-template
+pnpm launch:dashboard-proof
 pnpm launch:first-render-deploy
 pnpm launch:render-setup
 pnpm launch:database-setup
@@ -66,8 +67,11 @@ password manager.
 3. Review the Blueprint or web service from the GitHub repo.
 4. Let the host read `render.yaml`.
 5. Add the required environment values from `pnpm launch:env-template`.
-6. Deploy with paid enrollment still closed.
-7. Set `PUBLIC_APP_URL` to the real `https` URL after the first deploy.
+6. After values are set, run `pnpm launch:dashboard-proof` from a trusted
+   shell that has the same values loaded. It checks shapes without printing
+   secrets.
+7. Deploy with paid enrollment still closed.
+8. Set `PUBLIC_APP_URL` to the real `https` URL after the first deploy.
 
 ## 5. Check The Live Site Before Money
 
@@ -84,6 +88,7 @@ pnpm launch:live-url
 $env:PUBLIC_APP_URL="https://your-real-domain.example"
 pnpm launch:sitemap
 pnpm launch:source-audit
+pnpm launch:dashboard-proof
 pnpm launch:first-sales
 pnpm launch:owner-go-no-go
 pnpm launch:first-buyer
@@ -119,6 +124,7 @@ Final commands before public sales:
 Remove-Item Env:\LAUNCH_SMOKE_ALLOW_NOT_READY -ErrorAction SilentlyContinue
 $env:LAUNCH_BASE_URL="https://your-real-domain.example"
 pnpm launch:smoke
+pnpm launch:dashboard-proof -- --paid
 pnpm launch:live-purchase-test
 pnpm launch:fulfillment
 pnpm launch:first-10-customers
