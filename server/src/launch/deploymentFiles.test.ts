@@ -731,6 +731,9 @@ describe("deployment files", () => {
     expect(firstSalesScript).toContain(
       "OptiTech Academy First Sales Link Packet"
     );
+    expect(firstSalesScript).toContain("LAUNCH_BASE_URL");
+    expect(firstSalesScript).toContain("LAUNCH_FIRST_SALES_REPORT_PATH");
+    expect(firstSalesScript).toContain("first-sales-link-packet.md");
     expect(firstSalesScript).toContain("/first-sale");
     expect(firstSalesScript).toContain("/checkout");
     expect(firstSalesScript).toContain("/practice-packs");
@@ -1121,6 +1124,7 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("pnpm launch:lead-pipeline-smoke");
     expect(liveUrlScript).toContain("LAUNCH_CHECKOUT_SMOKE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_FIRST_SALES_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
     expect(liveUrlScript).toContain("pnpm launch:first-sales");
     expect(liveUrlScript).toContain("pnpm launch:emergency-stop");
