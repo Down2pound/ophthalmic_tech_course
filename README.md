@@ -62,6 +62,7 @@ pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding
 pnpm launch:email-smoke -- --email=internal.test@example.com https://your-real-domain.example
 LAUNCH_FIRST_SALES_REPORT_PATH=launch-evidence/first-sales-link-packet.md pnpm launch:first-sales https://your-real-domain.example
 LAUNCH_FIRST_10_CUSTOMERS_REPORT_PATH=launch-evidence/first-10-customers-plan.md pnpm launch:first-10-customers
+LAUNCH_FIRST_WEEK_SALES_REPORT_PATH=launch-evidence/first-week-sales-plan.md pnpm launch:first-week-sales
 LAUNCH_LIVE_PURCHASE_REPORT_PATH=launch-evidence/live-purchase-rehearsal-report.md pnpm launch:live-purchase-test -- --email=internal.test@example.com https://your-real-domain.example
 LAUNCH_FIRST_BUYER_REPORT_PATH=launch-evidence/first-buyer-command-center.md pnpm launch:first-buyer https://your-real-domain.example
 LAUNCH_FULFILLMENT_REPORT_PATH=launch-evidence/first-buyer-fulfillment-checklist.md pnpm launch:fulfillment
@@ -97,6 +98,8 @@ pnpm launch:blockers
   accepts a deployed URL, and can save a safe first-sales packet.
 - `launch:first-10-customers` prints the first 10 controlled outreach plan and
   can save a safe first-customer worksheet.
+- `launch:first-week-sales` prints the seven-day controlled outreach plan and
+  can save a safe first-week sales worksheet.
 - `launch:live-purchase-test` prints the first internal live purchase rehearsal
   and can save a safe report template for proving Stripe, webhook, access, and
   sign-in all worked together.

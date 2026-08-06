@@ -842,6 +842,7 @@ describe("deployment files", () => {
       '"launch:first-week-sales": "node scripts/launch-first-week-sales.mjs"'
     );
     expect(firstWeekScript).toContain("first-week-sales-plan.md");
+    expect(firstWeekScript).toContain("LAUNCH_FIRST_WEEK_SALES_REPORT_PATH");
     expect(firstWeekScript).not.toContain("execSync");
     expect(firstWeekPlan).toContain("OptiTech Academy First Week Sales Plan");
     expect(firstWeekPlan).toContain("Day 1: Prepare the warm list");
@@ -1137,6 +1138,7 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_SALES_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_10_CUSTOMERS_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_FIRST_WEEK_SALES_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FULFILLMENT_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
