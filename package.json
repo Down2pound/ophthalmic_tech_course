@@ -19,6 +19,7 @@
     "launch:bootcamp-intake": "node scripts/launch-bootcamp-intake.mjs",
     "launch:clinical-review": "node scripts/launch-clinical-review.mjs",
     "launch:clinical-review-request": "node scripts/launch-clinical-review-request.mjs",
+    "launch:clinical-signoff": "node scripts/launch-clinical-signoff.mjs",
     "launch:control": "node scripts/launch-control-checklist.mjs",
     "launch:checkout-smoke": "node scripts/launch-checkout-smoke.mjs",
     "launch:database-setup": "node scripts/launch-database-setup.mjs",

@@ -104,6 +104,7 @@ function renderPacket({ baseUrl, warnings, checklist }) {
     "",
     "```bash",
     "pnpm launch:preflight",
+    "LAUNCH_CLINICAL_SIGNOFF_REPORT_PATH=launch-evidence/module-1-clinical-signoff-packet.md pnpm launch:clinical-signoff -- --reviewer-name=\"Dr. Reviewer\" --reviewer-role=\"Ophthalmologist\" --review-date=\"2026-08-06\" --approved-version=\"module-one-v1\"",
     `LAUNCH_GO_LIVE_REPORT_PATH=launch-evidence/go-live-packet.md pnpm launch:go-live ${baseUrl}`,
     `LAUNCH_BASE_URL=${baseUrl} LAUNCH_SMOKE_ALLOW_NOT_READY=true pnpm launch:smoke`,
     `LAUNCH_BASE_URL=${baseUrl} pnpm launch:readiness-snapshot ${baseUrl}`,

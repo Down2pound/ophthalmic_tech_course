@@ -726,6 +726,40 @@ describe("deployment files", () => {
     expect(requestTemplate).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe clinical signoff packet command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const signoffScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-clinical-signoff.mjs"),
+      "utf8"
+    );
+    const clinicalGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/clinical-review-guide.md"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:clinical-signoff": "node scripts/launch-clinical-signoff.mjs"'
+    );
+    expect(signoffScript).toContain(
+      "OptiTech Academy Module 1 Clinical Signoff Packet"
+    );
+    expect(signoffScript).toContain("LAUNCH_CLINICAL_SIGNOFF_REPORT_PATH");
+    expect(signoffScript).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED=true");
+    expect(signoffScript).toContain("protected health information");
+    expect(signoffScript).not.toContain("execSync");
+    expect(signoffScript).not.toContain("sk_test_");
+    expect(signoffScript).not.toContain("whsec_");
+    expect(clinicalGuide).toContain("pnpm launch:clinical-signoff");
+    expect(readme).toContain("pnpm launch:clinical-signoff");
+  });
+
   it("keeps a work-computer-safe first-sales link packet command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

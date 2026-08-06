@@ -58,6 +58,7 @@ pnpm launch:online-start
 pnpm launch:external-setup
 pnpm launch:first-render-deploy
 pnpm launch:clinical-review-request
+LAUNCH_CLINICAL_SIGNOFF_REPORT_PATH=launch-evidence/module-1-clinical-signoff-packet.md pnpm launch:clinical-signoff -- --reviewer-name="Dr. Reviewer" --reviewer-role="Ophthalmologist" --review-date="2026-08-06" --approved-version="module-one-v1"
 pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding-learner https://your-real-domain.example
 pnpm launch:email-smoke -- --email=internal.test@example.com https://your-real-domain.example
 LAUNCH_FIRST_SALES_REPORT_PATH=launch-evidence/first-sales-link-packet.md pnpm launch:first-sales https://your-real-domain.example
@@ -94,6 +95,9 @@ pnpm launch:blockers
   with preflight proof, closed-checkout settings, and first live URL checks.
 - `launch:clinical-review-request` prints a ready-to-send Module 1 reviewer
   request so clinical signoff can move before paid launch.
+- `launch:clinical-signoff` prints and can save the final Module 1 approval
+  receipt with the `MODULE_ONE_CLINICAL_*` values to paste into the production
+  host dashboard after a qualified reviewer approves the packet.
 - `launch:checkout-smoke` asks the deployed app to create one Stripe Checkout
   session and can save safe proof without storing the raw checkout URL.
 - `launch:email-smoke` asks the deployed app to send one passwordless sign-in
@@ -271,6 +275,8 @@ Stripe key guide:
   `MODULE_ONE_CLINICAL_REVIEW_APPROVED` record Module 1 signoff after a
   qualified reviewer approves the clinical review packet. Keep
   `MODULE_ONE_CLINICAL_REVIEW_APPROVED=false` until corrections are resolved.
+  Run `pnpm launch:clinical-signoff` to create the safe approval receipt before
+  pasting these values into production.
 - `AUTH_SESSION_SECRET`, `TRANSACTIONAL_EMAIL_API_URL`,
   `TRANSACTIONAL_EMAIL_API_KEY`, and `SIGN_IN_FROM_EMAIL` are server-only values
   for passwordless sign-in email delivery.

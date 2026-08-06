@@ -33,6 +33,15 @@ The launch evidence bundle also includes:
 module-1-clinical-review-packet.md
 ```
 
+After the reviewer approves Module 1, create the saved approval receipt with:
+
+```bash
+LAUNCH_CLINICAL_SIGNOFF_REPORT_PATH=launch-evidence/module-1-clinical-signoff-packet.md pnpm launch:clinical-signoff -- --reviewer-name="Dr. Reviewer" --reviewer-role="Ophthalmologist" --review-date="2026-08-06" --approved-version="module-one-v1"
+```
+
+Beginner translation: this is the signed permission slip you keep before
+turning on the clinical review launch gate.
+
 The reviewer should read the lesson outcomes, lesson body, clinic context,
 patient-friendly script, scenario, common mistakes, scope note, sources, and
 review questions.
@@ -78,6 +87,9 @@ Save safe evidence that shows:
 - Corrections requested, if any.
 - Corrections resolved date, if any.
 - Final approval status.
+
+`pnpm launch:clinical-signoff` creates this safe evidence packet and prints the
+production values to paste into the host dashboard after approval.
 
 Do not save patient information, real chart details, protected health
 information, private employer data, secret keys, raw sign-in links, session
