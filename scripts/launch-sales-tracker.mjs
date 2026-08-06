@@ -3,11 +3,26 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const outputDir = path.resolve(
-  process.cwd(),
+const recommendedOutputDir = path.join(
   "launch-evidence",
   "sales-tracker-templates"
 );
+
+function getArgValue(name, fallback = "") {
+  const prefix = `--${name}=`;
+  const match = process.argv.find(arg => arg.startsWith(prefix));
+  return match ? match.slice(prefix.length).trim() : fallback;
+}
+
+function getOutputDir() {
+  return path.resolve(
+    getArgValue("output-dir") ||
+      process.env.LAUNCH_SALES_TRACKER_OUTPUT_DIR ||
+      recommendedOutputDir
+  );
+}
+
+const outputDir = getOutputDir();
 
 const trackers = [
   {
@@ -346,6 +361,9 @@ const lines = [
   `Created ${trackers.length} CSV templates in:`,
   "",
   outputDir,
+  "",
+  `Recommended output folder: ${recommendedOutputDir}`,
+  "Override with LAUNCH_SALES_TRACKER_OUTPUT_DIR or --output-dir=...",
   "",
   "Files:",
   ...trackers.map(tracker => `- ${tracker.fileName}`),

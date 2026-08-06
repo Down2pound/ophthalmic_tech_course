@@ -868,6 +868,13 @@ describe("deployment files", () => {
     );
     expect(salesTrackerScript).toContain("lead-tracker.csv");
     expect(salesTrackerScript).toContain("purchase-tracker.csv");
+    expect(salesTrackerScript).toContain("LAUNCH_SALES_TRACKER_OUTPUT_DIR");
+    expect(salesTrackerScript).toContain("--output-dir=");
+    expect(salesTrackerScript).toContain("sales-tracker-templates");
+    expect(salesTrackerScript).toContain("first-24-hour-sale-review.csv");
+    expect(salesTrackerScript).toContain(
+      "first-buyer-fulfillment-checklist.csv"
+    );
     expect(salesTrackerScript).toContain("weekly-business-review.csv");
     expect(salesTrackerScript).toContain("Do not paste secrets");
     expect(salesTrackerScript).not.toContain("execSync");
@@ -1139,10 +1146,12 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_FIRST_SALES_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_10_CUSTOMERS_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_WEEK_SALES_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_SALES_TRACKER_OUTPUT_DIR");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FULFILLMENT_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
     expect(liveUrlScript).toContain("pnpm launch:first-sales");
+    expect(liveUrlScript).toContain("pnpm launch:sales-tracker");
     expect(liveUrlScript).toContain("pnpm launch:emergency-stop");
     expect(liveUrlScript).toContain("Do not use localhost");
     expect(liveUrlScript).toContain("Replace the example URL");
