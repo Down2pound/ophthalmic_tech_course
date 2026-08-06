@@ -17,6 +17,15 @@ https://your-domain.example/api/launch/readiness
 Save the response as `runtime-readiness-snapshot.json` in the launch evidence
 folder.
 
+The easiest way to save it is:
+
+```bash
+pnpm launch:readiness-snapshot https://your-domain.example
+```
+
+That command also writes `runtime-readiness-summary.md` so the decision is easy
+to read without opening raw JSON.
+
 Do not paste Stripe secret keys, webhook secrets, email API keys, database
 passwords, raw sign-in links, cookies, card numbers, patient information,
 protected health information, or private employer details into launch notes.

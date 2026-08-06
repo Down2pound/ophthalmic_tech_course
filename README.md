@@ -66,6 +66,7 @@ pnpm launch:lead-qualifier
 pnpm launch:local-demo
 pnpm launch:live-url https://your-real-domain.example
 pnpm launch:bootcamp-intake
+pnpm launch:readiness-snapshot https://your-real-domain.example
 pnpm launch:blockers
 ```
 
@@ -96,6 +97,8 @@ pnpm launch:blockers
   smoke-test, sitemap, go/no-go, and first-buyer commands.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
+- `launch:readiness-snapshot` saves the deployed readiness scoreboard into
+  `launch-evidence/` for launch proof.
 - `launch:blockers` prints the setup areas still preventing paid launch.
 
 Use `docs/launch/current-backup-manifest.md` and the newest matching ZIP and
@@ -544,6 +547,12 @@ contain `.env`, live secrets, raw tokens, cookies, database passwords, or Stripe
 secret keys. It includes the production launch package, clinical review packet,
 production environment checklist, launch doctor report, manual launch QA
 evidence template, and runtime readiness snapshot.
+
+After the app is deployed, save the live readiness scoreboard:
+
+```bash
+pnpm launch:readiness-snapshot https://your-deployed-site.example.com
+```
 
 ## Database Contracts
 

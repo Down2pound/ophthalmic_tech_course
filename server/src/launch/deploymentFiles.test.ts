@@ -386,6 +386,40 @@ describe("deployment files", () => {
     expect(blockerScript).not.toContain("execSync");
   });
 
+  it("keeps a work-computer-safe deployed readiness snapshot command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const snapshotGuide = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/runtime-readiness-snapshot-guide.md"
+      ),
+      "utf8"
+    );
+    const snapshotScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-readiness-snapshot.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:readiness-snapshot": "node scripts/launch-readiness-snapshot.mjs"'
+    );
+    expect(readme).toContain("pnpm launch:readiness-snapshot");
+    expect(snapshotGuide).toContain("pnpm launch:readiness-snapshot");
+    expect(snapshotScript).toContain("/api/launch/readiness");
+    expect(snapshotScript).toContain("runtime-readiness-snapshot.json");
+    expect(snapshotScript).toContain("runtime-readiness-summary.md");
+    expect(snapshotScript).not.toContain("sk_test_");
+    expect(snapshotScript).not.toContain("whsec_");
+    expect(snapshotScript).not.toContain("DATABASE_URL=");
+  });
+
   it("keeps the next-step command center runnable without tsx", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
