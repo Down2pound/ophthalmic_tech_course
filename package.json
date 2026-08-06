@@ -37,6 +37,7 @@
     "launch:first-revenue": "node scripts/launch-first-revenue-path.mjs",
     "launch:first-sales": "node scripts/launch-first-sales-links.mjs",
     "launch:first-week-sales": "node scripts/launch-first-week-sales.mjs",
+    "launch:go-live": "node scripts/launch-go-live-packet.mjs",
     "launch:go-no-go": "node scripts/launch-go-no-go.mjs",
     "launch:jeffmini": "node scripts/launch-jeffmini-resume.mjs",
     "launch:lead-qualifier": "node scripts/launch-lead-qualifier.mjs",

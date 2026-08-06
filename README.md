@@ -77,6 +77,7 @@ pnpm launch:lead-pipeline-smoke
 pnpm launch:local-course-smoke
 pnpm launch:local-demo
 pnpm launch:live-url https://your-real-domain.example
+LAUNCH_GO_LIVE_REPORT_PATH=launch-evidence/go-live-packet.md pnpm launch:go-live https://your-real-domain.example
 pnpm launch:bootcamp-intake
 pnpm launch:readiness-snapshot https://your-real-domain.example
 pnpm launch:blockers
@@ -141,6 +142,8 @@ pnpm launch:blockers
 - `launch:live-url` turns the real Render or custom domain into the exact
   smoke-test, sitemap, checkout, email, lead-pipeline, go/no-go, live-purchase,
   and first-buyer commands.
+- `launch:go-live` prints and can save the final URL-specific launch-day packet
+  before `ENABLE_PAID_ENROLLMENT=true` is used.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
 - `launch:readiness-snapshot` saves the deployed readiness scoreboard, checkout

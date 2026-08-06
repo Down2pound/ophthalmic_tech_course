@@ -1156,6 +1156,7 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("pnpm launch:lead-pipeline-smoke");
     expect(liveUrlScript).toContain("LAUNCH_CHECKOUT_SMOKE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_GO_LIVE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_SALES_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_10_CUSTOMERS_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_WEEK_SALES_REPORT_PATH");
@@ -1165,6 +1166,7 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
     expect(liveUrlScript).toContain("pnpm launch:first-sales");
+    expect(liveUrlScript).toContain("pnpm launch:go-live");
     expect(liveUrlScript).toContain("pnpm launch:sales-tracker");
     expect(liveUrlScript).toContain("pnpm launch:first-buyer-proof");
     expect(liveUrlScript).toContain("pnpm launch:emergency-stop");
@@ -1173,6 +1175,38 @@ describe("deployment files", () => {
     expect(liveUrlScript).not.toContain("execSync");
     expect(liveUrlScript).not.toContain("sk_test_");
     expect(liveUrlScript).not.toContain("whsec_");
+  });
+
+  it("keeps a work-computer-safe final go-live packet command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const goLiveScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-go-live-packet.mjs"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:go-live": "node scripts/launch-go-live-packet.mjs"'
+    );
+    expect(goLiveScript).toContain("OptiTech Academy Final Go-Live Packet");
+    expect(goLiveScript).toContain("LAUNCH_GO_LIVE_REPORT_PATH");
+    expect(goLiveScript).toContain("go-live-checklist.md");
+    expect(goLiveScript).toContain("ENABLE_PAID_ENROLLMENT=true");
+    expect(goLiveScript).toContain("pnpm launch:readiness-snapshot");
+    expect(goLiveScript).toContain("pnpm launch:first-buyer-proof");
+    expect(goLiveScript).toContain("pnpm launch:emergency-stop");
+    expect(goLiveScript).toContain("/api/checkout/availability");
+    expect(goLiveScript).toContain("Do not paste Stripe secret keys");
+    expect(goLiveScript).not.toContain("execSync");
+    expect(goLiveScript).not.toContain("sk_test_");
+    expect(goLiveScript).not.toContain("whsec_");
+    expect(readme).toContain("pnpm launch:go-live");
   });
 
   it("keeps a work-computer-safe live purchase rehearsal command available", async () => {
