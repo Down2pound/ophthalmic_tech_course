@@ -634,6 +634,52 @@ describe("deployment files", () => {
     expect(spindelOnboardingScript).not.toContain("sk_test_");
   });
 
+  it("keeps a work-computer-safe access revocation packet command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const accessRevocationScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-access-revocation.mjs"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const supportRunbook = await readFile(
+      path.resolve(process.cwd(), "docs/launch/first-sale-support-runbook.md"),
+      "utf8"
+    );
+    const emergencyStopGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/paid-launch-emergency-stop.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:access-revocation": "node scripts/launch-access-revocation.mjs"'
+    );
+    expect(accessRevocationScript).toContain(
+      "OptiTech Academy Access Revocation Packet"
+    );
+    expect(accessRevocationScript).toContain(
+      "LAUNCH_ACCESS_REVOCATION_REPORT_PATH"
+    );
+    expect(accessRevocationScript).toContain(
+      "/api/support/access-revocations"
+    );
+    expect(accessRevocationScript).toContain("practice-seat-assignment");
+    expect(accessRevocationScript).toContain("practice-seat-pack");
+    expect(accessRevocationScript).toContain("Do not paste Stripe secret keys");
+    expect(accessRevocationScript).not.toContain("fetch(");
+    expect(accessRevocationScript).not.toContain("execSync");
+    expect(accessRevocationScript).not.toContain("sk_test_");
+    expect(accessRevocationScript).not.toContain("whsec_");
+    expect(readme).toContain("pnpm launch:access-revocation");
+    expect(supportRunbook).toContain("pnpm launch:access-revocation");
+    expect(emergencyStopGuide).toContain("pnpm launch:access-revocation");
+  });
+
   it("keeps a work-computer-safe local demo testing command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

@@ -42,6 +42,8 @@ protected health information, or private employee details into this checklist.
    resending sign-in instructions.
 5. If a refund is needed, handle the refund in Stripe and then use the protected
    access revocation flow only after documenting the decision.
+6. Before changing app access, run `pnpm launch:access-revocation` to prepare a
+   one-target packet from the buyer lookup result.
 
 ## Safe Evidence To Save
 

@@ -71,6 +71,7 @@ LAUNCH_FULFILLMENT_REPORT_PATH=launch-evidence/first-buyer-fulfillment-checklist
 LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH=launch-evidence/first-buyer-proof.md LAUNCH_BUYER_EMAIL=buyer@example.com pnpm launch:first-buyer-proof https://your-real-domain.example
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
+LAUNCH_ACCESS_REVOCATION_REPORT_PATH=launch-evidence/access-revocation-packet.md pnpm launch:access-revocation https://your-real-domain.example -- --email=buyer@example.com --target-type=enrollment --target-id=enrollment_example --reason=refund
 pnpm launch:env-checklist
 LAUNCH_ENV_TEMPLATE_REPORT_PATH=launch-evidence/host-dashboard-env-template.md pnpm launch:env-template https://your-real-domain.example
 pnpm launch:lead-qualifier
@@ -129,6 +130,8 @@ pnpm launch:blockers
   one controlled paid buyer.
 - `launch:emergency-stop` prints the red-button checklist for pausing paid
   checkout safely if a live launch issue appears.
+- `launch:access-revocation` prints and can save a one-target refund or support
+  correction packet before using the protected access revocation flow.
 - `launch:env-checklist` prints the full production host environment checklist
   so Render, Stripe, email, database, admin-token, and clinical-review settings
   can be filled in without putting real secret values in the repo.

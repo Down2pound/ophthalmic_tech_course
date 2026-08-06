@@ -15,6 +15,7 @@
     "launch:smoke": "node scripts/launch-smoke.mjs",
     "launch:doctor": "tsx server/src/launch/runLaunchDoctor.ts",
     "launch:admin-tokens": "node scripts/launch-admin-tokens.mjs",
+    "launch:access-revocation": "node scripts/launch-access-revocation.mjs",
     "launch:blockers": "node scripts/launch-blockers-summary.mjs",
     "launch:bootcamp-intake": "node scripts/launch-bootcamp-intake.mjs",
     "launch:clinical-review": "node scripts/launch-clinical-review.mjs",

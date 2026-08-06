@@ -76,6 +76,12 @@ staff details, or protected health information into support notes.
    private admin token, and submit one target only.
 6. Record the Stripe refund ID, revocation target, and date in safe notes.
 
+Generate a safe one-target revocation packet before changing access:
+
+```bash
+LAUNCH_ACCESS_REVOCATION_REPORT_PATH=launch-evidence/access-revocation-packet.md pnpm launch:access-revocation https://your-real-domain.example -- --email=buyer@example.com --target-type=enrollment --target-id=enrollment_example --reason=refund
+```
+
 ## Escalate Immediately When
 
 - A learner reports clinical or medical advice concerns.

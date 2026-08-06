@@ -111,6 +111,7 @@ function renderPacket({ baseUrl, expectedCommit, testEmail, buyerEmail }) {
     `LAUNCH_BUYER_EMAIL=${buyerEmail} LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH=launch-evidence/first-buyer-proof.md pnpm launch:first-buyer-proof ${baseUrl}`,
     "pnpm launch:fulfillment",
     "pnpm launch:sales-tracker",
+    `LAUNCH_ACCESS_REVOCATION_REPORT_PATH=launch-evidence/access-revocation-packet.md pnpm launch:access-revocation ${baseUrl} -- --email=${buyerEmail} --target-type=enrollment --target-id=enrollment_example --reason=refund`,
     "pnpm launch:emergency-stop",
     "```",
     "",
