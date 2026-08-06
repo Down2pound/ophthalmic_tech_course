@@ -343,8 +343,23 @@ describe("deployment files", () => {
       '"launch:external-setup": "tsx server/src/launch/runExternalSetupWorksheet.ts"'
     );
     expect(externalSetupScript).toContain("external-setup-worksheet.md");
+    expect(externalSetupScript).toContain(
+      "OptiTech Academy External Setup Session Packet"
+    );
+    expect(externalSetupScript).toContain("LAUNCH_EXTERNAL_SETUP_REPORT_PATH");
+    expect(externalSetupScript).toContain(
+      "launch-evidence/external-setup-session.md"
+    );
+    expect(externalSetupScript).toContain("pnpm launch:env-template");
+    expect(externalSetupScript).toContain("pnpm launch:dashboard-proof");
+    expect(externalSetupScript).toContain("pnpm launch:live-purchase-test");
+    expect(externalSetupScript).toContain("ENABLE_PAID_ENROLLMENT");
+    expect(externalSetupScript).toContain("checkout.session.completed");
     expect(externalSetupScript).not.toContain("execSync");
+    expect(externalSetupScript).not.toContain("sk_test_");
+    expect(externalSetupScript).not.toContain("whsec_");
     expect(readme).toContain("pnpm launch:external-setup");
+    expect(readme).toContain("LAUNCH_EXTERNAL_SETUP_REPORT_PATH");
     expect(externalSetupWorksheet).toContain(
       "OptiTech Academy External Setup Worksheet"
     );

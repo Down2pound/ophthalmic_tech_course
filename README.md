@@ -55,7 +55,7 @@ revenue.
 ```bash
 pnpm launch:jeffmini
 pnpm launch:online-start
-pnpm launch:external-setup
+LAUNCH_EXTERNAL_SETUP_REPORT_PATH=launch-evidence/external-setup-session.md pnpm launch:external-setup https://your-real-domain.example
 LAUNCH_FIRST_RENDER_REPORT_PATH=launch-evidence/first-render-deploy-evidence.md pnpm launch:first-render-deploy https://your-real-domain.example
 pnpm launch:clinical-review-request
 LAUNCH_CLINICAL_SIGNOFF_REPORT_PATH=launch-evidence/module-1-clinical-signoff-packet.md pnpm launch:clinical-signoff -- --reviewer-name="Dr. Reviewer" --reviewer-role="Ophthalmologist" --review-date="2026-08-06" --approved-version="module-one-v1"
@@ -93,9 +93,9 @@ pnpm launch:blockers
   Google Drive as the backup drawer.
 - `launch:online-start` prints the first-hour path for deploying the site with
   checkout safely closed.
-- `launch:external-setup` prints the outside-account worksheet for GitHub,
-  Render, Stripe, email, admin protection, clinical review, and live purchase
-  proof.
+- `launch:external-setup` prints and can save a dated home-PC setup-session
+  packet plus the outside-account worksheet for GitHub, Render, Stripe, email,
+  admin protection, clinical review, and live purchase proof.
 - `launch:first-render-deploy` prints and can save the short Render deploy
   evidence card with the current branch, commit, closed-checkout settings, and
   first live URL checks.
