@@ -23,6 +23,7 @@ export interface LearnerInterestRecord extends LearnerInterestInput {
   email: string;
   status: LearnerInterestStatus;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface LearnerInterestStore {
@@ -55,6 +56,7 @@ interface LearnerInterestRow extends Record<string, unknown> {
   goal: string;
   status: LearnerInterestStatus;
   created_at: Date | string;
+  updated_at?: Date | string;
 }
 
 function normalizeText(value: string, maxLength: number): string {
@@ -79,6 +81,14 @@ function mapLearnerInterest(row: LearnerInterestRow): LearnerInterestRecord {
       row.created_at instanceof Date
         ? row.created_at.toISOString()
         : new Date(row.created_at).toISOString(),
+    ...(row.updated_at
+      ? {
+          updatedAt:
+            row.updated_at instanceof Date
+              ? row.updated_at.toISOString()
+              : new Date(row.updated_at).toISOString(),
+        }
+      : {}),
   };
 }
 
@@ -169,7 +179,7 @@ export function createPostgresLearnerInterestStore(
       const result = await db.query<LearnerInterestRow>(
         `
         UPDATE commerce_learner_interests
-        SET status = $2
+        SET status = $2, updated_at = NOW()
         WHERE id = $1
         RETURNING *
         `,

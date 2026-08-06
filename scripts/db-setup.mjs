@@ -94,8 +94,12 @@ CREATE TABLE IF NOT EXISTS commerce_practice_inquiries (
   target_timeline TEXT NOT NULL,
   message TEXT NOT NULL,
   status TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL
+  created_at TIMESTAMPTZ NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE IF EXISTS commerce_practice_inquiries
+  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
 
 CREATE INDEX IF NOT EXISTS commerce_practice_inquiries_contact_email_idx
   ON commerce_practice_inquiries (contact_email);
@@ -107,8 +111,12 @@ CREATE TABLE IF NOT EXISTS commerce_learner_interests (
   background TEXT NOT NULL,
   goal TEXT NOT NULL,
   status TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL
+  created_at TIMESTAMPTZ NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE IF EXISTS commerce_learner_interests
+  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
 
 CREATE INDEX IF NOT EXISTS commerce_learner_interests_email_idx
   ON commerce_learner_interests (email);

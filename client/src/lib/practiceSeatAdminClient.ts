@@ -44,6 +44,7 @@ export interface PracticeInquirySummary {
   message: string;
   status: string;
   createdAt: string;
+  updatedAt?: string;
   followUpPlan: PracticeInquiryFollowUpPlan;
 }
 
@@ -55,6 +56,7 @@ export interface LearnerInterestSummary {
   goal: string;
   status: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface PracticeInquiryListResponse {

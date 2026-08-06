@@ -88,6 +88,16 @@ describe("createInMemoryPracticeInquiryStore", () => {
   });
 });
 
+describe("createPostgresPracticeInquiryStore", () => {
+  it("updates practice inquiry status timestamps in PostgreSQL", async () => {
+    const source = await import("node:fs/promises").then(fs =>
+      fs.readFile(new URL("./practiceInquiryStore.ts", import.meta.url), "utf8")
+    );
+
+    expect(source).toContain("SET status = $2, updated_at = NOW()");
+  });
+});
+
 describe("createPracticeInquiryFollowUpPlan", () => {
   it("prioritizes larger near-term practice leads with a clear next action", () => {
     const inquiry = preparePracticeInquiryRecord({

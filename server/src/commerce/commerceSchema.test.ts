@@ -65,6 +65,9 @@ describe("commerceSchemaSql", () => {
     expect(commerceSchemaSql).toContain("contact_email TEXT NOT NULL");
     expect(commerceSchemaSql).toContain("estimated_learner_count INTEGER");
     expect(commerceSchemaSql).toContain(
+      "ALTER TABLE IF EXISTS commerce_practice_inquiries"
+    );
+    expect(commerceSchemaSql).toContain(
       "commerce_practice_inquiries_contact_email_idx"
     );
   });
@@ -73,6 +76,9 @@ describe("commerceSchemaSql", () => {
     expect(commerceSchemaSql).toContain("learner_name TEXT NOT NULL");
     expect(commerceSchemaSql).toContain("background TEXT NOT NULL");
     expect(commerceSchemaSql).toContain("goal TEXT NOT NULL");
+    expect(commerceSchemaSql).toContain(
+      "ALTER TABLE IF EXISTS commerce_learner_interests"
+    );
     expect(commerceSchemaSql).toContain("commerce_learner_interests_email_idx");
   });
 });
@@ -88,6 +94,7 @@ describe("getCommerceSchemaChecklist", () => {
       "Assign practice seats to learner emails without exceeding purchased seat capacity.",
       "Store practice inquiries durably so larger team leads do not depend on mailto links.",
       "Store learner interest leads durably so individual buyers can be contacted before paid enrollment opens.",
+      "Track lead status updates so follow-up work can move from new to contacted to closed.",
     ]);
   });
 });

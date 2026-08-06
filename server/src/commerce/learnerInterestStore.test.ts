@@ -82,6 +82,16 @@ describe("createInMemoryLearnerInterestStore", () => {
   });
 });
 
+describe("createPostgresLearnerInterestStore", () => {
+  it("updates learner interest status timestamps in PostgreSQL", async () => {
+    const source = await import("node:fs/promises").then(fs =>
+      fs.readFile(new URL("./learnerInterestStore.ts", import.meta.url), "utf8")
+    );
+
+    expect(source).toContain("SET status = $2, updated_at = NOW()");
+  });
+});
+
 describe("createLearnerInterestNotificationMessage", () => {
   it("builds a safe internal learner lead notification", () => {
     const interest = prepareLearnerInterestRecord({

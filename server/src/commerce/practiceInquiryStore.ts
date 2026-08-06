@@ -25,6 +25,7 @@ export interface PracticeInquiryRecord extends PracticeInquiryInput {
   contactEmail: string;
   status: PracticeInquiryStatus;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export type PracticeInquiryLeadPriority = "high" | "medium" | "standard";
@@ -72,6 +73,7 @@ interface PracticeInquiryRow extends Record<string, unknown> {
   message: string;
   status: PracticeInquiryStatus;
   created_at: Date | string;
+  updated_at?: Date | string;
 }
 
 function normalizeText(value: string, maxLength: number): string {
@@ -104,6 +106,14 @@ function mapPracticeInquiry(row: PracticeInquiryRow): PracticeInquiryRecord {
       row.created_at instanceof Date
         ? row.created_at.toISOString()
         : new Date(row.created_at).toISOString(),
+    ...(row.updated_at
+      ? {
+          updatedAt:
+            row.updated_at instanceof Date
+              ? row.updated_at.toISOString()
+              : new Date(row.updated_at).toISOString(),
+        }
+      : {}),
   };
 }
 
@@ -207,7 +217,7 @@ export function createPostgresPracticeInquiryStore(
       const result = await db.query<PracticeInquiryRow>(
         `
         UPDATE commerce_practice_inquiries
-        SET status = $2
+        SET status = $2, updated_at = NOW()
         WHERE id = $1
         RETURNING *
         `,

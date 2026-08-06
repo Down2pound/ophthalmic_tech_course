@@ -61,6 +61,12 @@ function getRemainingSeats(seatPack: PracticeSeatPackSummary) {
   return Math.max(seatPack.totalSeats - seatPack.assignedSeats, 0);
 }
 
+function formatLeadDate(value: string | undefined) {
+  if (!value) return "Not recorded";
+
+  return new Date(value).toLocaleDateString();
+}
+
 export default function PracticeSeatAdmin() {
   const [adminToken, setAdminToken] = useState("");
   const [draftPublicAppUrl, setDraftPublicAppUrl] = useState(
@@ -1037,6 +1043,9 @@ export default function PracticeSeatAdmin() {
                         <p className="mt-2 text-sm font-semibold text-slate-700">
                           Status: {inquiry.status}
                         </p>
+                        <p className="mt-1 text-xs text-slate-500">
+                          Last updated: {formatLeadDate(inquiry.updatedAt)}
+                        </p>
                       </div>
                       <div className="rounded-md border border-blue-100 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-950">
                         {inquiry.estimatedLearnerCount ?? "Unknown"} learners
@@ -1165,6 +1174,9 @@ export default function PracticeSeatAdmin() {
                     </p>
                     <p className="mt-2 text-sm font-semibold text-slate-700">
                       Status: {interest.status}
+                    </p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      Last updated: {formatLeadDate(interest.updatedAt)}
                     </p>
                     <p className="mt-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm leading-6 text-green-950">
                       Recommended next step: send the learner decision one-pager
