@@ -67,6 +67,7 @@ LAUNCH_SALES_TRACKER_OUTPUT_DIR=launch-evidence/sales-tracker-templates pnpm lau
 LAUNCH_LIVE_PURCHASE_REPORT_PATH=launch-evidence/live-purchase-rehearsal-report.md pnpm launch:live-purchase-test -- --email=internal.test@example.com https://your-real-domain.example
 LAUNCH_FIRST_BUYER_REPORT_PATH=launch-evidence/first-buyer-command-center.md pnpm launch:first-buyer https://your-real-domain.example
 LAUNCH_FULFILLMENT_REPORT_PATH=launch-evidence/first-buyer-fulfillment-checklist.md pnpm launch:fulfillment
+LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH=launch-evidence/first-buyer-proof.md LAUNCH_BUYER_EMAIL=buyer@example.com pnpm launch:first-buyer-proof https://your-real-domain.example
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
 pnpm launch:env-checklist
@@ -114,6 +115,9 @@ pnpm launch:blockers
   command-center packet.
 - `launch:fulfillment` prints the first paid buyer receipt, access, welcome,
   and support proof checklist and can save a safe fulfillment evidence packet.
+- `launch:first-buyer-proof` saves the first-buyer proof packet after a real
+  payment, with an optional protected buyer lookup if the practice-seat admin
+  token is available only in the shell environment.
 - `launch:first-revenue` prints the shortest safe path from restored code to
   one controlled paid buyer.
 - `launch:emergency-stop` prints the red-button checklist for pausing paid

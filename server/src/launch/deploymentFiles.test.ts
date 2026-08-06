@@ -1162,9 +1162,11 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_SALES_TRACKER_OUTPUT_DIR");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FULFILLMENT_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
     expect(liveUrlScript).toContain("pnpm launch:first-sales");
     expect(liveUrlScript).toContain("pnpm launch:sales-tracker");
+    expect(liveUrlScript).toContain("pnpm launch:first-buyer-proof");
     expect(liveUrlScript).toContain("pnpm launch:emergency-stop");
     expect(liveUrlScript).toContain("Do not use localhost");
     expect(liveUrlScript).toContain("Replace the example URL");
@@ -1204,6 +1206,43 @@ describe("deployment files", () => {
     expect(livePurchaseScript).not.toContain("execSync");
     expect(livePurchaseScript).not.toContain("sk_test_");
     expect(livePurchaseScript).not.toContain("whsec_");
+  });
+
+  it("keeps a work-computer-safe first buyer proof command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const firstBuyerProofScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-buyer-proof.mjs"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:first-buyer-proof": "node scripts/launch-first-buyer-proof.mjs"'
+    );
+    expect(firstBuyerProofScript).toContain(
+      "OptiTech Academy First Buyer Proof Packet"
+    );
+    expect(firstBuyerProofScript).toContain(
+      "LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH"
+    );
+    expect(firstBuyerProofScript).toContain("LAUNCH_BUYER_EMAIL");
+    expect(firstBuyerProofScript).toContain("PRACTICE_SEAT_ADMIN_TOKEN");
+    expect(firstBuyerProofScript).toContain("/api/support/buyer-lookup");
+    expect(firstBuyerProofScript).toContain("checkout.session.completed");
+    expect(firstBuyerProofScript).toContain("pnpm launch:fulfillment");
+    expect(firstBuyerProofScript).toContain("pnpm launch:sales-tracker");
+    expect(firstBuyerProofScript).toContain("pnpm launch:emergency-stop");
+    expect(firstBuyerProofScript).toContain("Do not paste card numbers");
+    expect(firstBuyerProofScript).not.toContain("execSync");
+    expect(firstBuyerProofScript).not.toContain("sk_test_");
+    expect(firstBuyerProofScript).not.toContain("whsec_");
+    expect(readme).toContain("pnpm launch:first-buyer-proof");
   });
 
   it("keeps a work-computer-safe deployed lead pipeline smoke command available", async () => {
