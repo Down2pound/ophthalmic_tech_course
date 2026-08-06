@@ -8,6 +8,7 @@ import {
   Clock,
   Eye,
   FileBadge2,
+  ShieldCheck,
   Sparkles,
   Users,
 } from "lucide-react";
@@ -19,8 +20,17 @@ import {
   practicePackOffers,
 } from "@shared/commerce/offers";
 import { buyerConfidenceAnswers } from "@shared/commerce/salesReadiness";
+import { useEffect, useState } from "react";
+import {
+  fetchCheckoutAvailability,
+  type CheckoutAvailabilityReport,
+} from "@/lib/checkoutClient";
 
 export default function Home() {
+  const [checkoutAvailability, setCheckoutAvailability] =
+    useState<CheckoutAvailabilityReport | null>(null);
+  const [checkoutAvailabilityFailed, setCheckoutAvailabilityFailed] =
+    useState(false);
   const curriculumDays = curriculumModules.map(module => ({
     day: `Day ${module.day}`,
     title: module.title,
@@ -42,6 +52,55 @@ export default function Home() {
   ];
 
   const starterPracticePack = practicePackOffers[0];
+  const checkoutReady = checkoutAvailability?.ready === true;
+  const checkoutPaused = checkoutAvailability?.ready === false;
+  const individualCheckoutHref = checkoutReady
+    ? "/checkout"
+    : "/checkout#learner-interest";
+  const practiceCheckoutHref = checkoutReady
+    ? "/practice-packs"
+    : "/practice-packs#practice-inquiry";
+  const individualCtaLabel = checkoutReady
+    ? "Buy for Myself"
+    : "Join Learner Interest";
+  const practiceCtaLabel = checkoutReady
+    ? "Buy for My Practice"
+    : "Start Practice Inquiry";
+  const heroStatusTitle =
+    checkoutAvailability?.title ??
+    (checkoutAvailabilityFailed
+      ? "Enrollment status could not load"
+      : "Checking enrollment status");
+  const heroStatusMessage =
+    checkoutAvailability?.message ??
+    (checkoutAvailabilityFailed
+      ? "Use the buyer guide or free preview first. If you are ready to start, open the checkout page and join the interest list."
+      : "The page is checking whether checkout, manual first-buyer links, or the interest list should be the safest next step.");
+  const heroStatusTone = checkoutReady
+    ? "border-green-400/40 bg-green-400/10 text-green-100"
+    : checkoutPaused
+      ? "border-amber-300/40 bg-amber-300/10 text-amber-100"
+      : "border-white/15 bg-white/10 text-gray-100";
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchCheckoutAvailability()
+      .then(availability => {
+        if (!isMounted) return;
+        setCheckoutAvailability(availability);
+        setCheckoutAvailabilityFailed(false);
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setCheckoutAvailability(null);
+        setCheckoutAvailabilityFailed(true);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const stats = [
     { number: "10", label: "Planned modules" },
@@ -182,20 +241,20 @@ export default function Home() {
                     Start Here <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </a>
-                <a href="/checkout">
+                <a href={individualCheckoutHref}>
                   <Button
                     size="lg"
                     className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
                   >
-                    Buy for Myself <ArrowRight className="ml-2 w-4 h-4" />
+                    {individualCtaLabel} <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </a>
-                <a href="/practice-packs">
+                <a href={practiceCheckoutHref}>
                   <Button
                     size="lg"
                     className="w-full glass-dark text-white border border-white/20 hover:bg-white/10 text-base"
                   >
-                    Buy for My Practice
+                    {practiceCtaLabel}
                     <Building2 className="ml-2 w-4 h-4" />
                   </Button>
                 </a>
@@ -230,11 +289,31 @@ export default function Home() {
                   Completion is education, not certification
                 </span>
               </div>
+              <div
+                className={`rounded-md border p-4 text-sm leading-6 ${heroStatusTone}`}
+              >
+                <div className="flex items-start gap-3">
+                  <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold">{heroStatusTitle}</p>
+                    <p className="mt-1 opacity-90">{heroStatusMessage}</p>
+                    {checkoutPaused && (
+                      <a
+                        href={individualCheckoutHref}
+                        className="mt-3 inline-flex items-center gap-2 font-semibold text-white hover:text-cyan-100"
+                      >
+                        Go to the safest next step
+                        <ArrowRight className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="relative z-10">
               <div className="grid gap-4">
                 <a
-                  href="/checkout"
+                  href={individualCheckoutHref}
                   className="glass-card block p-6 transition-all hover:bg-white/10"
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -262,7 +341,7 @@ export default function Home() {
                 </a>
 
                 <a
-                  href="/practice-packs"
+                  href={practiceCheckoutHref}
                   className="glass-card block p-6 transition-all hover:bg-white/10"
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -389,9 +468,9 @@ export default function Home() {
                   </span>
                   <span className="text-gray-400 ml-2">one-time</span>
                 </div>
-                <a href="/checkout">
+                <a href={individualCheckoutHref}>
                   <Button className="w-full mb-8 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0">
-                    {tier.cta}
+                    {checkoutReady ? tier.cta : "Join Interest List"}
                   </Button>
                 </a>
                 <ul className="space-y-3">
@@ -527,12 +606,13 @@ export default function Home() {
               Join the founding learner group and help shape a practical, honest
               training path for new ophthalmic techs
             </p>
-            <a href="/checkout">
+            <a href={individualCheckoutHref}>
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 text-base"
               >
-                Start Learning Today <ArrowRight className="ml-2 w-4 h-4" />
+                {checkoutReady ? "Start Learning Today" : "Join Interest List"}{" "}
+                <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </a>
             <a

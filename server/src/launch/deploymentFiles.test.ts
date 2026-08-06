@@ -111,6 +111,23 @@ describe("deployment files", () => {
     expect(renderBlueprint).not.toContain("whsec_");
   });
 
+  it("keeps the homepage aligned with live checkout availability", async () => {
+    const homePage = await readFile(
+      path.resolve(process.cwd(), "client/src/pages/Home.tsx"),
+      "utf8"
+    );
+
+    expect(homePage).toContain("fetchCheckoutAvailability");
+    expect(homePage).toContain("Checking enrollment status");
+    expect(homePage).toContain("/checkout#learner-interest");
+    expect(homePage).toContain("/practice-packs#practice-inquiry");
+    expect(homePage).toContain("Join Interest List");
+    expect(homePage).toContain("Start Practice Inquiry");
+    expect(homePage).toContain("Go to the safest next step");
+    expect(homePage).not.toContain("sk_test_");
+    expect(homePage).not.toContain("whsec_");
+  });
+
   it("runs the launch secret scan and local course smoke check in GitHub launch CI", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
