@@ -72,6 +72,7 @@ LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH=launch-evidence/first-buyer-proof.md LAUNCH
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
 LAUNCH_ACCESS_REVOCATION_REPORT_PATH=launch-evidence/access-revocation-packet.md pnpm launch:access-revocation https://your-real-domain.example -- --email=buyer@example.com --target-type=enrollment --target-id=enrollment_example --reason=refund
+LAUNCH_SOURCE_AUDIT_REPORT_PATH=launch-evidence/course-source-audit.md pnpm launch:source-audit
 pnpm launch:env-checklist
 LAUNCH_ENV_TEMPLATE_REPORT_PATH=launch-evidence/host-dashboard-env-template.md pnpm launch:env-template https://your-real-domain.example
 pnpm launch:lead-qualifier
@@ -158,6 +159,9 @@ pnpm launch:blockers
   purchase rehearsal, first-buyer proof, fulfillment, and emergency stop.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
+- `launch:source-audit` checks that the NotebookLM source, Bootcamp Drive
+  folder, older course-data source, source inventory, and migration checklist
+  still agree before new course material is published.
 - `launch:readiness-snapshot` saves the deployed readiness scoreboard, checkout
   availability, and plain-English link-sharing traffic light into
   `launch-evidence/` for launch proof.

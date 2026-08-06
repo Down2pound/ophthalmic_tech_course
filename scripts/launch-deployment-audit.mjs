@@ -199,17 +199,17 @@ addCheck(
 );
 addCheck(
   checks,
-  "Launch preflight includes offer audit and local course smoke test",
+  "Launch preflight includes offer, source, deployment, and local course audits",
   source.packageJson.includes(
-    "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:local-course-smoke && pnpm launch:bundle"
+    "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:source-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:local-course-smoke && pnpm launch:bundle"
   ),
   files.packageJson
 );
 addCheck(
   checks,
-  "Work-safe preflight includes deployment audit",
+  "Work-safe preflight includes source and deployment audits",
   source.packageJson.includes(
-    "pnpm check && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm launch:blockers"
+    "pnpm check && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:source-audit && pnpm launch:deployment-audit && pnpm launch:blockers"
   ),
   files.packageJson
 );

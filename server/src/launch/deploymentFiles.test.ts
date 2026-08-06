@@ -125,7 +125,7 @@ describe("deployment files", () => {
       '"launch:secret-scan": "node scripts/launch-secret-scan.mjs"'
     );
     expect(packageJson).toContain(
-      '"launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:local-course-smoke && pnpm launch:bundle"'
+      '"launch:preflight": "pnpm check && pnpm test && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:source-audit && pnpm launch:deployment-audit && pnpm build && pnpm launch:local-course-smoke && pnpm launch:bundle"'
     );
     expect(packageJson).toContain(
       '"launch:local-course-smoke": "node scripts/launch-local-course-smoke.mjs"'
@@ -240,7 +240,7 @@ describe("deployment files", () => {
       '"launch:backup": "node scripts/launch-backup-handoff.mjs"'
     );
     expect(packageJson).toContain(
-      '"launch:work-safe-preflight": "pnpm check && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:deployment-audit && pnpm launch:blockers"'
+      '"launch:work-safe-preflight": "pnpm check && pnpm launch:secret-scan && pnpm launch:offer-audit && pnpm launch:source-audit && pnpm launch:deployment-audit && pnpm launch:blockers"'
     );
     expect(packageJson).toContain(
       '"launch:workstation-handoff": "pnpm launch:work-safe-preflight && node scripts/launch-backup-handoff.mjs && node scripts/launch-post-0716-handoff.mjs && node scripts/launch-first-revenue-path.mjs"'
@@ -254,6 +254,46 @@ describe("deployment files", () => {
     expect(backupScript).toContain("pnpm launch:deployment-audit");
     expect(backupScript).toContain("pnpm launch:first-sales");
     expect(backupScript).not.toContain("execSync");
+  });
+
+  it("keeps the Notebook and Drive course source audit runnable without secrets", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const sourceAuditScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-source-audit.mjs"),
+      "utf8"
+    );
+    const goLiveScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-go-live-packet.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:source-audit": "node scripts/launch-source-audit.mjs"'
+    );
+    expect(packageJson).toContain("pnpm launch:source-audit");
+    expect(readme).toContain("pnpm launch:source-audit");
+    expect(goLiveScript).toContain("pnpm launch:source-audit");
+    expect(sourceAuditScript).toContain("OptiTech Academy Course Source Audit");
+    expect(sourceAuditScript).toContain("LAUNCH_SOURCE_AUDIT_REPORT_PATH");
+    expect(sourceAuditScript).toContain(
+      "https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1"
+    );
+    expect(sourceAuditScript).toContain(
+      "https://drive.google.com/drive/folders/1tEGzMv4hXrCjZQwMnXyD2eWXqp1JkT5q"
+    );
+    expect(sourceAuditScript).toContain(
+      "NotebookLM and Google Drive are source workspaces"
+    );
+    expect(sourceAuditScript).not.toContain("execSync");
+    expect(sourceAuditScript).not.toContain("sk_test_");
+    expect(sourceAuditScript).not.toContain("whsec_");
   });
 
   it("keeps the first-revenue path tied to outside dashboard setup", async () => {
@@ -665,9 +705,7 @@ describe("deployment files", () => {
     expect(accessRevocationScript).toContain(
       "LAUNCH_ACCESS_REVOCATION_REPORT_PATH"
     );
-    expect(accessRevocationScript).toContain(
-      "/api/support/access-revocations"
-    );
+    expect(accessRevocationScript).toContain("/api/support/access-revocations");
     expect(accessRevocationScript).toContain("practice-seat-assignment");
     expect(accessRevocationScript).toContain("practice-seat-pack");
     expect(accessRevocationScript).toContain("Do not paste Stripe secret keys");
@@ -1114,7 +1152,9 @@ describe("deployment files", () => {
     expect(firstRenderDeployScript).toContain(
       "first-render-deploy-evidence.md"
     );
-    expect(firstRenderDeployScript).toContain("LAUNCH_FIRST_RENDER_REPORT_PATH");
+    expect(firstRenderDeployScript).toContain(
+      "LAUNCH_FIRST_RENDER_REPORT_PATH"
+    );
     expect(firstRenderDeployScript).toContain("Commit to deploy");
     expect(firstRenderDeployScript).toContain("pnpm launch:live-url");
     expect(firstRenderDeployScript).not.toContain("execSync");
