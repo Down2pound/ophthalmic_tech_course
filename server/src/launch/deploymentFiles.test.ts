@@ -772,9 +772,16 @@ describe("deployment files", () => {
     expect(packageJson).toContain(
       '"launch:lead-qualifier": "node scripts/launch-lead-qualifier.mjs"'
     );
+    expect(packageJson).toContain(
+      '"launch:first-buyer": "node scripts/launch-first-buyer-command-center.mjs"'
+    );
     expect(leadQualifierScript).toContain("first-lead-qualification-card.md");
     expect(leadQualifierScript).not.toContain("execSync");
+    expect(firstBuyerScript).toContain("LAUNCH_BASE_URL");
+    expect(firstBuyerScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
+    expect(firstBuyerScript).toContain("first-buyer-command-center.md");
     expect(firstBuyerScript).toContain("pnpm launch:lead-qualifier");
+    expect(firstBuyerScript).not.toContain("execSync");
     expect(leadQualificationCard).toContain(
       "OptiTech Academy First Lead Qualification Card"
     );
@@ -1125,6 +1132,7 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_CHECKOUT_SMOKE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_SALES_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
     expect(liveUrlScript).toContain("pnpm launch:first-sales");
     expect(liveUrlScript).toContain("pnpm launch:emergency-stop");

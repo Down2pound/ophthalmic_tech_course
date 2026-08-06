@@ -62,7 +62,7 @@ pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding
 pnpm launch:email-smoke -- --email=internal.test@example.com https://your-real-domain.example
 LAUNCH_FIRST_SALES_REPORT_PATH=launch-evidence/first-sales-link-packet.md pnpm launch:first-sales https://your-real-domain.example
 LAUNCH_LIVE_PURCHASE_REPORT_PATH=launch-evidence/live-purchase-rehearsal-report.md pnpm launch:live-purchase-test -- --email=internal.test@example.com https://your-real-domain.example
-pnpm launch:first-buyer
+LAUNCH_FIRST_BUYER_REPORT_PATH=launch-evidence/first-buyer-command-center.md pnpm launch:first-buyer https://your-real-domain.example
 pnpm launch:fulfillment
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
@@ -98,7 +98,8 @@ pnpm launch:blockers
   and can save a safe report template for proving Stripe, webhook, access, and
   sign-in all worked together.
 - `launch:first-buyer` prints the first-buyer control panel with safe links,
-  starter messages, and pause rules.
+  starter messages, and pause rules, accepts a deployed URL, and can save a safe
+  command-center packet.
 - `launch:fulfillment` prints the first paid buyer receipt, access, welcome,
   and support proof checklist.
 - `launch:first-revenue` prints the shortest safe path from restored code to
