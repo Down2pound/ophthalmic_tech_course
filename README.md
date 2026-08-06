@@ -79,6 +79,7 @@ pnpm launch:local-course-smoke
 pnpm launch:local-demo
 pnpm launch:live-url https://your-real-domain.example
 LAUNCH_GO_LIVE_REPORT_PATH=launch-evidence/go-live-packet.md pnpm launch:go-live https://your-real-domain.example
+LAUNCH_PAID_PROOF_REPORT_PATH=launch-evidence/paid-launch-proof-sequence.md pnpm launch:paid-proof https://your-real-domain.example
 pnpm launch:bootcamp-intake
 pnpm launch:readiness-snapshot https://your-real-domain.example
 pnpm launch:blockers
@@ -149,6 +150,9 @@ pnpm launch:blockers
   and first-buyer commands.
 - `launch:go-live` prints and can save the final URL-specific launch-day packet
   before `ENABLE_PAID_ENROLLMENT=true` is used.
+- `launch:paid-proof` prints and can save the ordered money-path proof packet:
+  deployed commit check, checkout smoke, email smoke, readiness snapshot, live
+  purchase rehearsal, first-buyer proof, fulfillment, and emergency stop.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
 - `launch:readiness-snapshot` saves the deployed readiness scoreboard, checkout

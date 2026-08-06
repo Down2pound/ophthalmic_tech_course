@@ -109,6 +109,7 @@ function renderPacket({ baseUrl, warnings, checklist }) {
     `LAUNCH_BASE_URL=${baseUrl} LAUNCH_SMOKE_ALLOW_NOT_READY=true pnpm launch:smoke`,
     `LAUNCH_BASE_URL=${baseUrl} pnpm launch:readiness-snapshot ${baseUrl}`,
     `LAUNCH_BASE_URL=${baseUrl} pnpm launch:go-no-go`,
+    `LAUNCH_PAID_PROOF_REPORT_PATH=launch-evidence/paid-launch-proof-sequence.md pnpm launch:paid-proof ${baseUrl}`,
     "```",
     "",
     "Only after readiness is green, Stripe live mode is configured, and `ENABLE_PAID_ENROLLMENT=true` has been set in the production host:",

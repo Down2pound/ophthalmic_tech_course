@@ -1282,6 +1282,50 @@ describe("deployment files", () => {
     expect(livePurchaseScript).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe paid launch proof sequence command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const paidProofScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-paid-proof-sequence.mjs"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const liveUrlScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-live-url-card.mjs"),
+      "utf8"
+    );
+    const goLiveScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-go-live-packet.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:paid-proof": "node scripts/launch-paid-proof-sequence.mjs"'
+    );
+    expect(paidProofScript).toContain(
+      "OptiTech Academy Paid Launch Proof Sequence"
+    );
+    expect(paidProofScript).toContain("LAUNCH_PAID_PROOF_REPORT_PATH");
+    expect(paidProofScript).toContain("LAUNCH_EXPECTED_COMMIT");
+    expect(paidProofScript).toContain("pnpm launch:checkout-smoke");
+    expect(paidProofScript).toContain("pnpm launch:email-smoke");
+    expect(paidProofScript).toContain("pnpm launch:live-purchase-test");
+    expect(paidProofScript).toContain("pnpm launch:first-buyer-proof");
+    expect(paidProofScript).toContain("pnpm launch:emergency-stop");
+    expect(paidProofScript).toContain("Do not paste Stripe secret keys");
+    expect(paidProofScript).not.toContain("execSync");
+    expect(paidProofScript).not.toContain("sk_test_");
+    expect(paidProofScript).not.toContain("whsec_");
+    expect(readme).toContain("pnpm launch:paid-proof");
+    expect(liveUrlScript).toContain("pnpm launch:paid-proof");
+    expect(goLiveScript).toContain("pnpm launch:paid-proof");
+  });
+
   it("keeps a work-computer-safe first buyer proof command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
