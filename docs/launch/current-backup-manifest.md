@@ -33,25 +33,30 @@ optitech-academy-static-first-sale-page-YYYY-MM-DD-COMMIT.zip
 Example:
 
 ```text
-optitech-academy-source-2026-07-28-8c4db9f-tracked.zip
-optitech-academy-branch-2026-07-28-8c4db9f.bundle
-optitech-academy-launch-evidence-2026-07-28-8c4db9f.zip
-optitech-academy-static-first-sale-page-2026-07-28-8c4db9f.zip
+optitech-academy-source-2026-08-06-a6cbdb4-tracked.zip
+optitech-academy-branch-2026-08-06-a6cbdb4.bundle
+optitech-academy-launch-evidence-2026-08-06-a6cbdb4.zip
+optitech-academy-static-first-sale-page-2026-08-06-a6cbdb4.zip
 ```
 
 ## Latest Confirmed Backup
 
 Latest confirmed backup point:
 
-- Commit: `8c4db9f`
+- Commit: `a6cbdb4`
+- Backup date: `2026-08-06`
 - Source code ZIP, tracked repo files only:
-  `https://drive.google.com/file/d/1zGkdD-DFGMXQVuuGEIxybiyvRLbYaW4W/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1eatoxS-uJWSPUg_I8TaltVf5xHbroUmx/view?usp=drivesdk`
 - Git branch bundle:
-  `https://drive.google.com/file/d/1O-GVJzZdIMDb65Y855fQKu4770MjuCDP/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1-N6461KAAc9W5pzNFy1fNfskLoJMoXeg/view?usp=drivesdk`
 - Launch evidence ZIP:
-  `https://drive.google.com/file/d/1QRR6vPURXMptFaqqMIL1SzSiZorYCdQ7/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1uFMUT_CMeprtGx3xrXu0CGodH3FpWata/view?usp=drivesdk`
 - Static first-sale page ZIP:
-  `https://drive.google.com/file/d/15-uFch0XtISip5Ns7bOTpoj10iYlrOWH/view?usp=drivesdk`
+  `https://drive.google.com/file/d/11LodjFiyeMhhhmXWDogXbeFnpD0WsSeA/view?usp=drivesdk`
+
+This manifest may be committed after `a6cbdb4` only to record the Drive links.
+If GitHub shows a newer manifest-only commit, use GitHub for the newest branch
+state and use the Drive files above as the latest full portable backup set.
 
 The source ZIP was created from Git-tracked files only so it stays small enough
 for Google Drive upload. It does not include installed packages such as
