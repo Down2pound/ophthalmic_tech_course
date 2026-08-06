@@ -77,6 +77,9 @@ Record safe evidence in `manual-launch-qa-evidence.md`.
 - [ ] Custom practice inquiry path is visible and creates a durable lead record.
 - [ ] Protected practice inquiry list shows the test lead without exposing
       secrets or private clinical details.
+- [ ] Protected lead pipeline smoke test submits safe practice and learner
+      leads, loads them from the dashboard, and marks both contacted:
+      `LAUNCH_BASE_URL=https://your-domain.example LAUNCH_ADMIN_TOKEN=your_private_admin_token pnpm launch:lead-pipeline-smoke`.
 
 ## 6. Run Browser And Sharing Checks
 

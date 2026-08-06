@@ -65,6 +65,7 @@ pnpm launch:fulfillment
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
 pnpm launch:lead-qualifier
+pnpm launch:lead-pipeline-smoke
 pnpm launch:local-course-smoke
 pnpm launch:local-demo
 pnpm launch:live-url https://your-real-domain.example
@@ -98,6 +99,9 @@ pnpm launch:blockers
   checkout safely if a live launch issue appears.
 - `launch:lead-qualifier` prints the first-lead fit card for deciding whether
   to send preview, buyer-guide, practice-pack, inquiry, or paid-checkout links.
+- `launch:lead-pipeline-smoke` submits safe test leads to a deployed app,
+  verifies the protected lead dashboard can see them, and marks both contacted
+  with the admin token.
 - `launch:local-course-smoke` starts the built app locally, creates a demo
   learner session, and checks that protected lessons, progress, quiz, and
   `/learn` load before you test by hand.
@@ -526,6 +530,18 @@ pre-checkout learner list works after deployment:
 ```bash
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_SMOKE_TEST_LEARNER_INTEREST=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
 ```
+
+To prove the whole deployed lead pipeline works, run this after your private
+admin token is set. This submits one safe practice lead and one safe learner
+lead, loads them from the protected dashboard, marks both contacted, and can
+save a safe report.
+
+```bash
+LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_ADMIN_TOKEN=your_private_admin_token LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH=launch-evidence/lead-pipeline-smoke-report.md pnpm launch:lead-pipeline-smoke
+```
+
+Do not save or paste the real admin token into reports, screenshots, GitHub,
+Google Drive, or chat.
 
 The smoke test checks `/api/health`, `/api/launch/readiness`,
 `/api/checkout/availability`, browser safety headers, `/robots.txt`, and the

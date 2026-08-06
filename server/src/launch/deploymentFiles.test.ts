@@ -1153,6 +1153,43 @@ describe("deployment files", () => {
     expect(livePurchaseScript).not.toContain("whsec_");
   });
 
+  it("keeps a work-computer-safe deployed lead pipeline smoke command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const leadPipelineSmokeScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-lead-pipeline-smoke.mjs"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const goLiveChecklist = await readFile(
+      path.resolve(process.cwd(), "docs/launch/go-live-checklist.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:lead-pipeline-smoke": "node scripts/launch-lead-pipeline-smoke.mjs"'
+    );
+    expect(leadPipelineSmokeScript).toContain("LAUNCH_ADMIN_TOKEN");
+    expect(leadPipelineSmokeScript).toContain("/api/practice-inquiries");
+    expect(leadPipelineSmokeScript).toContain("/api/learner-interests");
+    expect(leadPipelineSmokeScript).toContain(
+      "/api/support/practice-inquiries"
+    );
+    expect(leadPipelineSmokeScript).toContain("/api/support/learner-interests");
+    expect(leadPipelineSmokeScript).toContain("/status");
+    expect(leadPipelineSmokeScript).toContain("contacted");
+    expect(leadPipelineSmokeScript).not.toContain("execSync");
+    expect(leadPipelineSmokeScript).not.toContain("sk_test_");
+    expect(leadPipelineSmokeScript).not.toContain("whsec_");
+    expect(readme).toContain("pnpm launch:lead-pipeline-smoke");
+    expect(goLiveChecklist).toContain("pnpm launch:lead-pipeline-smoke");
+  });
+
   it("keeps a work-computer-safe paid launch emergency stop command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
