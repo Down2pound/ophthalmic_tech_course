@@ -20,6 +20,7 @@
     "launch:clinical-review": "node scripts/launch-clinical-review.mjs",
     "launch:clinical-review-request": "node scripts/launch-clinical-review-request.mjs",
     "launch:control": "node scripts/launch-control-checklist.mjs",
+    "launch:checkout-smoke": "node scripts/launch-checkout-smoke.mjs",
     "launch:database-setup": "node scripts/launch-database-setup.mjs",
     "launch:deployment-audit": "node scripts/launch-deployment-audit.mjs",
     "launch:email-smoke": "node scripts/launch-email-smoke.mjs",

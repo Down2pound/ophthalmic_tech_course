@@ -71,6 +71,16 @@ That command checks that the offer ids, prices, lookup keys, access length, and
 seat counts still match across the shared app offer list, Stripe checklist, and
 buyer-facing launch docs.
 
+After the deployed app has Stripe, database, and paid-enrollment settings ready,
+run a safe checkout-session smoke test:
+
+```bash
+LAUNCH_BASE_URL=https://your-domain.example LAUNCH_TEST_EMAIL=internal.test@example.com LAUNCH_CHECKOUT_OFFER_ID=founding-learner LAUNCH_CHECKOUT_SMOKE_REPORT_PATH=launch-evidence/checkout-session-smoke-report.md pnpm launch:checkout-smoke
+```
+
+The smoke test asks the app to create a Stripe Checkout session and records
+whether a Stripe-hosted URL came back. It does not save the raw checkout URL.
+
 ## Test Mode First
 
 1. Keep `ENABLE_PAID_ENROLLMENT=false`.

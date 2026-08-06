@@ -58,6 +58,7 @@ pnpm launch:online-start
 pnpm launch:external-setup
 pnpm launch:first-render-deploy
 pnpm launch:clinical-review-request
+pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding-learner https://your-real-domain.example
 pnpm launch:email-smoke -- --email=internal.test@example.com https://your-real-domain.example
 pnpm launch:first-buyer
 pnpm launch:fulfillment
@@ -82,6 +83,8 @@ pnpm launch:blockers
   with preflight proof, closed-checkout settings, and first live URL checks.
 - `launch:clinical-review-request` prints a ready-to-send Module 1 reviewer
   request so clinical signoff can move before paid launch.
+- `launch:checkout-smoke` asks the deployed app to create one Stripe Checkout
+  session and can save safe proof without storing the raw checkout URL.
 - `launch:email-smoke` asks the deployed app to send one passwordless sign-in
   email and can save a safe launch-evidence report without raw links.
 - `launch:first-buyer` prints the first-buyer control panel with safe links,
@@ -491,6 +494,12 @@ To test passwordless email delivery after email settings are configured:
 
 ```bash
 LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_TEST_EMAIL=internal.test@example.com LAUNCH_EMAIL_SMOKE_REPORT_PATH=launch-evidence/passwordless-email-smoke-report.md pnpm launch:email-smoke
+```
+
+To test Stripe Checkout session creation without saving a checkout URL:
+
+```bash
+LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_TEST_EMAIL=internal.test@example.com LAUNCH_CHECKOUT_OFFER_ID=founding-learner LAUNCH_CHECKOUT_SMOKE_REPORT_PATH=launch-evidence/checkout-session-smoke-report.md pnpm launch:checkout-smoke
 ```
 
 To also submit one safe custom-practice test inquiry and prove lead capture

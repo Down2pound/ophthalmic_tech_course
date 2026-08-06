@@ -453,6 +453,42 @@ describe("deployment files", () => {
     expect(emailSmokeScript).not.toContain("DATABASE_URL=");
   });
 
+  it("keeps a work-computer-safe Stripe checkout smoke command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const stripeGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/stripe-setup-guide.md"),
+      "utf8"
+    );
+    const checkoutSmokeScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-checkout-smoke.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:checkout-smoke": "node scripts/launch-checkout-smoke.mjs"'
+    );
+    expect(readme).toContain("pnpm launch:checkout-smoke");
+    expect(stripeGuide).toContain("pnpm launch:checkout-smoke");
+    expect(checkoutSmokeScript).toContain("/api/checkout/sessions");
+    expect(checkoutSmokeScript).toContain("acceptedTerms: true");
+    expect(checkoutSmokeScript).toContain("LAUNCH_CHECKOUT_OFFER_ID");
+    expect(checkoutSmokeScript).toContain("LAUNCH_CHECKOUT_SMOKE_REPORT_PATH");
+    expect(checkoutSmokeScript).toContain("checkout-session-smoke-report.md");
+    expect(checkoutSmokeScript).toContain(
+      "Do not share or save the raw Checkout URL"
+    );
+    expect(checkoutSmokeScript).not.toContain("sk_test_");
+    expect(checkoutSmokeScript).not.toContain("whsec_");
+    expect(checkoutSmokeScript).not.toContain("DATABASE_URL=");
+  });
+
   it("keeps the next-step command center runnable without tsx", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
