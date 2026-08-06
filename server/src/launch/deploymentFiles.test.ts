@@ -1133,6 +1133,7 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_SALES_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_FULFILLMENT_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
     expect(liveUrlScript).toContain("pnpm launch:first-sales");
     expect(liveUrlScript).toContain("pnpm launch:emergency-stop");
@@ -1277,6 +1278,39 @@ describe("deployment files", () => {
     expect(manualPaymentChecklist).toContain("pnpm launch:fulfillment");
     expect(manualPaymentChecklist).not.toContain("sk_test_");
     expect(manualPaymentChecklist).not.toContain("whsec_");
+  });
+
+  it("keeps a work-computer-safe first buyer fulfillment checklist command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const fulfillmentScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-buyer-fulfillment.mjs"),
+      "utf8"
+    );
+    const fulfillmentChecklist = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/first-buyer-fulfillment-checklist.md"
+      ),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:fulfillment": "node scripts/launch-first-buyer-fulfillment.mjs"'
+    );
+    expect(fulfillmentScript).toContain("LAUNCH_FULFILLMENT_REPORT_PATH");
+    expect(fulfillmentScript).toContain("first-buyer-fulfillment-checklist.md");
+    expect(fulfillmentScript).not.toContain("execSync");
+    expect(fulfillmentChecklist).toContain(
+      "OptiTech Academy First Buyer Fulfillment Checklist"
+    );
+    expect(fulfillmentChecklist).toContain("Confirm Stripe payment status");
+    expect(fulfillmentChecklist).toContain("Confirm learner access exists");
+    expect(fulfillmentChecklist).toContain("Do not save card details");
+    expect(fulfillmentChecklist).not.toContain("sk_test_");
+    expect(fulfillmentChecklist).not.toContain("whsec_");
   });
 
   it("keeps a work-computer-safe static first-sale page command available", async () => {

@@ -63,7 +63,7 @@ pnpm launch:email-smoke -- --email=internal.test@example.com https://your-real-d
 LAUNCH_FIRST_SALES_REPORT_PATH=launch-evidence/first-sales-link-packet.md pnpm launch:first-sales https://your-real-domain.example
 LAUNCH_LIVE_PURCHASE_REPORT_PATH=launch-evidence/live-purchase-rehearsal-report.md pnpm launch:live-purchase-test -- --email=internal.test@example.com https://your-real-domain.example
 LAUNCH_FIRST_BUYER_REPORT_PATH=launch-evidence/first-buyer-command-center.md pnpm launch:first-buyer https://your-real-domain.example
-pnpm launch:fulfillment
+LAUNCH_FULFILLMENT_REPORT_PATH=launch-evidence/first-buyer-fulfillment-checklist.md pnpm launch:fulfillment
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
 pnpm launch:env-checklist
@@ -101,7 +101,7 @@ pnpm launch:blockers
   starter messages, and pause rules, accepts a deployed URL, and can save a safe
   command-center packet.
 - `launch:fulfillment` prints the first paid buyer receipt, access, welcome,
-  and support proof checklist.
+  and support proof checklist and can save a safe fulfillment evidence packet.
 - `launch:first-revenue` prints the shortest safe path from restored code to
   one controlled paid buyer.
 - `launch:emergency-stop` prints the red-button checklist for pausing paid
