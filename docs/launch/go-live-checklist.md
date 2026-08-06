@@ -114,6 +114,8 @@ Only after every earlier section passes:
       rehearsal checklist.
 - [ ] Run one low-risk internal live-mode purchase.
 - [ ] Confirm live purchase creates durable access.
+- [ ] Run `pnpm launch:first-buyer-feedback` after support issues are resolved
+      so the first buyer feedback and testimonial consent path is ready.
 
 If any live check fails, set `ENABLE_PAID_ENROLLMENT=false` before debugging.
 Then run `pnpm launch:emergency-stop` and follow
@@ -127,6 +129,8 @@ Then run `pnpm launch:emergency-stop` and follow
 - [ ] Save email delivery evidence without raw sign-in links.
 - [ ] Save browser/accessibility QA notes.
 - [ ] Save deployment smoke report.
+- [ ] Save first-buyer feedback packet or note why feedback was not requested
+      yet.
 
 Do not archive `.env`, live secret keys, webhook secrets, email API keys,
 database passwords, raw magic-link tokens, session cookies, card numbers, or

@@ -289,6 +289,7 @@ describe("createLaunchEvidenceBundle", () => {
     );
 
     expect(readme).toContain("safe to save to Google Drive");
+    expect(readme).toContain("first-buyer feedback");
     expect(readme).toContain("Ready for paid launch: no");
     expect(readme).toContain("Individual learner sales: blocked");
     expect(readme).toContain("Practice pack sales: blocked");
@@ -310,20 +311,20 @@ describe("createLaunchEvidenceBundle", () => {
     expect(firstRenderDeployEvidence).toContain(
       "OptiTech Academy First Render Deploy Evidence"
     );
-    expect(firstRenderDeployEvidence).toContain("pnpm launch:first-render-deploy");
+    expect(firstRenderDeployEvidence).toContain(
+      "pnpm launch:first-render-deploy"
+    );
     expect(firstRenderDeployEvidence).toContain("pnpm launch:preflight");
     expect(firstRenderDeployEvidence).toContain("Branch: [fill branch]");
-    expect(firstRenderDeployEvidence).toContain("Commit checked: [fill commit]");
+    expect(firstRenderDeployEvidence).toContain(
+      "Commit checked: [fill commit]"
+    );
     expect(firstRenderDeployEvidence).toContain(
       "Test suite: [passed / not passed yet]"
     );
     expect(firstRenderDeployEvidence).toContain("ENABLE_PAID_ENROLLMENT=false");
-    expect(firstRenderDeployEvidence).toContain(
-      "LAUNCH_SMOKE_ALLOW_NOT_READY"
-    );
-    expect(firstRenderDeployEvidence).toContain(
-      "LAUNCH_SMOKE_REPORT_PATH"
-    );
+    expect(firstRenderDeployEvidence).toContain("LAUNCH_SMOKE_ALLOW_NOT_READY");
+    expect(firstRenderDeployEvidence).toContain("LAUNCH_SMOKE_REPORT_PATH");
     expect(firstRenderDeployEvidence).toContain(
       "launch-evidence/first-render-smoke-report.md"
     );
@@ -332,8 +333,12 @@ describe("createLaunchEvidenceBundle", () => {
     expect(externalSetupWorksheet).toContain(
       "OptiTech Academy External Setup Worksheet"
     );
-    expect(externalSetupWorksheet).toContain("Connect Stripe checkout and webhook");
-    expect(externalSetupWorksheet).toContain("pnpm launch:clinical-review-request");
+    expect(externalSetupWorksheet).toContain(
+      "Connect Stripe checkout and webhook"
+    );
+    expect(externalSetupWorksheet).toContain(
+      "pnpm launch:clinical-review-request"
+    );
     expect(externalSetupWorksheet).not.toContain("sk_test_");
     expect(externalSetupWorksheet).not.toContain("whsec_");
     expect(onlineStartGuide).toContain("OptiTech Academy Online Start Guide");
@@ -415,11 +420,16 @@ describe("createLaunchEvidenceBundle", () => {
       "OptiTech Academy First Customers Sales Packet"
     );
     expect(firstCustomersSalesPacket).toContain("pnpm launch:lead-qualifier");
+    expect(firstCustomersSalesPacket).toContain(
+      "pnpm launch:first-buyer-feedback"
+    );
     expect(firstLeadQualificationCard).toContain(
       "OptiTech Academy First Lead Qualification Card"
     );
     expect(firstLeadQualificationCard).toContain("Quick Fit Score");
-    expect(firstLeadQualificationCard).toContain("Only send the paid checkout path");
+    expect(firstLeadQualificationCard).toContain(
+      "Only send the paid checkout path"
+    );
     expect(firstWeekSalesPlan).toContain(
       "OptiTech Academy First Week Sales Plan"
     );
@@ -534,6 +544,9 @@ describe("createLaunchEvidenceBundle", () => {
       "Continue / Pause / Fix first"
     );
     expect(revenueAndSalesTrackerTemplate).toContain("Weekly Business Review");
+    expect(revenueAndSalesTrackerTemplate).toContain(
+      "First Buyer Feedback Tracker"
+    );
     expect(revenueAndSalesTrackerTemplate).toContain(
       "Do not paste secrets, private medical details, or raw access links"
     );

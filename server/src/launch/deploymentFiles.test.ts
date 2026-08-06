@@ -1584,11 +1584,13 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FULFILLMENT_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_FEEDBACK_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
     expect(liveUrlScript).toContain("pnpm launch:first-sales");
     expect(liveUrlScript).toContain("pnpm launch:go-live");
     expect(liveUrlScript).toContain("pnpm launch:sales-tracker");
     expect(liveUrlScript).toContain("pnpm launch:first-buyer-proof");
+    expect(liveUrlScript).toContain("pnpm launch:first-buyer-feedback");
     expect(liveUrlScript).toContain("pnpm launch:emergency-stop");
     expect(liveUrlScript).toContain("Do not use localhost");
     expect(liveUrlScript).toContain("Replace the example URL");
@@ -1620,6 +1622,7 @@ describe("deployment files", () => {
     expect(goLiveScript).toContain("ENABLE_PAID_ENROLLMENT=true");
     expect(goLiveScript).toContain("pnpm launch:readiness-snapshot");
     expect(goLiveScript).toContain("pnpm launch:first-buyer-proof");
+    expect(goLiveScript).toContain("pnpm launch:first-buyer-feedback");
     expect(goLiveScript).toContain("pnpm launch:emergency-stop");
     expect(goLiveScript).toContain("/api/checkout/availability");
     expect(goLiveScript).toContain("Do not paste Stripe secret keys");
@@ -1696,6 +1699,7 @@ describe("deployment files", () => {
     expect(paidProofScript).toContain("pnpm launch:email-smoke");
     expect(paidProofScript).toContain("pnpm launch:live-purchase-test");
     expect(paidProofScript).toContain("pnpm launch:first-buyer-proof");
+    expect(paidProofScript).toContain("pnpm launch:first-buyer-feedback");
     expect(paidProofScript).toContain("pnpm launch:emergency-stop");
     expect(paidProofScript).toContain("Do not paste Stripe secret keys");
     expect(paidProofScript).not.toContain("execSync");

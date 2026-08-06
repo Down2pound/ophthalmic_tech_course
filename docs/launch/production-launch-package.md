@@ -53,6 +53,8 @@ rules, run `pnpm launch:first-buyer`.
 For first paid buyer receipt, access, and welcome checks, use
 `docs/launch/first-buyer-fulfillment-checklist.md` or run
 `pnpm launch:fulfillment`.
+For first-buyer feedback, testimonial consent, and the continue-or-pause
+decision after access works, run `pnpm launch:first-buyer-feedback`.
 For controlled first-buyer Stripe Payment Links while automated checkout is
 paused, use `docs/launch/manual-payment-link-checklist.md` or run
 `pnpm launch:manual-payment-links`.
@@ -260,6 +262,7 @@ buyer, run:
 pnpm launch:first-revenue
 pnpm launch:first-buyer
 pnpm launch:fulfillment
+pnpm launch:first-buyer-feedback
 ```
 
 ## Google Drive Handoff
@@ -285,6 +288,7 @@ When the launch package is ready to archive, save these files together:
 - `docs/launch/manual-payment-link-checklist.md`
 - `docs/launch/static-first-sale-page-guide.md`
 - `docs/launch/first-buyer-fulfillment-checklist.md`
+- First-buyer feedback packet from `pnpm launch:first-buyer-feedback`
 - `docs/launch/revenue-and-sales-tracker-template.md`
 - `docs/launch/stripe-setup-guide.md`
 - `docs/launch/email-setup-guide.md`

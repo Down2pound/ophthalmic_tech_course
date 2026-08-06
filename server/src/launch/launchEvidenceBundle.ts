@@ -52,7 +52,7 @@ function renderReadme({
     "- `manual-payment-link-checklist.md`: controlled first-buyer Stripe Payment Link setup and stop rules.",
     "- `static-first-sale-page-guide.md`: static one-page first-sale fallback for controlled buyer conversations.",
     "- `first-buyer-fulfillment-checklist.md`: first paid buyer receipt, access, and welcome checklist.",
-    "- `revenue-and-sales-tracker-template.md`: safe lead, purchase, support, and weekly revenue tracker.",
+    "- `revenue-and-sales-tracker-template.md`: safe lead, purchase, first-buyer feedback, support, and weekly revenue tracker.",
     "- `stripe-setup-guide.md`: Stripe checkout and webhook setup recipe.",
     "- `email-setup-guide.md`: passwordless sign-in email setup recipe.",
     "- `database-setup-guide.md`: managed PostgreSQL setup recipe.",
@@ -250,7 +250,10 @@ export async function createLaunchEvidenceBundle({
     "utf8"
   );
   const clinicalReviewRequestTemplate = await readFile(
-    path.resolve(projectRoot, "docs/launch/clinical-review-request-template.md"),
+    path.resolve(
+      projectRoot,
+      "docs/launch/clinical-review-request-template.md"
+    ),
     "utf8"
   );
   const goLiveChecklist = await readFile(
