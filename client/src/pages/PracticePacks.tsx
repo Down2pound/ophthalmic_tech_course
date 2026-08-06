@@ -251,6 +251,17 @@ export default function PracticePacks() {
                   </li>
                 ))}
               </ul>
+              <a
+                href={checkoutStatus.action.href}
+                className={`mt-4 inline-flex items-center gap-2 text-sm font-semibold ${
+                  checkoutStatus.tone === "success"
+                    ? "text-green-800 hover:text-green-950"
+                    : "text-blue-800 hover:text-blue-950"
+                }`}
+              >
+                {checkoutStatus.action.label}
+                <ArrowRight className="h-4 w-4" />
+              </a>
             </Card>
           )}
 
@@ -678,9 +689,9 @@ export default function PracticePacks() {
                           Approved first-buyer payment link
                         </p>
                         <p className="mt-1">
-                          Automated seat setup is still paused. Use this only
-                          if Jeff has approved manual fulfillment for this
-                          practice pack.
+                          Automated seat setup is still paused. Use this only if
+                          Jeff has approved manual fulfillment for this practice
+                          pack.
                         </p>
                         <Button
                           className="mt-3 w-full bg-amber-700 text-white hover:bg-amber-800"

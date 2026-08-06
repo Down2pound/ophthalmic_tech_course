@@ -14,6 +14,10 @@ describe("getCheckoutStatus", () => {
         "Open Module 1 after your learner access is confirmed.",
         "Do not share patient information in course forms or support requests.",
       ],
+      action: {
+        label: "Request sign-in and start Module 1",
+        href: "/learn",
+      },
     });
   });
 
@@ -31,6 +35,10 @@ describe("getCheckoutStatus", () => {
         "Use the protected practice setup process to assign seats when ready.",
         "Do not send patient information, passwords, or private staff details in setup notes.",
       ],
+      action: {
+        label: "Open seat setup tools",
+        href: "/practice-seat-admin",
+      },
     });
   });
 
@@ -41,6 +49,10 @@ describe("getCheckoutStatus", () => {
       message:
         "No payment was taken. You can review the offer and restart checkout when ready.",
       nextSteps: ["Return to checkout when you are ready to enroll."],
+      action: {
+        label: "Return to checkout",
+        href: "/checkout",
+      },
     });
   });
 
@@ -55,6 +67,10 @@ describe("getCheckoutStatus", () => {
       nextSteps: [
         "Return to the practice pack options when you are ready to buy seats.",
       ],
+      action: {
+        label: "Return to practice packs",
+        href: "/practice-packs",
+      },
     });
   });
 

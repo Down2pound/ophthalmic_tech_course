@@ -231,15 +231,17 @@ export default function Checkout() {
                   </li>
                 ))}
               </ul>
-              {checkoutStatus.tone === "success" && (
-                <a
-                  href="/learn"
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-green-800 hover:text-green-950"
-                >
-                  Start Module 1
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-              )}
+              <a
+                href={checkoutStatus.action.href}
+                className={`mt-4 inline-flex items-center gap-2 text-sm font-semibold ${
+                  checkoutStatus.tone === "success"
+                    ? "text-green-800 hover:text-green-950"
+                    : "text-blue-800 hover:text-blue-950"
+                }`}
+              >
+                {checkoutStatus.action.label}
+                <ArrowRight className="h-4 w-4" />
+              </a>
             </Card>
           )}
 
@@ -504,9 +506,7 @@ export default function Checkout() {
           <Card className="border-slate-200 bg-white p-6 text-slate-950 shadow-sm">
             <div className="flex items-center gap-3">
               <HelpCircle className="h-6 w-6 text-blue-700" />
-              <h2 className="text-2xl font-bold">
-                Questions before buying
-              </h2>
+              <h2 className="text-2xl font-bold">Questions before buying</h2>
             </div>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               {buyerConfidenceAnswers.map(answer => (

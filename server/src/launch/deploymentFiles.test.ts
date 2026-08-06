@@ -128,6 +128,35 @@ describe("deployment files", () => {
     expect(homePage).not.toContain("whsec_");
   });
 
+  it("keeps checkout return states action-oriented for paid buyers", async () => {
+    const checkoutStatusClient = await readFile(
+      path.resolve(process.cwd(), "client/src/lib/checkoutStatus.ts"),
+      "utf8"
+    );
+    const checkoutPage = await readFile(
+      path.resolve(process.cwd(), "client/src/pages/Checkout.tsx"),
+      "utf8"
+    );
+    const practicePacksPage = await readFile(
+      path.resolve(process.cwd(), "client/src/pages/PracticePacks.tsx"),
+      "utf8"
+    );
+
+    expect(checkoutStatusClient).toContain(
+      "Request sign-in and start Module 1"
+    );
+    expect(checkoutStatusClient).toContain("Open seat setup tools");
+    expect(checkoutStatusClient).toContain("Return to checkout");
+    expect(checkoutStatusClient).toContain("Return to practice packs");
+    expect(checkoutStatusClient).toContain("/practice-seat-admin");
+    expect(checkoutPage).toContain("checkoutStatus.action.href");
+    expect(checkoutPage).toContain("checkoutStatus.action.label");
+    expect(practicePacksPage).toContain("checkoutStatus.action.href");
+    expect(practicePacksPage).toContain("checkoutStatus.action.label");
+    expect(checkoutStatusClient).not.toContain("sk_test_");
+    expect(checkoutStatusClient).not.toContain("whsec_");
+  });
+
   it("runs the launch secret scan and local course smoke check in GitHub launch CI", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

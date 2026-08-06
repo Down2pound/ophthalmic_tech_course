@@ -1,13 +1,14 @@
-import {
-  checkoutOffers,
-  isPracticePackOffer,
-} from "@shared/commerce/offers";
+import { checkoutOffers, isPracticePackOffer } from "@shared/commerce/offers";
 
 export interface CheckoutStatus {
   tone: "success" | "notice";
   title: string;
   message: string;
   nextSteps: string[];
+  action: {
+    label: string;
+    href: string;
+  };
 }
 
 function isPracticeCheckoutReturn(params: URLSearchParams): boolean {
@@ -37,6 +38,10 @@ export function getCheckoutStatus(search: string): CheckoutStatus | null {
           "Use the protected practice setup process to assign seats when ready.",
           "Do not send patient information, passwords, or private staff details in setup notes.",
         ],
+        action: {
+          label: "Open seat setup tools",
+          href: "/practice-seat-admin",
+        },
       };
     }
 
@@ -51,6 +56,10 @@ export function getCheckoutStatus(search: string): CheckoutStatus | null {
         "Open Module 1 after your learner access is confirmed.",
         "Do not share patient information in course forms or support requests.",
       ],
+      action: {
+        label: "Request sign-in and start Module 1",
+        href: "/learn",
+      },
     };
   }
 
@@ -65,6 +74,15 @@ export function getCheckoutStatus(search: string): CheckoutStatus | null {
           ? "Return to the practice pack options when you are ready to buy seats."
           : "Return to checkout when you are ready to enroll.",
       ],
+      action: isPracticeReturn
+        ? {
+            label: "Return to practice packs",
+            href: "/practice-packs",
+          }
+        : {
+            label: "Return to checkout",
+            href: "/checkout",
+          },
     };
   }
 
