@@ -67,6 +67,7 @@ LAUNCH_FIRST_WEEK_SALES_REPORT_PATH=launch-evidence/first-week-sales-plan.md pnp
 LAUNCH_SALES_TRACKER_OUTPUT_DIR=launch-evidence/sales-tracker-templates pnpm launch:sales-tracker
 LAUNCH_LIVE_PURCHASE_REPORT_PATH=launch-evidence/live-purchase-rehearsal-report.md pnpm launch:live-purchase-test -- --email=internal.test@example.com https://your-real-domain.example
 LAUNCH_FIRST_BUYER_REPORT_PATH=launch-evidence/first-buyer-command-center.md pnpm launch:first-buyer https://your-real-domain.example
+LAUNCH_MANUAL_FULFILLMENT_REPORT_PATH=launch-evidence/manual-fulfillment-packet.md pnpm launch:manual-fulfillment https://your-real-domain.example -- --email=buyer@example.com --offer=founding-learner --payment-reference=pi_or_payment_link_reference
 LAUNCH_FULFILLMENT_REPORT_PATH=launch-evidence/first-buyer-fulfillment-checklist.md pnpm launch:fulfillment
 LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH=launch-evidence/first-buyer-proof.md LAUNCH_BUYER_EMAIL=buyer@example.com pnpm launch:first-buyer-proof https://your-real-domain.example
 pnpm launch:first-revenue
@@ -123,6 +124,9 @@ pnpm launch:blockers
 - `launch:first-buyer` prints the first-buyer control panel with safe links,
   starter messages, and pause rules, accepts a deployed URL, and can save a safe
   command-center packet.
+- `launch:manual-fulfillment` prints and can save the exact protected request
+  packet for a controlled manual Stripe Payment Link sale after Stripe shows
+  paid.
 - `launch:fulfillment` prints the first paid buyer receipt, access, welcome,
   and support proof checklist and can save a safe fulfillment evidence packet.
 - `launch:first-buyer-proof` saves the first-buyer proof packet after a real

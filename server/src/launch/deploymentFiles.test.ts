@@ -789,6 +789,18 @@ describe("deployment files", () => {
       ),
       "utf8"
     );
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const manualFulfillmentScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-manual-fulfillment.mjs"),
+      "utf8"
+    );
     const manualPaymentChecklist = await readFile(
       path.resolve(
         process.cwd(),
@@ -803,7 +815,21 @@ describe("deployment files", () => {
       ),
       "utf8"
     );
+    const firstBuyerScript = await readFile(
+      path.resolve(
+        process.cwd(),
+        "scripts/launch-first-buyer-command-center.mjs"
+      ),
+      "utf8"
+    );
+    const liveUrlScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-live-url-card.mjs"),
+      "utf8"
+    );
 
+    expect(packageJson).toContain(
+      '"launch:manual-fulfillment": "node scripts/launch-manual-fulfillment.mjs"'
+    );
     expect(authRoutes).toContain("/support/manual-payment-fulfillments");
     expect(authRoutes).toContain("authorizePracticeSeatAdminRequest");
     expect(authRoutes).toContain("fulfillManualPaymentLinkPurchase");
@@ -815,15 +841,37 @@ describe("deployment files", () => {
       "createCommerceFulfillmentService"
     );
     expect(manualFulfillmentService).toContain("manual_");
+    expect(manualFulfillmentScript).toContain(
+      "OptiTech Academy Manual Fulfillment Packet"
+    );
+    expect(manualFulfillmentScript).toContain(
+      "LAUNCH_MANUAL_FULFILLMENT_REPORT_PATH"
+    );
+    expect(manualFulfillmentScript).toContain(
+      "/api/support/manual-payment-fulfillments"
+    );
+    expect(manualFulfillmentScript).toContain("x-admin-token");
+    expect(manualFulfillmentScript).toContain("practice-five-seat-pack");
+    expect(manualFulfillmentScript).toContain(
+      "does not call the endpoint by itself"
+    );
     expect(manualPaymentChecklist).toContain(
       "/api/support/manual-payment-fulfillments"
     );
     expect(manualPaymentChecklist).toContain("x-admin-token");
     expect(manualPaymentChecklist).toContain("practice-five-seat-pack");
     expect(manualPaymentChecklist).toMatch(/does\s+not replace webhook proof/);
+    expect(manualPaymentChecklist).toContain("pnpm launch:manual-fulfillment");
     expect(fulfillmentChecklist).toContain(
       "/api/support/manual-payment-fulfillments"
     );
+    expect(readme).toContain("pnpm launch:manual-fulfillment");
+    expect(firstBuyerScript).toContain("pnpm launch:manual-fulfillment");
+    expect(liveUrlScript).toContain("pnpm launch:manual-fulfillment");
+    expect(manualFulfillmentScript).not.toContain("fetch(");
+    expect(manualFulfillmentScript).not.toContain("execSync");
+    expect(manualFulfillmentScript).not.toContain("sk_test_");
+    expect(manualFulfillmentScript).not.toContain("whsec_");
     expect(manualFulfillmentService).not.toContain("execSync");
     expect(authRoutes).not.toContain("sk_test_");
     expect(manualPaymentChecklist).not.toContain("sk_test_");
@@ -1673,6 +1721,7 @@ describe("deployment files", () => {
     expect(manualPaymentChecklist).toContain(
       "/api/support/manual-payment-fulfillments"
     );
+    expect(manualPaymentChecklist).toContain("pnpm launch:manual-fulfillment");
     expect(manualPaymentChecklist).toContain("pnpm launch:fulfillment");
     expect(manualPaymentChecklist).not.toContain("sk_test_");
     expect(manualPaymentChecklist).not.toContain("whsec_");

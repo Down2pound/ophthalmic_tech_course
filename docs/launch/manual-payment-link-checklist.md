@@ -85,6 +85,12 @@ primaryAction: use-manual-payment-link
 Confirm the payment in Stripe first. Then use the protected support endpoint to
 create the matching app-side access record.
 
+Print a filled request packet:
+
+```bash
+LAUNCH_MANUAL_FULFILLMENT_REPORT_PATH=launch-evidence/manual-fulfillment-packet.md pnpm launch:manual-fulfillment https://your-real-domain.example -- --email=buyer@example.com --offer=founding-learner --payment-reference=pi_or_payment_link_reference
+```
+
 PowerShell shape:
 
 ```powershell
