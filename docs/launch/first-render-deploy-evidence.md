@@ -88,6 +88,7 @@ report in `launch-evidence/first-render-smoke-report.md`:
 ```powershell
 $env:LAUNCH_SMOKE_ALLOW_NOT_READY="true"
 $env:LAUNCH_BASE_URL="https://your-real-domain.example"
+$env:LAUNCH_EXPECTED_COMMIT="[fill commit checked]"
 $env:LAUNCH_SMOKE_REPORT_PATH="launch-evidence/first-render-smoke-report.md"
 pnpm launch:smoke
 ```

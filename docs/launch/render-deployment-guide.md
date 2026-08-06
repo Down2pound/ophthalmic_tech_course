@@ -212,7 +212,7 @@ Put the webhook signing secret into Render as `STRIPE_WEBHOOK_SECRET`.
 From your home PC or any machine that can run the project commands:
 
 ```bash
-LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-render-or-custom-domain.example pnpm launch:smoke
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-render-or-custom-domain.example LAUNCH_EXPECTED_COMMIT=CURRENT_COMMIT pnpm launch:smoke
 LAUNCH_BASE_URL=https://your-render-or-custom-domain.example pnpm launch:go-no-go
 ```
 
@@ -223,7 +223,7 @@ links, collect practice inquiries, or send paid checkout links.
 After every gate is complete and `ENABLE_PAID_ENROLLMENT=true`, run:
 
 ```bash
-LAUNCH_BASE_URL=https://your-render-or-custom-domain.example pnpm launch:smoke
+LAUNCH_BASE_URL=https://your-render-or-custom-domain.example LAUNCH_EXPECTED_COMMIT=CURRENT_COMMIT pnpm launch:smoke
 LAUNCH_BASE_URL=https://your-render-or-custom-domain.example pnpm launch:go-no-go
 ```
 

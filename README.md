@@ -533,13 +533,13 @@ You can also run the deployment smoke test from your local machine after the
 app is online but before paid launch is fully ready:
 
 ```bash
-LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com pnpm launch:smoke
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_EXPECTED_COMMIT=CURRENT_COMMIT pnpm launch:smoke
 ```
 
 To save a Markdown smoke-test report with your launch records:
 
 ```bash
-LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_SMOKE_REPORT_PATH=launch-evidence/deployment-smoke-report.md pnpm launch:smoke
+LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_EXPECTED_COMMIT=CURRENT_COMMIT LAUNCH_SMOKE_REPORT_PATH=launch-evidence/deployment-smoke-report.md pnpm launch:smoke
 ```
 
 To save the owner traffic-light report that says which links are safe to share:

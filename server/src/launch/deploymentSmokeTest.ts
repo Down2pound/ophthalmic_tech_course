@@ -4,6 +4,7 @@ import type { LaunchActionItem } from "../../../shared/launch/launchActionPlan";
 export interface DeploymentSmokeTestReport {
   baseUrl: string;
   healthOk: boolean;
+  release?: DeploymentSmokeReleaseResult;
   publicPagesOk: boolean;
   checkoutAvailabilityOk: boolean;
   securityHeadersOk: boolean;
@@ -22,6 +23,7 @@ export interface DeploymentSmokeTestReport {
 
 export interface DeploymentSmokeTestInput {
   baseUrl: string;
+  expectedCommit?: string;
   testPracticeInquiry?: boolean;
   testLearnerInterest?: boolean;
   fetcher?: typeof fetch;
@@ -32,6 +34,17 @@ export interface DeploymentSmokePublicPageResult {
   path: string;
   ok: boolean;
   status: number;
+}
+
+export interface DeploymentSmokeReleaseResult {
+  host?: string;
+  branch?: string;
+  commit?: string;
+  serviceName?: string;
+  url?: string;
+  expectedCommit?: string;
+  commitMatchesExpected?: boolean;
+  status: "matched" | "mismatched" | "not-checked";
 }
 
 export interface DeploymentSmokeSecurityHeaderResult {
@@ -76,6 +89,13 @@ export interface DeploymentSmokeExitOptions {
 
 interface HealthResponse {
   ok?: boolean;
+  release?: {
+    host?: string;
+    branch?: string;
+    commit?: string;
+    serviceName?: string;
+    url?: string;
+  };
 }
 
 interface CheckoutAvailabilityResponse {
@@ -123,6 +143,42 @@ export const deploymentSmokePublicPaths = [
 
 function trimBaseUrl(baseUrl: string): string {
   return baseUrl.trim().replace(/\/+$/, "");
+}
+
+function normalizeCommit(value: string | undefined): string | undefined {
+  const trimmedValue = value?.trim();
+  return trimmedValue ? trimmedValue.toLowerCase() : undefined;
+}
+
+function getReleaseResult({
+  health,
+  expectedCommit,
+}: {
+  health: HealthResponse;
+  expectedCommit?: string;
+}): DeploymentSmokeReleaseResult {
+  const normalizedExpectedCommit = normalizeCommit(expectedCommit);
+  const normalizedActualCommit = normalizeCommit(health.release?.commit);
+
+  if (!normalizedExpectedCommit) {
+    return {
+      ...health.release,
+      status: "not-checked",
+    };
+  }
+
+  const commitMatchesExpected = Boolean(
+    normalizedActualCommit &&
+      (normalizedExpectedCommit.startsWith(normalizedActualCommit) ||
+        normalizedActualCommit.startsWith(normalizedExpectedCommit))
+  );
+
+  return {
+    ...health.release,
+    expectedCommit: normalizedExpectedCommit,
+    commitMatchesExpected,
+    status: commitMatchesExpected ? "matched" : "mismatched",
+  };
 }
 
 async function fetchJson<T>({
@@ -280,6 +336,7 @@ async function submitLearnerInterestSmoke({
 
 export async function runDeploymentSmokeTest({
   baseUrl,
+  expectedCommit,
   testPracticeInquiry = false,
   testLearnerInterest = false,
   fetcher = fetch,
@@ -351,6 +408,7 @@ export async function runDeploymentSmokeTest({
   return {
     baseUrl: normalizedBaseUrl,
     healthOk: health.ok === true,
+    release: getReleaseResult({ health, expectedCommit }),
     publicPagesOk: publicPages.every(page => page.ok),
     checkoutAvailabilityOk,
     securityHeadersOk: securityHeaders.every(header => header.ok),
@@ -374,6 +432,7 @@ export function getDeploymentSmokeExitCode(
 ): number {
   if (
     !report.healthOk ||
+    report.release?.status === "mismatched" ||
     !report.publicPagesOk ||
     !report.checkoutAvailabilityOk ||
     !report.securityHeadersOk ||
@@ -406,6 +465,18 @@ export function renderDeploymentSmokeReport(
     "## Result",
     "",
     `- Health endpoint: ${report.healthOk ? "ok" : "failed"}`,
+    `- Deployed commit: ${
+      report.release?.commit
+        ? report.release.commit
+        : "not reported by host"
+    }`,
+    `- Expected commit check: ${
+      report.release?.status === "matched"
+        ? "ok"
+        : report.release?.status === "mismatched"
+          ? "failed"
+          : "not checked"
+    }`,
     `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
     `- Checkout availability endpoint: ${
       report.checkoutAvailabilityOk ? "ok" : "failed"
@@ -427,6 +498,22 @@ export function renderDeploymentSmokeReport(
         : "not tested"
     }`,
     `- Paid launch readiness: ${report.readyForPaidLaunch ? "ready" : "not ready"}`,
+    "",
+    "## Release Fingerprint",
+    "",
+    `- Host: ${report.release?.host ?? "not reported"}`,
+    `- Branch: ${report.release?.branch ?? "not reported"}`,
+    `- Commit: ${report.release?.commit ?? "not reported"}`,
+    `- Expected commit: ${report.release?.expectedCommit ?? "not checked"}`,
+    `- Commit matches expected: ${
+      report.release?.commitMatchesExpected === undefined
+        ? "not checked"
+        : report.release.commitMatchesExpected
+          ? "yes"
+          : "no"
+    }`,
+    `- Service name: ${report.release?.serviceName ?? "not reported"}`,
+    `- Host URL: ${report.release?.url ?? "not reported"}`,
     "",
     "## Public Page Checks",
     "",
@@ -506,6 +593,14 @@ export function renderDeploymentSmokeConsoleSummary({
   const lines = [
     `Deployment smoke test for ${report.baseUrl}`,
     `- Health: ${report.healthOk ? "ok" : "failed"}`,
+    `- Deployed commit: ${report.release?.commit ?? "not reported"}`,
+    `- Expected commit check: ${
+      report.release?.status === "matched"
+        ? "ok"
+        : report.release?.status === "mismatched"
+          ? "failed"
+          : "not checked"
+    }`,
     `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
     `- Checkout availability: ${
       report.checkoutAvailabilityOk ? "ok" : "failed"

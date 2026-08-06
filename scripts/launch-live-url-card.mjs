@@ -55,6 +55,8 @@ function getWarnings(value) {
 
 const baseUrl = normalizeBaseUrl(rawUrl);
 const warnings = getWarnings(baseUrl);
+const expectedCommit =
+  process.env.LAUNCH_EXPECTED_COMMIT?.trim() || "paste-current-git-commit";
 
 const buyerLinks = [
   ["First-buyer overview", "/first-sale"],
@@ -102,6 +104,7 @@ const lines = [
   "",
   "```powershell",
   `$env:LAUNCH_BASE_URL="${baseUrl}"`,
+  `$env:LAUNCH_EXPECTED_COMMIT="${expectedCommit}"`,
   "$env:PUBLIC_APP_URL=$env:LAUNCH_BASE_URL",
   '$env:LAUNCH_SMOKE_ALLOW_NOT_READY="true"',
   "pnpm launch:smoke",
@@ -137,6 +140,7 @@ const lines = [
   "",
   "```bash",
   `LAUNCH_BASE_URL=${baseUrl} LAUNCH_SMOKE_ALLOW_NOT_READY=true pnpm launch:smoke`,
+  `LAUNCH_BASE_URL=${baseUrl} LAUNCH_EXPECTED_COMMIT=${expectedCommit} LAUNCH_SMOKE_ALLOW_NOT_READY=true pnpm launch:smoke`,
   `PUBLIC_APP_URL=${baseUrl} pnpm launch:sitemap`,
   `LAUNCH_BASE_URL=${baseUrl} pnpm launch:owner-go-no-go`,
   `LAUNCH_BASE_URL=${baseUrl} LAUNCH_CHECKOUT_SMOKE_REPORT_PATH=launch-evidence/checkout-session-smoke-report.md pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding-learner`,

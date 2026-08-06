@@ -63,7 +63,16 @@ describe("runDeploymentSmokeTest", () => {
       requestedUrls.push(requestedUrl);
 
       if (requestedUrl.endsWith("/api/health")) {
-        return createResponse({ ok: true });
+        return createResponse({
+          ok: true,
+          release: {
+            host: "render",
+            branch: "codex/optitech-product-spec",
+            commit: "7400815",
+            serviceName: "optitech-academy",
+            url: "https://example.com",
+          },
+        });
       }
 
       if (requestedUrl.endsWith("/api/launch/readiness")) {
@@ -106,12 +115,23 @@ describe("runDeploymentSmokeTest", () => {
     await expect(
       runDeploymentSmokeTest({
         baseUrl: " https://example.com/ ",
+        expectedCommit: "7400815",
         fetcher: fetcher as typeof fetch,
         now: () => "2026-07-13T12:00:00.000Z",
       })
     ).resolves.toEqual({
       baseUrl: "https://example.com",
       healthOk: true,
+      release: {
+        host: "render",
+        branch: "codex/optitech-product-spec",
+        commit: "7400815",
+        serviceName: "optitech-academy",
+        url: "https://example.com",
+        expectedCommit: "7400815",
+        commitMatchesExpected: true,
+        status: "matched",
+      },
       publicPagesOk: true,
       checkoutAvailabilityOk: true,
       securityHeadersOk: true,
@@ -244,6 +264,63 @@ describe("runDeploymentSmokeTest", () => {
       "https://example.com/",
       "https://example.com/robots.txt",
     ]);
+  });
+
+  it("fails when the deployed commit does not match the expected commit", async () => {
+    const fetcher = async (url: string | URL | Request) => {
+      const requestedUrl = String(url);
+
+      if (requestedUrl.endsWith("/api/health")) {
+        return createResponse({
+          ok: true,
+          release: {
+            host: "render",
+            branch: "codex/optitech-product-spec",
+            commit: "old1234",
+            serviceName: "optitech-academy",
+            url: "https://example.com",
+          },
+        });
+      }
+
+      if (requestedUrl.endsWith("/api/launch/readiness")) {
+        return createResponse({
+          readyForPaidLaunch: true,
+          staticSummary: { blockers: [] },
+          warnings: [],
+          launchActions: [],
+        });
+      }
+
+      if (requestedUrl.endsWith("/api/checkout/availability")) {
+        return createResponse({
+          ready: true,
+          title: "Enrollment is open",
+          message: "Stripe checkout is available.",
+          primaryAction: "continue-to-checkout",
+        });
+      }
+
+      if (requestedUrl.endsWith("/robots.txt")) {
+        return createRobotsResponse();
+      }
+
+      return createTextResponse();
+    };
+
+    const report = await runDeploymentSmokeTest({
+      baseUrl: "https://example.com",
+      expectedCommit: "7400815",
+      fetcher: fetcher as typeof fetch,
+    });
+
+    expect(report.release).toMatchObject({
+      commit: "old1234",
+      expectedCommit: "7400815",
+      commitMatchesExpected: false,
+      status: "mismatched",
+    });
+    expect(getDeploymentSmokeExitCode(report, { allowNotReady: true })).toBe(1);
   });
 
   it("can submit a safe practice inquiry smoke check when enabled", async () => {
@@ -675,6 +752,14 @@ describe("runDeploymentSmokeTest", () => {
         notificationSent: false,
       },
       readyForPaidLaunch: false,
+      release: {
+        host: "render",
+        branch: "codex/optitech-product-spec",
+        commit: "7400815",
+        expectedCommit: "7400815",
+        commitMatchesExpected: true,
+        status: "matched",
+      },
       generatedAt: "2026-07-13T12:00:00.000Z",
       blockers: ["Clinical content review"],
       warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
@@ -693,6 +778,10 @@ describe("runDeploymentSmokeTest", () => {
     expect(report).toContain("OptiTech Academy Deployment Smoke Test");
     expect(report).toContain("Deployment URL: https://academy.spindeleye.com");
     expect(report).toContain("- Health endpoint: ok");
+    expect(report).toContain("- Deployed commit: 7400815");
+    expect(report).toContain("- Expected commit check: ok");
+    expect(report).toContain("Release Fingerprint");
+    expect(report).toContain("Commit matches expected: yes");
     expect(report).toContain("- Public buyer pages: ok");
     expect(report).toContain("- Checkout availability endpoint: ok");
     expect(report).toContain("- Security headers: ok");
@@ -758,6 +847,12 @@ describe("runDeploymentSmokeTest", () => {
           skippedReason: "not requested",
         },
         readyForPaidLaunch: false,
+        release: {
+          commit: "7400815",
+          expectedCommit: "7400815",
+          commitMatchesExpected: true,
+          status: "matched",
+        },
         generatedAt: "2026-07-13T12:00:00.000Z",
         blockers: ["Clinical content review"],
         warnings: ["Stripe webhook setup is missing: STRIPE_WEBHOOK_SECRET."],
@@ -775,6 +870,8 @@ describe("runDeploymentSmokeTest", () => {
     });
 
     expect(summary).toContain("Deployment smoke test for");
+    expect(summary).toContain("- Deployed commit: 7400815");
+    expect(summary).toContain("- Expected commit check: ok");
     expect(summary).toContain("- Public buyer pages: ok");
     expect(summary).toContain("- Checkout availability: ok");
     expect(summary).toContain("- Security headers: failed");

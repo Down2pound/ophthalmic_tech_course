@@ -53,6 +53,36 @@ async function fetchJson(url) {
   return response.json();
 }
 
+function normalizeCommit(value) {
+  const trimmedValue = value?.trim();
+  return trimmedValue ? trimmedValue.toLowerCase() : undefined;
+}
+
+function getReleaseResult({ health, expectedCommit }) {
+  const normalizedExpectedCommit = normalizeCommit(expectedCommit);
+  const normalizedActualCommit = normalizeCommit(health?.release?.commit);
+
+  if (!normalizedExpectedCommit) {
+    return {
+      ...(health?.release ?? {}),
+      status: "not-checked",
+    };
+  }
+
+  const commitMatchesExpected = Boolean(
+    normalizedActualCommit &&
+      (normalizedExpectedCommit.startsWith(normalizedActualCommit) ||
+        normalizedActualCommit.startsWith(normalizedExpectedCommit))
+  );
+
+  return {
+    ...(health?.release ?? {}),
+    expectedCommit: normalizedExpectedCommit,
+    commitMatchesExpected,
+    status: commitMatchesExpected ? "matched" : "mismatched",
+  };
+}
+
 async function fetchPublicPage(baseUrl, pagePath) {
   const response = await fetch(`${baseUrl}${pagePath}`);
 
@@ -144,6 +174,7 @@ async function submitLearnerInterest(baseUrl) {
 
 export async function runSmokeTest({
   baseUrl,
+  expectedCommit,
   testPracticeInquiry,
   testLearnerInterest,
 }) {
@@ -191,6 +222,7 @@ export async function runSmokeTest({
   return {
     baseUrl: normalizedBaseUrl,
     healthOk: health.ok === true,
+    release: getReleaseResult({ health, expectedCommit }),
     publicPagesOk: publicPages.every(page => page.ok),
     checkoutAvailabilityOk,
     securityHeadersOk: securityHeaders.every(header => header.ok),
@@ -211,6 +243,7 @@ export async function runSmokeTest({
 export function getExitCode(report, { allowNotReady }) {
   if (
     !report.healthOk ||
+    report.release?.status === "mismatched" ||
     !report.publicPagesOk ||
     !report.checkoutAvailabilityOk ||
     !report.securityHeadersOk ||
@@ -241,6 +274,16 @@ export function renderReport(report) {
     "## Result",
     "",
     `- Health endpoint: ${report.healthOk ? "ok" : "failed"}`,
+    `- Deployed commit: ${
+      report.release?.commit ? report.release.commit : "not reported by host"
+    }`,
+    `- Expected commit check: ${
+      report.release?.status === "matched"
+        ? "ok"
+        : report.release?.status === "mismatched"
+          ? "failed"
+          : "not checked"
+    }`,
     `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
     `- Checkout availability endpoint: ${
       report.checkoutAvailabilityOk ? "ok" : "failed"
@@ -264,6 +307,22 @@ export function renderReport(report) {
     `- Paid launch readiness: ${
       report.readyForPaidLaunch ? "ready" : "not ready"
     }`,
+    "",
+    "## Release Fingerprint",
+    "",
+    `- Host: ${report.release?.host ?? "not reported"}`,
+    `- Branch: ${report.release?.branch ?? "not reported"}`,
+    `- Commit: ${report.release?.commit ?? "not reported"}`,
+    `- Expected commit: ${report.release?.expectedCommit ?? "not checked"}`,
+    `- Commit matches expected: ${
+      report.release?.commitMatchesExpected === undefined
+        ? "not checked"
+        : report.release.commitMatchesExpected
+          ? "yes"
+          : "no"
+    }`,
+    `- Service name: ${report.release?.serviceName ?? "not reported"}`,
+    `- Host URL: ${report.release?.url ?? "not reported"}`,
     "",
     "## Public Page Checks",
     "",
@@ -345,6 +404,14 @@ export function renderConsoleSummary({ report, allowNotReady }) {
   const lines = [
     `Deployment smoke test for ${report.baseUrl}`,
     `- Health: ${report.healthOk ? "ok" : "failed"}`,
+    `- Deployed commit: ${report.release?.commit ?? "not reported"}`,
+    `- Expected commit check: ${
+      report.release?.status === "matched"
+        ? "ok"
+        : report.release?.status === "mismatched"
+          ? "failed"
+          : "not checked"
+    }`,
     `- Public buyer pages: ${report.publicPagesOk ? "ok" : "failed"}`,
     `- Checkout availability: ${
       report.checkoutAvailabilityOk ? "ok" : "failed"
@@ -421,12 +488,14 @@ export function renderConsoleSummary({ report, allowNotReady }) {
 async function main() {
   const baseUrl = process.env.LAUNCH_BASE_URL || process.env.PUBLIC_APP_URL || "";
   const allowNotReady = process.env.LAUNCH_SMOKE_ALLOW_NOT_READY === "true";
+  const expectedCommit = process.env.LAUNCH_EXPECTED_COMMIT || "";
   const testPracticeInquiry =
     process.env.LAUNCH_SMOKE_TEST_PRACTICE_INQUIRY === "true";
   const testLearnerInterest =
     process.env.LAUNCH_SMOKE_TEST_LEARNER_INTEREST === "true";
   const report = await runSmokeTest({
     baseUrl,
+    expectedCommit,
     testPracticeInquiry,
     testLearnerInterest,
   });
