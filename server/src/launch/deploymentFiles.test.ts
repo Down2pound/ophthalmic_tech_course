@@ -513,6 +513,33 @@ describe("deployment files", () => {
     expect(spindelOnboardingScript).not.toContain("sk_test_");
   });
 
+  it("keeps a work-computer-safe local demo testing command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const localDemoScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-local-demo.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:local-demo": "node scripts/launch-local-demo.mjs"'
+    );
+    expect(readme).toContain("pnpm launch:local-demo");
+    expect(localDemoScript).toContain("OptiTech Academy Local Demo Tester");
+    expect(localDemoScript).toContain("ENABLE_LOCAL_COURSE_DEMO");
+    expect(localDemoScript).toContain("/api/dev/demo-learner/start");
+    expect(localDemoScript).toContain("/learn");
+    expect(localDemoScript).not.toContain("sk_test_");
+    expect(localDemoScript).not.toContain("whsec_");
+    expect(localDemoScript).not.toContain("DATABASE_URL=");
+  });
+
   it("keeps a work-computer-safe clinical review checklist command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

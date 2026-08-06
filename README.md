@@ -63,6 +63,7 @@ pnpm launch:fulfillment
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
 pnpm launch:lead-qualifier
+pnpm launch:local-demo
 pnpm launch:live-url https://your-real-domain.example
 pnpm launch:bootcamp-intake
 pnpm launch:blockers
@@ -89,6 +90,8 @@ pnpm launch:blockers
   checkout safely if a live launch issue appears.
 - `launch:lead-qualifier` prints the first-lead fit card for deciding whether
   to send preview, buyer-guide, practice-pack, inquiry, or paid-checkout links.
+- `launch:local-demo` prints the exact local testing commands and demo learner
+  link for clicking through the protected course before paid launch.
 - `launch:live-url` turns the real Render or custom domain into the exact
   smoke-test, sitemap, go/no-go, and first-buyer commands.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
@@ -102,6 +105,12 @@ bundle pair in the Drive backup folder to identify the latest safe handoff.
 
 Use this when you want to click through the course yourself before Stripe,
 email, and production hosting are fully connected.
+
+Print the local testing recipe:
+
+```bash
+pnpm launch:local-demo
+```
 
 1. Build the app.
 2. Start the local server with `ENABLE_LOCAL_COURSE_DEMO=true`.
