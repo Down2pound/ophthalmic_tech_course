@@ -146,15 +146,15 @@ describe("deployment files", () => {
       "utf8"
     );
 
-    expect(packageJson).toContain(
-      '"db:setup": "node scripts/db-setup.mjs"'
-    );
+    expect(packageJson).toContain('"db:setup": "node scripts/db-setup.mjs"');
     expect(packageJson).not.toContain(
       '"db:setup": "tsx server/src/db/runSetup.ts"'
     );
     expect(renderBlueprint).toContain("preDeployCommand: pnpm db:setup");
     expect(dbSetupScript).toContain("DATABASE_URL is required");
-    expect(dbSetupScript).toContain("CREATE TABLE IF NOT EXISTS commerce_purchases");
+    expect(dbSetupScript).toContain(
+      "CREATE TABLE IF NOT EXISTS commerce_purchases"
+    );
     expect(dbSetupScript).toContain("CREATE TABLE IF NOT EXISTS auth_sessions");
     expect(dbSetupScript).toContain(
       "CREATE TABLE IF NOT EXISTS learning_lesson_completions"
@@ -288,7 +288,10 @@ describe("deployment files", () => {
       path.resolve(process.cwd(), "docs/launch/external-setup-worksheet.md"),
       "utf8"
     );
-    const readme = await readFile(path.resolve(process.cwd(), "README.md"), "utf8");
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
 
     expect(packageJson).toContain(
       '"launch:external-setup": "node scripts/launch-external-setup.mjs"'
@@ -303,11 +306,21 @@ describe("deployment files", () => {
       "OptiTech Academy External Setup Worksheet"
     );
     expect(externalSetupWorksheet).toContain("Create the Render web service");
-    expect(externalSetupWorksheet).toContain("Connect Stripe checkout and webhook");
-    expect(externalSetupWorksheet).toContain("Connect passwordless sign-in email");
-    expect(externalSetupWorksheet).toContain("Record Module 1 clinical review signoff");
-    expect(externalSetupWorksheet).toContain("Run one controlled live purchase");
-    expect(externalSetupWorksheet).toContain("pnpm launch:clinical-review-request");
+    expect(externalSetupWorksheet).toContain(
+      "Connect Stripe checkout and webhook"
+    );
+    expect(externalSetupWorksheet).toContain(
+      "Connect passwordless sign-in email"
+    );
+    expect(externalSetupWorksheet).toContain(
+      "Record Module 1 clinical review signoff"
+    );
+    expect(externalSetupWorksheet).toContain(
+      "Run one controlled live purchase"
+    );
+    expect(externalSetupWorksheet).toContain(
+      "pnpm launch:clinical-review-request"
+    );
     expect(externalSetupWorksheet).not.toContain("sk_test_");
     expect(externalSetupWorksheet).not.toContain("whsec_");
   });
@@ -332,7 +345,9 @@ describe("deployment files", () => {
     expect(deploymentAuditScript).toContain("Dockerfile");
     expect(deploymentAuditScript).toContain("Procfile");
     expect(deploymentAuditScript).toContain("ENABLE_PAID_ENROLLMENT");
-    expect(deploymentAuditScript).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED");
+    expect(deploymentAuditScript).toContain(
+      "MODULE_ONE_CLINICAL_REVIEW_APPROVED"
+    );
     expect(deploymentAuditScript).toContain(
       "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER"
     );
@@ -453,6 +468,51 @@ describe("deployment files", () => {
     expect(envTemplateScript).not.toContain("whsec_");
   });
 
+  it("keeps work-computer-safe launch secret, sitemap, and Spindel onboarding commands available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const secretsScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-secrets.mjs"),
+      "utf8"
+    );
+    const sitemapScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-sitemap.mjs"),
+      "utf8"
+    );
+    const spindelOnboardingScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-spindel-onboarding.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:secrets": "node scripts/launch-secrets.mjs"'
+    );
+    expect(packageJson).toContain(
+      '"launch:spindel-onboarding": "node scripts/launch-spindel-onboarding.mjs"'
+    );
+    expect(packageJson).toContain(
+      '"launch:sitemap": "node scripts/launch-sitemap.mjs"'
+    );
+    expect(secretsScript).toContain("OptiTech Academy Launch Secrets");
+    expect(secretsScript).toContain("randomBytes");
+    expect(sitemapScript).toContain(
+      "Set PUBLIC_APP_URL to the real https production domain"
+    );
+    expect(sitemapScript).toContain("/practice-packs");
+    expect(spindelOnboardingScript).toContain(
+      "Spindel Eye Technician Onboarding"
+    );
+    expect(spindelOnboardingScript).toContain("Doctor-Specific Protocols");
+    expect(secretsScript).not.toContain("tsx");
+    expect(sitemapScript).not.toContain("tsx");
+    expect(spindelOnboardingScript).not.toContain("tsx");
+    expect(secretsScript).not.toContain("sk_test_");
+    expect(sitemapScript).not.toContain("sk_test_");
+    expect(spindelOnboardingScript).not.toContain("sk_test_");
+  });
+
   it("keeps a work-computer-safe clinical review checklist command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
@@ -492,7 +552,10 @@ describe("deployment files", () => {
       "utf8"
     );
     const requestTemplate = await readFile(
-      path.resolve(process.cwd(), "docs/launch/clinical-review-request-template.md"),
+      path.resolve(
+        process.cwd(),
+        "docs/launch/clinical-review-request-template.md"
+      ),
       "utf8"
     );
     const clinicalGuide = await readFile(
@@ -508,7 +571,9 @@ describe("deployment files", () => {
     );
     expect(requestTemplate).toContain("Approved as written");
     expect(requestTemplate).toContain("Not approved yet");
-    expect(requestTemplate).toContain("MODULE_ONE_CLINICAL_REVIEW_APPROVED=true");
+    expect(requestTemplate).toContain(
+      "MODULE_ONE_CLINICAL_REVIEW_APPROVED=true"
+    );
     expect(requestTemplate).not.toContain("sk_test_");
     expect(requestTemplate).not.toContain("whsec_");
   });
@@ -550,11 +615,17 @@ describe("deployment files", () => {
       "utf8"
     );
     const leadQualificationCard = await readFile(
-      path.resolve(process.cwd(), "docs/launch/first-lead-qualification-card.md"),
+      path.resolve(
+        process.cwd(),
+        "docs/launch/first-lead-qualification-card.md"
+      ),
       "utf8"
     );
     const firstBuyerScript = await readFile(
-      path.resolve(process.cwd(), "scripts/launch-first-buyer-command-center.mjs"),
+      path.resolve(
+        process.cwd(),
+        "scripts/launch-first-buyer-command-center.mjs"
+      ),
       "utf8"
     );
 
@@ -883,7 +954,10 @@ describe("deployment files", () => {
       path.resolve(process.cwd(), "scripts/launch-live-url-card.mjs"),
       "utf8"
     );
-    const readme = await readFile(path.resolve(process.cwd(), "README.md"), "utf8");
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
     const domainGuide = await readFile(
       path.resolve(process.cwd(), "docs/launch/domain-and-sharing-guide.md"),
       "utf8"
@@ -991,9 +1065,7 @@ describe("deployment files", () => {
     expect(packageJson).toContain(
       '"launch:manual-payment-links": "node scripts/launch-manual-payment-links.mjs"'
     );
-    expect(manualPaymentScript).toContain(
-      "manual-payment-link-checklist.md"
-    );
+    expect(manualPaymentScript).toContain("manual-payment-link-checklist.md");
     expect(manualPaymentScript).not.toContain("execSync");
     expect(manualPaymentChecklist).toContain(
       "OptiTech Academy Manual Payment Link Checklist"
@@ -1018,7 +1090,10 @@ describe("deployment files", () => {
       "utf8"
     );
     const staticPageGuide = await readFile(
-      path.resolve(process.cwd(), "docs/launch/static-first-sale-page-guide.md"),
+      path.resolve(
+        process.cwd(),
+        "docs/launch/static-first-sale-page-guide.md"
+      ),
       "utf8"
     );
 
