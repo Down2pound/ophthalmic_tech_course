@@ -79,7 +79,7 @@ pnpm launch:lead-qualifier
 pnpm launch:lead-pipeline-smoke
 pnpm launch:local-course-smoke
 pnpm launch:local-demo
-pnpm launch:live-url https://your-real-domain.example
+LAUNCH_LIVE_URL_REPORT_PATH=launch-evidence/live-url-command-card.md pnpm launch:live-url https://your-real-domain.example
 LAUNCH_GO_LIVE_REPORT_PATH=launch-evidence/go-live-packet.md pnpm launch:go-live https://your-real-domain.example
 LAUNCH_PAID_PROOF_REPORT_PATH=launch-evidence/paid-launch-proof-sequence.md pnpm launch:paid-proof https://your-real-domain.example
 pnpm launch:bootcamp-intake
@@ -151,7 +151,8 @@ pnpm launch:blockers
   link for clicking through the protected course before paid launch.
 - `launch:live-url` turns the real Render or custom domain into the exact
   smoke-test, sitemap, checkout, email, lead-pipeline, go/no-go, live-purchase,
-  and first-buyer commands.
+  source-audit, and first-buyer commands, and can save the card to
+  `launch-evidence/`.
 - `launch:go-live` prints and can save the final URL-specific launch-day packet
   before `ENABLE_PAID_ENROLLMENT=true` is used.
 - `launch:paid-proof` prints and can save the ordered money-path proof packet:

@@ -1266,6 +1266,10 @@ describe("deployment files", () => {
       path.resolve(process.cwd(), "docs/launch/render-deployment-guide.md"),
       "utf8"
     );
+    const onlineStartGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/online-start-guide.md"),
+      "utf8"
+    );
 
     expect(packageJson).toContain(
       '"launch:live-url": "node scripts/launch-live-url-card.mjs"'
@@ -1273,9 +1277,14 @@ describe("deployment files", () => {
     expect(readme).toContain("pnpm launch:live-url");
     expect(domainGuide).toContain("pnpm launch:live-url");
     expect(renderGuide).toContain("pnpm launch:live-url");
+    expect(onlineStartGuide).toContain("LAUNCH_LIVE_URL_REPORT_PATH");
+    expect(onlineStartGuide).toContain("pnpm launch:source-audit");
     expect(liveUrlScript).toContain("OptiTech Academy Live URL Command Card");
+    expect(liveUrlScript).toContain("LAUNCH_LIVE_URL_REPORT_PATH");
+    expect(liveUrlScript).toContain("live-url-command-card.md");
     expect(liveUrlScript).toContain("LAUNCH_SMOKE_ALLOW_NOT_READY");
     expect(liveUrlScript).toContain("pnpm launch:sitemap");
+    expect(liveUrlScript).toContain("pnpm launch:source-audit");
     expect(liveUrlScript).toContain("pnpm launch:owner-go-no-go");
     expect(liveUrlScript).toContain("pnpm launch:checkout-smoke");
     expect(liveUrlScript).toContain("pnpm launch:email-smoke");

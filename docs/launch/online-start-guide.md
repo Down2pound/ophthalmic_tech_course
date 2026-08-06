@@ -78,8 +78,12 @@ $env:LAUNCH_SMOKE_ALLOW_NOT_READY="true"
 $env:LAUNCH_BASE_URL="https://your-real-domain.example"
 pnpm launch:smoke
 
+$env:LAUNCH_LIVE_URL_REPORT_PATH="launch-evidence/live-url-command-card.md"
+pnpm launch:live-url
+
 $env:PUBLIC_APP_URL="https://your-real-domain.example"
 pnpm launch:sitemap
+pnpm launch:source-audit
 pnpm launch:first-sales
 pnpm launch:owner-go-no-go
 pnpm launch:first-buyer

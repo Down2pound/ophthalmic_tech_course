@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+
 const rawUrl =
   process.argv[2]?.trim() ||
   process.env.LAUNCH_BASE_URL?.trim() ||
   process.env.PUBLIC_APP_URL?.trim() ||
   "https://your-real-domain.example";
+const recommendedReportPath = "launch-evidence/live-url-command-card.md";
 
 function normalizeBaseUrl(value) {
   try {
@@ -58,6 +62,11 @@ const warnings = getWarnings(baseUrl);
 const expectedCommit =
   process.env.LAUNCH_EXPECTED_COMMIT?.trim() || "paste-current-git-commit";
 
+function getReportPath() {
+  const value = process.env.LAUNCH_LIVE_URL_REPORT_PATH?.trim() || "";
+  return value ? path.resolve(value) : "";
+}
+
 const buyerLinks = [
   ["First-buyer overview", "/first-sale"],
   ["Individual checkout or interest list", "/checkout"],
@@ -108,6 +117,8 @@ const lines = [
   "$env:PUBLIC_APP_URL=$env:LAUNCH_BASE_URL",
   '$env:LAUNCH_SMOKE_ALLOW_NOT_READY="true"',
   "pnpm launch:smoke",
+  '$env:LAUNCH_SOURCE_AUDIT_REPORT_PATH="launch-evidence/course-source-audit.md"',
+  "pnpm launch:source-audit",
   "pnpm launch:sitemap",
   "pnpm launch:owner-go-no-go",
   '$env:LAUNCH_CHECKOUT_SMOKE_REPORT_PATH="launch-evidence/checkout-session-smoke-report.md"',
@@ -143,6 +154,7 @@ const lines = [
   "```bash",
   `LAUNCH_BASE_URL=${baseUrl} LAUNCH_SMOKE_ALLOW_NOT_READY=true pnpm launch:smoke`,
   `LAUNCH_BASE_URL=${baseUrl} LAUNCH_EXPECTED_COMMIT=${expectedCommit} LAUNCH_SMOKE_ALLOW_NOT_READY=true pnpm launch:smoke`,
+  "LAUNCH_SOURCE_AUDIT_REPORT_PATH=launch-evidence/course-source-audit.md pnpm launch:source-audit",
   `PUBLIC_APP_URL=${baseUrl} pnpm launch:sitemap`,
   `LAUNCH_BASE_URL=${baseUrl} pnpm launch:owner-go-no-go`,
   `LAUNCH_BASE_URL=${baseUrl} LAUNCH_CHECKOUT_SMOKE_REPORT_PATH=launch-evidence/checkout-session-smoke-report.md pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding-learner`,
@@ -178,4 +190,15 @@ const lines = [
   "",
 ];
 
-console.log(lines.join("\n"));
+const report = lines.join("\n");
+const reportPath = getReportPath();
+
+console.log(report);
+
+if (reportPath) {
+  await mkdir(path.dirname(reportPath), { recursive: true });
+  await writeFile(reportPath, report, "utf8");
+  console.log(`Report written: ${reportPath}`);
+} else {
+  console.log(`Recommended report path: ${recommendedReportPath}`);
+}
