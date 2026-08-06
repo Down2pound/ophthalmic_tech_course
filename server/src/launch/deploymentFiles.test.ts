@@ -574,11 +574,16 @@ describe("deployment files", () => {
       '"launch:env-template": "node scripts/launch-env-template.mjs"'
     );
     expect(envTemplateScript).toContain("Host Dashboard Paste Template");
+    expect(envTemplateScript).toContain("LAUNCH_ENV_TEMPLATE_REPORT_PATH");
+    expect(envTemplateScript).toContain("--public-app-url");
+    expect(envTemplateScript).toContain("Recommended report path");
     expect(envTemplateScript).toContain("ENABLE_PAID_ENROLLMENT=false");
     expect(envTemplateScript).toContain(
       "MODULE_ONE_CLINICAL_REVIEW_APPROVED=false"
     );
     expect(envTemplateScript).toContain("TRANSACTIONAL_EMAIL_API_URL");
+    expect(envTemplateScript).toContain("STRIPE_SECRET_KEY=");
+    expect(envTemplateScript).toContain("STRIPE_WEBHOOK_SECRET=");
     expect(envTemplateScript).not.toContain("execSync");
     expect(envTemplateScript).not.toContain("sk_test_");
     expect(envTemplateScript).not.toContain("whsec_");
@@ -1052,6 +1057,8 @@ describe("deployment files", () => {
     expect(renderSetupScript).toContain("node dist/index.js");
     expect(renderSetupScript).toContain("/api/health");
     expect(renderSetupScript).toContain("/api/launch/readiness");
+    expect(renderSetupScript).toContain("pnpm launch:env-template");
+    expect(renderSetupScript).toContain("LAUNCH_ENV_TEMPLATE_REPORT_PATH");
     expect(renderSetupScript).toContain("LAUNCH_SMOKE_ALLOW_NOT_READY");
     expect(renderSetupScript).not.toContain("execSync");
     expect(renderSetupScript).not.toContain("sk_test_");

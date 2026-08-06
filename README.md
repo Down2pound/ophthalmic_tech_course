@@ -70,6 +70,7 @@ LAUNCH_FULFILLMENT_REPORT_PATH=launch-evidence/first-buyer-fulfillment-checklist
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
 pnpm launch:env-checklist
+LAUNCH_ENV_TEMPLATE_REPORT_PATH=launch-evidence/host-dashboard-env-template.md pnpm launch:env-template https://your-real-domain.example
 pnpm launch:lead-qualifier
 pnpm launch:lead-pipeline-smoke
 pnpm launch:local-course-smoke
@@ -120,6 +121,9 @@ pnpm launch:blockers
 - `launch:env-checklist` prints the full production host environment checklist
   so Render, Stripe, email, database, admin-token, and clinical-review settings
   can be filled in without putting real secret values in the repo.
+- `launch:env-template` prints a safe host dashboard paste template, can fill
+  `PUBLIC_APP_URL` from the deployed URL, and can save the template to
+  `launch-evidence/` without storing secret values.
 - `launch:lead-qualifier` prints the first-lead fit card for deciding whether
   to send preview, buyer-guide, practice-pack, inquiry, or paid-checkout links.
 - `launch:lead-pipeline-smoke` submits safe test leads to a deployed app,
