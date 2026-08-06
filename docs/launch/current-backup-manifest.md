@@ -18,6 +18,8 @@ branch.
   `https://github.com/Down2pound/ophthalmic_tech_course/pull/10`
 - Google Drive folder:
   `https://drive.google.com/drive/folders/1pA_fNKEMLKnCmhn6tkM7VLrEj7fgX97T`
+- NotebookLM course source:
+  `https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1`
 
 ## Drive Backup File Pattern
 
@@ -33,28 +35,28 @@ optitech-academy-static-first-sale-page-YYYY-MM-DD-COMMIT.zip
 Example:
 
 ```text
-optitech-academy-source-2026-08-06-a6cbdb4-tracked.zip
-optitech-academy-branch-2026-08-06-a6cbdb4.bundle
-optitech-academy-launch-evidence-2026-08-06-a6cbdb4.zip
-optitech-academy-static-first-sale-page-2026-08-06-a6cbdb4.zip
+optitech-academy-source-2026-08-06-dcbce8b-tracked.zip
+optitech-academy-branch-2026-08-06-dcbce8b.bundle
+optitech-academy-launch-evidence-2026-08-06-dcbce8b.zip
+optitech-academy-static-first-sale-page-2026-08-06-dcbce8b.zip
 ```
 
 ## Latest Confirmed Backup
 
 Latest confirmed backup point:
 
-- Commit: `a6cbdb4`
+- Commit: `dcbce8b`
 - Backup date: `2026-08-06`
 - Source code ZIP, tracked repo files only:
-  `https://drive.google.com/file/d/1eatoxS-uJWSPUg_I8TaltVf5xHbroUmx/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1TO26vIz2J1x_rNJQoa-J_GAweDAY7kMt/view?usp=drivesdk`
 - Git branch bundle:
-  `https://drive.google.com/file/d/1-N6461KAAc9W5pzNFy1fNfskLoJMoXeg/view?usp=drivesdk`
+  `https://drive.google.com/file/d/13MDRFzfIGbZJ1XbapEAOX7kTZdCf_vGP/view?usp=drivesdk`
 - Launch evidence ZIP:
-  `https://drive.google.com/file/d/1uFMUT_CMeprtGx3xrXu0CGodH3FpWata/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1arRSxozM54laGx7oaikqIPsF3g1K5BkK/view?usp=drivesdk`
 - Static first-sale page ZIP:
-  `https://drive.google.com/file/d/11LodjFiyeMhhhmXWDogXbeFnpD0WsSeA/view?usp=drivesdk`
+  `https://drive.google.com/file/d/1pHIQbbIAL0bdtVXtRAo_wB0vNyUjzUQk/view?usp=drivesdk`
 
-This manifest may be committed after `a6cbdb4` only to record the Drive links.
+This manifest may be committed after `dcbce8b` only to record the Drive links.
 If GitHub shows a newer manifest-only commit, use GitHub for the newest branch
 state and use the Drive files above as the latest full portable backup set.
 
