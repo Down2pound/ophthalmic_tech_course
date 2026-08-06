@@ -141,6 +141,10 @@ describe("deployment files", () => {
       path.resolve(process.cwd(), "client/src/pages/PracticePacks.tsx"),
       "utf8"
     );
+    const learnPage = await readFile(
+      path.resolve(process.cwd(), "client/src/pages/Learn.tsx"),
+      "utf8"
+    );
 
     expect(checkoutStatusClient).toContain(
       "Request sign-in and start Module 1"
@@ -153,8 +157,14 @@ describe("deployment files", () => {
     expect(checkoutPage).toContain("checkoutStatus.action.label");
     expect(practicePacksPage).toContain("checkoutStatus.action.href");
     expect(practicePacksPage).toContain("checkoutStatus.action.label");
+    expect(learnPage).toContain("buyerSupportContact");
+    expect(learnPage).toContain("Email support if access looks wrong");
+    expect(learnPage).toContain("Email support if access is missing");
+    expect(learnPage).toContain("supportHref");
     expect(checkoutStatusClient).not.toContain("sk_test_");
     expect(checkoutStatusClient).not.toContain("whsec_");
+    expect(learnPage).not.toContain("sk_test_");
+    expect(learnPage).not.toContain("whsec_");
   });
 
   it("runs the launch secret scan and local course smoke check in GitHub launch CI", async () => {

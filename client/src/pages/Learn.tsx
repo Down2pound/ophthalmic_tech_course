@@ -16,6 +16,8 @@ import {
   type ProtectedModuleOneLessons,
 } from "@/lib/protectedLessonsClient";
 import { getCheckoutStatus } from "@/lib/checkoutStatus";
+import { createMailtoHref } from "@shared/commerce/offers";
+import { buyerSupportContact } from "@shared/commerce/policies";
 import {
   fetchModuleOneLessonProgress,
   markModuleOneLessonComplete,
@@ -31,11 +33,17 @@ import {
   ClipboardCheck,
   Compass,
   ExternalLink,
+  Mail,
   ShieldAlert,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 const storage = typeof window === "undefined" ? null : window.localStorage;
+const supportHref = createMailtoHref({
+  email: buyerSupportContact.email,
+  subject: buyerSupportContact.subject,
+  body: buyerSupportContact.emailBody,
+});
 
 export default function Learn() {
   const [selectedLessonId, setSelectedLessonId] = useState<string>();
@@ -236,10 +244,17 @@ export default function Learn() {
               </ul>
               {!learnerAccess?.hasAccess && (
                 <p className="mt-3 rounded-md border border-green-200 bg-white p-3 text-sm leading-6">
-                  Need access on this device? Request a sign-in link below
-                  using the same email entered at checkout.
+                  Need access on this device? Request a sign-in link below using
+                  the same email entered at checkout.
                 </p>
               )}
+              <a
+                href={supportHref}
+                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-green-800 hover:text-green-950"
+              >
+                <Mail className="h-4 w-4" />
+                Email support if access looks wrong
+              </a>
             </Card>
           )}
 
@@ -316,6 +331,15 @@ export default function Learn() {
                     >
                       Review access options
                     </a>
+                    {checkoutStatus?.tone === "success" && (
+                      <a
+                        href={supportHref}
+                        className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900"
+                      >
+                        <Mail className="h-4 w-4" />
+                        Email support if access is missing
+                      </a>
+                    )}
                   </div>
                 )}
               </div>
