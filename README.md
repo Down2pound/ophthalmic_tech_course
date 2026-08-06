@@ -478,6 +478,12 @@ To save a Markdown smoke-test report with your launch records:
 LAUNCH_SMOKE_ALLOW_NOT_READY=true LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_SMOKE_REPORT_PATH=launch-evidence/deployment-smoke-report.md pnpm launch:smoke
 ```
 
+To save the owner traffic-light report that says which links are safe to share:
+
+```bash
+LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_OWNER_REPORT_PATH=launch-evidence/owner-go-no-go-report.md pnpm launch:owner-go-no-go
+```
+
 To also submit one safe custom-practice test inquiry and prove lead capture
 works after deployment:
 

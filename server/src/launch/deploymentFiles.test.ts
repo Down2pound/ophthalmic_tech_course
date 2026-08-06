@@ -1005,6 +1005,8 @@ describe("deployment files", () => {
     expect(ownerGoNoGoScript).toContain("First buyer overview");
     expect(ownerGoNoGoScript).toContain("/api/launch/readiness");
     expect(ownerGoNoGoScript).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(ownerGoNoGoScript).toContain("LAUNCH_OWNER_REPORT_PATH");
+    expect(ownerGoNoGoScript).toContain("owner-go-no-go-report.md");
     expect(ownerGoNoGoScript).not.toContain("execSync");
     expect(ownerGoNoGoScript).not.toContain("sk_test_");
     expect(ownerGoNoGoScript).not.toContain("whsec_");

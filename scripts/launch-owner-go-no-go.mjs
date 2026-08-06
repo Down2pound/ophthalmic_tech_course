@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 
 const publicPaths = [
   "/",
@@ -19,7 +21,10 @@ const requiredSecurityHeaders = [
   ["X-Content-Type-Options", "nosniff"],
   ["X-Frame-Options", "DENY"],
   ["Referrer-Policy", "strict-origin-when-cross-origin"],
-  ["Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(self)"],
+  [
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=(), payment=(self)",
+  ],
   ["Cross-Origin-Opener-Policy", "same-origin"],
 ];
 
@@ -49,6 +54,12 @@ function renderUsage() {
     "Simple translation: this is a work-computer-safe traffic light. It reads the deployed site and tells you what is safe to share.",
     "",
     "It does not submit practice inquiries, create buyers, send email, run Stripe payments, or print secret values.",
+    "",
+    "To save a copy in launch evidence:",
+    "",
+    "```bash",
+    "LAUNCH_BASE_URL=https://your-real-domain.example LAUNCH_OWNER_REPORT_PATH=launch-evidence/owner-go-no-go-report.md pnpm launch:owner-go-no-go",
+    "```",
     "",
   ].join("\n");
 }
@@ -172,7 +183,11 @@ function renderShareableLinks({ baseUrl, decision }) {
     "Paid checkout links:",
     "",
     formatLink("Individual checkout", `${baseUrl}/checkout`, paidStatus),
-    formatLink("Practice pack checkout", `${baseUrl}/practice-packs`, paidStatus),
+    formatLink(
+      "Practice pack checkout",
+      `${baseUrl}/practice-packs`,
+      paidStatus
+    ),
     "",
     decision.paid === "GO"
       ? "Paid links are marked shareable only because paid readiness is green. Still run one controlled internal live purchase before broad outreach."
@@ -327,7 +342,9 @@ async function run() {
       listResult(
         header.header,
         header.ok,
-        header.ok ? "" : `expected ${header.expected}, got ${header.actual ?? "missing"}`
+        header.ok
+          ? ""
+          : `expected ${header.expected}, got ${header.actual ?? "missing"}`
       )
     ),
     "",
@@ -355,7 +372,16 @@ async function run() {
     "",
   ];
 
-  console.log(lines.join("\n"));
+  const report = lines.join("\n");
+
+  console.log(report);
+
+  if (process.env.LAUNCH_OWNER_REPORT_PATH) {
+    const reportPath = path.resolve(process.env.LAUNCH_OWNER_REPORT_PATH);
+    await mkdir(path.dirname(reportPath), { recursive: true });
+    await writeFile(reportPath, report, "utf8");
+    console.log(`Report written: ${reportPath}`);
+  }
 
   return basicOk ? 0 : 1;
 }

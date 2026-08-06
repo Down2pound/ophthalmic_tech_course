@@ -37,6 +37,12 @@ You can also run this read-only owner traffic-light report:
 LAUNCH_BASE_URL=https://your-real-domain.example pnpm launch:owner-go-no-go
 ```
 
+To save the same traffic-light report with launch evidence:
+
+```bash
+LAUNCH_BASE_URL=https://your-real-domain.example LAUNCH_OWNER_REPORT_PATH=launch-evidence/owner-go-no-go-report.md pnpm launch:owner-go-no-go
+```
+
 It tells you whether preview links, practice inquiry links, and paid checkout
 links are GO, CAUTION, or NO-GO without creating buyers, sending email, or
 submitting a practice inquiry.
