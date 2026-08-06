@@ -3,7 +3,12 @@
 This document outlines the 10-day ophthalmic technician training program with references to detailed curriculum materials in Google NotebookLM.
 
 ## Curriculum Reference
-**Google NotebookLM Notebook:** https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1
+**Google NotebookLM Notebook:** https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1
+
+NotebookLM is the research/source workspace for this curriculum. Before any
+NotebookLM material becomes paid course content, export the underlying source
+file or summary into the repository, preserve the original Drive or Notebook
+reference, and complete rights, clinical, and accessibility review.
 
 ---
 
@@ -166,6 +171,9 @@ The curriculum content will be integrated into the enrollment website with:
 ## Updating Curriculum
 
 For curriculum updates or corrections, refer to the source material in NotebookLM:
-https://notebooklm.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1
+https://notebook.google.com/notebook/a4bc6fed-4059-4597-a60f-a43aa78ff3e1
+
+Simple version: use NotebookLM to find and draft ideas, then move the finished
+source-backed content into this repo before it goes into the live course.
 
 Last Updated: May 27, 2026
