@@ -809,6 +809,10 @@ describe("deployment files", () => {
     expect(firstCustomersScript).toContain(
       "OptiTech Academy First 10 Customers Plan"
     );
+    expect(firstCustomersScript).toContain(
+      "LAUNCH_FIRST_10_CUSTOMERS_REPORT_PATH"
+    );
+    expect(firstCustomersScript).toContain("first-10-customers-plan.md");
     expect(firstCustomersScript).toContain("Individual learners");
     expect(firstCustomersScript).toContain("Practice buyers");
     expect(firstCustomersScript).toContain("Do not send paid checkout links");
@@ -1132,6 +1136,7 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_CHECKOUT_SMOKE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_SALES_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_FIRST_10_CUSTOMERS_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_FULFILLMENT_REPORT_PATH");
     expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
