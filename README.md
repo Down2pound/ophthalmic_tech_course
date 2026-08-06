@@ -60,6 +60,7 @@ pnpm launch:first-render-deploy
 pnpm launch:clinical-review-request
 pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding-learner https://your-real-domain.example
 pnpm launch:email-smoke -- --email=internal.test@example.com https://your-real-domain.example
+LAUNCH_LIVE_PURCHASE_REPORT_PATH=launch-evidence/live-purchase-rehearsal-report.md pnpm launch:live-purchase-test -- --email=internal.test@example.com https://your-real-domain.example
 pnpm launch:first-buyer
 pnpm launch:fulfillment
 pnpm launch:first-revenue
@@ -90,6 +91,9 @@ pnpm launch:blockers
   session and can save safe proof without storing the raw checkout URL.
 - `launch:email-smoke` asks the deployed app to send one passwordless sign-in
   email and can save a safe launch-evidence report without raw links.
+- `launch:live-purchase-test` prints the first internal live purchase rehearsal
+  and can save a safe report template for proving Stripe, webhook, access, and
+  sign-in all worked together.
 - `launch:first-buyer` prints the first-buyer control panel with safe links,
   starter messages, and pause rules.
 - `launch:fulfillment` prints the first paid buyer receipt, access, welcome,

@@ -1143,11 +1143,16 @@ describe("deployment files", () => {
     );
     expect(livePurchaseScript).toContain("Founding Learner Access");
     expect(livePurchaseScript).toContain("ENABLE_PAID_ENROLLMENT=true");
+    expect(livePurchaseScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
+    expect(livePurchaseScript).toContain("live-purchase-rehearsal-report.md");
+    expect(livePurchaseScript).toContain("Stripe event ID");
+    expect(livePurchaseScript).toContain("App access result");
     expect(livePurchaseScript).toContain("/api/launch/readiness");
     expect(livePurchaseScript).toContain("/api/checkout/availability");
     expect(livePurchaseScript).toContain("checkout.session.completed");
     expect(livePurchaseScript).toContain("turn paid enrollment back off");
     expect(livePurchaseScript).toContain("pnpm launch:emergency-stop");
+    expect(livePurchaseScript).toContain("Do not paste Stripe secret keys");
     expect(livePurchaseScript).not.toContain("execSync");
     expect(livePurchaseScript).not.toContain("sk_test_");
     expect(livePurchaseScript).not.toContain("whsec_");
