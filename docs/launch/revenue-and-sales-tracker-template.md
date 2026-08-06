@@ -143,6 +143,21 @@ For practice buyers, the green light is:
 If any row fails, pause broad outreach and fix that one issue before sending
 more checkout links.
 
+## First Buyer Feedback Tracker
+
+Run `pnpm launch:first-buyer-feedback` after the first buyer has paid, signed
+in, opened Module 1, and any urgent support issue is resolved. Then use
+`first-buyer-feedback-tracker.csv` from `pnpm launch:sales-tracker`.
+
+| Feedback Date | Buyer Type | Offer                   | Feedback Received | Top Useful Theme                  | Top Confusing Theme | Next Improvement       | Testimonial Consent  | Approved Public Quote |
+| ------------- | ---------- | ----------------------- | ----------------- | --------------------------------- | ------------------- | ---------------------- | -------------------- | --------------------- |
+| 2026-08-06    | Individual | Founding Learner Access | Yes / No          | Beginner-friendly clinic language | None yet            | Improve welcome email. | Yes / No / Not asked |                       |
+
+Only publish testimonials with written permission. Do not save patient
+information, protected health information, private employee performance notes,
+raw sign-in links, card data, passwords, Stripe secret keys, webhook secrets,
+database passwords, or admin tokens.
+
 ## Weekly Business Review
 
 Answer these once a week. Think of it like checking the course dashboard, but

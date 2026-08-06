@@ -286,6 +286,14 @@ After someone buys or seriously reviews the course, ask:
 Only publish testimonials with written permission. Never include patient
 details, private staff details, or private employer details.
 
+For the first paid buyer, use the dedicated feedback packet so the questions,
+testimonial consent, and continue-or-pause decision are recorded the same way
+each time:
+
+```bash
+LAUNCH_FIRST_BUYER_FEEDBACK_REPORT_PATH=launch-evidence/first-buyer-feedback-packet.md pnpm launch:first-buyer-feedback https://your-real-domain.example -- --buyer-type=individual --email=buyer@example.com --offer=founding-learner
+```
+
 ## First 30 Days After Launch
 
 Week 1:

@@ -1237,11 +1237,63 @@ describe("deployment files", () => {
     expect(salesTrackerScript).toContain(
       "first-buyer-fulfillment-checklist.csv"
     );
+    expect(salesTrackerScript).toContain("first-buyer-feedback-tracker.csv");
     expect(salesTrackerScript).toContain("weekly-business-review.csv");
     expect(salesTrackerScript).toContain("Do not paste secrets");
     expect(salesTrackerScript).not.toContain("execSync");
     expect(salesTrackerScript).not.toContain("sk_test_");
     expect(salesTrackerScript).not.toContain("whsec_");
+  });
+
+  it("keeps a work-computer-safe first buyer feedback packet command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const feedbackScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-first-buyer-feedback.mjs"),
+      "utf8"
+    );
+    const firstCustomersPacket = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/first-customers-sales-packet.md"
+      ),
+      "utf8"
+    );
+    const salesTrackerTemplate = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/revenue-and-sales-tracker-template.md"
+      ),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:first-buyer-feedback": "node scripts/launch-first-buyer-feedback.mjs"'
+    );
+    expect(feedbackScript).toContain(
+      "OptiTech Academy First Buyer Feedback Packet"
+    );
+    expect(feedbackScript).toContain("LAUNCH_FIRST_BUYER_FEEDBACK_REPORT_PATH");
+    expect(feedbackScript).toContain("Testimonial Consent Rules");
+    expect(feedbackScript).toContain("Continue Or Pause Decision");
+    expect(feedbackScript).toContain("patient information");
+    expect(feedbackScript).toContain("protected health information");
+    expect(feedbackScript).toContain("certification");
+    expect(feedbackScript).toContain("employment");
+    expect(feedbackScript).toContain("practice manager");
+    expect(firstCustomersPacket).toContain("pnpm launch:first-buyer-feedback");
+    expect(salesTrackerTemplate).toContain("First Buyer Feedback Tracker");
+    expect(salesTrackerTemplate).toContain("first-buyer-feedback-tracker.csv");
+    expect(readme).toContain("pnpm launch:first-buyer-feedback");
+    expect(feedbackScript).not.toContain("execSync");
+    expect(feedbackScript).not.toContain("sk_test_");
+    expect(feedbackScript).not.toContain("whsec_");
   });
 
   it("keeps a work-computer-safe Stripe product setup command available", async () => {

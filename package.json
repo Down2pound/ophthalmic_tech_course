@@ -34,6 +34,7 @@
     "launch:external-setup": "node scripts/launch-external-setup.mjs",
     "launch:first-10-customers": "node scripts/launch-first-10-customers.mjs",
     "launch:first-buyer": "node scripts/launch-first-buyer-command-center.mjs",
+    "launch:first-buyer-feedback": "node scripts/launch-first-buyer-feedback.mjs",
     "launch:first-buyer-proof": "node scripts/launch-first-buyer-proof.mjs",
     "launch:first-render-deploy": "node scripts/launch-first-render-deploy.mjs",
     "launch:fulfillment": "node scripts/launch-first-buyer-fulfillment.mjs",

@@ -284,6 +284,35 @@ const trackers = [
     ],
   },
   {
+    fileName: "first-buyer-feedback-tracker.csv",
+    rows: [
+      [
+        "Feedback Date",
+        "Buyer Type",
+        "Offer",
+        "Feedback Received",
+        "Top Useful Theme",
+        "Top Confusing Theme",
+        "Next Improvement",
+        "Testimonial Consent",
+        "Approved Public Quote",
+        "Safe Notes",
+      ],
+      [
+        "2026-08-06",
+        "Individual",
+        "Founding Learner Access",
+        "Yes / No",
+        "Beginner-friendly clinic language",
+        "None yet",
+        "Improve welcome email.",
+        "Yes / No / Not asked",
+        "",
+        "Do not save patient information, PHI, raw sign-in links, or private workplace details.",
+      ],
+    ],
+  },
+  {
     fileName: "weekly-business-review.csv",
     rows: [
       [
@@ -338,6 +367,8 @@ const readme = [
   "4. What should happen next?",
   "",
   "Use first-buyer-fulfillment-checklist.csv before broad outreach. It is the plain-English proof sheet for checking that a real buyer paid, received access, signed in, and reached the course without private data being stored.",
+  "",
+  "Use first-buyer-feedback-tracker.csv after the first buyer has access and any urgent support issue is resolved. It captures useful themes, confusing themes, next improvements, and testimonial consent without private data.",
   "",
   "Source guide: docs/launch/revenue-and-sales-tracker-template.md",
   "",

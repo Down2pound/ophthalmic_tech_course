@@ -70,6 +70,7 @@ LAUNCH_FIRST_BUYER_REPORT_PATH=launch-evidence/first-buyer-command-center.md pnp
 LAUNCH_MANUAL_FULFILLMENT_REPORT_PATH=launch-evidence/manual-fulfillment-packet.md pnpm launch:manual-fulfillment https://your-real-domain.example -- --email=buyer@example.com --offer=founding-learner --payment-reference=pi_or_payment_link_reference
 LAUNCH_FULFILLMENT_REPORT_PATH=launch-evidence/first-buyer-fulfillment-checklist.md pnpm launch:fulfillment
 LAUNCH_FIRST_BUYER_PROOF_REPORT_PATH=launch-evidence/first-buyer-proof.md LAUNCH_BUYER_EMAIL=buyer@example.com pnpm launch:first-buyer-proof https://your-real-domain.example
+LAUNCH_FIRST_BUYER_FEEDBACK_REPORT_PATH=launch-evidence/first-buyer-feedback-packet.md pnpm launch:first-buyer-feedback https://your-real-domain.example -- --buyer-type=individual --email=buyer@example.com --offer=founding-learner
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
 LAUNCH_ACCESS_REVOCATION_REPORT_PATH=launch-evidence/access-revocation-packet.md pnpm launch:access-revocation https://your-real-domain.example -- --email=buyer@example.com --target-type=enrollment --target-id=enrollment_example --reason=refund
@@ -132,6 +133,9 @@ pnpm launch:blockers
 - `launch:first-buyer-proof` saves the first-buyer proof packet after a real
   payment, with an optional protected buyer lookup if the practice-seat admin
   token is available only in the shell environment.
+- `launch:first-buyer-feedback` prints and can save the safe follow-up
+  questions, testimonial consent rules, and continue-or-pause decision after
+  the first buyer has paid, signed in, and opened Module 1.
 - `launch:first-revenue` prints the shortest safe path from restored code to
   one controlled paid buyer.
 - `launch:emergency-stop` prints the red-button checklist for pausing paid
