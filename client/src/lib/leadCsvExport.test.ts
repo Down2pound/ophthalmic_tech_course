@@ -19,6 +19,7 @@ describe("lead CSV export", () => {
         message: "Need onboarding.\nNo patient details.",
         status: "new",
         createdAt: "2026-07-17T12:00:00.000Z",
+        updatedAt: "2026-07-17T13:00:00.000Z",
         followUpPlan: {
           priority: "high",
           recommendedOffer: "Custom practice onboarding call",
@@ -29,6 +30,8 @@ describe("lead CSV export", () => {
     ]);
 
     expect(csv).toContain('"Practice"');
+    expect(csv).toContain('"Updated At"');
+    expect(csv).toContain('"2026-07-17T13:00:00.000Z"');
     expect(csv).toContain('"high"');
     expect(csv).toContain('"Example ""Eye"", Care"');
     expect(csv).toContain('"Need onboarding. No patient details."');
@@ -45,9 +48,12 @@ describe("lead CSV export", () => {
         goal: "I want eye-care vocabulary.",
         status: "new",
         createdAt: "2026-07-17T12:00:00.000Z",
+        updatedAt: "2026-07-17T13:00:00.000Z",
       },
     ]);
 
+    expect(csv).toContain('"Updated At"');
+    expect(csv).toContain('"2026-07-17T13:00:00.000Z"');
     expect(csv).toContain('"Future Tech"');
     expect(csv).toContain('"learner@example.com"');
     expect(csv).toContain("learner decision one-pager");
@@ -102,7 +108,8 @@ describe("lead CSV export", () => {
         issueCategories: ["sign-in-help"],
         safeSummary:
           "Lookup email: learner@example.com. Purchases: 1. Enrollments: 1.",
-        nextStep: "Ask the learner to request a fresh passwordless sign-in link.",
+        nextStep:
+          "Ask the learner to request a fresh passwordless sign-in link.",
         evidenceToSave: ["Buyer or learner email."],
         neverSave: ["Raw passwordless sign-in links or session cookies."],
       },

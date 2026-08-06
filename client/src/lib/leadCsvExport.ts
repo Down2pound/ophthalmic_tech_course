@@ -21,6 +21,7 @@ export function buildPracticeLeadCsv(
   return [
     csvRow([
       "Created At",
+      "Updated At",
       "Priority",
       "Practice",
       "Contact",
@@ -35,6 +36,7 @@ export function buildPracticeLeadCsv(
     ...inquiries.map(inquiry =>
       csvRow([
         inquiry.createdAt,
+        inquiry.updatedAt ?? "",
         inquiry.followUpPlan.priority,
         inquiry.practiceName,
         inquiry.contactName,
@@ -56,6 +58,7 @@ export function buildLearnerLeadCsv(
   return [
     csvRow([
       "Created At",
+      "Updated At",
       "Learner",
       "Email",
       "Background",
@@ -67,6 +70,7 @@ export function buildLearnerLeadCsv(
     ...learnerInterests.map(interest =>
       csvRow([
         interest.createdAt,
+        interest.updatedAt ?? "",
         interest.learnerName,
         interest.email,
         interest.background,
