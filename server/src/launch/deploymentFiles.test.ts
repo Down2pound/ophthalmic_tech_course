@@ -1409,11 +1409,29 @@ describe("deployment files", () => {
   });
 
   it("keeps a standalone production environment checklist in launch docs", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const checklistScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-env-checklist.mjs"),
+      "utf8"
+    );
     const checklist = await readFile(
       path.resolve(process.cwd(), "docs/launch/production-env-checklist.md"),
       "utf8"
     );
 
+    expect(packageJson).toContain(
+      '"launch:env-checklist": "node scripts/launch-env-checklist.mjs"'
+    );
+    expect(readme).toContain("pnpm launch:env-checklist");
+    expect(checklistScript).toContain("production-env-checklist.md");
+    expect(checklistScript).not.toContain("execSync");
     expect(checklist).toContain(
       "OptiTech Academy Production Environment Checklist"
     );

@@ -64,6 +64,7 @@ pnpm launch:first-buyer
 pnpm launch:fulfillment
 pnpm launch:first-revenue
 pnpm launch:emergency-stop
+pnpm launch:env-checklist
 pnpm launch:lead-qualifier
 pnpm launch:lead-pipeline-smoke
 pnpm launch:local-course-smoke
@@ -97,6 +98,9 @@ pnpm launch:blockers
   one controlled paid buyer.
 - `launch:emergency-stop` prints the red-button checklist for pausing paid
   checkout safely if a live launch issue appears.
+- `launch:env-checklist` prints the full production host environment checklist
+  so Render, Stripe, email, database, admin-token, and clinical-review settings
+  can be filled in without putting real secret values in the repo.
 - `launch:lead-qualifier` prints the first-lead fit card for deciding whether
   to send preview, buyer-guide, practice-pack, inquiry, or paid-checkout links.
 - `launch:lead-pipeline-smoke` submits safe test leads to a deployed app,

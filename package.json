@@ -26,6 +26,7 @@
     "launch:email-smoke": "node scripts/launch-email-smoke.mjs",
     "launch:email-setup": "node scripts/launch-email-setup.mjs",
     "launch:emergency-stop": "node scripts/launch-emergency-stop.mjs",
+    "launch:env-checklist": "node scripts/launch-env-checklist.mjs",
     "launch:env-template": "node scripts/launch-env-template.mjs",
     "launch:external-setup": "node scripts/launch-external-setup.mjs",
     "launch:first-10-customers": "node scripts/launch-first-10-customers.mjs",
