@@ -35,7 +35,9 @@ Use this when someone buys Founding Learner Access.
 
 - [ ] Record purchase date and buyer email.
 - [ ] Confirm Stripe payment status is paid.
-- [ ] Confirm `checkout.session.completed` webhook was delivered.
+- [ ] Confirm `checkout.session.completed` webhook was delivered, or if this
+      was an approved manual Payment Link sale, confirm
+      `/api/support/manual-payment-fulfillments` created access.
 - [ ] Confirm learner access exists for the buyer email.
 - [ ] Confirm the protected buyer lookup endpoint shows the purchase and
       active enrollment.
@@ -75,7 +77,9 @@ Use this when a practice buys a five-seat or fifteen-seat pack.
 
 - [ ] Record purchase date, buyer email, practice name, and purchased pack size.
 - [ ] Confirm Stripe payment status is paid.
-- [ ] Confirm `checkout.session.completed` webhook was delivered.
+- [ ] Confirm `checkout.session.completed` webhook was delivered, or if this
+      was an approved manual Payment Link sale, confirm
+      `/api/support/manual-payment-fulfillments` created the seat pack.
 - [ ] Confirm the practice seat pack exists with the correct seat count.
 - [ ] Confirm the protected buyer lookup endpoint shows the practice purchase
       and remaining seat count.
@@ -122,6 +126,7 @@ Save safe evidence only:
 - Buyer email.
 - Stripe Checkout session ID.
 - Stripe event ID.
+- Manual fulfillment reference, only for approved manual Payment Link sales.
 - Whether access appeared automatically.
 - Whether the automated welcome email was sent.
 - Buyer lookup summary.

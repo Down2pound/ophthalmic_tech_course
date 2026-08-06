@@ -131,7 +131,7 @@ function renderFirstBuyerCommandCenter() {
     "4. Ask one simple question: what would make starting in eye care or onboarding new techs easier?",
     "5. Use the learner interest list or practice inquiry path while paid checkout is closed.",
     "6. Send paid checkout only after readiness, smoke test, and internal live purchase proof are green.",
-    "7. If automated checkout is not ready but an approved first buyer will use a Stripe Payment Link, run `pnpm launch:manual-payment-links` first.",
+    "7. If automated checkout is not ready but an approved first buyer will use a Stripe Payment Link, run `pnpm launch:manual-payment-links` first and use `/api/support/manual-payment-fulfillments` only after Stripe shows paid.",
     "8. Watch the first buyer complete payment, sign-in, and Module 1 access.",
     "9. Run `pnpm launch:fulfillment` and fill `first-buyer-fulfillment-checklist.csv` from `pnpm launch:sales-tracker`.",
     "",

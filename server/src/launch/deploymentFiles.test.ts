@@ -777,6 +777,58 @@ describe("deployment files", () => {
     expect(emergencyStopGuide).toContain("pnpm launch:access-revocation");
   });
 
+  it("keeps controlled manual Payment Link fulfillment protected and documented", async () => {
+    const authRoutes = await readFile(
+      path.resolve(process.cwd(), "server/src/routes/auth.ts"),
+      "utf8"
+    );
+    const manualFulfillmentService = await readFile(
+      path.resolve(
+        process.cwd(),
+        "server/src/commerce/manualPaymentFulfillment.ts"
+      ),
+      "utf8"
+    );
+    const manualPaymentChecklist = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/manual-payment-link-checklist.md"
+      ),
+      "utf8"
+    );
+    const fulfillmentChecklist = await readFile(
+      path.resolve(
+        process.cwd(),
+        "docs/launch/first-buyer-fulfillment-checklist.md"
+      ),
+      "utf8"
+    );
+
+    expect(authRoutes).toContain("/support/manual-payment-fulfillments");
+    expect(authRoutes).toContain("authorizePracticeSeatAdminRequest");
+    expect(authRoutes).toContain("fulfillManualPaymentLinkPurchase");
+    expect(authRoutes).toContain("It does not replace Stripe webhook proof.");
+    expect(manualFulfillmentService).toContain("foundingLearnerOffer");
+    expect(manualFulfillmentService).toContain("practicePackOffers");
+    expect(manualFulfillmentService).toContain("normalizeCheckoutEmail");
+    expect(manualFulfillmentService).toContain(
+      "createCommerceFulfillmentService"
+    );
+    expect(manualFulfillmentService).toContain("manual_");
+    expect(manualPaymentChecklist).toContain(
+      "/api/support/manual-payment-fulfillments"
+    );
+    expect(manualPaymentChecklist).toContain("x-admin-token");
+    expect(manualPaymentChecklist).toContain("practice-five-seat-pack");
+    expect(manualPaymentChecklist).toMatch(/does\s+not replace webhook proof/);
+    expect(fulfillmentChecklist).toContain(
+      "/api/support/manual-payment-fulfillments"
+    );
+    expect(manualFulfillmentService).not.toContain("execSync");
+    expect(authRoutes).not.toContain("sk_test_");
+    expect(manualPaymentChecklist).not.toContain("sk_test_");
+  });
+
   it("keeps a work-computer-safe local demo testing command available", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),
@@ -969,6 +1021,9 @@ describe("deployment files", () => {
     expect(firstBuyerScript).toContain("LAUNCH_FIRST_BUYER_REPORT_PATH");
     expect(firstBuyerScript).toContain("first-buyer-command-center.md");
     expect(firstBuyerScript).toContain("pnpm launch:lead-qualifier");
+    expect(firstBuyerScript).toContain(
+      "/api/support/manual-payment-fulfillments"
+    );
     expect(firstBuyerScript).not.toContain("execSync");
     expect(leadQualificationCard).toContain(
       "OptiTech Academy First Lead Qualification Card"
@@ -1615,6 +1670,9 @@ describe("deployment files", () => {
       "PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER"
     );
     expect(manualPaymentChecklist).toContain("ENABLE_PAID_ENROLLMENT=false");
+    expect(manualPaymentChecklist).toContain(
+      "/api/support/manual-payment-fulfillments"
+    );
     expect(manualPaymentChecklist).toContain("pnpm launch:fulfillment");
     expect(manualPaymentChecklist).not.toContain("sk_test_");
     expect(manualPaymentChecklist).not.toContain("whsec_");

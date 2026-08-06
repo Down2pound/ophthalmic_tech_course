@@ -27,10 +27,10 @@ Do not use manual payment links for broad public launch.
 
 Create one Stripe Payment Link per offer in the Stripe dashboard:
 
-| Offer | Price | Host variable |
-| --- | ---: | --- |
-| Founding Learner Access | `$199` | `PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER` |
-| Five-Seat Practice Onboarding Pack | `$799` | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS` |
+| Offer                                 |    Price | Host variable                                  |
+| ------------------------------------- | -------: | ---------------------------------------------- |
+| Founding Learner Access               |   `$199` | `PUBLIC_STRIPE_PAYMENT_LINK_FOUNDING_LEARNER`  |
+| Five-Seat Practice Onboarding Pack    |   `$799` | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_5_SEATS`  |
 | Fifteen-Seat Practice Onboarding Pack | `$1,799` | `PUBLIC_STRIPE_PAYMENT_LINK_PRACTICE_15_SEATS` |
 
 Use only links that begin with:
@@ -82,6 +82,33 @@ primaryAction: use-manual-payment-link
 
 ## After The Buyer Pays
 
+Confirm the payment in Stripe first. Then use the protected support endpoint to
+create the matching app-side access record.
+
+PowerShell shape:
+
+```powershell
+$env:LAUNCH_BASE_URL="https://your-real-domain.example"
+$env:PRACTICE_SEAT_ADMIN_TOKEN="[paste only in this trusted shell]"
+
+Invoke-RestMethod `
+  -Method Post `
+  -Uri "$env:LAUNCH_BASE_URL/api/support/manual-payment-fulfillments" `
+  -Headers @{ "x-admin-token" = $env:PRACTICE_SEAT_ADMIN_TOKEN } `
+  -ContentType "application/json" `
+  -Body '{"buyerEmail":"buyer@example.com","offerId":"founding-learner","paymentReference":"pi_or_payment_link_reference"}'
+```
+
+Supported `offerId` values:
+
+- `founding-learner`
+- `practice-five-seat-pack`
+- `practice-fifteen-seat-pack`
+
+This endpoint is only for controlled manual Stripe Payment Link sales. It does
+not replace webhook proof and should not be used to pretend automated checkout
+worked.
+
 Immediately run:
 
 ```bash
@@ -102,6 +129,7 @@ Save safe evidence only:
 - Stripe payment or checkout session ID.
 - Payment status.
 - Whether access was manually granted.
+- Manual fulfillment endpoint status.
 - Whether welcome instructions were sent.
 - Any non-private buyer feedback.
 

@@ -28,6 +28,7 @@ import {
   type AccessRevocationTarget,
 } from "../commerce/accessRevocation";
 import { lookupBuyerSupportProfile } from "../commerce/buyerSupportLookup";
+import { fulfillManualPaymentLinkPurchase } from "../commerce/manualPaymentFulfillment";
 import { assignPracticeSeatToLearner } from "../commerce/practiceSeatAssignment";
 import { getCheckoutBaseUrl } from "../commerce/stripeCheckout";
 import {
@@ -63,6 +64,12 @@ interface AccessRevocationRequestBody {
   enrollmentId?: string;
   assignmentId?: string;
   seatPackId?: string;
+}
+
+interface ManualPaymentFulfillmentRequestBody {
+  buyerEmail?: string;
+  offerId?: string;
+  paymentReference?: string;
 }
 
 interface LeadStatusRequestBody {
@@ -410,6 +417,53 @@ export function setupAuthRoutes(router: Router) {
       });
 
       res.status(result.revoked ? 200 : 404).json(result);
+    }
+  );
+
+  router.post(
+    "/support/manual-payment-fulfillments",
+    async (req: Request, res: Response) => {
+      const authorization = authorizePracticeSeatAdminRequest(req);
+
+      if (!authorization.authorized) {
+        res.status(authorization.status).json(authorization.payload);
+        return;
+      }
+
+      const { buyerEmail, offerId, paymentReference } = (req.body ??
+        {}) as ManualPaymentFulfillmentRequestBody;
+
+      try {
+        const result = await fulfillManualPaymentLinkPurchase({
+          buyerEmail: buyerEmail ?? "",
+          offerId: offerId ?? "",
+          paymentReference: paymentReference ?? "",
+          purchaseStore: getPurchaseStore(),
+          enrollmentStore: getEnrollmentStore(),
+          practiceSeatPackStore: getPracticeSeatPackStore(),
+        });
+
+        res.status(result.fulfillment.purchaseRecorded ? 201 : 200).json({
+          fulfillment: result.fulfillment,
+          purchase: {
+            checkoutSessionId: result.purchaseEvent.checkoutSessionId,
+            offerId: result.purchaseEvent.offerId,
+            purchaserEmail: result.purchaseEvent.purchaserEmail,
+            amountTotal: result.purchaseEvent.amountTotal,
+            currency: result.purchaseEvent.currency,
+            accessMonths: result.purchaseEvent.accessMonths,
+            seatCount: result.purchaseEvent.seatCount ?? null,
+          },
+          note: "Manual fulfillment is for controlled Stripe Payment Link sales only. It does not replace Stripe webhook proof.",
+        });
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Manual payment fulfillment failed.";
+
+        res.status(400).json({ error: message });
+      }
     }
   );
 
