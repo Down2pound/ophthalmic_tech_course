@@ -58,6 +58,7 @@ pnpm launch:online-start
 pnpm launch:external-setup
 pnpm launch:first-render-deploy
 pnpm launch:clinical-review-request
+pnpm launch:email-smoke -- --email=internal.test@example.com https://your-real-domain.example
 pnpm launch:first-buyer
 pnpm launch:fulfillment
 pnpm launch:first-revenue
@@ -81,6 +82,8 @@ pnpm launch:blockers
   with preflight proof, closed-checkout settings, and first live URL checks.
 - `launch:clinical-review-request` prints a ready-to-send Module 1 reviewer
   request so clinical signoff can move before paid launch.
+- `launch:email-smoke` asks the deployed app to send one passwordless sign-in
+  email and can save a safe launch-evidence report without raw links.
 - `launch:first-buyer` prints the first-buyer control panel with safe links,
   starter messages, and pause rules.
 - `launch:fulfillment` prints the first paid buyer receipt, access, welcome,
@@ -482,6 +485,12 @@ To save the owner traffic-light report that says which links are safe to share:
 
 ```bash
 LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_OWNER_REPORT_PATH=launch-evidence/owner-go-no-go-report.md pnpm launch:owner-go-no-go
+```
+
+To test passwordless email delivery after email settings are configured:
+
+```bash
+LAUNCH_BASE_URL=https://your-deployed-site.example.com LAUNCH_TEST_EMAIL=internal.test@example.com LAUNCH_EMAIL_SMOKE_REPORT_PATH=launch-evidence/passwordless-email-smoke-report.md pnpm launch:email-smoke
 ```
 
 To also submit one safe custom-practice test inquiry and prove lead capture

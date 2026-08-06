@@ -420,6 +420,39 @@ describe("deployment files", () => {
     expect(snapshotScript).not.toContain("DATABASE_URL=");
   });
 
+  it("keeps a work-computer-safe passwordless email smoke command available", async () => {
+    const packageJson = await readFile(
+      path.resolve(process.cwd(), "package.json"),
+      "utf8"
+    );
+    const readme = await readFile(
+      path.resolve(process.cwd(), "README.md"),
+      "utf8"
+    );
+    const emailGuide = await readFile(
+      path.resolve(process.cwd(), "docs/launch/email-setup-guide.md"),
+      "utf8"
+    );
+    const emailSmokeScript = await readFile(
+      path.resolve(process.cwd(), "scripts/launch-email-smoke.mjs"),
+      "utf8"
+    );
+
+    expect(packageJson).toContain(
+      '"launch:email-smoke": "node scripts/launch-email-smoke.mjs"'
+    );
+    expect(readme).toContain("pnpm launch:email-smoke");
+    expect(emailGuide).toContain("pnpm launch:email-smoke");
+    expect(emailSmokeScript).toContain("/api/auth/passwordless/start");
+    expect(emailSmokeScript).toContain("LAUNCH_TEST_EMAIL");
+    expect(emailSmokeScript).toContain("LAUNCH_EMAIL_SMOKE_REPORT_PATH");
+    expect(emailSmokeScript).toContain("passwordless-email-smoke-report.md");
+    expect(emailSmokeScript).toContain("Raw sign-in link exposed");
+    expect(emailSmokeScript).not.toContain("sk_test_");
+    expect(emailSmokeScript).not.toContain("whsec_");
+    expect(emailSmokeScript).not.toContain("DATABASE_URL=");
+  });
+
   it("keeps the next-step command center runnable without tsx", async () => {
     const packageJson = await readFile(
       path.resolve(process.cwd(), "package.json"),

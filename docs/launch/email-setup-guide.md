@@ -21,6 +21,16 @@ pnpm launch:email-setup
 That command lists the required host variables, message shape, and pre-sale
 email tests without printing any secret values.
 
+After the app is deployed and email settings are configured, run a safe
+passwordless email smoke test:
+
+```bash
+LAUNCH_BASE_URL=https://your-domain.example LAUNCH_TEST_EMAIL=internal.test@example.com LAUNCH_EMAIL_SMOKE_REPORT_PATH=launch-evidence/passwordless-email-smoke-report.md pnpm launch:email-smoke
+```
+
+The smoke test requests one sign-in email and saves whether the API accepted the
+request. It never saves the raw sign-in link; check the inbox manually.
+
 The request uses this authorization header:
 
 ```text

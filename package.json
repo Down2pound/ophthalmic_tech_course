@@ -22,6 +22,7 @@
     "launch:control": "node scripts/launch-control-checklist.mjs",
     "launch:database-setup": "node scripts/launch-database-setup.mjs",
     "launch:deployment-audit": "node scripts/launch-deployment-audit.mjs",
+    "launch:email-smoke": "node scripts/launch-email-smoke.mjs",
     "launch:email-setup": "node scripts/launch-email-setup.mjs",
     "launch:emergency-stop": "node scripts/launch-emergency-stop.mjs",
     "launch:env-template": "node scripts/launch-env-template.mjs",
