@@ -1116,6 +1116,12 @@ describe("deployment files", () => {
     expect(liveUrlScript).toContain("LAUNCH_SMOKE_ALLOW_NOT_READY");
     expect(liveUrlScript).toContain("pnpm launch:sitemap");
     expect(liveUrlScript).toContain("pnpm launch:owner-go-no-go");
+    expect(liveUrlScript).toContain("pnpm launch:checkout-smoke");
+    expect(liveUrlScript).toContain("pnpm launch:email-smoke");
+    expect(liveUrlScript).toContain("pnpm launch:lead-pipeline-smoke");
+    expect(liveUrlScript).toContain("LAUNCH_CHECKOUT_SMOKE_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH");
+    expect(liveUrlScript).toContain("LAUNCH_LIVE_PURCHASE_REPORT_PATH");
     expect(liveUrlScript).toContain("pnpm launch:first-sales");
     expect(liveUrlScript).toContain("pnpm launch:emergency-stop");
     expect(liveUrlScript).toContain("Do not use localhost");

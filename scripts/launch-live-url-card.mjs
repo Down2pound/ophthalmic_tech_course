@@ -34,14 +34,20 @@ function getWarnings(value) {
       hostname === "127.0.0.1" ||
       hostname === "::1"
     ) {
-      warnings.push("Do not use localhost for Stripe, email, sitemap, or buyers.");
+      warnings.push(
+        "Do not use localhost for Stripe, email, sitemap, or buyers."
+      );
     }
 
     if (hostname.endsWith(".example") || hostname === "example.com") {
-      warnings.push("Replace the example URL with the real Render or custom domain.");
+      warnings.push(
+        "Replace the example URL with the real Render or custom domain."
+      );
     }
   } catch {
-    warnings.push("The URL could not be parsed. Use a full URL like https://your-domain.com.");
+    warnings.push(
+      "The URL could not be parsed. Use a full URL like https://your-domain.com."
+    );
   }
 
   return warnings;
@@ -96,11 +102,16 @@ const lines = [
   "",
   "```powershell",
   `$env:LAUNCH_BASE_URL="${baseUrl}"`,
+  "$env:PUBLIC_APP_URL=$env:LAUNCH_BASE_URL",
   '$env:LAUNCH_SMOKE_ALLOW_NOT_READY="true"',
   "pnpm launch:smoke",
-  '$env:PUBLIC_APP_URL=$env:LAUNCH_BASE_URL',
   "pnpm launch:sitemap",
   "pnpm launch:owner-go-no-go",
+  '$env:LAUNCH_CHECKOUT_SMOKE_REPORT_PATH="launch-evidence/checkout-session-smoke-report.md"',
+  "pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding-learner",
+  "pnpm launch:email-smoke -- --email=internal.test@example.com",
+  '$env:LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH="launch-evidence/lead-pipeline-smoke-report.md"',
+  "pnpm launch:lead-pipeline-smoke",
   "pnpm launch:first-sales",
   "pnpm launch:first-buyer",
   "```",
@@ -111,6 +122,9 @@ const lines = [
   `LAUNCH_BASE_URL=${baseUrl} LAUNCH_SMOKE_ALLOW_NOT_READY=true pnpm launch:smoke`,
   `PUBLIC_APP_URL=${baseUrl} pnpm launch:sitemap`,
   `LAUNCH_BASE_URL=${baseUrl} pnpm launch:owner-go-no-go`,
+  `LAUNCH_BASE_URL=${baseUrl} LAUNCH_CHECKOUT_SMOKE_REPORT_PATH=launch-evidence/checkout-session-smoke-report.md pnpm launch:checkout-smoke -- --email=internal.test@example.com --offer=founding-learner`,
+  `LAUNCH_BASE_URL=${baseUrl} pnpm launch:email-smoke -- --email=internal.test@example.com`,
+  `LAUNCH_BASE_URL=${baseUrl} LAUNCH_LEAD_PIPELINE_SMOKE_REPORT_PATH=launch-evidence/lead-pipeline-smoke-report.md pnpm launch:lead-pipeline-smoke`,
   `PUBLIC_APP_URL=${baseUrl} pnpm launch:first-sales`,
   `PUBLIC_APP_URL=${baseUrl} pnpm launch:first-buyer`,
   "```",
@@ -122,7 +136,7 @@ const lines = [
   "```bash",
   `LAUNCH_BASE_URL=${baseUrl} pnpm launch:smoke`,
   `LAUNCH_BASE_URL=${baseUrl} pnpm launch:go-no-go`,
-  "pnpm launch:live-purchase-test",
+  `LAUNCH_BASE_URL=${baseUrl} LAUNCH_LIVE_PURCHASE_REPORT_PATH=launch-evidence/live-purchase-rehearsal-report.md pnpm launch:live-purchase-test -- --email=internal.test@example.com`,
   "```",
   "",
   "If anything fails after paid enrollment opens, run:",

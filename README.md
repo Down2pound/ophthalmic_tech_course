@@ -116,7 +116,8 @@ pnpm launch:blockers
 - `launch:local-demo` prints the exact local testing commands and demo learner
   link for clicking through the protected course before paid launch.
 - `launch:live-url` turns the real Render or custom domain into the exact
-  smoke-test, sitemap, go/no-go, and first-buyer commands.
+  smoke-test, sitemap, checkout, email, lead-pipeline, go/no-go, live-purchase,
+  and first-buyer commands.
 - `launch:bootcamp-intake` prints the new Bootcamp Drive files that need review
   before becoming paid course content.
 - `launch:readiness-snapshot` saves the deployed readiness scoreboard into
